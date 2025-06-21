@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Controllers
 {
-    public class RegisterDto { public string Email { get; set; } public string Password { get; set; } }
+    public class RegisterDto { public string Email { get; set; } public string Password { get; set; } public string FirstName { get; set; } public string LastName { get; set; } public string PhoneNumber { get; set; } }
     public class LoginDto { public string Email { get; set; } public string Password { get; set; } }
 
     [ApiController]
@@ -12,11 +13,11 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
 
         public UsersController(
             IUserService userService,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<User> signInManager)
         {
             _userService = userService;
             _signInManager = signInManager;
@@ -24,7 +25,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // GET: api/users/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<IdentityUser>> GetUser(string id)
+        public async Task<ActionResult<User>> GetUser(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null) return NotFound();
@@ -33,9 +34,9 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // POST: api/users/register
         [HttpPost("register")]
-        public async Task<ActionResult<IdentityUser>> Register([FromBody] RegisterDto dto)
+        public async Task<ActionResult<User>> Register([FromBody] RegisterDto dto)
         {
-            var user = await _userService.CreateUserAsync(dto.Email, dto.Password);
+            var user = await _userService.CreateUserAsync(dto.Email, dto.Password, dto.FirstName, dto.LastName, dto.PhoneNumber);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 

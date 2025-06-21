@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Quizlo.Questionnaire.WebApi.Data.Entities;
 
 namespace Quizlo.Questionnaire.WebApi.Services
 {
     public interface IUserService
     {
-        Task<IdentityUser> GetUserByIdAsync(string userId);
-        Task<IdentityUser> CreateUserAsync(string email, string password);
-        Task<bool> CheckPasswordAsync(IdentityUser user, string password);
+        Task<User> GetUserByIdAsync(string userId);
+        Task<User> CreateUserAsync(string email, string password, string firstName, string lastName, string phoneNumber);
+        Task<bool> CheckPasswordAsync(User user, string password);
     }
 }

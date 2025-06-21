@@ -8,18 +8,18 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [Key]
         public int Id { get; set; }
         [MaxLength(100)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         [MaxLength(100)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         [MaxLength(20)]
-        public string PreparingForExam { get; set; }
+        public string? PreparingForExam { get; set; }
         [MaxLength(100)]
         public string Email { get; set; }
-        public string PasswordHash { get; set; }       // null if Google-only
-        public string GoogleId { get; set; }
+        public string? PasswordHash { get; set; }       // null if Google-only
+        public string? GoogleId { get; set; }
         [MaxLength(20)]
-        public string PhoneNumber { get; set; }
-        public bool PhoneNumberConfirmed { get; set; }
+        public string? PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; } = false;
         public DateTime CreatedAt { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
     }

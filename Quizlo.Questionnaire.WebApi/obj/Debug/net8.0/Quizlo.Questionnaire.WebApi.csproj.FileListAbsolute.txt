@@ -187,3 +187,4 @@ C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\Quizlo.Questionnaire.WebApi.pdb
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\Quizlo.Questionnaire.WebApi.genruntimeconfig.cache
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\ref\Quizlo.Questionnaire.WebApi.dll
+C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

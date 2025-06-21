@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(UserManager<IdentityUser> userManager)
+        public UserService(UserManager<User> userManager)
             => _userManager = userManager;
 
-        public Task<IdentityUser> GetUserByIdAsync(string userId)
+        public Task<User> GetUserByIdAsync(string userId)
             => _userManager.FindByIdAsync(userId);
 
-        public async Task<IdentityUser> CreateUserAsync(string email, string password)
+        public async Task<User> CreateUserAsync(string email, string password, string firstName, string lastName, string phoneNumber)
         {
-            var user = new IdentityUser { UserName = email, Email = email };
+            var user = new User { UserName = email, Email = email, FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber,
+                EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow, GoogleId ="NA" };
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded) return user;
             throw new ApplicationException(
@@ -23,7 +26,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
             );
         }
 
-        public Task<bool> CheckPasswordAsync(IdentityUser user, string password)
+        public Task<bool> CheckPasswordAsync(User user, string password)
             => _userManager.CheckPasswordAsync(user, password);
     }
 }
