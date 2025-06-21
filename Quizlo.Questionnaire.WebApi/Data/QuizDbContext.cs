@@ -1,5 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Quizlo.Questionnaire.WebApi.Data.Entities;
 
 namespace Quizlo.Questionnaire.WebApi.Data
 {
@@ -9,8 +11,8 @@ namespace Quizlo.Questionnaire.WebApi.Data
             : base(options)
         { }
 
-        //public DbSet<Exam> Exams { get; set; }
-        //public DbSet<Question> Questions { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<Question> Questions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

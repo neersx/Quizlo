@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\PROJECTS\\Quizlo.Questionnaire\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj": {}
+    "C:\\PROJECTS\\Quizlo.Questionnaire.App\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj": {}
   },
   "projects": {
-    "C:\\PROJECTS\\Quizlo.Questionnaire\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj": {
+    "C:\\PROJECTS\\Quizlo.Questionnaire.App\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\PROJECTS\\Quizlo.Questionnaire\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\Quizlo.Questionnaire.App\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj",
         "projectName": "Quizlo.Questionnaire.WebApi",
-        "projectPath": "C:\\PROJECTS\\Quizlo.Questionnaire\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj",
+        "projectPath": "C:\\PROJECTS\\Quizlo.Questionnaire.App\\Quizlo.Questionnaire.WebApi\\Quizlo.Questionnaire.WebApi.csproj",
         "packagesPath": "C:\\Users\\neeraj.singh\\.nuget\\packages\\",
-        "outputPath": "C:\\PROJECTS\\Quizlo.Questionnaire\\Quizlo.Questionnaire.WebApi\\obj\\",
+        "outputPath": "C:\\PROJECTS\\Quizlo.Questionnaire.App\\Quizlo.Questionnaire.WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Google": {
+              "target": "Package",
+              "version": "[8.0.15, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.15, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.15, )"
@@ -88,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.105/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.107/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
