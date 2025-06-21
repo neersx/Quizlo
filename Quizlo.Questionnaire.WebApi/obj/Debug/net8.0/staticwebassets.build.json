@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "yp2D4wjiyUGujzxOJd8ltBB6Bp6BnVoyx9WtmFuKomY=",
+  "Source": "Quizlo.Questionnaire.WebApi",
+  "BasePath": "_content/Quizlo.Questionnaire.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

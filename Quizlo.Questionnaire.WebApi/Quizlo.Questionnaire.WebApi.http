@@ -1,0 +1,6 @@
+@Quizlo.Questionnaire.WebApi_HostAddress = http://localhost:5081
+
+GET {{Quizlo.Questionnaire.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
