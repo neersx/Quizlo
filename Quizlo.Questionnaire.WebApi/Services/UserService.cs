@@ -17,10 +17,11 @@ namespace Quizlo.Questionnaire.WebApi.Services
         public async Task<User> CreateUserAsync(string email, string password, string firstName, string lastName, string phoneNumber)
         {
             var user = new User { UserName = email, Email = email, FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber,
-                EmailConfirmed = true,
+                EmailConfirmed = false, PhoneNumberConfirmed = false,
                 CreatedAt = DateTime.UtcNow, GoogleId ="NA" };
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded) return user;
+
             throw new ApplicationException(
                 string.Join("; ", result.Errors.Select(e => e.Description))
             );

@@ -1,60 +1,64 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configuration & Connection String
-// Make sure you have a "DefaultConnection" in appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // 2. EF Core DbContext
 builder.Services.AddDbContext<QuizDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 3. Identity (with default cookie scheme)
+// 3. Identity
 builder.Services.AddIdentity<User, Role>(options =>
 {
-    // password, lockout, etc. configuration
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
+    options.Password.RequireUppercase = true;
 })
     .AddEntityFrameworkStores<QuizDbContext>()
     .AddDefaultTokenProviders();
 
-// 4. Authentication
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddCookie()
-    // 4.a Google
-    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-        options.CallbackPath = "/signin-google";
-    })
-    // 4.b (placeholder for phone number / OTP scheme)
-    ;
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"], // e.g., "QuizloApi"
+        ValidAudience = builder.Configuration["Jwt:Audience"], // e.g., "QuizloApiClient"
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
 
-// 5. Register your application services & repositories
+
+// 5. Register your services
 builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<JwtTokenService>();
 
-// 6. Controllers, Swagger & CORS
+
+// 6. Controllers, Swagger, CORS
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    // Tell Swagger that you use Bearer/Cookie tokens
     c.AddSecurityDefinition("cookieAuth", new()
     {
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
@@ -100,9 +104,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 7. Order is important:
 app.UseCors("DefaultCors");
-app.UseAuthentication();
+app.UseAuthentication();  // <--- This must come before UseAuthorization
 app.UseAuthorization();
 
 app.MapControllers();

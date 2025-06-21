@@ -23,15 +23,6 @@ namespace Quizlo.Questionnaire.WebApi.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<User>(b => {
-                b.ToTable("Users");
-
-                // make PasswordHash nullable
-                b.Property(u => u.PasswordHash)
-                 .HasMaxLength(500)   // match aspnet default
-                 .IsRequired(false);
-            });
-            builder.Entity<Role>(b => b.ToTable("Roles"));
             builder.Entity<IdentityUserRole<int>>(b => b.ToTable("UserRoles"));
             builder.Entity<IdentityUserClaim<int>>(b => b.ToTable("UserClaims"));
             builder.Entity<IdentityUserLogin<int>>(b => b.ToTable("UserLogins"));

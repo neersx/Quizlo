@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.DTO;
 using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Controllers
@@ -14,12 +15,17 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly JwtTokenService _jwtTokenService;
 
         public UsersController(
+            UserManager<User> userManager, JwtTokenService jwtTokenService,
             IUserService userService,
             SignInManager<User> signInManager)
         {
             _userService = userService;
+            _userManager = userManager;
+            _jwtTokenService = jwtTokenService;
             _signInManager = signInManager;
         }
 
@@ -44,11 +50,24 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDto dto)
         {
-            var result = await _signInManager.PasswordSignInAsync(
-                dto.Email, dto.Password, isPersistent: false, lockoutOnFailure: false);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null) return Unauthorized("Invalid credentials");
 
-            if (!result.Succeeded) return Unauthorized();
-            return Ok();
+            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
+            if (!result.Succeeded) return Unauthorized("Invalid credentials");
+
+            var token = await _jwtTokenService.GenerateJwtToken(user);
+
+            var response = new AuthResponseDto
+            {
+                Token = token,
+                UserId = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+            return Ok(response);
         }
 
         // POST: api/users/logout

@@ -896,12 +896,20 @@
             "type": "string",
             "nullable": true
           },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
           "normalizedEmail": {
             "type": "string",
             "nullable": true
           },
           "emailConfirmed": {
             "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
           },
           "securityStamp": {
             "type": "string",
@@ -933,20 +941,6 @@
           },
           "lastName": {
             "maxLength": 100,
-            "type": "string",
-            "nullable": true
-          },
-          "preparingForExam": {
-            "maxLength": 20,
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "maxLength": 100,
-            "type": "string",
-            "nullable": true
-          },
-          "passwordHash": {
             "type": "string",
             "nullable": true
           },

@@ -11,11 +11,6 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public string? FirstName { get; set; }
         [MaxLength(100)]
         public string? LastName { get; set; }
-        [MaxLength(20)]
-        public string? PreparingForExam { get; set; }
-        [MaxLength(100)]
-        public string Email { get; set; }
-        public string? PasswordHash { get; set; }       // null if Google-only
         public string? GoogleId { get; set; }
         [MaxLength(20)]
         public string? PhoneNumber { get; set; }
