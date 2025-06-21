@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.Data.Seed;
 using Quizlo.Questionnaire.WebApi.Services;
 using System.Text;
 
@@ -109,5 +110,8 @@ app.UseAuthentication();  // <--- This must come before UseAuthorization
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seed data
+IdentityDataSeeder.Seed(app.Services);
 
 app.Run();

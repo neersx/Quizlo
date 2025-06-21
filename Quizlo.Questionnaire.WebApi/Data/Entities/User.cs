@@ -20,9 +20,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
     }
 
     public class Role : IdentityRole<int>
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }               // e.g. "Student","Teacher","Admin"
+    {             
         public ICollection<UserRole> UserRoles { get; set; }
     }
 

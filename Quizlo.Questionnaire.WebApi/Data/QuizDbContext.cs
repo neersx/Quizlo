@@ -22,12 +22,6 @@ namespace Quizlo.Questionnaire.WebApi.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<IdentityUserRole<int>>(b => b.ToTable("UserRoles"));
-            builder.Entity<IdentityUserClaim<int>>(b => b.ToTable("UserClaims"));
-            builder.Entity<IdentityUserLogin<int>>(b => b.ToTable("UserLogins"));
-            builder.Entity<IdentityRoleClaim<int>>(b => b.ToTable("RoleClaims"));
-            builder.Entity<IdentityUserToken<int>>(b => b.ToTable("UserTokens"));
         }
     }
 }
