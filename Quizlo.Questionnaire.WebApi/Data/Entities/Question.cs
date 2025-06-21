@@ -1,22 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Quizlo.Questionnaire.WebApi.Helpers;
 
 namespace Quizlo.Questionnaire.WebApi.Data.Entities
 {
     public class Question
     {
-        [Key]
-        public int QuestionId { get; set; }
+        public int Id { get; set; }
 
-        public int QuestionNo { get; set; }
-
+        [MaxLength(500)]
         public string QuestionText { get; set; }
-
-        public string Type { get; set; }
 
         // store options as JSON in the DB
         public string OptionsJson { get; set; }
+
+        public QuestionType Type { get; set; }         // Single, Multiple, etc.
+        public DifficultyLevel Difficulty { get; set; }
 
         [NotMapped]
         public string[] Options
@@ -25,12 +25,12 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
             set => OptionsJson = JsonSerializer.Serialize(value);
         }
 
-        // you can do the same for CorrectAnswer & CorrectOption
+       
         public string Explanation { get; set; }
-        public string Complexity { get; set; }
-
-        // FK back to Exam
-        public int ExamId { get; set; }
-        public Exam Exam { get; set; }
+        [MaxLength(50)]
+        public string CorrectOptionIds { get; set; }
+        [MaxLength(50)]
+        public string SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
+        public bool IsCorrect { get; set; }
     }
 }
