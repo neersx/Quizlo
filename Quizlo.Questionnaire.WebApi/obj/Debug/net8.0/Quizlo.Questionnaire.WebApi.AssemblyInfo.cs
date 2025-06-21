@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Quizlo.Questionnaire.WebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bdd4a40b018509a7187fd2545bb719f85ad89a66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df0a43c10554eeef5ca2ce240a002261ca5b27c6")]
 [assembly: System.Reflection.AssemblyProductAttribute("Quizlo.Questionnaire.WebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Quizlo.Questionnaire.WebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

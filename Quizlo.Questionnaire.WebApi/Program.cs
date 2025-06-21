@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizlo.Questionnaire.WebApi.Data;
+using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<QuizDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // 3. Identity (with default cookie scheme)
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<User, Role>(options =>
 {
     // password, lockout, etc. configuration
     options.Password.RequireNonAlphanumeric = false;
