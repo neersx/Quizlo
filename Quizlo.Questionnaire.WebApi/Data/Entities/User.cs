@@ -5,6 +5,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 {
     public class User:  IdentityUser<int>
     {
+        [Key]
         public int Id { get; set; }
         [MaxLength(100)]
         public string FirstName { get; set; }
@@ -32,6 +33,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
     public class UserRole
     {
+        [Key]
+        public int Id { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
         public int RoleId { get; set; }

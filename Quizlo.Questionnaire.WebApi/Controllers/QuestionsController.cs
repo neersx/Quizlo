@@ -36,14 +36,14 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         public async Task<ActionResult<Question>> CreateQuestion([FromBody] Question question)
         {
             var created = await _questionService.CreateQuestionAsync(question);
-            return CreatedAtAction(nameof(GetQuestion), new { id = created.QuestionId }, created);
+            return CreatedAtAction(nameof(GetQuestion), new { id = created.Id }, created);
         }
 
         // PUT: api/questions/10
         [HttpPut("questions/{id}")]
         public async Task<ActionResult<Question>> UpdateQuestion(int id, [FromBody] Question question)
         {
-            if (id != question.QuestionId) return BadRequest();
+            if (id != question.Id) return BadRequest();
             var updated = await _questionService.UpdateQuestionAsync(question);
             return Ok(updated);
         }

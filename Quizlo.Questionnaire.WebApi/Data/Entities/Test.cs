@@ -36,6 +36,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
     public class TestQuestion
     {
+        [Key]
+        public int Id { get; set; }
         public int TestId { get; set; }
         public Test Test { get; set; }
         public int QuestionId { get; set; }

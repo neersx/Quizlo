@@ -14,15 +14,15 @@ namespace Quizlo.Questionnaire.WebApi.Services
 
         public async Task<Exam> GetExamAsync(int examId)
             => await _context.Exams
-                             .Include(e => e.Questions)
-                             .FirstOrDefaultAsync(e => e.ExamId == examId);
+                             .Include(e => e.Tests)
+                             .FirstOrDefaultAsync(e => e.Id == examId);
 
         public async Task<IEnumerable<Exam>> GetExamsAsync(int pageNumber, int pageSize, string search = null)
         {
             var q = _context.Exams.AsQueryable();
             if (!string.IsNullOrEmpty(search))
-                q = q.Where(e => EF.Functions.Like(e.ExamId.ToString(), $"%{search}%"));
-            return await q.Include(e => e.Questions)
+                q = q.Where(e => EF.Functions.Like(e.Id.ToString(), $"%{search}%"));
+            return await q.Include(e => e.Tests)
                           .Skip((pageNumber - 1) * pageSize)
                           .Take(pageSize)
                           .ToListAsync();

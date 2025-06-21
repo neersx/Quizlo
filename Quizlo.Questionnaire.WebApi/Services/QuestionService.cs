@@ -17,7 +17,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
 
         public async Task<IEnumerable<Question>> GetQuestionsByExamAsync(int examId)
             => await _context.Questions
-                             .Where(q => q.ExamId == examId)
+                             .Where(q => q.Id == examId)
                              .ToListAsync();
 
         public async Task<Question> CreateQuestionAsync(Question question)

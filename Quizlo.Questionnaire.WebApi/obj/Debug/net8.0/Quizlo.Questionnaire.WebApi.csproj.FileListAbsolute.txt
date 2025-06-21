@@ -181,7 +181,6 @@ C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Quizlo.Questionnaire.WebApi.props
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Quizlo.Questionnaire.WebApi.props
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\staticwebassets.pack.json
-C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\Quizlo.Q.BFF9E69D.Up2Date
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\Quizlo.Questionnaire.WebApi.dll
 C:\PROJECTS\Quizlo.Questionnaire.App\Quizlo.Questionnaire.WebApi\obj\Debug\net8.0\refint\Quizlo.Questionnaire.WebApi.dll
