@@ -260,6 +260,68 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.TestsController",
+    "Method": "Create",
+    "RelativePath": "api/Tests",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Quizlo.Questionnaire.WebApi.DTO.CreateTestRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Quizlo.Questionnaire.WebApi.DTO.TestDetailsDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      }
+    ]
+  },
+  {
+    "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.TestsController",
+    "Method": "GetTest",
+    "RelativePath": "api/Tests/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Quizlo.Questionnaire.WebApi.DTO.TestDetailsDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ],
+    "EndpointName": "GetTest"
+  },
+  {
     "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.UsersController",
     "Method": "GetUser",
     "RelativePath": "api/Users/{id}",

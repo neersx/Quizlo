@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Data.Seed;
@@ -47,6 +48,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization();
+
 
 // 5. Register your services
 builder.Services.AddScoped<IExamService, ExamService>();
@@ -54,32 +57,25 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<JwtTokenService>();
 
+builder.Services.AddHttpClient();          // for webhook
+builder.Services.AddScoped<ITestService, TestService>();
+
 
 // 6. Controllers, Swagger, CORS
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("cookieAuth", new()
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Name = "Cookie",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Cookie authentication"
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "Paste access-token here"
     });
-    c.AddSecurityRequirement(new()
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new()
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id   = "cookieAuth"
-                }
-            },
-            new string[] {}
-        }
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+      { new OpenApiSecurityScheme { Reference = new OpenApiReference {
+              Id = "Bearer", Type = ReferenceType.SecurityScheme }}, Array.Empty<string>() }
     });
 });
 
