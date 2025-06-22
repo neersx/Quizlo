@@ -87,10 +87,9 @@ public class TestService : ITestService
             Options = q.Options,
             OptionsJson = JsonConvert.SerializeObject(q.Options),        // ← keep if you store JSON
             CorrectOptionIds = q.CorrectOptionIds,                            // already CSV?
-            Difficulty = q.Difficulty,
+            Difficulty = (DifficultyLevel)(int)Enum.Parse<DifficultyLevel>(q.Difficulty, true),
             Explanation = q.Explanation,
-            Type = q.IsMultipleSelect ? QuestionType.Multiple
-                                                  : QuestionType.Single
+            Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single
         }).ToList();
 
         // 4-b  Bulk-insert Questions
@@ -143,33 +142,37 @@ public class TestService : ITestService
         return await resp.Content.ReadAsStringAsync(ct);
     }
 
+    // Update the mapping of Difficulty property in the GetTestAsync method to convert DifficultyLevel to string.
     public async Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default)
-        => await _db.Tests
-                    .AsNoTracking()
-                    .Include(t => t.Exam)
-                    .Include(t => t.TestQuestions)
-                        .ThenInclude(tq => tq.Question)
-                    .Where(t => t.Id == id)
-                    .Select(t => new TestDetailsDto
-                    {
-                        Id = t.Id,
-                        Title = t.Title,
-                        Duration = (TimeSpan)t.Duration,
-                        CreatedAt = t.CreatedAt,
-                        ExamId = t.ExamId,
-                        ExamName = t.Exam.Name,
-                        Questions = t.TestQuestions
-                                     .OrderBy(tq => tq.Order)
-                                     .Select(tq => tq.Question)
-                                     .Select(q => new QuestionDto
-                                     {
-                                         Id = q.Id,
-                                         QuestionText = q.QuestionText,
-                                         Options = q.Options,
-                                         CorrectOptionIds = q.CorrectOptionIds,
-                                         Explanation = q.Explanation
-                                     })
-                                     .ToList()
-                    })
-                    .FirstOrDefaultAsync(ct);
+    {
+        return await _db.Tests
+                        .AsNoTracking()
+                        .Include(t => t.Exam)
+                        .Include(t => t.TestQuestions)
+                            .ThenInclude(tq => tq.Question)
+                        .Where(t => t.Id == id)
+                        .Select(t => new TestDetailsDto
+                        {
+                            Id = t.Id,
+                            Title = t.Title,
+                            Duration = (TimeSpan)t.Duration,
+                            CreatedAt = t.CreatedAt,
+                            ExamId = t.ExamId,
+                            ExamName = t.Exam.Name,
+                            Questions = t.TestQuestions
+                                         .OrderBy(tq => tq.Order)
+                                         .Select(tq => new QuestionDto
+                                         {
+                                             Id = tq.Question.Id,
+                                             QuestionText = tq.Question.QuestionText,
+                                             QuestionNo = tq.Order,
+                                             Options = tq.Question.Options,
+                                             CorrectOptionIds = tq.Question.CorrectOptionIds,
+                                             Explanation = tq.Question.Explanation,
+                                             Difficulty = tq.Question.Difficulty.ToString() // Convert DifficultyLevel to string  
+                                         })
+                                         .ToList()
+                        })
+                        .FirstOrDefaultAsync(ct);
+    }
 }

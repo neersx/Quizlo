@@ -15,7 +15,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public int QuestionNo { get; set; }
         public string OptionsJson { get; set; }
         public QuestionType Type { get; set; }         // Single, Multiple, etc.
-        public string DifficultyRaw   { get; set; } = "Mix";
+        public string Difficulty   { get; set; } = default!;
         public string Explanation { get; set; }
         public string CorrectOptionIds { get; set; }
 
@@ -23,12 +23,6 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public bool IsCorrect { get; set; } = false;
         [NotMapped]
         public bool IsMultipleSelect { get; set; }
-
-        [JsonIgnore]
-        public DifficultyLevel Difficulty =>
-        Enum.TryParse<DifficultyLevel>(DifficultyRaw, true, out var d)
-        ? d
-        : DifficultyLevel.Mix;
 
         [NotMapped]
         public string[] Options
