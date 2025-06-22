@@ -5,7 +5,7 @@
     public class N8nResponseDto
     {
         [JsonPropertyName("totalTimeToAnswer")]
-        public int TotalTimeToAnswer { get; set; }
+        public int TotalTimeToAnswer { get; set; } // in minutes
 
         [JsonPropertyName("TotalQuestions")]
         public int TotalQuestions { get; set; }

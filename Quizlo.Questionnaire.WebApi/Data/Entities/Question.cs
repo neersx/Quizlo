@@ -33,7 +33,5 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
             set => OptionsJson = JsonSerializer.Serialize(value);
         }
 
-       
-
     }
 }

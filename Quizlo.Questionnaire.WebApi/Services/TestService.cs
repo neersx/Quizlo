@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Json;
 using Newtonsoft.Json;
+using System.Data;
 
 public interface ITestService
 {
@@ -33,89 +34,108 @@ public class TestService : ITestService
         _webhookUrl = cfg["N8n:WebhookUrl"]!; // -> appsettings.json
     }
 
-    public async Task<TestDetailsDto> CreateTestAsync(CreateTestRequest req, int userId,
-                                                      CancellationToken ct = default)
+
+    public async Task<TestDetailsDto> CreateTestAsync(
+        CreateTestRequest req, int userId, CancellationToken ct = default)
     {
-        // 1. Verify exam exists
+        //------------------------------------------------------------------
+        // 1)   Get *all* data you need BEFORE you open a DB transaction
+        //------------------------------------------------------------------
         var exam = await _db.Exams.AsNoTracking()
                                   .FirstOrDefaultAsync(e => e.Id == req.ExamId, ct)
-                     ?? throw new KeyNotFoundException($"Exam {req.ExamId} not found");
+                   ?? throw new KeyNotFoundException($"Exam {req.ExamId} not found");
 
-        // 2. Insert the Test shell so we get the TestId
+        // ── remote call to n8n ────────────────────────────────────────────
+        string raw = await GetAIGeneratedQuestions(exam, req, ct);
+        var env = System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw,
+                      new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? throw new ApplicationException("Empty n8n response");
+
+        var aiQuestions = env.Questions!;               // short alias
+
+        //------------------------------------------------------------------
+        // 2)   Map AI objects → EF entities (pure in-memory work)
+        //------------------------------------------------------------------
         var test = new Test
         {
             ExamId = exam.Id,
             Title = req.Title ?? $"{exam.Name} Mock Test",
-            Duration = req.Duration ?? TimeSpan.FromMinutes(exam.Tests?.Max(t => t.Duration.HasValue ? t.Duration.Value.TotalMinutes : 0) ?? 120),
+            Duration = TimeSpan.FromMinutes(env.TotalTimeToAnswer),
             DurationCompltedIn = TimeSpan.Zero,
-            Subject = req.Subject,
+            Subject = req.Subject ?? "All",
             Language = req.Language ?? "English",
             CreatedAt = DateTime.UtcNow,
             CreatedByUserId = userId
         };
 
-        _db.Tests.Add(test);
-        await _db.SaveChangesAsync(ct);
-
-        // 3. Ask n8n to generate questions ──────────────────────────────────────────
-        string raw = await GetAIGeneratedQuestions(test,exam, req, ct);
-
-
-        if (string.IsNullOrWhiteSpace(raw))
-        {
-            _log.LogError("n8n webhook returned an empty body");
-            throw new ApplicationException("n8n returned empty response");
-        }
-
-        _log.LogDebug("Raw n8n response: {Json}", raw);
-        var opts = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        var envelope = System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw, opts)
-                      ?? new N8nResponseDto();
-
-        // This is the list we’ll persist
-        var n8n = envelope.Questions!;
-
-
-        // 4-a  Build the Question entities
-        var questions = n8n.Select(q => new Question
+        var questions = aiQuestions.Select(q => new Question
         {
             QuestionText = q.QuestionText,
-            Options = q.Options,
-            OptionsJson = JsonConvert.SerializeObject(q.Options),        // ← keep if you store JSON
-            CorrectOptionIds = q.CorrectOptionIds,                            // already CSV?
-            Difficulty = (DifficultyLevel)(int)Enum.Parse<DifficultyLevel>(q.Difficulty, true),
+            Options = q.Options,    
+            OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
+            CorrectOptionIds = q.CorrectOptionIds,
             Explanation = q.Explanation,
-            Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single
+            Type = q.IsMultipleSelect
+                                    ? QuestionType.Multiple
+                                    : QuestionType.Single,
+            Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true)
         }).ToList();
 
-        // 4-b  Bulk-insert Questions
-        await _db.Questions.AddRangeAsync(questions, ct);
-        await _db.SaveChangesAsync(ct);      
 
-        // 4-c  Build the TestQuestion link table
-        var testQuestions = questions.Select((question, idx) => new TestQuestion
+        //------------------------------------------------------------------
+        // 3)   One *resilient* transaction for every INSERT
+        //------------------------------------------------------------------
+        var strategy = _db.Database.CreateExecutionStrategy();   // has built-in retries
+
+        return await strategy.ExecuteAsync(async () =>
         {
-            TestId = test.Id,                     
-            QuestionId = question.Id,
-            Order = n8n[idx].QuestionNo 
-        }).ToList();
+            // any dead-lock / transient SQL error => the whole lambda is rerun
+            await using var tx =
+                await _db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
 
-        // 4-d  Bulk-insert TestQuestions
-        await _db.TestQuestions.AddRangeAsync(testQuestions, ct);
-        await _db.SaveChangesAsync(ct);           // commit the link rows
+            try
+            {
+                //------------------------------------------------------------------
+                // 3-A  Insert the Test  ➜ we need its identity for TestQuestions
+                //------------------------------------------------------------------
+                _db.Tests.Add(test);
+                await _db.SaveChangesAsync(ct);               // generates test.Id
 
+                //------------------------------------------------------------------
+                // 3-B  Insert all Questions
+                //------------------------------------------------------------------
+                _db.Questions.AddRange(questions);
+                await _db.SaveChangesAsync(ct);               // gets question.Id’s
 
+                //------------------------------------------------------------------
+                // 3-C  Link table rows
+                //------------------------------------------------------------------
+                var links = questions.Select((q, i) => new TestQuestion
+                {
+                    TestId = test.Id,
+                    QuestionId = q.Id,
+                    Order = aiQuestions[i].QuestionNo
+                });
 
-        // 5. Load back + map to response DTO
-        return await GetTestAsync(test.Id, ct) ??
-               throw new InvalidOperationException("Test not found after creation");
+                _db.TestQuestions.AddRange(links);
+                await _db.SaveChangesAsync(ct);
+
+                //------------------------------------------------------------------
+                await tx.CommitAsync(ct);                     // <-- atomic commit
+            }
+            catch   // *any* exception => rollback + re-throw
+            {
+                await tx.RollbackAsync(ct);
+                throw;
+            }
+
+            // we are still inside the execution-strategy delegate
+            return await GetTestAsync(test.Id, ct);
+        });
     }
 
-    private async Task<string> GetAIGeneratedQuestions(Test test, Exam exam, CreateTestRequest req, CancellationToken ct)
+
+    private async Task<string> GetAIGeneratedQuestions( Exam exam, CreateTestRequest req, CancellationToken ct)
     {
         var client = _http.CreateClient();
         client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
@@ -126,11 +146,11 @@ public class TestService : ITestService
             ["examCode"] = exam.Code,
             ["numberOfQuestions"] = req.NumberOfQuestions.ToString() ?? "",
             ["difficultyLevel"] = req.Difficulty.ToString() ?? "Mix",
-            ["subject"] = test.Subject ?? "All",
-            ["language"] = test.Language,
+            ["subject"] = req.Subject ?? "All",
+            ["language"] = req.Language,
             ["testId"] = "1",
             ["examId"] = exam.Id.ToString(),
-            ["testTitle"] = test.Title,
+            ["testTitle"] = req.Title,
         };
 
         var webhookUrl = QueryHelpers.AddQueryString(_webhookUrl, query);
@@ -158,6 +178,8 @@ public class TestService : ITestService
                             Duration = (TimeSpan)t.Duration,
                             CreatedAt = t.CreatedAt,
                             ExamId = t.ExamId,
+                            Subject = t.Subject,
+                            Language = t.Language,
                             ExamName = t.Exam.Name,
                             Questions = t.TestQuestions
                                          .OrderBy(tq => tq.Order)
