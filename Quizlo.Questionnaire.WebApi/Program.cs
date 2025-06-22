@@ -113,5 +113,7 @@ app.MapControllers();
 
 // Seed data
 IdentityDataSeeder.Seed(app.Services);
+ExamDataSeeder.Seed(app.Services);
+
 
 app.Run();

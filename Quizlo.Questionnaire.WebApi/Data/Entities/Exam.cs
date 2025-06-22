@@ -15,6 +15,15 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [Required, MaxLength(20)]
         public string Code { get; set; }
 
+        [MaxLength(50)]
+        public string Country { get; set; }
+
+        [MaxLength(50)]
+        public string Category { get; set; }     // New column
+
+        [MaxLength(50)]
+        public string Type { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
 
