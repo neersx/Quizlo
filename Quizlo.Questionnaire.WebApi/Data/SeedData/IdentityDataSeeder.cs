@@ -11,35 +11,37 @@ namespace Quizlo.Questionnaire.WebApi.Data.Seed
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
-            // 1. Seed Roles first (blocking and ensuring they exist before user assignment)
             string[] roleNames = { "Admin", "Student", "Teacher" };
+
+            // 1. Create Roles if missing
             foreach (var roleName in roleNames)
             {
                 var exists = roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult();
                 if (!exists)
                 {
-                    var role = new Role
+                    var result = roleManager.CreateAsync(new Role
                     {
                         Name = roleName,
-                        NormalizedName = roleName.ToUpperInvariant() // <--- This is required!
-                    };
-                    var createResult = roleManager.CreateAsync(role).GetAwaiter().GetResult();
-                    if (createResult.Succeeded)
-                        Console.WriteLine($"Role '{roleName}' created.");
+                        NormalizedName = roleName.ToUpperInvariant()
+                    }).GetAwaiter().GetResult();
+
+                    if (!result.Succeeded)
+                    {
+                        Console.WriteLine($"[Seeder] Failed to create role '{roleName}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                    }
                     else
-                        Console.WriteLine($"Failed to create role '{roleName}': {string.Join(", ", createResult.Errors.Select(e => e.Description))}");
-                }
-                else
-                {
-                    Console.WriteLine($"Role '{roleName}' already exists.");
+                    {
+                        Console.WriteLine($"[Seeder] Created role '{roleName}'.");
+                    }
                 }
             }
 
-            // 2. Now add Admin user
+            // 2. Create Admin User if missing
             string adminEmail = "quizlo@gmail.com";
-            string adminPassword = "Admin@123"; // Change this before production
+            string adminPassword = "Admin@123"; // TODO: Secure for prod
 
             var adminUser = userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult();
+
             if (adminUser == null)
             {
                 adminUser = new User
@@ -52,46 +54,36 @@ namespace Quizlo.Questionnaire.WebApi.Data.Seed
                     PhoneNumber = "9999999999"
                 };
 
-                var result = userManager.CreateAsync(adminUser, adminPassword).GetAwaiter().GetResult();
-                if (result.Succeeded)
-                {
-                    // Refetch roles (optional, but safest)
-                    foreach (var roleName in roleNames)
-                    {
-                        var roleExists = roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult();
-                        if (!roleExists)
-                            throw new InvalidOperationException($"Role {roleName} does not exist.");
-                    }
+                var createUserResult = userManager.CreateAsync(adminUser, adminPassword).GetAwaiter().GetResult();
 
-                    var addToRoleResult = userManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
-                    if (!addToRoleResult.Succeeded)
-                    {
-                        foreach (var error in addToRoleResult.Errors)
-                            Console.WriteLine($"Role assignment error: {error.Description}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Admin user created and assigned Admin role.");
-                    }
+                if (!createUserResult.Succeeded)
+                {
+                    Console.WriteLine($"[Seeder] Failed to create admin user: {string.Join(", ", createUserResult.Errors.Select(e => e.Description))}");
+                    return;
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                        Console.WriteLine(error.Description);
+                    Console.WriteLine("[Seeder] Created admin user.");
+                }
+            }
+
+            // 3. Ensure Admin User is in Admin Role
+            var isInRole = userManager.IsInRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
+            if (!isInRole)
+            {
+                var addToRoleResult = userManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
+                if (!addToRoleResult.Succeeded)
+                {
+                    Console.WriteLine($"[Seeder] Failed to add admin user to Admin role: {string.Join(", ", addToRoleResult.Errors.Select(e => e.Description))}");
+                }
+                else
+                {
+                    Console.WriteLine("[Seeder] Admin user added to Admin role.");
                 }
             }
             else
             {
-                var inRole = userManager.IsInRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
-                if (!inRole)
-                {
-                    var addToRoleResult = userManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
-                    if (!addToRoleResult.Succeeded)
-                    {
-                        foreach (var error in addToRoleResult.Errors)
-                            Console.WriteLine($"Role assignment error: {error.Description}");
-                    }
-                }
+                Console.WriteLine("[Seeder] Admin user already in Admin role.");
             }
         }
     }
