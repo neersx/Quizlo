@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quizlo.Questionnaire.WebApi.Data;
 
@@ -11,9 +12,11 @@ using Quizlo.Questionnaire.WebApi.Data;
 namespace Quizlo.Questionnaire.WebApi.Migrations
 {
     [DbContext(typeof(QuizDbContext))]
-    partial class QuizDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622173923_TestAndQuestionsMigration")]
+    partial class TestAndQuestionsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,9 +103,6 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("AnsweredAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CorrectOptionIds")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -115,7 +115,7 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsCorrect")
+                    b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
                     b.Property<string>("OptionsJson")
@@ -128,6 +128,7 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("SelectedOptionIds")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 

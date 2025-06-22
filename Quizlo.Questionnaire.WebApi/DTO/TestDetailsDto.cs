@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public string Title { get; set; } = default!;
+        public string Language { get; set; } = default!;
+        public string? Subject { get; set; } = default!;
         public TimeSpan Duration { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ExamId { get; set; }

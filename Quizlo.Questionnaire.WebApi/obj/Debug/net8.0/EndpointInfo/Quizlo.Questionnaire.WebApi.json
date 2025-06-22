@@ -768,7 +768,8 @@
         "enum": [
           0,
           1,
-          2
+          2,
+          3
         ],
         "type": "integer",
         "format": "int32"
@@ -870,6 +871,12 @@
         "additionalProperties": { }
       },
       "Question": {
+        "required": [
+          "correctOptionIds",
+          "explanation",
+          "optionsJson",
+          "questionText"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -891,13 +898,6 @@
           "difficulty": {
             "$ref": "#/components/schemas/DifficultyLevel"
           },
-          "options": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
           "explanation": {
             "type": "string",
             "nullable": true
@@ -913,7 +913,20 @@
             "nullable": true
           },
           "isCorrect": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
+          },
+          "answeredAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -926,8 +939,42 @@
             "format": "int32"
           },
           "questionText": {
+            "maxLength": 500,
             "type": "string",
             "nullable": true
+          },
+          "questionNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "optionsJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/QuestionType"
+          },
+          "difficultyRaw": {
+            "type": "string",
+            "nullable": true
+          },
+          "explanation": {
+            "type": "string",
+            "nullable": true
+          },
+          "correctOptionIds": {
+            "type": "string",
+            "nullable": true
+          },
+          "selectedOptionIds": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCorrect": {
+            "type": "boolean"
+          },
+          "isMultipleSelect": {
+            "type": "boolean"
           },
           "options": {
             "type": "array",
@@ -935,20 +982,6 @@
               "type": "string"
             },
             "nullable": true
-          },
-          "correctOption": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "explanation": {
-            "type": "string",
-            "nullable": true
-          },
-          "difficulty": {
-            "$ref": "#/components/schemas/DifficultyLevel"
           }
         },
         "additionalProperties": false
@@ -1062,6 +1095,14 @@
             "format": "int32"
           },
           "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "subject": {
             "type": "string",
             "nullable": true
           },

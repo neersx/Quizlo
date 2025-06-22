@@ -3,6 +3,9 @@ using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Helpers;
 using Quizlo.Questionnaire.WebApi.DTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 public interface ITestService
 {
@@ -43,63 +46,101 @@ public class TestService : ITestService
         {
             ExamId = exam.Id,
             Title = req.Title ?? $"{exam.Name} Mock Test",
-            Duration = req.Duration ?? TimeSpan.FromMinutes(exam.Tests?.Max(t => (int)t.Duration.TotalMinutes) ?? 120),
+            Duration = req.Duration ?? TimeSpan.FromMinutes(exam.Tests?.Max(t => t.Duration.HasValue ? t.Duration.Value.TotalMinutes : 0) ?? 120),
             DurationCompltedIn = TimeSpan.Zero,
             Subject = req.Subject,
             Language = req.Language ?? "English",
             CreatedAt = DateTime.UtcNow,
             CreatedByUserId = userId
         };
+
         _db.Tests.Add(test);
-        await _db.SaveChangesAsync(ct);   // Test.Id materialised
+        await _db.SaveChangesAsync(ct);
 
-        // 3. Ask n8n to generate questions
-        var client = _http.CreateClient();
-        var payload = new
+        // 3. Ask n8n to generate questions ──────────────────────────────────────────
+        string raw = await GetAIGeneratedQuestions(test,exam, req, ct);
+
+
+        if (string.IsNullOrWhiteSpace(raw))
         {
-            examName = exam.Name,
-            examCode = exam.Code,
-            language = test.Language,
-            subject = test.Subject,
-            numberOfQuestions = req.NumberOfQuestions,
-            difficultyLevel = req.Difficulty.ToString()
-        };
-
-        _log.LogInformation("Calling n8n webhook {Url}", _webhookUrl);
-        using var resp = await client.PostAsJsonAsync(_webhookUrl, payload, ct);
-        resp.EnsureSuccessStatusCode();
-
-        var n8n = await resp.Content.ReadFromJsonAsync<N8nQuestionDto[]>(cancellationToken: ct)
-                  ?? Array.Empty<N8nQuestionDto>();
-
-        // 4. Persist questions + link table
-        foreach (var q in n8n)
-        {
-            var entity = new Question
-            {
-                QuestionText = q.Question,
-                Options = q.Options,
-                CorrectOptionIds = string.Join(',', q.CorrectOption),
-                Explanation = q.Explanation,
-                Difficulty = Enum.TryParse<DifficultyLevel>(q.Complexity, true, out var d) ? d : req.Difficulty,
-                Type = QuestionType.Single // map if needed
-            };
-            _db.Questions.Add(entity);
-            await _db.SaveChangesAsync(ct);  // Question.Id
-
-            _db.TestQuestions.Add(new TestQuestion
-            {
-                TestId = test.Id,
-                QuestionId = entity.Id,
-                Order = q.QuestionNo
-            });
+            _log.LogError("n8n webhook returned an empty body");
+            throw new ApplicationException("n8n returned empty response");
         }
 
-        await _db.SaveChangesAsync(ct);
+        _log.LogDebug("Raw n8n response: {Json}", raw);
+        var opts = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var envelope = System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw, opts)
+                      ?? new N8nResponseDto();
+
+        // This is the list we’ll persist
+        var n8n = envelope.Questions!;
+
+
+        // 4-a  Build the Question entities
+        var questions = n8n.Select(q => new Question
+        {
+            QuestionText = q.QuestionText,
+            Options = q.Options,
+            OptionsJson = JsonConvert.SerializeObject(q.Options),        // ← keep if you store JSON
+            CorrectOptionIds = q.CorrectOptionIds,                            // already CSV?
+            Difficulty = q.Difficulty,
+            Explanation = q.Explanation,
+            Type = q.IsMultipleSelect ? QuestionType.Multiple
+                                                  : QuestionType.Single
+        }).ToList();
+
+        // 4-b  Bulk-insert Questions
+        await _db.Questions.AddRangeAsync(questions, ct);
+        await _db.SaveChangesAsync(ct);      
+
+        // 4-c  Build the TestQuestion link table
+        var testQuestions = questions.Select((question, idx) => new TestQuestion
+        {
+            TestId = test.Id,                     
+            QuestionId = question.Id,
+            Order = n8n[idx].QuestionNo 
+        }).ToList();
+
+        // 4-d  Bulk-insert TestQuestions
+        await _db.TestQuestions.AddRangeAsync(testQuestions, ct);
+        await _db.SaveChangesAsync(ct);           // commit the link rows
+
+
 
         // 5. Load back + map to response DTO
         return await GetTestAsync(test.Id, ct) ??
                throw new InvalidOperationException("Test not found after creation");
+    }
+
+    private async Task<string> GetAIGeneratedQuestions(Test test, Exam exam, CreateTestRequest req, CancellationToken ct)
+    {
+        var client = _http.CreateClient();
+        client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
+
+        var query = new Dictionary<string, string?>
+        {
+            ["examName"] = exam.Name,
+            ["examCode"] = exam.Code,
+            ["numberOfQuestions"] = req.NumberOfQuestions.ToString() ?? "",
+            ["difficultyLevel"] = req.Difficulty.ToString() ?? "Mix",
+            ["subject"] = test.Subject ?? "All",
+            ["language"] = test.Language,
+            ["testId"] = "1",
+            ["examId"] = exam.Id.ToString(),
+            ["testTitle"] = test.Title,
+        };
+
+        var webhookUrl = QueryHelpers.AddQueryString(_webhookUrl, query);
+        _log.LogInformation("Calling n8n webhook {Url}", webhookUrl);
+
+        using var resp = await client.GetAsync(webhookUrl, ct);
+        resp.EnsureSuccessStatusCode();
+
+        return await resp.Content.ReadAsStringAsync(ct);
     }
 
     public async Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default)
@@ -113,7 +154,7 @@ public class TestService : ITestService
                     {
                         Id = t.Id,
                         Title = t.Title,
-                        Duration = t.Duration,
+                        Duration = (TimeSpan)t.Duration,
                         CreatedAt = t.CreatedAt,
                         ExamId = t.ExamId,
                         ExamName = t.Exam.Name,
@@ -125,9 +166,8 @@ public class TestService : ITestService
                                          Id = q.Id,
                                          QuestionText = q.QuestionText,
                                          Options = q.Options,
-                                         CorrectOption = q.CorrectOptionIds.Split(',', StringSplitOptions.RemoveEmptyEntries),
-                                         Explanation = q.Explanation,
-                                         Difficulty = q.Difficulty
+                                         CorrectOptionIds = q.CorrectOptionIds,
+                                         Explanation = q.Explanation
                                      })
                                      .ToList()
                     })

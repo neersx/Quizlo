@@ -10,13 +10,21 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public int Id { get; set; }
 
         [MaxLength(500)]
-        public string QuestionText { get; set; }
+        public required string QuestionText { get; set; }
 
-        // store options as JSON in the DB
-        public string OptionsJson { get; set; }
+        public required string OptionsJson { get; set; }
 
         public QuestionType Type { get; set; }         // Single, Multiple, etc.
         public DifficultyLevel Difficulty { get; set; }
+
+        public required string Explanation { get; set; }
+        [MaxLength(50)]
+        public required string CorrectOptionIds { get; set; }
+        [MaxLength(50)]
+        public string? SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
+        public bool? IsCorrect { get; set; }
+
+        public DateTime? AnsweredAt { get; set; }
 
         [NotMapped]
         public string[] Options
@@ -26,11 +34,6 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         }
 
        
-        public string Explanation { get; set; }
-        [MaxLength(50)]
-        public string CorrectOptionIds { get; set; }
-        [MaxLength(50)]
-        public string SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
-        public bool IsCorrect { get; set; }
+
     }
 }

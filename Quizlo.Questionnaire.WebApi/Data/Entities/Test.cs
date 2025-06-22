@@ -22,12 +22,12 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public string Language { get; set; } = IndianLanguages.English;
 
         [MaxLength(100)]
-        public string Subject { get; set; } = "English";
+        public string? Subject { get; set; } = "English";
 
         [Required]
-        public TimeSpan Duration { get; set; }
+        public TimeSpan? Duration { get; set; }
         [Required]
-        public TimeSpan DurationCompltedIn { get; set; }
+        public TimeSpan? DurationCompltedIn { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
