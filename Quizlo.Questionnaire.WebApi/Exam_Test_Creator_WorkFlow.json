@@ -1,0 +1,127 @@
+{
+  "name": "Exam Test Creator",
+  "nodes": [
+    {
+      "parameters": {
+        "functionCode": "return items[0].json.message.content;"
+      },
+      "id": "c4f72924-3091-4672-a1ba-4aeed262fa2c",
+      "name": "Parse OpenAI JSON",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        860,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "ec52e151-ac1a-462d-86ec-6689bb6291b2",
+      "name": "Respond with Questions",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-NANO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Below is a tightened and more “instruction-ready” prompt you can drop straight into the **OpenAI** node of your n8n workflow.\nKey upgrades:\n\n* **Precise role & scope** – tells the model it is an official paper-setter who must mirror the real exam’s syllabus, weightage, and timing rules.\n* **Dynamic difficulty logic** – makes the Easy/Medium/Hard mix deterministic.\n* **Time estimate** – first tries to follow the exam’s own time-per-question rule; if none exists, falls back to a transparent formula (you can tweak the numbers).\n* **Strict JSON contract** – one top-level object with `totalTimeToAnswer` and `questions`, ready for downstream parsing.\n* **Guardrails** – forbids hallucination, enforces uniqueness and freshness, and requests citations inline (remove if you don’t need them).\n\n---\n\n````prompt\nYou are an **accredited exam-paper setter and education researcher**.\n\n### TASK\nUsing the inputs below, compose **{{ $json.query.numberOfQuestions }} unique and realistic MCQs** for **{{ $json.query.examName }} ({{ $json.query.examCode }})** – subject **{{ $json.query.subject }}**, language **{{ $json.query.language }}**.\n\n### INPUT VARIABLES\n- numberOfQuestions → {{ $json.query.numberOfQuestions }}   // may be empty\n- examName         → {{ $json.query.examName }}\n- examCode         → {{ $json.query.examCode }}\n- subject          → {{ $json.query.subject }}   // may be empty or “All”\n- language         → {{ $json.query.language }}\n- difficultyLevel  → {{ $json.query.difficultyLevel }}   // “Easy”, “Medium”, “Hard”, or “Mix”\n\n### QUESTION-COUNT LOGIC  \n1. **If `numberOfQuestions` is provided (non-empty)** → generate **exactly** that many questions.  \n2. **If `numberOfQuestions` is empty / null** →  \n   * Retrieve the **official exam blueprint** (total questions, section breakdown, subjects).  \n   * Produce a **complete paper** that matches that blueprint in count and structure.\n\n\n### SUBJECT LOGIC  \n1. **If `subject` is non-empty** ➜ generate questions *only* for that subject.  \n2. **If `subject` is empty / “All” / null** ➜  \n   * Retrieve the **complete official subject list** for {{ $json.query.examName }}.  \n   * Distribute questions **evenly** across all subjects (±1).  \n   * Add a `subject` property to each question object indicating the subject it belongs to.\n\n\n### QUALITY & SOURCE REQUIREMENTS  \n1. **Align strictly with the latest official syllabus / blueprint** for {{ $json.query.examName }}.  \n2. Base content on **authoritative textbooks, government publications, recognised online portals, and the last 10 years of authentic papers & mocks**. Cite the source in parentheses at the end of each explanation (e.g. “NCERT Chemistry XII p. 112”).  \n3. No plagiarism. Re-phrase and update facts to reflect the most current consensus (≤ 1 year old where applicable).  \n4. Avoid trick or ambiguous wording; write in clear, student-friendly {{ $json.query.language }}.\n\n### DIFFICULTY LOGIC  \nIf *difficultyLevel* = “Mix”, create → **35 % Easy, 45 % Medium, 20 % Hard** (round to nearest whole).  \nOtherwise, generate all questions at the specified single level.\n\n### QUESTION FORMAT  \nFor each item return:\n- **questionNo**   → 1…N (sequential)  \n- **questionText** → plain sentence(s)  \n- **options**      → 4–5 strings, each prefixed “A. ”, “B. ”…  \n- **correctOption**→ single letter matching the right choice  \n- **explanation**  → brief rationale (≤ 40 words) + citation  \n- **isMultipleSelect** → *true* only if >1 correct options\n- **difficulty**→ mention the difficulty level of question\n\n### TIME BUDGET  \n1. If the official guidelines specify minutes per question, use that.  \n2. ELSE use this fallback formula: Easy = 1.25 min, Medium = 2.0 min, Hard = 2.5 min. Sum across all items to compute **totalTimeToAnswer** (integer).\n\n### OUTPUT  \nReturn **one JSON object** exactly in the schema below – nothing more, nothing less:\n\n```json\n{\n  \"totalTimeToAnswer\": <integer_minutes>,\n  \"questions\": [\n    {\n      \"questionNo\": 1,\n      \"questionText\": \"...\",\n      \"options\": [\"A. ...\", \"B. ...\", \"C. ...\", \"D. ...\"],\n      \"correctOption\": \"A\",\n      \"explanation\": \"... (source)\",\n      \"isMultipleSelect\": false,\n      \"difficulty\": \"Medium\" // “Easy”, “Medium” or “Hard”\n    }\n    // … n items\n  ]\n}\n````\n\n**Do not wrap the JSON in markdown back-ticks** when you send the final answer.\n\n```\n\n---\n\n### How to customise further\n* **Change the difficulty mix** percentages or time-per-question constants to match a specific exam.  \n* **Remove citations** if you don’t want source hints (delete the clause in “explanation”).  \n* **Add topic-weighting rules** by inserting another section like “### TOPIC BLUEPRINT”.\n\nDrop this prompt into n8n’s OpenAI node (mode: *“chat”*, role: *“user”*). Feed the `query` object as JSON via the previous node, and you’ll receive clean, parse-ready exam content every run. Happy testing!\n```\n\nI am providing the Sample Output so that you can follow and prepare the response accordingly: \n\nresponse: {\n\nexamId: 1\ntestId: 1\ntotalTimeToAnswer: 120 // minutes in integer\nquestions: [\n  {\n    \"questionId\": \"q1\",\n    \"questionNo\": 1,\n    \"question\": \"What is the capital of India?\",\n    \"type\": \"single\",\n    \"options\": [\"A. Delhi\", \"B. Mumbai\", \"C. Kolkata\", \"D. Chennai\"],\n    \"correctAnswer\": [\"Delhi\"],\n    \"correctOption\": [\"A\"],\n    \"explanation\": \"Delhi is the capital of India.\",\n    \"complexity\": \"easy\"\n  },\n]\n}\n\n\nAll questions must be highly accurate, relevant, and human readable.\",\n        \"temperature\": 0.6,\n        \"maxTokens\": 2048,\n        \"stop\": [],\n        \"frequencyPenalty\": 0,"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        460,
+        0
+      ],
+      "id": "85745fe3-96c2-4bbf-8799-d8c7188e7624",
+      "name": "Create Questions",
+      "credentials": {
+        "openAiApi": {
+          "id": "IMm4tzWjEuqh5yT0",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "ffc4de45-e563-49db-aca4-a7e39453c9d7",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        160,
+        0
+      ],
+      "id": "84749c25-1682-42b2-b35a-5c51e2d99cf8",
+      "name": "Webhook",
+      "webhookId": "ffc4de45-e563-49db-aca4-a7e39453c9d7"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Parse OpenAI JSON": {
+      "main": [
+        [
+          {
+            "node": "Respond with Questions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Questions": {
+      "main": [
+        [
+          {
+            "node": "Parse OpenAI JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create Questions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ea35acbc-0012-4b09-b532-e402fcc90cf5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59bd5190b2300f0e843d95511f487b4ce555e05816688a32bda77d3a01ce3dd4"
+  },
+  "id": "kvR8qUgq73073s6C",
+  "tags": []
+}

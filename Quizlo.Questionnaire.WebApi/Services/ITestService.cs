@@ -45,6 +45,8 @@ public class TestService : ITestService
             Title = req.Title ?? $"{exam.Name} Mock Test",
             Duration = req.Duration ?? TimeSpan.FromMinutes(exam.Tests?.Max(t => (int)t.Duration.TotalMinutes) ?? 120),
             DurationCompltedIn = TimeSpan.Zero,
+            Subject = req.Subject,
+            Language = req.Language ?? "English",
             CreatedAt = DateTime.UtcNow,
             CreatedByUserId = userId
         };
@@ -57,6 +59,8 @@ public class TestService : ITestService
         {
             examName = exam.Name,
             examCode = exam.Code,
+            language = test.Language,
+            subject = test.Subject,
             numberOfQuestions = req.NumberOfQuestions,
             difficultyLevel = req.Difficulty.ToString()
         };

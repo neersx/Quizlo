@@ -741,6 +741,14 @@
             "type": "integer",
             "format": "int32"
           },
+          "subject": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
           "difficulty": {
             "$ref": "#/components/schemas/DifficultyLevel"
           },
