@@ -1007,6 +1007,16 @@
             "minLength": 1,
             "type": "string"
           },
+          "language": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "subject": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
           "duration": {
             "type": "string",
             "format": "date-span"

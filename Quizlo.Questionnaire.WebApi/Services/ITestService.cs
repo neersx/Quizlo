@@ -55,9 +55,10 @@ public class TestService : ITestService
         var client = _http.CreateClient();
         var payload = new
         {
-            examId = exam.Id,
+            examName = exam.Name,
+            examCode = exam.Code,
             numberOfQuestions = req.NumberOfQuestions,
-            difficulty = req.Difficulty.ToString()
+            difficultyLevel = req.Difficulty.ToString()
         };
 
         _log.LogInformation("Calling n8n webhook {Url}", _webhookUrl);

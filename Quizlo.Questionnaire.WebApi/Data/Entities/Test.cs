@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 
 namespace Quizlo.Questionnaire.WebApi.Data.Entities
 {
@@ -16,6 +17,12 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
         [Required, MaxLength(200)]
         public string Title { get; set; }
+
+        [MaxLength(50)]
+        public string Language { get; set; } = IndianLanguages.English;
+
+        [MaxLength(100)]
+        public string Subject { get; set; } = "English";
 
         [Required]
         public TimeSpan Duration { get; set; }
