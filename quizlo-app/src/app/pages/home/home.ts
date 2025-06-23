@@ -606,106 +606,108 @@ export class HomeComponent {
       collapsed: false,
     },
   ];
-  servicecards = [
-    {
-      image: './assets/images/media/landing/services/1.png',
-      title: 'Health Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/2.png',
-      title: 'Financial Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/3.png',
-      title: 'Transportation Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/4.png',
-      title: 'Educational Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/5.png',
-      title: 'Home Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/6.png',
-      title: 'Communication Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/7.png',
-      title: 'Professional Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-    {
-      image: './assets/images/media/landing/services/8.png',
-      title: 'Hospitality Services',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit',
-    },
-  ];
-  featuresCard = [
-    {
-      iconClass: 'bi bi-code-square',
-      title: 'Quality of Code',
-      description: 'Justo aliquyam duo vero clita aliqua vero eirmod.',
-      textColorClass: 'text-primary',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-bootstrap',
-      title: 'Ng-Bootstrap',
-      description: 'Justo aliquyam duo vero clita aliqua vero eirmod.',
-      textColorClass: 'text-secondary',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-layers',
-      title: '60+ component',
-      description: 'Justo aliquyam duo vero clita aliqua vero eirmod.',
-      textColorClass: 'text-info',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-layout-text-sidebar',
-      title: 'Ready RTL',
-      description: 'Easy to switch.clita aliqua vero eirmod stet.',
-      textColorClass: 'text-warning',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-person-lock',
-      title: 'Custom Pages',
-      description: 'Justo aliquyam duo vero clita aliqua vero eirmod.',
-      textColorClass: 'text-pink',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-display',
-      title: 'Layout Styles',
-      description: 'Justo aliquyam duo vero clita aliqua vero eirmod.',
-      textColorClass: 'text-success',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-palette',
-      title: 'Theme Colors',
-      description: 'Theme Background and Theme primary were there.',
-      textColorClass: 'text-danger',
-      cardClass: 'bg-image add-class',
-    },
-    {
-      iconClass: 'bi bi-grid-1x2',
-      title: 'Widgets',
-      description: 'Justo aliquyam duo vero clita aliqua vero eirmod.',
-      textColorClass: 'text-purple',
-      cardClass: 'bg-image add-class',
-    },
-  ];
+ servicecards = [
+  {
+    image: '../../assets/images/exams/jee.jpg',
+    title: 'NEET UG',
+    description: 'AI-generated full-length NEET mocks with real-exam timing, section-wise breakdown, and instant score reports.',
+  },
+  {
+    image: '../../assets/images/exams/main.jpg',
+    title: 'JEE Main',
+    description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
+  },
+  {
+    image: '../../assets/images/exams/jee.jpg',
+    title: 'JEE Advanced',
+    description: 'Replicate the toughest JEE Advanced interface with AI-crafted questions and topic mastery insights.',
+  },
+  {
+    image: '../../assets/images/exams/upsc.jpg',
+    title: 'UPSC Civil Services',
+    description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
+  },
+  {
+    image: '../../assets/images/exams/ssc.jpg',
+    title: 'SSC CGL',
+    description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
+  },
+  {
+    image: '../../assets/images/exams/ibps.jpg',
+    title: 'IBPS PO',
+    description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
+  },
+  {
+    image: 'https://source.unsplash.com/200x200/?rbi',
+    title: 'RBI Grade B',
+    description: 'Fully automated RBI Grade B practice tests, seamless UI, and AI-backed topic-wise analytics.',
+  },
+  {
+    image: 'https://source.unsplash.com/200x200/?gate-exam',
+    title: 'GATE',
+    description: 'AI-powered GATE mock exams with strict time limits, sectional scoring and instant performance dashboards.',
+  },
+];
+
+ featuresCard = [
+  {
+    iconClass: 'bi bi-brightness-alt-high',
+    title: 'AI-Generated Question Bank',
+    description: 'Endless, exam-accurate questions created on-the-fly by our AI engine.',
+    textColorClass: 'text-primary',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-speedometer2',
+    title: 'Real-Exam Interface',
+    description: 'Full-screen timed tests that replicate the look & feel of the official exams.',
+    textColorClass: 'text-secondary',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-bar-chart-line',
+    title: 'Instant Performance Analytics',
+    description: 'Detailed topic-wise reports and percentile ranking delivered immediately.',
+    textColorClass: 'text-info',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-sliders',
+    title: 'Adaptive Difficulty',
+    description: 'Questions dynamically adjust in real-time based on your mastery level.',
+    textColorClass: 'text-warning',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-clock-history',
+    title: 'Custom Test Scheduling',
+    description: 'Create recurring mock-test schedules with calendar reminders and streak tracking.',
+    textColorClass: 'text-danger',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-book-half',
+    title: 'Detailed Solutions & Explanations',
+    description: 'Step-by-step answer breakdowns with references to key concepts.',
+    textColorClass: 'text-success',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-phone',
+    title: 'Mobile-Responsive & Offline Mode',
+    description: 'Practice anytime, anywhere—offline downloads let you prep without internet.',
+    textColorClass: 'text-pink',
+    cardClass: 'bg-image add-class',
+  },
+  {
+    iconClass: 'bi bi-people',
+    title: 'Peer-Comparison & Leaderboards',
+    description: 'See how you stack up against fellow aspirants in real-time leaderboards.',
+    textColorClass: 'text-purple',
+    cardClass: 'bg-image add-class',
+  },
+];
+
   teamMembers = [
     {
       name: 'Hadley Kylin',

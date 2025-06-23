@@ -12,4 +12,6 @@ export class SpkLandingServicesCardComponent {
   @Input() title: string = ''; // Service title
   @Input() description: string = ''; // Service description
   @Input() link: string = '';
+   @Input() height: string = '300px'; // Default height for the card
+   @Input() width: string = '300px';
 }
