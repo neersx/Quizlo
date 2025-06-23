@@ -1,0 +1,46 @@
+<div class="card custom-card pricing-card {{mainClass}} ">
+    @if(isPopular){
+    <div class="pricing-table-item-icon">
+        <i class="fe fe-zap me-2"></i>
+        Popular
+    </div>
+    
+}
+    <div class="card-body p-4 border-bottom border-block-end-dashed {{borderClass}}">
+        <h6 class="fw-medium mb-1 {{textColor}}">{{ title }}</h6>
+        <h2 class="mb-1 fw-semibold d-block {{textColor}}">{{ price }}<span class="fs-12 fw-medium ms-1 op-8"> /
+                {{pricingPlan}}</span></h2>
+        <span class="op-7 d-block {{textColor}} fs-11">{{ description }}</span>
+    </div>
+    <div class="card-body  {{bodyClass}}">
+        <ul class="list-unstyled pricing-body">
+            @for(feature of features;track $index){
+
+            <li>
+                <div class="d-flex align-items-center">
+                    <span class="avatar avatar-xs svg-success">
+                        <i class="ti ti-circle-check fs-18 text-primary"></i>
+                    </span>
+                    <span class="ms-2 my-auto flex-fill">{{ feature.text }}</span>
+                    @if(feature.icon){
+                      
+
+                        <span class="bg-{{feature.icon}}-transparent op-8 p-1 lh-1 rounded-pill" data-bs-toggle="tooltip"
+                            ngbTooltip="Provide essential insights and data analysis to help you track the performance.">
+                            <i class="ri-information-2-line"></i> </span>
+                    }
+                    @if(feature.badge){
+
+                    <span class="{{feature.badgeClass}}">{{ feature.badge }}</span>
+                    }
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
+    <div class="card-footer  p-4 {{footerClass}}">
+        <button class="btn btn-lg btn-{{buttonClass}} d-grid w-100 btn-wave">
+            <span class="ms-4 me-4">Get Started!</span>
+        </button>
+    </div>
+</div>

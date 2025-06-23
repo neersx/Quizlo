@@ -1,0 +1,7 @@
+<!-- <ngb-alert  [type]="variant"  [dismissible]="isDismissible"  >
+    <ng-content >
+    </ng-content>
+  </ngb-alert> -->
+  <ngb-alert  [type]="variant + ' mb-3'" (closed)="onClose()" [dismissible]="isDismissible">
+    <ng-content></ng-content>
+  </ngb-alert>

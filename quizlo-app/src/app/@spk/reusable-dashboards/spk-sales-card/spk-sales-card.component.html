@@ -1,0 +1,27 @@
+
+    <div class="card custom-card">
+      <div class="card-body">
+        <div class="d-flex align-items-end gap-2 justify-content-between flex-wrap mb-3">
+          <div>
+            <span class="avatar avatar-rounded" [ngClass]="iconBgColor">
+              <svg [innerHTML]="sanitizeIcon(icon)"></svg>
+            </span>
+            <h4 class="mb-0 mt-3 fw-smeibold">{{ value }}</h4>
+            <div class="fs-12 text-muted fw-medium">{{ title }}</div>
+          </div>
+          <div class="text-end">
+            <span class="d-block" [ngClass]="trendColor + ' lh-1 fs-12 fw-medium'">
+              <i class="ti ti-trending-up me-1 align-middle fs-16 d-inline-block" *ngIf="trend === 'up'"></i>
+              <i class="ti ti-trending-down me-1 align-middle fs-16 d-inline-block" *ngIf="trend === 'down'"></i>
+              {{ percentage }}
+            </span>
+            <span class="text-muted fs-11 op-5 fw-medium">This week</span>
+          </div>
+        </div>
+        <div [id]="chartId">
+          <spk-apexcharts [chartOptions]="chartOptions"></spk-apexcharts>
+        </div>
+      </div>
+    </div>
+
+  

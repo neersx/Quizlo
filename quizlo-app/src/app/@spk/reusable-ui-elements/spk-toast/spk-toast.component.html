@@ -1,0 +1,39 @@
+@if(content1){
+    <ngb-toast [class]="buttonClass" [autohide]="autohide" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+        {{content1}}
+      <button class="btn-close {{btnClass}} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"
+      (click)="onClose()"></button>
+    </div>
+    <ng-content></ng-content>
+  </ngb-toast>
+}
+@else {
+
+    <ngb-toast
+   [delay]="5000"
+   [autohide]="autohide"
+   class="mb-2"
+   [header]="header"
+   [ngClass]="buttonClass"
+   (hide)="show = false" 
+   >
+       <ng-content>
+           <ng-template ngbToastHeader (hide)="show = true;">
+               <img
+                 class="bd-placeholder-img rounded me-2"
+                 src="./assets/images/brand-logos/{{toastImage}}.png"
+                 alt="Your Image"
+                 />
+                 <strong class="me-auto">zeno</strong>
+                 <small>11 mins ago</small>
+           </ng-template>
+           {{content}}
+       </ng-content>
+       <!-- <button aria-label="Close" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+       >
+       <span aria-hidden="true"></span>
+     </button> -->
+   </ngb-toast> 
+}

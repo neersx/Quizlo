@@ -1,0 +1,49 @@
+<table class="table  {{tableClass}}">
+  <thead class="{{tableHead}}">
+    <tr>
+      @if(showCheckbox){
+      <th class="{{checkboxClass}}">
+        <input class="form-check-input"    
+        (change)="onToggleSelectAll($event)" type="checkbox" aria-label="...">
+      </th>
+      }
+      @for(column of columns;track $index){
+      <th class="{{column.tableHeadColumn}}">{{ column.header }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody class="{{tableBody}}">
+    @for(row of data;track $index){
+
+      <tr>
+    @if(showCheckbox){
+    <td>
+      <input 
+        class="form-check-input" 
+        type="checkbox" 
+        [checked]="allTasksChecked" [(ngModel)]="row.checked" >
+    </td>
+    @for(column of columns;track $index){
+
+      <td>
+        {{ row[column.field] }}
+      </td>
+    }
+    }
+  
+  </tr>
+    }
+    <ng-content></ng-content>
+  </tbody>
+  @if(showFooter==true){
+  <tfoot class="{{tableFooter}}">
+
+      <th scope="row"> {{tableFoot}} </th>
+      <td> United States </td>
+      <td> 558 </td>
+      <td><span class="badge bg-primary text-fixed-white">56%</span></td>
+    <!-- }
+    </tr> -->
+  </tfoot>
+  }
+</table>

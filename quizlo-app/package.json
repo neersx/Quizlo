@@ -1,0 +1,52 @@
+{
+  "name": "quizlo-app",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:quizlo-app": "node dist/quizlo-app/server/server.mjs",
+    "sass": "sass ./public/assets/scss:./public/assets/css/",
+    "sass-min": "sass ./public/assets/scss:./public/assets/css/ --style compressed"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "@angular/material": "^20.0.3",
+    "@angular/platform-browser": "^20.0.0",
+    "@angular/platform-server": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "@angular/ssr": "^20.0.3",
+    "@ng-bootstrap/ng-bootstrap": "^19.0.0",
+    "@ng-select/ng-select": "^15.1.2",
+    "@wfpena/angular-wysiwyg": "^2.0.0",
+    "angular-font-awesome": "^3.1.2",
+    "angularx-flatpickr": "^8.1.0",
+    "express": "^5.1.0",
+    "ngx-color-picker": "^20.0.0",
+    "ngx-colors": "^3.6.0",
+    "ngx-owl-carousel-o": "^20.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.0.3",
+    "@angular/cli": "^20.0.3",
+    "@angular/compiler-cli": "^20.0.0",
+    "@types/express": "^5.0.1",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "jasmine-core": "~5.7.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.8.2"
+  }
+}

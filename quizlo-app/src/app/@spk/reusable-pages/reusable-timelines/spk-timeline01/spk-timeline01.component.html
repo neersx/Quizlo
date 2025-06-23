@@ -1,0 +1,64 @@
+<div class="timeline container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="timeline-container">
+        @for(item of timelineData;track $index){
+          <ng-container>
+            @if(item.type === 'date'){
+
+              <div class="timeline-end">
+                <span class="p-1 fs-11 bg-{{item.bgColor}} text-fixed-white backdrop-blur text-center border border-info border-opacity-10 rounded-1 lh-1 fw-medium">
+                  {{ item.date }}
+                </span>
+              </div>
+            }
+            <div class="timeline-continue">
+              <!-- @for(item of day.entries;track $index){ -->
+                
+                @if(item.type === 'event'){
+                    <ng-container>
+                      <div class="timeline-right">
+                        <div class="timeline-content">
+                          <p class="timeline-date text-muted mb-2">{{ item.time }}</p>
+                          <div class="timeline-box">
+                            @if(item.title){
+                              <p  class="mb-2">
+                                <b>{{ item.title }}</b>
+                                @if(item.tagged){
+        
+                                  <ng-container >
+                                    {{item.defaultText}} <b class="{{item.tagColor}}">{{ item.tagged }}</b> {{item.defaultText1}}
+                                  </ng-container>
+                                }
+                              </p>
+                            }
+                            @if(item.description){
+        
+                              <p class="mb-2">{{ item.description }}</p>
+                            }
+                            @if(item.media && item.media.length){
+        
+                              <p  class="profile-activity-media mb-0">
+                                @for(media of item.media;track $index){
+        
+                                  <ng-container>
+                                    <a href="javascript:void(0);">
+                                      <img [src]="media" alt="" class="mb-0">
+                                    </a>
+                                  </ng-container>
+                                }
+                              </p>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    }
+              <!-- } -->
+            </div>
+            </ng-container>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div [class]="Customclass"    ngbDropdown>
+      @if(splitbutton){
+        <button type="button" class="{{splitbuttonClass}}">{{splitTitle}}</button>
+      }
+        <button ngbDropdownToggle class="btn {{class}}" [id]="Id" > {{title}}  
+          @if(iconPosition === 'before'){
+              <ng-container>
+               @if(Imagetag){
+                   <img  [src]="Imagesrc" [alt]="Imagename" [class]="Imageclass">
+               }
+               @if(Icon){
+                   <i  [class]="IconClass"></i>
+               }
+                 {{ Toggletext }}
+               </ng-container>
+          } 
+          @if(iconPosition !== 'before'){
+  
+              <ng-container>
+                {{ Toggletext }}
+                @if(Imagetag){
+                   <img  [src]="Imagesrc" [alt]="Imagename" [class]="Imageclass">
+               }
+               @if(Icon){
+                   <i  [class]="IconClass"></i>
+               }
+              </ng-container>
+          }
+          @if(Arrowicon){
+  
+              <i class="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
+          }
+          @if(Svg){ 
+              <svg  xmlns="http://www.w3.org/2000/svg" [class]="SvgClass" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="Svgicon"/>
+              </svg>
+          }
+          @if(Badgetag){
+  
+              <span class="badge" >{{ Badgetext }}</span>
+          }
+          @if(splitbuttonEnd){
+            <button type="button" class="{{splitbuttonClass}}">{{splitTitle}}</button>
+          }
+        </button>   
+      <ul [class]="Menuclass" ngbDropdownMenu [attr.aria-labelledby]="Menulabel">
+        <ng-content></ng-content>
+      </ul>
+  </div>
+  
+
+  
+  

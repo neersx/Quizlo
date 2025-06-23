@@ -1,0 +1,55 @@
+<ul class="notification container px-3">
+    @for(notification of notifications;track $index){
+        <li>
+          <div class="row">
+            @if(notification.Start){
+            <ng-container>
+                <div class="col-xl-6">
+                    <div class="notification-time d-flex align-items-center gap-2" [ngClass]="{ 'content-end': notification.isEnd }">
+                      <span class="date">{{ notification.date }}</span>
+                      <span class="time">{{ notification.time }}</span>
+                    </div>
+                    <div class="notification-icon">
+                      <a href="javascript:void(0);" [class]="notification.badgeClass"></a>
+                    </div>
+                  </div>
+              </ng-container>
+            }
+                    <div class="col-xl-6">
+                        
+                      <div  class="notification-body notification-body border border-{{notification.badgeClass}}  border-opacity-50" [ngClass]="{ 'notification-body-end': notification.isEnd }">
+                        
+                        <div class="d-flex align-items-start gap-3 flex-wrap">
+                          <div>
+                            <span class="avatar avatar-lg online">
+                              <img [src]="notification.avatar" alt="Avatar">
+                            </span>
+                          </div>
+                          <div class="flex-fill w-50">
+                            <h5 class="mb-1 fs-15 fw-medium text-dark">{{ notification.title }}</h5>
+                            <p class="mb-0 text-muted">{{ notification.description }}</p>
+                          </div>
+                          <div>
+                            <span class=" badge bg-{{ notification.badgeClass}}-transparent" >{{ notification.badgeContent }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+            @if(notification.End){
+                <ng-container>
+                    <div class="col-xl-6">
+                      <div class="notification-time d-flex align-items-center gap-2" [ngClass]="{ 'content-end': notification.isEnd }">
+                        <span class="date">{{ notification.date }}</span>
+                        <span class="time">{{ notification.time }}</span>
+                      </div>
+                      <div class="notification-icon">
+                        <a href="javascript:void(0);" [class]="notification.badgeClass"></a>
+                      </div>
+                    </div>
+                </ng-container>
+            }
+          </div>
+        </li>
+    }
+  </ul>
+  

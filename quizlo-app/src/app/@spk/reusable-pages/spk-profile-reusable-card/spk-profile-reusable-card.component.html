@@ -1,0 +1,29 @@
+<div class="card custom-card shadow-none border">
+  <div class="card-body">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="avatar avatar-xl avatar-rounded flex-shrink-0">
+        <img [src]="avatar" alt="{{ name }}">
+      </span>
+      <div class="text-truncate">
+        <p class="mb-0 fw-semibold">{{ name }}</p>
+        <p class="w-75 text-truncate fs-12 op-7 mb-1 text-muted">{{ email }}</p>
+        <span class="badge  {{badgeClass}}">{{ role }}</span>
+      </div>
+      <div class="dropdown ms-auto" ngbDropdown> <a aria-label="anchor"
+          class="btn btn-secondary-light btn-icon btn-sm btn-wave waves-effect waves-light no-caret" ngbDropdownToggle href="javascript:void(0);"
+          data-bs-toggle="dropdown"> <i class="ri-more-2-fill"></i> </a>
+        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
+          <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Message</a></li>
+          <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Block</a></li>
+          <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Remove</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer text-center p-3">
+    <div class="d-flex gap-2 flex-wrap justify-content-center">
+      <button class="btn btn-sm btn-primary-light btn-wave me-0">View Profile</button>
+      <button class="btn btn-sm btn-light btn-wave me-0">Unfollow</button>
+    </div>
+  </div>
+</div>

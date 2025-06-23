@@ -1,0 +1,27 @@
+<div class="timeline-steps">
+    <div *ngFor="let step of steps" class="timeline-step">
+      <div
+        class="timeline-content"
+        data-toggle="popover"
+        data-placement="top"
+        [attr.title]="step.date"
+        [attr.data-content]="step.description"
+        [attr.data-original-title]="step.title"
+      >
+        <div class="inner-circle"></div>
+        <div class="card custom-card mb-0 border border-opacity-25 border-{{step.bgClass}} bg-{{step.bgClass}}-transparent">
+          <div class="card-body">
+            <span class="avatar avatar-sm avatar-rounded">
+              <img [src]="step.imageSrc" alt="">
+            </span>
+            <p class="fw-medium mt-1 mb-1">{{ step.date }}</p>
+            <p class="mb-1 fw-semibold">
+              {{ step.title }}:
+              <span class="text-muted fw-normal mb-0 mb-lg-0">{{ step.content }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
