@@ -7,13 +7,23 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Json;
 using Newtonsoft.Json;
 using System.Data;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 
 public interface ITestService
 {
+
+    Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(
+       int userId,
+       CancellationToken ct = default);
     Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int createdByUserId,
                                          CancellationToken ct = default);
 
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
+
+    Task<TestSubmissionResultDto> SubmitAnswersAsync(
+       int testId,
+       SubmitTestAnswersRequest request,
+       CancellationToken ct = default);
 }
 
 public class TestService : ITestService
@@ -22,6 +32,7 @@ public class TestService : ITestService
     private readonly IHttpClientFactory _http;
     private readonly ILogger<TestService> _log;
     private readonly string _webhookUrl;
+    private const int MaxRetries = 3;
 
     public TestService(QuizDbContext db,
                        IHttpClientFactory http,
@@ -34,9 +45,36 @@ public class TestService : ITestService
         _webhookUrl = cfg["N8n:WebhookUrl"]!; // -> appsettings.json
     }
 
+    /// <summary>All tests that belong to one user, most-recent first.</summary>
+    public async Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(
+        int userId,
+        CancellationToken ct = default)
+    {
+        // NB: projection happens in SQL, so only the needed columns travel over the wire
+        return await _db.Tests
+            .AsNoTracking()
+            .Where(t => t.CreatedByUserId == userId)
+            .OrderByDescending(t => t.CreatedAt)
+            .Select(t => new TestDetailsDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Language = t.Language,
+                Subject = t.Subject,
+                Duration = (TimeSpan)t.Duration,
+                CreatedAt = t.CreatedAt,
+                ExamId = t.ExamId,
+                TotalQuestions = t.TestQuestions.Count,   // COUNT(*) in SQL
+                TotalMarks = t.TotalMarks,
+                MarksScored = t.MarksScored,
+                ExamName = t.Exam.Name,
+                ExamCode = t.Exam.Code
+            })
+            .ToListAsync(ct);
+    }
 
     public async Task<TestDetailsDto> CreateTestAsync(
-        CreateTestRequest req, int userId, CancellationToken ct = default)
+            CreateTestRequest req, int userId, CancellationToken ct = default)
     {
         //------------------------------------------------------------------
         // 1)   Get *all* data you need BEFORE you open a DB transaction
@@ -65,13 +103,14 @@ public class TestService : ITestService
             Subject = req.Subject ?? "All",
             Language = req.Language ?? "English",
             CreatedAt = DateTime.UtcNow,
-            CreatedByUserId = userId
+            CreatedByUserId = userId,
+            Status = TestStatus.NotStarted
         };
 
         var questions = aiQuestions.Select(q => new Question
         {
             QuestionText = q.QuestionText,
-            Options = q.Options,    
+            Options = q.Options,
             OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
             CorrectOptionIds = q.CorrectOptionIds,
             Explanation = q.Explanation,
@@ -95,19 +134,16 @@ public class TestService : ITestService
 
             try
             {
-                //------------------------------------------------------------------
                 // 3-A  Insert the Test  ➜ we need its identity for TestQuestions
                 //------------------------------------------------------------------
                 _db.Tests.Add(test);
                 await _db.SaveChangesAsync(ct);               // generates test.Id
 
-                //------------------------------------------------------------------
                 // 3-B  Insert all Questions
                 //------------------------------------------------------------------
                 _db.Questions.AddRange(questions);
                 await _db.SaveChangesAsync(ct);               // gets question.Id’s
 
-                //------------------------------------------------------------------
                 // 3-C  Link table rows
                 //------------------------------------------------------------------
                 var links = questions.Select((q, i) => new TestQuestion
@@ -123,7 +159,7 @@ public class TestService : ITestService
                 //------------------------------------------------------------------
                 await tx.CommitAsync(ct);                     // <-- atomic commit
             }
-            catch   // *any* exception => rollback + re-throw
+            catch
             {
                 await tx.RollbackAsync(ct);
                 throw;
@@ -135,7 +171,7 @@ public class TestService : ITestService
     }
 
 
-    private async Task<string> GetAIGeneratedQuestions( Exam exam, CreateTestRequest req, CancellationToken ct)
+    private async Task<string> GetAIGeneratedQuestions(Exam exam, CreateTestRequest req, CancellationToken ct)
     {
         var client = _http.CreateClient();
         client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
@@ -180,6 +216,9 @@ public class TestService : ITestService
                             ExamId = t.ExamId,
                             Subject = t.Subject,
                             Language = t.Language,
+                            Status = t.Status,
+                            MarksScored = t.MarksScored,
+                            TotalMarks = t.TotalMarks,
                             ExamName = t.Exam.Name,
                             Questions = t.TestQuestions
                                          .OrderBy(tq => tq.Order)
@@ -189,6 +228,7 @@ public class TestService : ITestService
                                              QuestionText = tq.Question.QuestionText,
                                              QuestionNo = tq.Order,
                                              Options = tq.Question.Options,
+                                             Marks = tq.Question.Marks,
                                              CorrectOptionIds = tq.Question.CorrectOptionIds,
                                              Explanation = tq.Question.Explanation,
                                              Difficulty = tq.Question.Difficulty.ToString() // Convert DifficultyLevel to string  
@@ -196,5 +236,75 @@ public class TestService : ITestService
                                          .ToList()
                         })
                         .FirstOrDefaultAsync(ct);
+    }
+
+
+    // / Submit all answers for a given test in one shot.
+    public async Task<TestSubmissionResultDto> SubmitAnswersAsync(
+        int testId,
+        SubmitTestAnswersRequest req,
+        CancellationToken ct = default)
+    {
+        if (req.Answers.Count == 0)
+            throw new ArgumentException("No answers supplied.", nameof(req));
+
+        for (var attempt = 1; attempt <= MaxRetries; attempt++)
+        {
+            await using var tx = await _db.Database.BeginTransactionAsync(ct);
+            try
+            {
+                var test = await _db.Tests
+                    .Include(t => t.TestQuestions)
+                        .ThenInclude(tq => tq.Question)
+                    .FirstOrDefaultAsync(t => t.Id == testId, ct)
+                    ?? throw new KeyNotFoundException($"Test {testId} not found.");
+
+                var answers = req.Answers.ToDictionary(a => a.QuestionId, a => a.SelectedIds);
+                int attempted = 0, correct = 0, total = test.TestQuestions.Count;
+
+                foreach (var tq in test.TestQuestions)
+                {
+                    var q = tq.Question;
+                    if (!answers.TryGetValue(q.Id, out var selected)) continue;
+
+                    attempted++;
+
+                    q.SelectedOptionIds = string.Join(",", selected);
+                    q.IsCorrect = IsAnswerCorrect(q, selected);
+                    q.AnsweredAt = DateTime.UtcNow;
+                    if (q.IsCorrect == true) correct++;
+                }
+
+                await _db.SaveChangesAsync(ct);
+                await tx.CommitAsync(ct);
+
+                return new TestSubmissionResultDto(
+                    testId,
+                    total,
+                    attempted,
+                    correct,
+                    attempted - correct,
+                    total == 0 ? 0 : Math.Round(correct * 100.0 / total, 2));
+            }
+            catch (DbUpdateConcurrencyException ex) when (attempt < MaxRetries)
+            {
+                _log.LogWarning(ex,
+                    "SubmitAnswers concurrency collision – retry {Attempt}/{Max}", attempt, MaxRetries);
+            }
+        }
+
+        throw new InvalidOperationException("Could not submit answers due to concurrent edits.");
+    }
+
+    // --------------------------------------------------------
+
+    private static bool IsAnswerCorrect(Question q, string[] selected)
+    {
+        var correct = q.CorrectOptionIds
+                       .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        return q.Type == QuestionType.Single
+               ? selected.Length == 1 && correct.Length == 1 && selected[0] == correct[0]
+               : selected.OrderBy(x => x).SequenceEqual(correct.OrderBy(x => x), StringComparer.OrdinalIgnoreCase);
     }
 }

@@ -15,6 +15,19 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         public TestsController(ITestService svc) => _svc = svc;
 
+        /// <summary>Returns every test created by the currently-logged-in user.</summary>
+        [HttpGet]                                // GET api/tests
+        public async Task<ActionResult<IEnumerable<TestDetailsDto>>> GetMyTests(
+            CancellationToken ct)
+        {
+            // Identity uses the NameIdentifier claim to store User.Id
+            if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+                return Unauthorized("User id not found in token.");
+
+            var tests = await _svc.GetUserTestsAsync(userId, ct);
+            return Ok(tests);
+        }
+
         /// POST api/tests
         [HttpPost]
         [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
@@ -35,6 +48,20 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             => await _svc.GetTestAsync(id, ct) is { } dto
                ? Ok(dto)
                : NotFound();
+
+        /// <summary>Submit all answers for the specified test.</summary>
+        [HttpPost("{testId:int}/submit")]
+        public async Task<ActionResult<TestSubmissionResultDto>> Submit(
+            int testId,
+            [FromBody] SubmitTestAnswersRequest request,
+            CancellationToken ct)
+        {
+            if (request is null || request.Answers.Count == 0)
+                return BadRequest("Answers collection cannot be empty.");
+
+            var result = await _svc.SubmitAnswersAsync(testId, request, ct);
+            return Ok(result);
+        }
     }
 
 }

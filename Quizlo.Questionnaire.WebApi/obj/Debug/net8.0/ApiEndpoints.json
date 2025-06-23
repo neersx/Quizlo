@@ -261,6 +261,26 @@
   },
   {
     "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.TestsController",
+    "Method": "GetMyTests",
+    "RelativePath": "api/Tests",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Quizlo.Questionnaire.WebApi.DTO.TestDetailsDto, Quizlo.Questionnaire.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.TestsController",
     "Method": "Create",
     "RelativePath": "api/Tests",
     "HttpMethod": "POST",
@@ -320,6 +340,37 @@
       }
     ],
     "EndpointName": "GetTest"
+  },
+  {
+    "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.TestsController",
+    "Method": "Submit",
+    "RelativePath": "api/Tests/{testId}/submit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "testId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Quizlo.Questionnaire.WebApi.DTO.SubmitTestAnswersRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Quizlo.Questionnaire.WebApi.DTO.TestSubmissionResultDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Quizlo.Questionnaire.WebApi.Controllers.UsersController",

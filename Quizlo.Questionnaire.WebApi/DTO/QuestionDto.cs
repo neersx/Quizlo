@@ -23,6 +23,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public bool IsCorrect { get; set; } = false;
         [NotMapped]
         public bool IsMultipleSelect { get; set; }
+        public double? Marks { get; init; }
 
         [NotMapped]
         public string[] Options

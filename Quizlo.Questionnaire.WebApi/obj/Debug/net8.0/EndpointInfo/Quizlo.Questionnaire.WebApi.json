@@ -450,6 +450,42 @@
       }
     },
     "/api/Tests": {
+      "get": {
+        "tags": [
+          "Tests"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestDetailsDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestDetailsDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TestDetailsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Tests"
@@ -551,6 +587,65 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Tests/{testId}/submit": {
+      "post": {
+        "tags": [
+          "Tests"
+        ],
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitTestAnswersRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitTestAnswersRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitTestAnswersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestSubmissionResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestSubmissionResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestSubmissionResultDto"
                 }
               }
             }
@@ -916,6 +1011,11 @@
             "type": "boolean",
             "nullable": true
           },
+          "marks": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "answeredAt": {
             "type": "string",
             "format": "date-time",
@@ -976,6 +1076,11 @@
           "isMultipleSelect": {
             "type": "boolean"
           },
+          "marks": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "options": {
             "type": "array",
             "items": {
@@ -1016,6 +1121,36 @@
           },
           "phoneNumber": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubmitAnswerDto": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "selectedIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubmitTestAnswersRequest": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubmitAnswerDto"
+            },
             "nullable": true
           }
         },
@@ -1077,6 +1212,16 @@
           "createdBy": {
             "$ref": "#/components/schemas/User"
           },
+          "totalMarks": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "marksScored": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "testQuestions": {
             "type": "array",
             "items": {
@@ -1118,7 +1263,25 @@
             "type": "integer",
             "format": "int32"
           },
+          "totalQuestions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMarks": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "marksScored": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "examName": {
+            "type": "string",
+            "nullable": true
+          },
+          "examCode": {
             "type": "string",
             "nullable": true
           },
@@ -1156,6 +1319,36 @@
           "order": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TestSubmissionResultDto": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalQuestions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attempted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "correct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "incorrect": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scorePercent": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
