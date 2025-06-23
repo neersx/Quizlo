@@ -1222,6 +1222,20 @@
             "format": "double",
             "nullable": true
           },
+          "testRules": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
           "testQuestions": {
             "type": "array",
             "items": {
@@ -1282,6 +1296,10 @@
             "nullable": true
           },
           "examCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
             "type": "string",
             "nullable": true
           },

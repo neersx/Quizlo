@@ -10,6 +10,10 @@
         [JsonPropertyName("TotalQuestions")]
         public int TotalQuestions { get; set; }
 
+        [JsonPropertyName("totalMarks")]
+        public int totalMarks { get; set; }
+
+
         [JsonPropertyName("questions")]
         public List<QuestionDto> Questions { get; set; } = [];
     }

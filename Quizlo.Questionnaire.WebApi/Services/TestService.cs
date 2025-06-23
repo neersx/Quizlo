@@ -104,7 +104,8 @@ public class TestService : ITestService
             Language = req.Language ?? "English",
             CreatedAt = DateTime.UtcNow,
             CreatedByUserId = userId,
-            Status = TestStatus.NotStarted
+            Status = TestStatus.NotStarted,
+            TotalMarks = env.totalMarks
         };
 
         var questions = aiQuestions.Select(q => new Question
@@ -114,6 +115,7 @@ public class TestService : ITestService
             OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
             CorrectOptionIds = q.CorrectOptionIds,
             Explanation = q.Explanation,
+            Marks = q.Marks,
             Type = q.IsMultipleSelect
                                     ? QuestionType.Multiple
                                     : QuestionType.Single,
