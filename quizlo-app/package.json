@@ -28,6 +28,7 @@
     "angular-font-awesome": "^3.1.2",
     "angularx-flatpickr": "^8.1.0",
     "express": "^5.1.0",
+    "ng-apexcharts": "^1.16.0",
     "ngx-color-picker": "^20.0.0",
     "ngx-colors": "^3.6.0",
     "ngx-owl-carousel-o": "^20.0.0",

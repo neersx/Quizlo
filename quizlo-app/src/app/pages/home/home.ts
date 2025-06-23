@@ -6,9 +6,14 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
+  PLATFORM_ID,
   inject,
 } from '@angular/core';
-import { CommonModule, ViewportScroller } from '@angular/common';
+import {
+  CommonModule,
+  ViewportScroller,
+  isPlatformBrowser,
+} from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgxColorsModule } from 'ngx-colors';
 import {
@@ -46,7 +51,7 @@ import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-la
     NgxColorsModule,
     NgbAccordionModule,
     CarouselModule,
-  
+
     SpkLandingServicesCardComponent,
   ],
   providers: [NgbOffcanvas],
@@ -56,6 +61,12 @@ import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-la
 })
 export class HomeComponent {
   isYearly: boolean = false;
+  localdata: any = localStorage;
+  
+  get WindowPreSize(): number[] {
+    return [window.innerWidth];
+  }
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   onToggle() {}
   thumbsSwiper: any;
@@ -180,12 +191,14 @@ export class HomeComponent {
 
     this.dynamicLightPrimaryColor(dynamicPrimaryLight, this.color1);
 
-    localStorage.setItem(
-      'zeno-primary-mode',
-      this.hexToRgba(this.color1) || ''
-    );
-    localStorage.setItem('zenolight-mode', 'true');
-    this.body?.classList.remove('transparent-mode');
+    if (this.isBrowser) {
+      localStorage.setItem(
+        'zeno-primary-mode',
+        this.hexToRgba(this.color1) || ''
+      );
+      localStorage.setItem('zenolight-mode', 'true');
+      this.body?.classList.remove('transparent-mode');
+    }
 
     // Adding
     this.body?.classList.add('light-mode');
@@ -248,12 +261,13 @@ export class HomeComponent {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
+     if(this.isBrowser) 
     this.scrolled = window.scrollY > 10;
     const sections = this.el.nativeElement.querySelectorAll('.side-menu__item');
     const scrollPos =
-      window.scrollY ||
+      this.isBrowser ? window.scrollY ||
       this.elementRef.nativeElement.ownerDocument.documentElement.scrollTop ||
-      document.body.scrollTop;
+      document.body.scrollTop: "10";
     sections.forEach((el: any, i: string | number) => {
       const currLink = sections[i];
       const val: any = currLink.getAttribute('value');
@@ -277,10 +291,10 @@ export class HomeComponent {
       }
     });
     let number =
-      window.pageYOffset ||
+      this.isBrowser ? window.pageYOffset ||
       document.documentElement.scrollTop ||
       document.body.scrollTop ||
-      0;
+      0: 0;
     if (number > 100) {
       this.show = true;
     } else {
@@ -315,7 +329,7 @@ export class HomeComponent {
     this.renderer.setAttribute(htmlElement, 'data-toggled', 'close');
   }
   ngOnInit(): void {
-    this.localStorageBackUp();
+    if (this.isBrowser) this.localStorageBackUp();
   }
   ngOnDestroy(): void {
     document.body.classList.remove('landing-body');
@@ -327,19 +341,22 @@ export class HomeComponent {
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'data-header-styles', type1);
+    if(this.isBrowser) {
     localStorage.setItem('zenoHeader', type1);
     this.renderer.setAttribute(htmlElement, 'data-menu-styles', type1);
     localStorage.setItem('zenoMenu', type1);
     this.renderer.setAttribute(htmlElement, 'data-theme-mode', type1);
     localStorage.setItem('zenodarktheme', type1);
+    }
   }
-  localdata: any = localStorage;
+
+
   //  Directions
   DirectionsChange(type: string) {
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'dir', type);
-    localStorage.setItem('dir', type);
+    if(this.isBrowser) localStorage.setItem('dir', type);
   }
 
   //Theme Primary
@@ -348,8 +365,8 @@ export class HomeComponent {
       '--primary-rgb',
       type
     );
-    localStorage.setItem('zeno-primary-mode', type);
-    localStorage.removeItem('zenolight-primary-color');
+     if(this.isBrowser) {localStorage.setItem('zeno-primary-mode', type);
+    localStorage.removeItem('zenolight-primary-color');}
   }
 
   //reset switcher
@@ -795,6 +812,7 @@ export class HomeComponent {
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.menuResizeFn();
+    if(this.isBrowser) 
     this.screenWidth = window.innerWidth;
 
     // Check if the event hasn't been triggered and the screen width is less than or equal to your breakpoint
@@ -808,9 +826,11 @@ export class HomeComponent {
     }
   }
 
-  WindowPreSize: number[] = [window.innerWidth];
+  
   menuResizeFn(): void {
-    this.WindowPreSize.push(window.innerWidth);
+    if (this.isBrowser) {
+      this.WindowPreSize.push(window.innerWidth);
+      }
 
     if (this.WindowPreSize.length > 2) {
       this.WindowPreSize.shift();
