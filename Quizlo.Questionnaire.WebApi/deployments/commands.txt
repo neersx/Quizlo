@@ -1,0 +1,21 @@
+sudo nano /etc/systemd/system/quizlo-api.service
+sudo systemctl daemon-reload
+sudo systemctl enable quizlo-api.service
+sudo systemctl start quizlo-api.service
+
+####
+
+# 1) Test your Nginx config
+sudo nginx -t
+
+# 2) Reload Nginx
+sudo systemctl reload nginx
+
+# 3) (Optional) Fix permissions
+sudo chown -R www-data:www-data /var/www/quizlo
+sudo chown -R www-data:www-data /var/www/quizlo/api
+
+
+###
+
+Place this script anywhere on the server (e.g. /home/ubuntu/deploy.sh), make it executable (chmod +x deploy.sh):
