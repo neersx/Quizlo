@@ -1,0 +1,6 @@
+sudo systemctl daemon-reload
+sudo systemctl enable quizlo-api.service
+
+####
+
+Place this script anywhere on the server (e.g. /home/ubuntu/deploy.sh), make it executable (chmod +x deploy.sh):
