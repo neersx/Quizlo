@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Quizlo.Questionnaire.WebApi.props" />
-</Project>
