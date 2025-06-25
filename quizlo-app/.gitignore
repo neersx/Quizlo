@@ -40,3 +40,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# .NET build artifacts
+**/bin/
+**/obj/
+
+# (Optional) NuGet caches & MSBuild caches
+**/*.nuget.cache
+**/*.dgspec.json
+**/*.g.props
+**/*.g.targets
+
