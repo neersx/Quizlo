@@ -11,6 +11,12 @@ export const routes: Routes = [
       import('./pages/home/home').then((m) => m.HomeComponent),
   },
 
+  {
+    path: 'auth/login',
+    loadComponent: () =>
+      import('../app/pages/identity/login/login').then((m) => m.Login),
+  },
+
   // ③ Dashboard (lazy-loaded standalone component)
 //   {
 //     path: 'dashboard',

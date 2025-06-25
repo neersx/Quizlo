@@ -1,0 +1,212 @@
+<!-- Start::app-sidebar -->
+<aside class="app-sidebar sticky" id="sidebar" [ngClass]="{ 'sticky-pin': scrolled }">
+  <!-- Start::main-sidebar-header -->
+  <div class="main-sidebar-header">
+    <a  routerLink="/dashboards/sales" class="header-logo">
+       <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+       <img src="../assets/images/brand-logos/toggle-dark.png" alt="logo" class="toggle-dark">
+       <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
+        <img src="../assets/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
+        <img src="../assets/images/brand-logos/toggle-white.png" alt="logo" class="toggle-white">
+        <img src="../assets/images/brand-logos/desktop-white.png" alt="logo" class="desktop-white">
+      </a>
+  </div>
+  <!-- End::main-sidebar-header -->
+
+  <!-- Start::main-sidebar -->
+  <overlay-scrollbars [defer] class="main-sidebar" id="sidebar-scroll">
+      <!-- Start::nav -->
+      <nav class="main-menu-container nav nav-pills flex-column sub-open">
+          <div class="slide-left" id="slide-left" (click)="leftArrowFn()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> 
+                <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path> 
+              </svg>
+          </div>
+          <ul class="main-menu" [ngStyle]="{ display: 'block' }">
+              @for (menuItem of menuItems; track menuItem) {
+              <li
+                class="slide"
+                #activeMenuItems
+                [ngClass]="{
+                  slide__category: menuItem.headTitle,
+                  'slide has-sub': menuItem.title,
+                  'open': menuItem.active,
+                  'active': menuItem.selected
+                }"
+              >
+                <!-- head title  -->
+                @if(menuItem.headTitle){
+                <span class="category-name">{{ menuItem.headTitle }}</span>
+                }
+                <!-- has-Link -->
+                @if (menuItem.type === 'link') {
+                <a
+                  class="side-menu__item"
+                  [routerLink]="!menuItem.type ? null : [menuItem.path]"
+                  routerLinkActive="active"
+                  (click)="setNavActive($event, menuItem.path ?? '')"
+                >
+                  @if (menuItem.icon) {
+                  <span class="iconclick" [appSvgReplace]="menuItem.icon"></span>
+                  }
+                  <span class="side-menu__label"
+                    >{{ menuItem.title }}
+                    <span class="badge bg-{{ menuItem.badgeClass }}">{{menuItem.badgeValue}}</span>
+                  </span>
+                </a>
+                }
+                <!-- has-empty -->
+                @if (menuItem.type === 'empty') {
+                <a
+                  class="side-menu__item"
+                  href="javascript:;"
+                  (click)="setNavActive($event, menuItem.path ?? '')"
+                >
+                  @if (menuItem.icon) {
+                  <span class="iconclick" [appSvgReplace]="menuItem.icon"></span>
+                  }
+                  <span class="side-menu__label"
+                    >{{ menuItem.title }}
+                    <span class="badge bg-warning ms-2">hot</span>
+                  </span>
+                </a>
+                }
+                <!-- has-Sub -->
+                @if (menuItem.type === 'sub') {
+                  <a class="side-menu__item" [routerLink]="menuItem.type ? null: [menuItem.path]"
+                    [ngClass]="{active: menuItem.selected}" (click)="toggleNavActive($event, menuItem, undefined, true)">
+                    @if (menuItem.icon) {
+                      <span class="iconclick" [appSvgReplace]="menuItem.icon"></span>
+                      }
+                    <span class="side-menu__label">{{menuItem.title}}
+                      <span class="badge bg-{{ menuItem.badgeClass }} ms-2">{{
+                        menuItem.badgeValue
+                      }}</span></span>
+                    <i class="fe fe-chevron-right side-menu__angle"></i>
+                  </a>
+                  }
+                  @if (menuItem.children) {
+                    <ul class="slide-menu child1" [ngClass]="{'active':menuItem.active,'double-menu-active':menuItem.active, 'force-left' : menuItem.dirchange}"
+                      [ngStyle]="{ display: menuItem.active ? 'block' : 'none' }">
+                      <li class="slide side-menu__label1"><a href="javascript:void(0)">{{menuItem.title}}</a></li>
+                      @for (childrenItem of menuItem.children; track childrenItem) {
+                      <li class="slide" activeMenuItems [ngClass]="{'active':childrenItem.selected}" appDropdownPosition
+                        [ngClass]="{'has-sub': childrenItem.type === 'sub','open':childrenItem.active}">
+                        <!-- link -->
+                        @if (childrenItem.type === 'link') {
+                        <a class="side-menu__item" [routerLink]="!childrenItem.type ? null : [childrenItem.path] "
+                          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                          (click)="setNavActive($event, childrenItem.path ?? '')">
+                          {{childrenItem.title}}
+                        </a>
+                        }
+                        <!-- empty -->
+                        @if (childrenItem.type === 'empty' ) {
+                        <a class="side-menu__item " href="javascript:;" (click)="setNavActive($event, childrenItem.path ?? '')">
+                          {{childrenItem.title }}
+                        </a>
+                        }
+                        <!-- sub -->
+                        @if (childrenItem.type === 'sub') {
+                        <a class="side-menu__item " [ngClass]="{'active': childrenItem.active}"
+                          [routerLink]="childrenItem.type ? null : [childrenItem.path]"
+                          (click)="toggleNavActive($event, childrenItem)">
+                          <span class="">{{childrenItem.title}}</span>
+                          <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        }
+                        <!-- 3rd Level menu -->
+                        @if (childrenItem.children) {
+                        <ul class="slide-menu child2"
+                        [ngClass]="{'force-left' : childrenItem.dirchange}" [ngStyle]="{
+                                            display: childrenItem.active ? 'block' : 'none',
+                                            right: localdata['dir'] == 'rtl' ? 'auto' : '',
+                                            left: localdata['dir'] == 'rtl' ? '100%' : ''
+                                          }">
+                          @for (childrenSubItem of childrenItem.children; track childrenSubItem) {
+                          <li class="slide" activeMenuItems appDropdownPosition [ngClass]="{open:childrenSubItem.active}">
+                            @if (childrenSubItem.type === 'link') {
+                            <a class="side-menu__item" routerLinkActive="active"
+                              [routerLink]="!childrenSubItem.type ?  null : [childrenSubItem.path]"
+                              [routerLinkActiveOptions]="{exact : true}">
+                              {{childrenSubItem.title}}
+                            </a>
+                            }
+                            @if (childrenSubItem.type === 'empty') {
+                            <a class="side-menu__item" href="javascript:;">
+                              {{childrenSubItem.title}}
+                            </a>
+                            }
+          
+                            @if (childrenSubItem.type === 'sub') {
+                            <a class="side-menu__item " [ngClass]="{'active': childrenSubItem.active}"
+                              [routerLink]="childrenSubItem.type ? null : [childrenSubItem.path]" routerLinkActive="active"
+                              (click)="toggleNavActive($event, childrenSubItem)">
+                              <span class="">{{childrenSubItem.title}}</span>
+                              <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
+                            }
+                            <!-- 3rd Level menu -->
+                            @if (childrenSubItem.children) {
+                            <ul class="slide-menu child3"
+                            [ngClass]="{'force-left' : childrenSubItem.dirchange}" [ngStyle]="{
+                                                                    display: childrenSubItem.active ? 'block' : 'none',
+                                                                
+                                                                  }">
+                              @for (childrenSubItem1 of childrenSubItem.children; track childrenSubItem1) {
+                              <li class="slide" activeMenuItems [ngClass]="{'open': childrenSubItem1.active}">
+                                @if (childrenSubItem1.type === 'link') {
+                                <a class="side-menu__item" routerLinkActive="active"
+                                  [routerLink]="!childrenSubItem1.type ?  null : [childrenSubItem1.path]"
+                                  [routerLinkActiveOptions]="{exact : true}">
+                                  {{childrenSubItem1.title}}
+                                </a>
+                                }
+                                @if (childrenSubItem1.type === 'empty') {
+                                <a class="side-menu__item" href="javascript:;">
+                                  {{childrenSubItem1.title}}
+                                </a>
+                                }
+                              </li>
+                              }
+                            </ul>
+                            }
+                          </li>
+                          }
+                        </ul>
+                        }
+                      </li>
+                      }
+                    </ul>
+                    }
+              </li>
+              @if (menuItem.type === 'external') {
+              <a
+                class="side-menu__item"
+                target="_blank"
+                [routerLink]="!menuItem.type ? null : [menuItem.path]"
+                routerLinkActive="active"
+                (click)="setNavActive($event, menuItem.path ?? '')"
+              >
+                @if (menuItem.icon) {
+                <i class="side-menu__icon  bx bx-{{ menuItem.icon }}"></i>
+                }
+                <span class="side-menu__label"
+                  >{{ menuItem.title }}
+                  <span class="badge bg-{{ menuItem.badgeClass }} float-end">{{
+                    menuItem.badgeValue
+                  }}</span>
+                </span>
+              </a>
+              } }
+              <!-- End::slide -->
+            </ul>
+          <div class="slide-right" id="slide-right" (click)="rightArrowFn()"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path> </svg></div>
+      </nav>
+      <!-- End::nav -->
+
+  </overlay-scrollbars>
+  <!-- End::main-sidebar -->
+
+</aside>
+<!-- End::app-sidebar --> 

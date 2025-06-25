@@ -1,0 +1,17 @@
+
+<div class="page">
+    <app-header></app-header>
+    <app-sidebar appHoverEffectSidebar></app-sidebar>
+
+    <!-- Start::app-content -->
+    <div class="main-content app-content" (click)="clickOnBody()" >
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <app-footer class="footer mt-auto py-3 bg-white text-center"></app-footer>
+    
+</div>
+<app-tap-to-top></app-tap-to-top>
+
+<div id="responsive-overlay" (click)="clearToggle()"></div>

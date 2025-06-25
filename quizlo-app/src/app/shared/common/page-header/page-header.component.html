@@ -1,0 +1,25 @@
+     <!-- Start::page-header -->
+     <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
+        <div>
+            <nav>
+                <ol class="breadcrumb mb-1"> 
+                    @if(firstTitle){
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">{{firstTitle}}</a></li>
+                    }
+                     <li class="breadcrumb-item"><a href="javascript:void(0);">{{title1}}</a></li> 
+                     <li class="breadcrumb-item active" aria-current="page">{{title}}</li> 
+                    </ol>
+            </nav>
+            <h1 class="page-title fw-medium fs-18 mb-0">{{title}}</h1>
+        </div>
+        <div class="btn-list">
+            <button class="btn btn-primary-light btn-wave">
+                <i class="ri-upload-cloud-line align-middle me-1"></i> Export report
+            </button>
+            <button class="btn btn-info-light btn-wave me-0">
+                <i class="bx bx-crown align-middle me-1"></i> Upgrade plan
+            </button>
+        </div>
+    </div>
+    <!-- End::page-header -->
+

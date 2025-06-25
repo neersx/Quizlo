@@ -1,0 +1,555 @@
+<!-- Start Switcher -->
+<div class=" offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Switcher</h5>
+    <button type="button" class="btn-close text-reset" aria-label="Close"
+      (click)="activeOffcanvas.close('Close click')"></button>
+</div>
+<div class="offcanvas-body switcher-canvas custom-tabs" id="switcher-canvas">
+    <nav ngbNav #nav="ngbNav" [activeId]="1" class="border-top border-block-start-dashed " role="tablist">
+
+        <ng-container class="nav nav-tabs nav-justified tab-content-1" [ngbNavItem]="1">
+            <button ngbNavLink class="flex-grow-1 nav-link theme-styles" id="switcher-home-tab" data-bs-toggle="tab"
+                data-bs-target="#switcher-home" type="button" role="tab" aria-controls="switcher-home"
+                aria-selected="true">Theme Styles</button>
+            <ng-template ngbNavContent>
+                <div class="" id="switcher-home" role="tabpanel" aria-labelledby="switcher-home-tab" tabindex="0">
+                    <div class="">
+                        <p class="switcher-style-head">Theme Color Mode:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-light-theme">
+                                        Light
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="theme-style"
+                                        id="switcher-light-theme" (click)="updateTheme('light')"
+                                        [checked]="localdata['theme']=='light'">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-dark-theme">
+                                        Dark
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="theme-style"
+                                        id="switcher-dark-theme" (click)="updateTheme('dark')"
+                                        [checked]="localdata['theme'] =='dark'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="switcher-style-head">Directions:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-ltr">
+                                        LTR
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="direction" id="switcher-ltr"
+                                        (click)="updateDirection('ltr')" [checked]="localdata['direction'] != 'rtl'">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-rtl">
+                                        RTL
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="direction" id="switcher-rtl"
+                                        (click)="updateDirection('rtl')" [checked]="localdata['direction'] == 'rtl'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="switcher-style-head">Navigation Styles:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-vertical">
+                                        Vertical
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="navigation-style"
+                                        id="switcher-vertical" (click)="updatemenuType('vertical')"
+                                        [checked]="localdata['navigationStyles'] != 'horizontal'">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-horizontal">
+                                        Horizontal
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="navigation-style"
+                                        id="switcher-horizontal"
+                                        [checked]="localdata['navigationStyles'] == 'horizontal'"
+                                        (click)="updatemenuType('horizontal')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation-menu-styles">
+                        <p class="switcher-style-head">Vertical & Horizontal Menu Styles:</p>
+                        <div class="row switcher-style gx-0 pb-2 gy-2">
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-menu-click">
+                                        Menu Click
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="navigation-menu-styles"
+                                        id="switcher-menu-click" (click)="updatemenuStyle('menu-click')"
+                                        [checked]="localdata['menuStyles'] == 'menu-click'"
+                                        >
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-menu-hover">
+                                        Menu Hover
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="navigation-menu-styles"
+                                        id="switcher-menu-hover" (click)="updatemenuStyle('menu-hover')"
+                                        [checked]="localdata['menuStyles'] == 'menu-hover'"
+                                        [checked]="localdata['menuStyles'] == 'menu-hover'">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-icon-click">
+                                        Icon Click
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="navigation-menu-styles"
+                                        id="switcher-icon-click" (click)="updatemenuStyle('icon-click')"
+                                        [checked]="localdata['menuStyles'] == 'icon-click'">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-icon-hover">
+                                        Icon Hover
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="navigation-menu-styles"
+                                        id="switcher-icon-hover" (click)="updatemenuStyle('icon-hover')"
+                                        [checked]="localdata['menuStyles'] == 'icon-hover'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidemenu-layout-styles">
+                        <p class="switcher-style-head">Sidemenu Layout Styles:</p>
+                        <div class="row switcher-style gx-0 pb-2 gy-2">
+                            <div class="col-sm-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-default-menu">
+                                        Default Menu
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="sidemenu-layout-styles"
+                                        id="switcher-default-menu" (click)="updatelayoutStyles('default')" checked>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-closed-menu">
+                                        Closed Menu
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="sidemenu-layout-styles"
+                                        id="switcher-closed-menu" (click)="updatelayoutStyles('closed')"
+                                        [checked]="localdata['layoutStyles'] == 'closed'">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-icontext-menu">
+                                        Icon Text
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="sidemenu-layout-styles"
+                                        id="switcher-icontext-menu" (click)="updatelayoutStyles('icontext')"
+                                        [checked]="localdata['layoutStyles'] == 'icontext'">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-icon-overlay">
+                                        Icon Overlay
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="sidemenu-layout-styles"
+                                        id="switcher-icon-overlay" (click)="updatelayoutStyles('overlay')"
+                                        [checked]="localdata['layoutStyles'] == 'overlay'">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-detached">
+                                        Detached
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="sidemenu-layout-styles"
+                                        id="switcher-detached" (click)="updatelayoutStyles('detached')"
+                                        [checked]="localdata['layoutStyles'] == 'detached'">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-double-menu">
+                                        Double Menu
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="sidemenu-layout-styles"
+                                        id="switcher-double-menu" (click)="updatelayoutStyles('doublemenu')"
+                                        [checked]="localdata['layoutStyles'] == 'doublemenu'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="switcher-style-head">Page Styles:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-regular">
+                                        Regular
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="page-styles"
+                                        id="switcher-regular" (click)="updatepageStyles('regular')"
+                                        [checked]="localdata['pageStyles'] != 'classic'">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-classic">
+                                        Classic
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="page-styles"
+                                        id="switcher-classic" (click)="updatepageStyles('classic')"
+                                        [checked]="localdata['pageStyles'] == 'classic'">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-modern">
+                                        Modern
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="page-styles" id="switcher-modern"
+                                        (click)="updatepageStyles('modern')"
+                                        [checked]="localdata['pageStyles'] == 'modern'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="switcher-style-head">Layout Width Styles:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-full-width">
+                                        Full Width
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="layout-width"
+                                        id="switcher-full-width" (click)="updatewidthStyles('full-width')"
+                                        [checked]="localdata['widthStyles'] != 'boxed'">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-boxed">
+                                        Boxed
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="layout-width" id="switcher-boxed"
+                                        (click)="updatewidthStyles('boxed')"
+                                        [checked]="localdata['widthStyles'] == 'boxed'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="switcher-style-head">Menu Positions:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-menu-fixed">
+                                        Fixed
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="menu-positions"
+                                        id="switcher-menu-fixed" (click)="updatemenuPosition('fixed')"
+                                        [checked]="localdata['menuPosition'] != 'scrollable'">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-menu-scroll">
+                                        Scrollable
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="menu-positions"
+                                        id="switcher-menu-scroll" (click)="updatemenuPosition('scrollable')"
+                                        [checked]="localdata['menuPosition'] == 'scrollable'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="switcher-style-head">Header Positions:</p>
+                        <div class="row switcher-style gx-0">
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-header-fixed">
+                                        Fixed
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="header-positions"
+                                        id="switcher-header-fixed" (click)="updateheaderPosition('fixed')"
+                                        [checked]="localdata['headerPosition'] != 'scrollable'">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-6">
+                                <div class="form-check switch-select">
+                                    <label class="form-check-label" for="switcher-header-scroll">
+                                        Scrollable
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="header-positions"
+                                        id="switcher-header-scroll" (click)="updateheaderPosition('scrollable')"
+                                        [checked]="localdata['headerPosition'] == 'scrollable'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ng-container>
+        <ng-container [ngbNavItem]="2" class="nav nav-tabs nav-justified tab-content-1">
+            <button ngbNavLink class="flex-grow-1 nav-link theme-styles" id="switcher-profile-tab" data-bs-toggle="tab"
+                data-bs-target="#switcher-profile" type="button" role="tab" aria-controls="switcher-profile"
+                aria-selected="false">Theme Colors</button>
+            <ng-template ngbNavContent>
+                <div class="border-0" id="switcher-profile" role="tabpanel" aria-labelledby="switcher-profile-tab"
+                    tabindex="0">
+                    <div>
+                        <div class="theme-colors">
+                            <p class="switcher-style-head">Menu Colors:</p>
+                            <div class="d-flex switcher-style pb-2">
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-white" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Light Menu" type="radio" name="menu-colors"
+                                        id="switcher-menu-light" (click)="updatemenuColor('light')"
+                                        [checked]="localdata['menuColor'] == 'light'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-dark" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Dark Menu" type="radio" name="menu-colors"
+                                        id="switcher-menu-dark" (click)="updatemenuColor('dark')"
+                                        [checked]="localdata['menuColor'] == 'dark'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Color Menu" type="radio" name="menu-colors"
+                                        id="switcher-menu-primary" (click)="updatemenuColor('color')"
+                                        [checked]="localdata['menuColor'] == 'color'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-gradient" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Gradient Menu" type="radio" name="menu-colors"
+                                        id="switcher-menu-gradient" (click)="updatemenuColor('gradient')"
+                                        [checked]="localdata['menuColor'] == 'gradient'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-transparent"
+                                        data-bs-toggle="tooltip" placement="top" ngbTooltip="Transparent Menu"
+                                        type="radio" name="menu-colors" id="switcher-menu-transparent"
+                                        (click)="updatemenuColor('transparent')"
+                                        [checked]="localdata['menuColor'] == 'transparent'">
+                                </div>
+                            </div>
+                            <div class="px-4 pb-3 text-muted fs-11">Note:If you want to change color Menu
+                                dynamically change from below Theme Primary color picker</div>
+                        </div>
+                        <div class="theme-colors">
+                            <p class="switcher-style-head">Header Colors:</p>
+                            <div class="d-flex switcher-style pb-2">
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-white" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Light Header" type="radio" name="header-colors"
+                                        id="switcher-header-light" (click)="updateheaderColor('light')"
+                                        [checked]="localdata['headerColor'] == 'light'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-dark" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Dark Header" type="radio" name="header-colors"
+                                        id="switcher-header-dark" (click)="updateheaderColor('dark')"
+                                        [checked]="localdata['headerColor'] == 'dark'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Color Header" type="radio" name="header-colors"
+                                        id="switcher-header-primary" (click)="updateheaderColor('color')"
+                                        [checked]="localdata['headerColor'] == 'color'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-gradient" data-bs-toggle="tooltip"
+                                        placement="top" ngbTooltip="Gradient Header" type="radio" name="header-colors"
+                                        id="switcher-header-gradient" (click)="updateheaderColor('gradient')"
+                                        [checked]="localdata['headerColor'] == 'gradient'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-transparent"
+                                        data-bs-toggle="tooltip" placement="top" ngbTooltip="Transparent Header"
+                                        type="radio" name="header-colors" id="switcher-header-transparent"
+                                        (click)="updateheaderColor('transparent')"
+                                        [checked]="localdata['headerColor'] == 'transparent'">
+                                </div>
+                            </div>
+                            <div class="px-4 pb-3 text-muted fs-11">Note:If you want to change color Header
+                                dynamically change from below Theme Primary color picker</div>
+                        </div>
+                        <div class="theme-colors">
+                            <p class="switcher-style-head">Theme Primary:</p>
+                            <div class="d-flex flex-wrap align-items-center switcher-style">
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary-1" type="radio"
+                                        name="theme-primary" id="switcher-primary"
+                                        (click)="updateprimary('64, 100, 221')">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary-2" type="radio"
+                                        name="theme-primary" id="switcher-success"
+                                        (click)="updateprimary('207, 117, 225')"
+                                        [checked]="localdata['themePrimary'] == '207, 117, 225'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary-3" type="radio"
+                                        name="theme-primary" id="switcher-info"
+                                        (click)="updateprimary('199, 89, 106')"
+                                        [checked]="localdata['themePrimary'] == '199, 89, 106'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary-4" type="radio"
+                                        name="theme-primary" id="switcher-secondary" (click)="updateprimary('1, 159, 162')"
+                                        [checked]="localdata['themePrimary'] == '1, 159, 162'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-primary-5" type="radio"
+                                        name="theme-primary" id="switcher-primary4"
+                                        (click)="updateprimary('139, 149, 4')"
+                                        [checked]="localdata['themePrimary'] == '139, 149, 4'">
+                                </div>
+                                <div class="form-check switch-select ps-0 mt-1 color-primary-light">
+                                    <div class="theme-container-primary"></div>
+                                    <div class="pickr-container-primary">
+                                        <div class="pickr">
+                                            <!-- <button type="button" type="button" role="button" aria-label="toggle color picker dialog"
+                                                class="color-bg-transparent pcr-button"
+                                                style="--pcr-color: rgba(132, 90, 223, 1);"
+                                                [style.background]="defaultPrimary" [cpAlphaChannel]="'disabled'"
+                                                [cpOutputFormat]="'rgba'" [(colorPicker)]="defaultPrimary"
+                                                (cpSliderDragEnd)="dynamicLightPrimary($event)"></button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="theme-colors">
+                            <p class="switcher-style-head">Theme Background:</p>
+                            <div class="d-flex flex-wrap align-items-center switcher-style">
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-bg-1" type="radio"
+                                        name="theme-background" id="switcher-background" (click)="
+                                                    updateBackground({
+                                                        main :  '34, 49, 153',  secondary :'48, 63, 167',
+                                                        accent: '48, 63, 167', overlay:'rgba(255,255,255,0.1)',
+                                                        theme:'dark'
+                                                    })
+                                                  "   [checked]="localdata['themeBackground']?.['main'] == '34, 49, 153'" >
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-bg-2" type="radio"
+                                        name="theme-background" id="switcher-background1" (click)="
+                                                  updateBackground(
+                                                        {main : '147, 52, 150',
+                                                        secondary : '161, 66, 164',
+                                                        accent : '161, 66, 164',
+                                                        overlay: 'rgba(255,255,255,0.1)',theme: 'dark'}
+                                                    )
+                                                  " [checked]="localdata['themeBackground']?.['main'] == '147, 52, 150'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-bg-3" type="radio"
+                                        name="theme-background" id="switcher-background2" (click)="
+                                                      updateBackground({
+                                                        main: '135, 44, 47', 
+                                                    secondary: '149, 58, 61',
+                                                    accent: '149, 58, 61',
+                                                    overlay: 'rgba(255,255,255,0.1)',
+                                                    theme: 'dark'
+                            })" [checked]="localdata['themeBackground']?.['main'] == '135, 44, 47'">  
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-bg-4" type="radio"
+                                        name="theme-background" id="switcher-background3" (click)=" 
+                                                      updateBackground({
+                                                        main : '3, 81, 60',  secondary :'8, 99, 75',accent: '8, 99, 75', overlay:'rgba(255,255,255,0.1)',
+                                                        theme:'dark',gray: 'rgba(255,255,255,0.1)'
+                                                    })
+                                                    " [checked]="localdata['themeBackground']?.['main'] =='3, 81, 60'">
+                                </div>
+                                <div class="form-check switch-select me-3">
+                                    <input class="form-check-input color-input color-bg-5" type="radio"
+                                        name="theme-background" id="switcher-background4" (click)="    updateBackground({
+                                                        main : '73, 78, 1', formControl:'84, 89, 4', secondary :'84, 89, 4',accent: '84, 89, 4', overlay:'rgba(255,255,255,0.1)', 
+                                                        theme:'dark',gray: 'rgba(255,255,255,0.1)',
+                                                    })"  [checked]="localdata['themeBackground']?.['main'] == '73, 78, 1'">
+                                </div>
+                                <div
+                                    class="form-check switch-select ps-0 mt-1 tooltip-static-demo color-bg-transparent">
+                                    <div class="theme-container-background"></div>
+                                    <div class="pickr-container-background">
+                                        <div class="pickr">
+                                            <!-- <button type="button" role="button" aria-label="toggle color picker dialog"
+                                                class="color-bg-transparent pcr-button"
+                                                style="--pcr-color: rgba(132, 90, 223, 1);"
+                                                [style.background]="defaultBg" [cpAlphaChannel]="'disabled'"
+                                                [cpOutputFormat]="'rgba'" [(colorPicker)]="defaultBg"
+                                                (cpSliderDragEnd)="dynamicTranparentBgPrimary($event)"
+                                                ></button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-image mb-3">
+                            <p class="switcher-style-head">Menu With Background Image:</p>
+                            <div class="d-flex flex-wrap align-items-center switcher-style">
+                                <div class="form-check switch-select m-1">
+                                    <input class="form-check-input bgimage-input bg-img1"
+                                        (click)="updateBgImage('bgimg1')" type="radio" name="theme-background"
+                                        id="switcher-bg-img">
+                                </div>
+                                <div class="form-check switch-select m-1">
+                                    <input class="form-check-input bgimage-input bg-img2"
+                                        (click)="updateBgImage('bgimg2')" type="radio" name="theme-background"
+                                        id="switcher-bg-img1">
+                                </div>
+                                <div class="form-check switch-select m-1"> 
+                                    <input class="form-check-input bgimage-input bg-img3"
+                                        (click)="updateBgImage('bgimg3')" type="radio" name="theme-background"
+                                        id="switcher-bg-img2">
+                                </div>
+                                <div class="form-check switch-select m-1">
+                                    <input class="form-check-input bgimage-input bg-img4"
+                                        (click)="updateBgImage('bgimg4')" type="radio" name="theme-background"
+                                        id="switcher-bg-img3">
+                                </div>
+                                <div class="form-check switch-select m-1">
+                                    <input class="form-check-input bgimage-input bg-img5"
+                                        (click)="updateBgImage('bgimg5')" type="radio" name="theme-background"
+                                        id="switcher-bg-img4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ng-container>
+    </nav>
+    <div class="tab-content " id="nav-tabContent">
+        <div [ngbNavOutlet]="nav"></div>
+    </div>
+    <div class="d-grid canvas-footer">
+        <a (click)="reset()" href="javascript:void(0);" id="reset-all" class="btn btn-danger">Reset</a>
+    </div>
+</div>
+<!-- End Switcher -->
+
