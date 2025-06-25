@@ -7,10 +7,10 @@ import { SidebarComponent } from './common/sidebar/sidebar.component';
 import { SwitcherComponent } from './common/switcher/switcher.component';
 import {  NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { ColorPickerModule } from 'ngx-color-picker'; 
+// import { NgxColorPickerModule } from 'ngx-color-picker'; 
 import { TapToTopComponent } from "./common/tap-to-top/tap-to-top.component";
 import { FooterComponent } from './common/footer/footer.component';
-// import { OverlayscrollbarsModule } from "overlayscrollbars-ngx";
+import { OverlayscrollbarsModule } from "overlayscrollbars-ngx";
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { AuthenticationLayoutComponent } from './layouts/authentication-layout/authentication-layout.component';
 import { FullscreenDirective } from './directives/fullscreen.directive';
@@ -32,7 +32,7 @@ import { SvgReplaceDirective } from './directives/svgReplace.directive';
         CommonModule,
         RouterModule,   
         NgbModule,
-        // OverlayscrollbarsModule,
+        OverlayscrollbarsModule,
         // ColorPickerModule,
         FormsModule, ReactiveFormsModule,
         RouterModule, FullscreenDirective,

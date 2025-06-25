@@ -25,6 +25,7 @@
     "@ng-bootstrap/ng-bootstrap": "^19.0.0",
     "@ng-select/ng-select": "^15.1.2",
     "@wfpena/angular-wysiwyg": "^2.0.0",
+    "add": "^2.0.6",
     "angular-font-awesome": "^3.1.2",
     "angularx-flatpickr": "^8.1.0",
     "express": "^5.1.0",
@@ -32,6 +33,7 @@
     "ngx-color-picker": "^20.0.0",
     "ngx-colors": "^3.6.0",
     "ngx-owl-carousel-o": "^20.0.0",
+    "overlayscrollbars-ngx": "^0.5.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
