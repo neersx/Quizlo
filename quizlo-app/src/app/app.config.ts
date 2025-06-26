@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/sharedmodule';
@@ -12,6 +12,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
+    provideHttpClient(
+      withFetch(),               // ← enables fetch() support
+      withInterceptorsFromDi()   // ← lets @Inject(HttpInterceptor) still work
+    ),
     importProvidersFrom( // required by ngx-toastr if you want animations
       HttpClientModule,         // provides HttpClient
       NgbModule,

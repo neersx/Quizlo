@@ -3,10 +3,14 @@ import { NgModule } from '@angular/core';
 
 export const authen: Routes = [
     { path: '', children: [
-          {
-            path: '',
-            loadChildren: () => import('../error/error.route').then(r => r.errorRoutingModule)
-          },
+      {
+        path: '',
+        loadChildren: () => import('../routes/auth-routing.module').then(r => r.authenticationRoutingModule)
+      },
+          // {
+          //   path: '',
+          //   loadChildren: () => import('../error/error.route').then(r => r.errorRoutingModule)
+          // },
           
  ] },
  
@@ -14,7 +18,7 @@ export const authen: Routes = [
  
 ]
 @NgModule({
-    imports: [RouterModule],
-    exports: [RouterModule]
+  imports: [RouterModule],
+  exports: [RouterModule]
 })
-export class SaredRoutingModule { }
+export class SaredAuthRoutingModule { }
