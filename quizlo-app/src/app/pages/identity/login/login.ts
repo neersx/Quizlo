@@ -72,10 +72,10 @@ export class Login {
   }
   ngOnInit(): void {
     if( this.authservice.currentUser !== null) {
-      this.router.navigate(['/dashboards/sales']);
+      this.router.navigate(['/']);
     }
     this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required]],
       password: ['', Validators.required],
     });
   }
@@ -97,7 +97,7 @@ export class Login {
     this.clearErrorMessage();
     if (
       this.validateForm(
-        this.loginForm.value.username,
+        this.loginForm.value.email,
         this.loginForm.value.password
       )
     ) {
@@ -155,7 +155,6 @@ export class Login {
   }
 
   Submit() {
-    console.log(this.loginForm);
     if (this.loginForm.valid) {
       this.login();
     } else {
