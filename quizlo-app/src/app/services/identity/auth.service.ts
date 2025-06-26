@@ -6,7 +6,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'https://quizloai.com/user/api'; // Replace with actual API URL
+  private readonly apiUrl = 'https://quizloai.com/api/users'; // Replace with actual API URL
   public showLoader:boolean=false;
 
   private readonly userData = new BehaviorSubject<any>({}); // Observable cart count
@@ -26,7 +26,7 @@ export class AuthService {
   //   }
   // }
 
-  login(credentials: { username: string; password: string }): Observable<any> {
+  login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       map((response: any) => {
         localStorage.setItem('token', response.result?.token);

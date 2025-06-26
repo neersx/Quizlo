@@ -1,7 +1,9 @@
 sudo nano /etc/systemd/system/quizlo-api.service
 sudo systemctl daemon-reload
 sudo systemctl enable quizlo-api.service
+sudo systemctl stop quizlo-api.service
 sudo systemctl start quizlo-api.service
+sudo systemctl status quizlo-api.service
 
 ####
 
