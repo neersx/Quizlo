@@ -6,4 +6,5 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
    { path: 'home', renderMode: RenderMode.Client },
+   { path: 'auth/login', renderMode: RenderMode.Client },
 ];

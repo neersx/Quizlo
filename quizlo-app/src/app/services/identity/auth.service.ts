@@ -6,7 +6,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'https://quizloai.com/user/api/login'; // Replace with actual API URL
+  private readonly apiUrl = 'https://quizloai.com/user/api'; // Replace with actual API URL
   public showLoader:boolean=false;
 
   private readonly userData = new BehaviorSubject<any>({}); // Observable cart count

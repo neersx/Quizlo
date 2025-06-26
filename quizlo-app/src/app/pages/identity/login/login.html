@@ -1,1 +1,188 @@
-<p>login works!</p>
+<div class="container custom-tabs">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-8 col-sm-12 col-12">
+            <ul ngbNav #nav="ngbNav" [(activeId)]="active"
+                class="nav-tabs rounded-2 justify-content-center  border-bottom-0">
+                <li ngbNavItem="Firebase">
+                    <!-- <a ngbNavLink class="firebase-img">
+                        <img src="./assets/images/firebase.svg" class="firebase" alt="" />
+                    </a> -->
+                    <ng-template ngbNavContent>
+                        <div class="card custom-card my-4">
+                            <div class="card-body p-5">
+                                <div class="mb-4 d-flex justify-content-center">
+                                    <a routerLink="/dashboards/sales">
+                                        <img src="./assets/images/brand-logos/desktop-logo.png" alt="logo"
+                                            class="desktop-logo">
+                                        <img src="./assets/images/brand-logos/desktop-white.png" alt="logo"
+                                            class="desktop-white">
+                                    </a>
+                                </div>
+                                <form [formGroup]="loginForm" (ngSubmit)="login()">
+                                    @if(errorMessage.length > 0){
+                                    <p class="text-danger">
+                                        {{errorMessage}}</p>
+                                    }
+                                    @if(_error.message.length > 0){
+                                    <p class="text-danger">
+                                        {{_error.message}} </p>
+                                    }
+                                    <p class="h5 mb-2 text-center">Sign In</p>
+                                    <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome back to Admin Portal !</p>
+                                    <div class="row gy-3">
+                                        <div class="col-xl-12">
+                                            <label for="signin-username" class="form-label text-default">Mobile Number<sup
+                                                    class="fs-12 text-danger">*</sup></label>
+                                            <input type="text" class="form-control" id="signin-username"
+                                                placeholder="mobile number" autocomplete formControlName="username"
+                                                [ngModel]="phoneNumber" required>
+                                        </div>
+                                        <div class="col-xl-12 mb-2">
+                                            <label for="signin-password"
+                                                class="form-label text-default d-block">Password<sup
+                                                    class="fs-12 text-danger">*</sup><a
+                                                    href="javascript:void(0);"
+                                                    class="float-end fw-normal text-primary">Forget password ?</a></label>
+                                            <div class="position-relative">
+                                                <input type="password" class="form-control create-password-input"
+                                                    id="signin-password" autocomplete placeholder="password"
+                                                    [type]="showPassword ? 'text' : 'password'" autocomplete
+                                                    placeholder="Password" formControlName="password"
+                                                    [ngModel]="password" required>
+                                                <a href="javascript:void(0);" class="show-password-button text-muted"
+                                                    (click)="togglePassword()" id="button-addon2"><i
+                                                        class="ri-eye-{{toggleClass}} align-middle"></i></a>
+                                            </div>
+                                            <div class="mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value=""
+                                                        id="defaultCheck1">
+                                                    <label class="form-check-label text-muted fw-normal"
+                                                        for="defaultCheck1">
+                                                        Remember password ?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid mt-4">
+                                        <button [disabled]="!loginForm.valid || authservice.showLoader" autofocus
+                                            [class.loader--text]="authservice.showLoader" class="btn btn-primary{{
+                                            disabled
+                                          }}">Sign In</button>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-muted mt-3 mb-0">Dont have an account? <a
+                                            href="javascript:void(0);" class="text-primary">Sign
+                                                Up</a></p>
+                                    </div>
+                                    <div class="btn-list text-center mt-3">
+                                        <button type="button" class="btn btn-icon btn-wave btn-primary-light">
+                                            <i class="ri-facebook-line lh-1 align-center fs-17"></i> </button>
+                                        <button type="button" class="btn btn-icon btn-wave btn-success-light">
+                                            <i class="ri-twitter-x-line lh-1 align-center fs-17"></i> </button>
+                                        <button type="button" class="btn btn-icon btn-wave btn-info-light"> <i
+                                                class="ri-instagram-line lh-1 align-center fs-17"></i> </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </ng-template>
+                </li>
+                <li ngbNavItem="Angular">
+                    <!-- <a ngbNavLink class="firebase-img">
+                        <img src="./assets/images/favicon.svg" class="firebase" alt="" />
+                    </a> -->
+                    <ng-template ngbNavContent>
+                        <div class="card custom-card my-4">
+                            <div class="card-body p-5">
+                                <div class="mb-4 d-flex justify-content-center">
+                                    <a routerLink="/dashboards/sales">
+                                        <img src="./assets/images/brand-logos/desktop-logo.png" alt="logo"
+                                            class="desktop-logo">
+                                        <img src="./assets/images/brand-logos/desktop-white.png" alt="logo"
+                                            class="desktop-white">
+                                    </a>
+                                </div>
+
+                                <form [formGroup]="loginForm" (ngSubmit)="Submit()">
+                                    @if(errorMessage.length > 0){
+
+                                    <p class="text-danger">
+                                        {{errorMessage}}</p>
+                                    }
+                                    @if(_error.message.length > 0){
+
+
+                                    <p class="text-danger">
+                                        {{_error.message}} </p>
+                                    }
+                                    <p class="h5 mb-2 text-center">Sign In</p>
+                                    <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome back !</p>
+                                    <div class="row gy-3">
+                                        <div class="col-xl-12">
+                                            <label for="signin-username" class="form-label text-default">User Name<sup
+                                                    class="fs-12 text-danger">*</sup></label>
+                                            <input type="text" class="form-control" id="signin-username"
+                                                placeholder="user name" autocomplete formControlName="username"
+                                                [ngModel]="phoneNumber" required>
+                                        </div>
+                                        <div class="col-xl-12 mb-2">
+                                            <label for="signin-password"
+                                                class="form-label text-default d-block">Password<sup
+                                                    class="fs-12 text-danger">*</sup><a
+                                                    href="javascript:void(0);"
+                                                    class="float-end fw-normal text-primary">Forget password ?</a></label>
+                                            <div class="position-relative">
+                                                <input type="password" class="form-control create-password-input"
+                                                    id="signin-password" autocomplete placeholder="password"
+                                                    [type]="showPassword ? 'text' : 'password'" autocomplete
+                                                    placeholder="Password" formControlName="password"
+                                                    [ngModel]="password" required>
+                                                <a href="javascript:void(0);" class="show-password-button text-muted"
+                                                    (click)="togglePassword()" id="button-addon2"><i
+                                                        class="ri-eye-{{toggleClass}} align-middle"></i></a>
+                                            </div>
+                                            <div class="mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value=""
+                                                        id="defaultCheck1">
+                                                    <label class="form-check-label text-muted fw-normal"
+                                                        for="defaultCheck1">
+                                                        Remember password ?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid mt-4">
+                                        <button [disabled]="!loginForm.valid || authservice.showLoader" autofocus
+                                            [class.loader--text]="authservice.showLoader" class="btn btn-primary{{
+                                                disabled
+                                              }}">Sign In</button>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-muted mt-3 mb-0">Dont have an account? <a
+                                                href="javascript:void(0);" class="text-primary">Sign
+                                                Up</a></p>
+                                    </div>
+                                    <div class="btn-list text-center mt-3">
+                                        <button type="button" class="btn btn-icon btn-wave btn-primary-light">
+                                            <i class="ri-facebook-line lh-1 align-center fs-17"></i> </button>
+                                        <button type="button" class="btn btn-icon btn-wave btn-success-light">
+                                            <i class="ri-twitter-x-line lh-1 align-center fs-17"></i> </button>
+                                        <button type="button" class="btn btn-icon btn-wave btn-info-light"> <i
+                                                class="ri-instagram-line lh-1 align-center fs-17"></i> </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
+
+        </div>
+    </div>
+
+</div>

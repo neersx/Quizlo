@@ -45,7 +45,7 @@ import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-la
     FormsModule,
     NgbModule,
     SpkLandingTestimonialComponent,
-    SpkLandingTeamCardComponent,
+    // SpkLandingTeamCardComponent,
     SpkLandingAboutComponent,
     SpkLandingFeaturesComponent,
     NgxColorsModule,
@@ -85,90 +85,19 @@ export class HomeComponent {
     this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
     this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
     this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
-    this.renderer.removeAttribute(htmlElement, 'data-header-styles');
-    this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
-    this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
-    this.renderer.removeAttribute(htmlElement, 'loader');
-    this.renderer.removeAttribute(htmlElement, 'data-width');
-    this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
-    this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
-    this.renderer.removeAttribute(htmlElement, 'light-rgb');
+    // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
+    // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
+    // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
+    // this.renderer.removeAttribute(htmlElement, 'loader');
+    // this.renderer.removeAttribute(htmlElement, 'data-width');
+    // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
+    // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
+    // this.renderer.removeAttribute(htmlElement, 'light-rgb');
   }
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
   @ViewChild('swiperContainer1') swiperContainer1!: ElementRef;
 
-  ngAfterViewInit(): void {
-    const swiperEl = this.swiperContainer.nativeElement;
-    const swiperEl1 = this.swiperContainer1.nativeElement;
-
-    Object.assign(swiperEl, {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      pagination: {
-        el: '.swiper-pagination',
-        dynamicBullets: false,
-        clickable: false,
-      },
-      loop: true,
-      autoplay: {
-        delay: 1500,
-        disableOnInteraction: false,
-      },
-      breakpoints: {
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 0,
-        },
-        480: {
-          slidesPerView: 2,
-          spaceBetween: 10,
-        },
-        1112: {
-          slidesPerView: 3,
-          spaceBetween: 15,
-        },
-        1300: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-      },
-    });
-
-    Object.assign(swiperEl1, {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      loop: true,
-      loopFillGroupWithBlank: true,
-      pagination: {
-        el: '.swiper-pagination',
-        dynamicBullets: true,
-        clickable: true,
-      },
-      autoplay: {
-        enabled: true,
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      breakpoints: {
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-        },
-        480: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-        },
-        1112: {
-          slidesPerView: 3,
-          spaceBetween: 10,
-        },
-        1300: {
-          slidesPerView: 2,
-          spaceBetween: 30,
-        },
-      },
-    });
-  }
+ 
   private offcanvasService = inject(NgbOffcanvas);
   openSwitcher(content: any) {
     this.offcanvasService.open(content, { position: 'end' });
