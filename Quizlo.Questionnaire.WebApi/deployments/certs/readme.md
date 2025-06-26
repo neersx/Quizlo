@@ -1,3 +1,7 @@
+# Generate CSR Code 
+https://decoder.link/csr_generator
+
+
 # SSL Certificate Installation for Nginx
 
 This guide walks you through converting certificate files and installing your SSL certificate chain in Nginx on Ubuntu.

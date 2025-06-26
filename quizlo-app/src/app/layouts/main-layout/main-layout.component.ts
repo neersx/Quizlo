@@ -1,11 +1,12 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { Menu, NavService } from '../../services/navservice';
 import { Subscription, filter } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Menu, NavService } from '../../shared/services/navservice';
+import { SharedModule } from '../../shared/sharedmodule';
 
 @Component({
   selector: 'app-main-layout',
-  standalone:false,
+  imports: [RouterModule, SharedModule],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'
 })

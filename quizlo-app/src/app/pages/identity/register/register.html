@@ -1,1 +1,69 @@
-<p>register works!</p>
+<div class="row authentication authentication-cover-main mx-0">
+    <div class="col-xxl-8 col-xl-7">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-xxl-5 col-xl-9 col-lg-6 col-md-6 col-sm-8 col-12">
+                <div class="card custom-card my-4 border">
+                    <div class="card-body p-5">
+                        <p class="h5 mb-2 text-center">Sign Up</p>
+                        <p class="text-muted mb-4 text-center">Let's get started</p>
+                        <a href="javascript:void(0);" class="other-links d-flex align-items-center gap-2 justify-content-center flex-fill mb-3">
+                            <span class="fs-13 text-default fw-medium">Signup with Google</span>
+                            <span class="avatar avatar-xs">
+                                <img src="./assets/images/media/apps/google.png" alt="">
+                            </span>
+                        </a>
+                        <a href="javascript:void(0);" class="other-links d-flex align-items-center gap-2 justify-content-center flex-fill">
+                            <span class="fs-13 text-default fw-medium">Signup with Facebook</span>
+                            <span class="avatar avatar-xs">
+                                <img src="./assets/images/media/apps/facebook.png" alt="">
+                            </span>
+                        </a>
+                        <div class="text-center my-3 authentication-barrier">
+                            <span class="fs-16">or</span>
+                        </div>
+                        <div class="row gy-3">
+                            <div class="col-xl-12">
+                                <label for="signup-firstname" class="form-label text-default">Full Name</label>
+                                <input type="text" class="form-control" id="signup-firstname" placeholder="full name">
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-password" class="form-label text-default">Password<sup class="fs-12 text-danger">*</sup></label>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control create-password-input" id="signup-password" placeholder="password" [type]="showPassword ? 'text' : 'password'" autocomplete>
+                                    <a href="javascript:void(0);" class="show-password-button text-muted" (click)="createpassword()" id="button-addon2"><i class="ri-eye-{{toggleClass}} align-middle"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-confirmpassword" class="form-label text-default">Confirm Password<sup class="fs-12 text-danger">*</sup></label>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control create-password-input" id="signup-confirmpassword" placeholder="confirm password" [type]="showPassword1 ? 'text' : 'password'" autocomplete >
+                                    <a href="javascript:void(0);" class="show-password-button text-muted" (click)="createpassword1()" id="button-addon21"><i class="ri-eye-{{toggleClass1}} align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <a class="btn btn-primary" routerLink="/dashboards/sales" >Sign Up</a>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-muted mt-3 mb-0">Already have an account? <a routerLink="/authentication/sign-in/basic" class="text-primary fw-medium">Sign In</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-xl-5 col-lg-12 d-xl-block d-none px-0">
+        <div class="authentication-cover overflow-hidden">
+            <div class="authentication-cover-logo"> 
+                <a routerLink="/dashboards/sales" > 
+                    <img src="./assets/images/brand-logos/desktop-white.png" alt="" class="authentication-brand desktop-white"> 
+                </a> 
+            </div>
+            <div class="aunthentication-cover-content d-flex align-items-center justify-content-center">
+                <div>
+                    <img src="./assets/images/media/media-73.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

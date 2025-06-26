@@ -1,9 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, Renderer2 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-authentication-layout',
-  standalone:false,
+  imports: [RouterModule],
   templateUrl: './authentication-layout.component.html',
   styleUrl: './authentication-layout.component.scss'
 })

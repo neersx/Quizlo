@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from '../../../shared/sharedmodule';
+import { SharedModule } from '../../shared/sharedmodule';
 
 @Component({
   selector: 'app-error404',
