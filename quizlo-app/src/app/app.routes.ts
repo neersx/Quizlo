@@ -4,13 +4,13 @@ import { Login } from './pages/identity/login/login';
 import { LandingPageLayout } from './layouts/landing-page-layout/landing-page-layout';
 import { AuthenticationLayoutComponent } from './layouts/authentication-layout/authentication-layout.component';
 import { authen } from './routes/auth.route';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { MainQuizLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { content } from './routes/content.route';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home',  component: HomeComponent },
   { path: '', component: AuthenticationLayoutComponent, children: authen },
-  { path: '', component: MainLayoutComponent, children: content },
+  { path: '', component: MainQuizLayoutComponent, children: content },
 
 ];
