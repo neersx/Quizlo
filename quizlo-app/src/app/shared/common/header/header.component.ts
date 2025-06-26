@@ -66,7 +66,10 @@ export class HeaderComponent implements OnInit {
     if (!token) {
       // this.openLoginModal();
     } else {
-      this.user = JSON.parse(localStorage.getItem('user') || '{}');
+      const raw = localStorage.getItem('user');
+      const json = (raw && raw !== 'undefined') ? raw : '{}';
+      this.user = JSON.parse(json);
+      
       // this.isUserLoggedIn = !!this.user;
       // this.prefillUserDetails();
     }
