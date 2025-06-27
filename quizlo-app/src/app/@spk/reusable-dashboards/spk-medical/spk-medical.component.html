@@ -1,0 +1,21 @@
+
+  <div class="card custom-card overflow-hidden medical-main-card {{roundBgClass}}">
+    <div class="card-body p-4">
+      <div class="d-flex align-items-center gap-3">
+        <div>
+          <span class="avatar avatar-lg" [ngClass]="iconBgColor + ' avatar-rounded svg-white'"  [innerHTML]="getSanitizedSVG(iconSvg)"></span>
+        </div>
+        <div class="flex-fill">
+          <h4 class="fw-medium mb-0">{{ value }}</h4>
+          <span class="d-block">{{ title }}</span>
+        </div>
+        <div class="text-end flex-shrink-0">
+          <span [ngClass]="change > 0 ? 'text-success' : 'text-danger'" class="lh-1 mb-1 d-block fw-medium">
+            <i class="ri-arrow-{{ change > 0 ? 'up' : 'down' }}-s-fill"></i>{{ changePercentage }}%
+          </span>
+          <span class="fs-12 text-muted">{{ label }}</span>
+        </div>
+      </div> 
+    </div>
+  </div>
+

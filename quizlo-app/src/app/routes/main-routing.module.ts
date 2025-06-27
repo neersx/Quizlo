@@ -11,14 +11,19 @@ export const admin: Routes = [
         import('../pages/ai-tests/prepare-test/prepare-test').then((m) => m.PrepareTest),
     },
     {
-        path: 'prepare',
+        path: 'live-test',
         loadComponent: () =>
-          import('../pages/ai-tests/prepare-test/prepare-test').then((m) => m.PrepareTest),
+          import('../pages/ai-tests/live-test/live-test').then((m) => m.LiveTest),
       },
       {
-        path: 'result',
+        path: 'test-result',
         loadComponent: () =>
-          import('../pages/ai-tests/prepare-test/prepare-test').then((m) => m.PrepareTest),
+          import('../pages/ai-tests/test-result/test-result').then((m) => m.TestResult),
+      },
+      {
+        path: 'exams',
+        loadComponent: () =>
+          import('../pages/ai-tests/exams-home/exams-home').then((m) => m.ExamsHome),
       },
 
   ]}

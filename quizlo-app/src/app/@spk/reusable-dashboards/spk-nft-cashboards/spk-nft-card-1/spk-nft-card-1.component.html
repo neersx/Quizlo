@@ -1,0 +1,35 @@
+
+    <div class="card custom-card">
+        <div class="card-body">
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div class="main-card-icon" [ngClass]="iconClass">
+                    <div class="avatar avatar-lg avatar-rounded" [ngClass]="bgColor">
+                        <div class="avatar avatar-sm svg-white">
+                            <svg class="svg-white" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                                <path d="M0 0h24v24H0V0z" fill="none"></path>
+                                <path [attr.d]="iconPath"></path>
+                                @if (SvgPath) {
+                                    <rect height="2" width="6" x="9" y="7"></rect>
+                                    <rect height="2" width="2" x="16" y="7"></rect>
+                                    <rect height="2" width="6" x="9" y="10"></rect>
+                                    <rect height="2" width="2" x="16" y="10"></rect>
+                                }
+                                @if(SvgCircle){
+                                    <circle cx="6.5" cy="6.5" r="1.5"></circle>
+                                }
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <span class="d-block mb-1">{{ title }}</span>
+                    <h5 class="fw-medium d-block mb-0">{{ value }} 
+                      <span class="text-{{ valueChangeClass }} fw-semibold fs-12 ms-2 d-inline-block">
+                        {{ valueChange }}<i class="ri-arrow-{{ arrowDirection }}-s-line align-middle ms-1"></i>
+                      </span>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+

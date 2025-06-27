@@ -1,0 +1,13 @@
+
+<div class="swiper-slide">
+    <div class="d-flex align-items-center gap-3">
+      <div class="lh-1">
+        <img [src]="logoUrl" alt="" class="avatar avatar-sm">
+      </div>
+      <div>{{ cryptoName }} - {{ price }}</div>
+      <div [ngClass]="{'text-success': isPositive, 'text-danger': !isPositive}" class="ms-auto">
+        {{ percentageChange }}
+      </div>
+    </div>
+  </div>
+  

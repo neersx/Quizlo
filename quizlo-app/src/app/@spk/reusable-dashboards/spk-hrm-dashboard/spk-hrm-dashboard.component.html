@@ -1,0 +1,30 @@
+
+    <div class="card custom-card">
+      <div class="card-body pb-4 mb-2">
+        <div class="d-flex align-items-center w-100 justify-content-between gap-1 flex-wrap">
+          <div>
+            <p class="mb-1 text-muted fw-medium">{{ title }}</p>
+            <h4 class="mb-0 fw-medium">{{ value }}</h4>
+          </div>
+          <div class="ms-auto text-end">
+            <span 
+      [ngClass]="{'bg-success': isIncrease, 'bg-danger': !isIncrease}" 
+      class="rounded-pill align-items-center fs-11 badge">
+      @if (isIncrease) {
+  <i class="ri-arrow-left-up-line fs-11"></i>
+      }
+      @if (!isIncrease) {
+  <i class="ri-arrow-left-down-line fs-11"></i> 
+      }
+  {{ percentage }}%
+</span>
+            <div class="text-muted fs-12 mt-1">This year</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <spk-apexcharts [chartOptions]="chartOptions"></spk-apexcharts>
+      </div>
+    </div>
+
+  

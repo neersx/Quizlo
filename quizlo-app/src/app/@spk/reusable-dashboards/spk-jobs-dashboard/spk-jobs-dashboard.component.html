@@ -1,0 +1,26 @@
+
+    <div class="card custom-card" [ngClass]="{'overflow-hidden': overflowHidden}">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between">
+          <div>
+            <p class="fw-medium mb-2">{{ title }}</p>
+            <h4 class="fw-medium mb-0">{{ count }} <span class="text-muted fs-10">{{ timeFrame }}</span></h4>
+          </div>
+          <div>
+            <span class="avatar avatar-lg" [ngClass]="avatarBgClass + ' avatar-rounded'">
+              <i [ngClass]="iconClass + ' fs-20'"></i>
+            </span>
+          </div>
+        </div>
+        <div class="d-flex mt-2 flex-wrap gap-1">
+          <a href="javascript:void(0);" class="fs-12 text-primary d-inline-flex align-items-center">
+            <span>Show full status</span><i class="ti ti-chevron-right rtl-transform-icon ms-1"></i>
+          </a>
+          <span class="badge" [ngClass]="badgeClass + '-transparent' + ' rounded-pill ms-auto'">
+            <i class="ti ti-caret-up me-1"></i>{{ percentage }}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+  

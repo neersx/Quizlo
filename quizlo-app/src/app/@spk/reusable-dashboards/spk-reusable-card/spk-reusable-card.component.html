@@ -1,0 +1,28 @@
+<div class="card custom-card {{card.cardClass}} ">
+    <div class="card-body">
+<div class="d-flex   {{card.customClass}}">
+    <div class="{{card.customClass1}}">
+        @if(card.titleClass){
+            <span class="text-muted {{card.titleClass}}">{{card.title}}</span>
+        }
+        @else{
+            <p class="text-muted fw-medium mb-2">{{card.title}}</p>
+        }
+        <h4 class="{{card.valueClass}}">{{card.value}}</h4>
+    </div>
+    <div class="lh-1">
+        @if(card.icon){
+            <span class="avatar avatar-md avatar-rounded bg-{{card.bg}}">
+                <i class="{{card.icon}} fs-5"></i>
+            </span>
+        }
+        @else{
+            <span class="{{card.svgClass}}">
+                <div [innerHTML]="sanitizeIcon(card.svg)"></div>
+                </span>
+        }
+    </div>
+</div>
+<div class="text-muted fs-13">{{card.graph}} By <span class="text-{{card.color}}">{{card.percentage}}<i  [class]="card.percentageIcon"></i></span></div>
+</div>
+</div>

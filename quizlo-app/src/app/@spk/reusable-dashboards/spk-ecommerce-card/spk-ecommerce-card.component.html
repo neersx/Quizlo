@@ -1,0 +1,25 @@
+
+    <div class="card custom-card overflow-hidden main-content-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between gap-1">
+          <div>
+            <div class="flex-fill fs-13 text-muted">{{ title }}</div>
+            <div class="fs-23 fw-medium mb-0">{{ value }}</div>
+            <div class="text-muted fs-13">
+              {{ changeDirection === 'increase' ? 'Increased By' : 'Decreased By' }} 
+              <span [class.text-success]="changeDirection === 'increase'" [class.text-danger]="changeDirection === 'decrease'">
+                {{ percentageChange }}
+                <i [class.ti-trending-up]="changeDirection === 'increase'" [class.ti-trending-down]="changeDirection === 'decrease'" class="fs-16 ti"></i>
+              </span>
+            </div>
+          </div>
+          <div class="avatar avatar-md" [ngClass]="avatarBgClass + ' avatar-rounded flex-shrink-0 svg-white'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+              <path [attr.d]="iconSvg"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+  

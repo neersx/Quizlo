@@ -1,0 +1,19 @@
+<ng-select 
+  [items]="options"
+  [id]="id"
+  [ngClass]="mainClass"
+  [class]="selectClass"
+  [bindLabel]="'label'"  
+  [bindValue]="'value'"  
+  [disabled]="disabled"
+  [multiple]="multiple"
+  [placeholder]="placeholder"
+  [(ngModel)]="defaultValue" 
+  [clearable]="clearable"
+  [searchable]="searchable"
+  [hideSelected]="hideSelected"
+  [maxSelectedItems]="maxSelectedItems"
+  (change)="onValueChange($event)"
+  (change)="onSelectionChange($event)">
+<ng-content></ng-content>
+</ng-select>

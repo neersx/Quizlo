@@ -1,0 +1,30 @@
+
+    <div class="card custom-card crm-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+          <div class="p-2 border border-opacity-10 rounded" [ngClass]="iconColor">
+            <span class="avatar avatar-md svg-white" [ngClass]="BgColor">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                <path [attr.d]="icon"></path>
+              </svg>
+            </span>
+          </div>
+          @if (chartOptions) {
+          <spk-apexcharts [chartOptions]="chartOptions"></spk-apexcharts>
+          }
+        </div>
+        <p class="text-muted fs-14 mb-0">{{ title }}</p>
+        <div class="d-flex align-items-center justify-content-between mt-1">
+          <h4 class="mb-0 d-flex align-items-center">{{ value }}</h4>
+          <span
+            class="badge rounded-pill d-flex align-items-center fs-11 me-0 ms-2 mb-0"
+            [ngClass]="isIncrease ? 'bg-success-transparent text-success' : 'bg-danger-transparent text-danger'"
+          >
+            <i [ngClass]="isIncrease ? 'ri-arrow-left-up-line' : 'ri-arrow-left-down-line'" class="fs-11"></i>
+            {{ percentageChange }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  

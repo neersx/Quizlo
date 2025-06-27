@@ -1,0 +1,26 @@
+
+    <div class="card custom-card social-cards" [ngClass]="platform.toLowerCase()">
+      <div class="card-body flex-fill">
+        <div class="d-flex flex-wrap gap-2 align-items-start justify-content-between">
+          <div>
+            <p class="flex-fill fs-15 fw-medium mb-1" [ngClass]="{'text-primary': platform === 'Instagram', 'text-success': platform === 'LinkedIn', 'text-info': platform === 'Facebook', 'text-secondary': platform === 'Twitter', 'text-warning': platform === 'Youtube', 'text-danger': platform === 'Messenger'}">
+              {{ platform }}
+            </p>
+            <p class="mb-2 fs-24 fw-medium">{{ followers }}</p>
+            <div class="flex-between">
+              <span class="text-muted fs-12 me-1">{{ timePeriod }}</span>
+              <span [ngClass]="trendColor" class="d-inline-block">
+                <i [ngClass]="trendIcon" class="me-1 fs-10"></i>{{ percentageChange }}
+              </span>
+            </div>
+          </div>
+          <div>
+            <span class="avatar avatar-lg avatar-rounded" [ngClass]="bgClass">
+              <i [ngClass]="icon" class="fs-5"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  

@@ -1,80 +1,214 @@
-
+<!-- Start Switcher -->
+<ng-template #content let-offcanvas>
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Switcher</h5>
+        <button type="button" (click)="offcanvas.dismiss('Cross click')" class="btn-close" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body switcher-canvas" id="switcher-canvas">
+        <div class="">
+            <p class="switcher-style-head">Theme Color Mode:</p>
+            <div class="row switcher-style gx-0">
+                <div class="col-4">
+                    <div class="form-check switch-select">
+                        <label class="form-check-label" for="switcher-light-theme">
+                            Light
+                        </label>
+                        <input (click)="themeChange('light', 'light')" class="form-check-input" type="radio"
+                            name="theme-style" id="switcher-light-theme" checked>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-check switch-select">
+                        <label class="form-check-label" for="switcher-dark-theme">
+                            Dark
+                        </label>
+                        <input (click)="themeChange('dark', 'dark')" class="form-check-input" type="radio"
+                            name="theme-style" id="switcher-dark-theme"
+                            [checked]="localdata['zenodarktheme'] == 'dark'">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <p class="switcher-style-head">Directions:</p>
+            <div class="row switcher-style gx-0">
+                <div class="col-4">
+                    <div class="form-check switch-select">
+                        <label class="form-check-label" for="switcher-ltr">
+                            LTR
+                        </label>
+                        <input class="form-check-input" (click)="DirectionsChange('ltr')" type="radio" name="direction"
+                            id="switcher-ltr" checked>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-check switch-select">
+                        <label class="form-check-label" for="switcher-rtl">
+                            RTL
+                        </label>
+                        <input class="form-check-input" (click)="DirectionsChange('rtl')" type="radio" name="direction"
+                            id="switcher-rtl" [checked]="localdata['dir'] == 'rtl'">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="theme-colors">
+            <p class="switcher-style-head">Theme Primary:</p>
+            <div class="d-flex align-items-center switcher-style">
+                <div class="form-check switch-select me-3">
+                    <input class="form-check-input color-input color-primary-1" (click)="primary('64, 100, 221')"
+                        [checked]="localdata['zeno-primary-mode'] == '64, 100, 221'" type="radio" name="theme-primary"
+                        id="switcher-primary">
+                </div>
+                <div class="form-check switch-select me-3">
+                    <input class="form-check-input color-input color-primary-2" (click)="primary('207, 117, 225')"
+                        [checked]="localdata['zeno-primary-mode'] == '207, 117, 225'" type="radio" name="theme-primary"
+                        id="switcher-success">
+                </div>
+                <div class="form-check switch-select me-3">
+                    <input class="form-check-input color-input color-primary-3" (click)="primary('199, 89, 106')"
+                        [checked]="localdata['zeno-primary-mode'] == '199, 89, 106'" type="radio" name="theme-primary"
+                        id="switcher-info">
+                </div>
+                <div class="form-check switch-select me-3">
+                    <input class="form-check-input color-input color-primary-4" (click)="primary('1, 159, 162')"
+                        [checked]="localdata['zeno-primary-mode'] == '1, 159, 162'" type="radio" name="theme-primary"
+                        id="switcher-secondary">
+                </div>
+                <div class="form-check switch-select me-3">
+                    <input class="form-check-input color-input color-primary-5" (click)="primary('139, 149, 4')"
+                        [checked]="localdata['zeno-primary-mode'] == '139, 149, 4'" type="radio" name="theme-primary"
+                        id="switcher-primary4">
+                </div>
+                <div class="form-check switch-select me-3 ps-0 mt-1 color-primary-light">
+                    <div class="theme-container-primary"></div>
+                    <div class="pickr-container-primary">
+                        <div class="pickr">
+                            <button type="button" class="pcr-button" role="button"
+                                aria-label="toggle color picker dialog" id="lightPrimaryColorID"
+                                style="--pcr-color: rgba(132, 90, 223, 1)" [style.background]="color1"
+                                (cpSliderDragEnd)="dynamicLightPrimary($event)"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p class="switcher-style-head">reset:</p>
+            <div class="text-center">
+                <button id="reset-all" (click)="reset()" class="btn btn-danger mt-3">Reset</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- End Switcher -->
 
 <div class="landing-page-wrapper">
 
     <!-- app-header -->
     <header class="app-header">
 
-        <!-- Start::main-header-container -->
-        <div class="main-header-container container-fluid">
-
-            <!-- Start::header-content-left -->
-            <div class="header-content-left">
-
-                <!-- Start::header-element -->
-                <div class="header-element">
-                    <div class="horizontal-logo">
-                        <a routerLink="/dashboards/sales" class="header-logo">
-                            <img src="./assets/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
-                            <img src="./assets/images/brand-logos/toggle-dark.png" alt="logo" class="toggle-dark">
-                        </a>
-                        <!-- <a routerLink="/dashboards/sales" class="header-logo"> 
-                                <img src="./assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo"> 
-                                <img src="./assets/images/brand-logos/desktop-white.png" alt="logo" class="desktop-white"> 
-                            </a> -->
-                    </div>
-                </div>
-                <!-- End::header-element -->
-
-                <!-- Start::header-element -->
-                <div class="header-element">
-                    <!-- Start::header-link -->
-                    <a href="javascript:void(0);" (click)="toggleSidebar()" class="sidemenu-toggle header-link"
-                        data-bs-toggle="sidebar">
-                        <span class="open-toggle">
-                            <i class="ri-menu-3-line fs-20"></i>
-                        </span>
-                    </a>
-                    <!-- End::header-link -->
-                </div>
-                <!-- End::header-element -->
-
-            </div>
-            <!-- End::header-content-left -->
-
-            <!-- Start::header-content-right -->
-            <div class="header-content-right">
-
-                <!-- Start::header-element -->
-                <div class="header-element align-items-center">
-                    <!-- Start::header-link|switcher-icon -->
-                    <div class="btn-list d-lg-none d-flex">
-                        <a routerLink="/auth/login" class="btn btn-wave btn-success">
-                            Sign Up
-                        </a>
-                        <button 
-                            class="btn btn-wave btn-icon btn-primary switcher-icon d-flex align-items-center justify-content-center"
-                            data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
-                            <i class="ri-settings-3-line"></i>
-                        </button>
-                    </div>
-                    <!-- End::header-link|switcher-icon -->
-                </div>
-                <!-- End::header-element -->
-
-            </div>
-            <!-- End::header-content-right -->
-
-        </div>
-        <!-- End::main-header-container -->
 
     </header>
     <!-- /app-header -->
 
+    <!-- Start::app-sidebar -->
+    <aside [ngClass]="{ 'data-toggled': isDataToggled }" class="app-sidebar sticky" id="sidebar"
+        [ngClass]="{ 'sticky-pin': scrolled }" style="margin-bottom: -64px">
+        <div class="container-xl">
+            <!-- Start::main-sidebar -->
+            <div class="main-sidebar">
+
+                <!-- Start::nav -->
+                <nav class="main-menu-container nav nav-pills sub-open">
+                    <div class="landing-logo-container">
+                        <div class="horizontal-logo">
+                            <a routerLink="/dashboards/sales" class="header-logo">
+                                <img src="./assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+                                <img src="./assets/images/brand-logos/desktop-white.png" alt="logo"
+                                    class="desktop-white">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
+                            width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                        </svg></div>
+                    <ul class="main-menu">
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a class="side-menu__item">
+                                <span class="side-menu__label">Home</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a class="side-menu__item">
+                                <span class="side-menu__label">About</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a class="side-menu__item">
+                                <span class="side-menu__label">Pricing</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a class="side-menu__item">
+                                <span class="side-menu__label">Testimonials</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a class="side-menu__item">
+                                <span class="side-menu__label">Contact Us</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                    </ul>
+                    <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
+                            width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                        </svg></div>
+                    <div class="d-lg-flex d-none">
+                        <div class="btn-list d-lg-flex d-none mt-0">
+                            <a routerLink="/auth/login" class="btn btn-wave btn-success">
+                                Sign Up
+                            </a>
+                            <button (click)="openSwitcher(content)"
+                                class="btn btn-wave btn-icon btn-primary switcher-icon d-flex align-items-center justify-content-center"
+                                data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
+                                <i class="ri-settings-3-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+                <!-- End::nav -->
+
+            </div>
+            <!-- End::main-sidebar -->
+        </div>
+    </aside>
+    <!-- End::app-sidebar -->
+
     <!-- Start::app-content -->
     <div class="main-content landing-main px-0">
 
-        <router-outlet></router-outlet>
+        <section id="services" class="section bg-background">
+            <div class="container">
+                <router-outlet></router-outlet>
+            </div>
+        </section>
+     
 
         <!-- Start:: Section-11 -->
         <footer class="footer mt-auto text-fixed-white position-relative">
@@ -110,7 +244,8 @@
                             <a routerLink="/dashboards/sales" class="d-inline-block mb-2"><img
                                     src="./assets/images/brand-logos/desktop-white.png" width="100px" alt="img"></a>
                             <p class="mb-4 op-8 fs-15">
-                                Quizlo Ai is a leading online platform that provides AI-generated mock tests. Contact us on below detail.
+                                Quizlo Ai is a leading online platform that provides AI-generated mock tests. Contact us
+                                on below detail.
                             </p>
                             <ul class="list-unstyled mb-0">
                                 <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link"><i
@@ -119,7 +254,8 @@
                                             class="fe fe-mail me-2 d-inline-block fs-16"></i>quizloai&#64;gmail.com</a>
                                 </li>
                                 <li class="list-item"><a href="javascript:void(0);" class="footer-link"><i
-                                            class="fe fe-map-pin me-2 d-inline-block fs-16"></i>Mumbai, Maharastra, INDIA </a>
+                                            class="fe fe-map-pin me-2 d-inline-block fs-16"></i>Mumbai, Maharastra,
+                                        INDIA </a>
                                 </li>
                             </ul>
                             <div class="footer-btn-list d-flex align-items-center mt-3">
@@ -137,24 +273,7 @@
                                         class="ri ri-twitter-x-line"></i></a>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                            <h5 class="text-fixed-white">Page Links</h5>
-                            <ul class="list-unstyled footer-icon mb-0">
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">About
-                                        company</a></li>
-                               
-                                <li class="list-item mb-2"><a routerLink="/pages/blog/blog" class="footer-link">News
-                                        &amp; Blog</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);"
-                                        class="footer-link">Testimonials</a></li>
-                                <li class="list-item mb-2"><a routerLink="/pages/faqs" class="footer-link">FAQ's</a>
-                                </li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Account
-                                        Settings</a></li>
-                                <li class="list-item"><a routerLink="/pages/pricing" class="footer-link">Price &amp;
-                                        Plan</a></li>
-                            </ul>
-                        </div>
+
                         <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                             <h5 class="text-fixed-white">Services</h5>
                             <ul class="list-unstyled footer-icon mb-0">

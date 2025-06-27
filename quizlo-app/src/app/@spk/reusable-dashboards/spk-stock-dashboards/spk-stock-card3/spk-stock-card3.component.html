@@ -1,0 +1,24 @@
+
+    <div class="card custom-card">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-1">
+          <div class="d-flex align-items-center gap-1">
+            <div class="me-2">
+              <span class="avatar" [ngClass]="marketIndex?.iconColor + '-transparent'">
+                <i class="ti" [ngClass]="marketIndex?.icon + ' fs-18'"></i>
+              </span>
+            </div>
+            <div>
+              <span class="d-block fw-semibold">{{ marketIndex?.name }}</span>
+              <span class="d-block">${{ marketIndex?.value.toFixed(2) }}</span>
+            </div>
+          </div>
+          <div class="text-end" [ngClass]="marketIndex?.changePercentage >= 0 ? 'text-primary' : 'text-danger'">
+            <span class="d-block">{{ marketIndex?.changePercentage >= 0 ? '+' : '' }}{{ marketIndex?.changePercentage.toFixed(2) }}%</span>
+            <span class="d-block">${{ marketIndex?.changeAmount.toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+  

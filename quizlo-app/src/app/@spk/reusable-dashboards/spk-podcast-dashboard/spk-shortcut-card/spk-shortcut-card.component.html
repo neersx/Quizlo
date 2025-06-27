@@ -1,0 +1,21 @@
+<!-- card-item.component.html -->
+
+    <div class="card custom-card active">
+      <div class="card-body">
+        <a href="javascript:void(0);" class="stretched-link categories" data-filter="*">
+          <div class="d-flex align-items-center flex-wrap gap-3">
+            <span [class]="'avatar avatar-md ' + bgColor + ' svg-white'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                <path [attr.d]="icon"></path>
+              </svg>
+            </span>
+            <div>
+              <span class="fw-medium">{{ title }}</span>
+              <span class="fs-12 d-block fw-medium text-muted">{{ itemCount }} Items</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+ 
+  

@@ -1,0 +1,27 @@
+
+  <div class="card custom-card overflow-hidden">
+    <div class="card-body p-0">
+      <div class="p-3 d-flex align-items-start gap-3 flex-wrap">
+        <div class="lh-1">
+          <span [ngClass]="'avatar avatar-rounded ' + avatarBgClass + ' svg-white flex-shrink-0'">
+            <i [ngClass]="iconClass"></i>
+          </span>
+        </div>
+        <div class="mb-3 me-3">
+          <span class="fw-medium fs-13 text-muted pe-3">{{ title }}</span>
+          <span class="fs-20 fw-medium mb-0 d-flex align-items-center">{{ value }}</span>
+          <div class="text-muted fs-12">
+            <span [ngClass]="changeDirection === 'increase' ? 'text-success' : 'text-danger'">
+              {{ percentageChange }}<i [ngClass]="changeDirection === 'increase' ? 'ti ti-arrow-narrow-up' : 'ti ti-arrow-narrow-down'" class="fs-16"></i>
+            </span> This year
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-end justify-content-end">
+        <div id="chart-21" style="min-height: 70px;">
+          <spk-apexcharts [chartOptions]="chartOptions"></spk-apexcharts>
+        </div>
+      </div>
+    </div>
+  </div>
+

@@ -1,0 +1,77 @@
+<app-page-header firstTitle="Apps" title="Currency Exchange" title1="Crypto" activeTitle="Currency Exchange" ></app-page-header>
+ <!-- Start::row-1 -->
+ <div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card currency-exchange-card">
+            <div class="card-body p-5 d-flex align-items-center justify-content-center z-1">
+                <div class="container">
+                    <h3 class="text-fixed-white text-center">Buy and Sell Coins without additional fees</h3>
+                    <span class="d-block fs-16 text-fixed-white text-center op-8 mb-4">
+                        Buy now and get +50% extra bonus Minimum pre-sale amount 100 Crypto Coin. We accept BTC crypto-currency..
+                    </span>
+                    <div class="p-3 mb-4 rounded currency-exchange-area">
+                        <div class="row gy-3">
+                            <div class="col-xxl-3 col-12">
+                                <input type="text" class="form-control" value="0.0453" placeholder="Enter Amount">
+                            </div>
+                            <div class="col-xxl-2 col-12">
+                                <div>
+                                    <spk-ng-select 
+                                [options]="SellCoins"
+                                [selectClass]="''"
+                                [clearable]="true"
+                                [multi]="true"
+                                [searchable]="true"
+                                [placeholder]="'Bitcoin'"
+                                [additionalProperties]="{}"
+                                (change)="handleSelectChange($event)">
+                                </spk-ng-select>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-12 text-center">
+                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-success btn-icon btn-sm my-2 rounded-pill"><i class="ti ti-arrows-exchange fs-19 align-middle"></i></a>
+                            </div>
+                            <div class="col-xxl-3 col-12">
+                                <input type="text" class="form-control" value="1350.93" placeholder="Exchange Amount">
+                            </div>
+                            <div class="col-xxl-2 col-12">
+                                <spk-ng-select 
+                                [options]="Currency"
+                                [selectClass]="''"
+                                [clearable]="true"
+                                [multi]="true"
+                                [searchable]="true"
+                                [placeholder]="'USD'"
+                                [additionalProperties]="{}"
+                                (change)="handleSelectChange($event)">
+                                </spk-ng-select>
+                             
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-success btn-wave">Exchange Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+
+    <!-- Start:: row-2 -->
+    <div class="row justify-content-center">
+      
+    
+        <div class="col-xl-12">
+             <div class="text-center my-4">
+                <button class="btn btn-primary-light" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm align-middle" role="status"
+                        aria-hidden="true"></span>
+                    Loading...
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- End:: row-2 -->

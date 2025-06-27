@@ -1,0 +1,24 @@
+
+    <div class="card custom-card">
+      <div class="card-body">
+        <div class="d-flex align-items-start gap-3 flex-wrap">
+            @if (icon) {
+          <div [class]="'avatar avatar-lg ' + backgroundColor + ' avatar-rounded svg-white'" [innerHTML]="getSanitizedSVG(icon)">
+            <!-- Use dynamic icon, for now using the provided example SVG as placeholder -->
+          </div>
+        }
+          <div class="lh-1">
+            <span class="d-block mb-2 fw-medium">{{ title }}</span>
+            <h4 class="mb-1 fw-medium">{{ value }}</h4>
+            <span class="fs-11 text-muted mb-0">
+              <span [class]="changeDirection === 'up' ? 'text-success' : 'text-danger'" class="fw-semibold">
+                {{ changePercentage }}<i [class]="changeDirection === 'up' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" class="align-middle mx-1"></i>
+              </span>
+              This {{plans}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  

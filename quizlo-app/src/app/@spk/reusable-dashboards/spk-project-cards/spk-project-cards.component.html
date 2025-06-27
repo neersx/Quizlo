@@ -1,0 +1,30 @@
+
+  <div class="card custom-card">
+      <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between gap-1 flex-wrap flex-xxl-nowrap">
+              <div class="flex-fill">
+                  <span class="d-block mb-2 text-muted">{{ title }}</span>
+                  <h4 class="fw-medium mb-0 lh-1 d-flex align-items-center gap-2 flex-wrap">
+                      {{ value }} 
+                      <span [ngClass]="{
+                        'bg-primary-transparent': status === 'up',
+                        'bg-success-transparent': status === 'good',
+                        'bg-info-transparent': status === 'down',
+                        'bg-secondary-transparent': status === 'neutral'
+                      }" class="fs-11 badge">
+                        <i class="ti ti-trending-{{graph}} me-1 align-middle d-inline-block"></i>
+                        {{ percentage }}
+                      </span>
+                  </h4>
+              </div>
+              <div class="ms-auto">
+                  <span class="avatar avatar-lg avatar-rounded svg-white" [ngClass]="iconBg">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="svg-white" viewBox="0 0 24 24">
+                          <path [attr.d]="icon"></path>
+                      </svg>
+                  </span>
+              </div>
+          </div>
+      </div>
+  </div>
+

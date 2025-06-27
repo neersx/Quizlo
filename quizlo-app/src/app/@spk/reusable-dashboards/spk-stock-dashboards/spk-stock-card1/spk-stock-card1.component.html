@@ -1,0 +1,31 @@
+<div class="swiper-slide">
+    <div class="card custom-card">
+      <div class="card-body">
+        <div class="d-flex gap-2 flex-wrap align-items-center justify-content-between">
+          <div class="d-flex flex-fill align-items-center">
+            <div class="me-2">
+              <span class="avatar avatar-sm" [ngClass]="bgColor">
+                <i class="bi" [ngClass]="icon + ' fs-18'"></i>
+              </span>
+            </div>
+            <div class="lh-1">
+              <span class="d-block mb-2 text-default fw-medium">{{ title }}</span>
+              <span class="d-block fs-12">{{ value }}</span>
+            </div>
+          </div>
+          <div class="fs-12 text-end">
+            <span [ngClass]="{
+              'text-success': parsedChangePercentage > 0,
+              'text-danger': parsedChangePercentage < 0
+            }" class="d-block">
+              {{ changePercentage }}<i class="ti ti-arrow-bear-right"></i>
+            </span>
+            <span class="{{textColor}}"  class="d-block">
+              {{ changeValue }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
