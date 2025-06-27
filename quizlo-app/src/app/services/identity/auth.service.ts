@@ -2,12 +2,13 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'https://quizloai.com/api/users'; // Replace with actual API URL
+  private readonly apiUrl = `${environment.apiUrl}/users`; // Replace with actual API URLenvironment.apiUrl; // Replace with actual API URL
   public showLoader:boolean=false;
 
   private readonly userData = new BehaviorSubject<any>({}); // Observable cart count

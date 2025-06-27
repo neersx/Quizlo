@@ -1,6 +1,7 @@
 ﻿// Controllers/QuestionsController.cs
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.DTO;
 using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Controllers
@@ -16,19 +17,19 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // GET: api/exams/5/questions
         [HttpGet("exams/{examId}/questions")]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestionsByExam(int examId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<Question>>>> GetQuestionsByExam(int examId)
         {
             var questions = await _questionService.GetQuestionsByExamAsync(examId);
-            return Ok(questions);
+            return Ok(ApiResponse<IEnumerable<Question>>.Success(questions));
         }
 
         // GET: api/questions/10
         [HttpGet("questions/{id}")]
-        public async Task<ActionResult<Question>> GetQuestion(int id)
+        public async Task<ActionResult<ApiResponse<Question>>> GetQuestion(int id)
         {
             var question = await _questionService.GetQuestionAsync(id);
             if (question == null) return NotFound();
-            return Ok(question);
+            return Ok(ApiResponse<Question>.Success(question)); //return Ok(question);
         }
 
         // POST: api/questions
@@ -41,11 +42,11 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // PUT: api/questions/10
         [HttpPut("questions/{id}")]
-        public async Task<ActionResult<Question>> UpdateQuestion(int id, [FromBody] Question question)
+        public async Task<ActionResult<ApiResponse<Question>>> UpdateQuestion(int id, [FromBody] Question question)
         {
             if (id != question.Id) return BadRequest();
             var updated = await _questionService.UpdateQuestionAsync(question);
-            return Ok(updated);
+            return Ok(ApiResponse<Question>.Success(updated)); //return Ok(updated);
         }
 
         // DELETE: api/questions/10

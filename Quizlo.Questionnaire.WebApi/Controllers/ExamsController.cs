@@ -1,6 +1,7 @@
 ﻿// Controllers/ExamsController.cs
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.DTO;
 using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Controllers
@@ -16,22 +17,22 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // GET: api/exams?pageNumber=1&pageSize=10&search=foo
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Exam>>> GetExams(
+        public async Task<ActionResult<ApiResponse<IEnumerable<Exam>>>> GetExams(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] string search = null)
         {
             var exams = await _examService.GetExamsAsync(pageNumber, pageSize, search);
-            return Ok(exams);
+            return Ok(ApiResponse<IEnumerable<Exam>>.Success(exams));
         }
 
         // GET: api/exams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Exam>> GetExam(int id)
+        public async Task<ActionResult<ApiResponse<Exam>>> GetExam(int id)
         {
             var exam = await _examService.GetExamAsync(id);
             if (exam == null) return NotFound();
-            return Ok(exam);
+            return Ok(ApiResponse<Exam>.Success(exam)); //return Ok(exam);
         }
 
         // POST: api/exams
@@ -44,11 +45,11 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // PUT: api/exams/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Exam>> UpdateExam(int id, [FromBody] Exam exam)
+        public async Task<ActionResult<ApiResponse<Exam>>> UpdateExam(int id, [FromBody] Exam exam)
         {
             if (id != exam.Id) return BadRequest();
             var updated = await _examService.UpdateExamAsync(exam);
-            return Ok(updated);
+            return Ok(ApiResponse<Exam>.Success(updated)); //return Ok(updated);
         }
 
         // DELETE: api/exams/5

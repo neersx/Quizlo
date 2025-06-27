@@ -8,11 +8,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { SharedModule } from './shared/sharedmodule';
+import { provideAnimations, provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(withRoutes(serverRoutes)),
     provideRouter(routes),
+    provideAnimations(),
+    provideNoopAnimations(),
     importProvidersFrom( // required by ngx-toastr if you want animations
       HttpClientModule,         // provides HttpClient
       NgbModule,

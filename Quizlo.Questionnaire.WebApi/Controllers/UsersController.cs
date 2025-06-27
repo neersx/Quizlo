@@ -31,11 +31,11 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // GET: api/users/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
+        public async Task<ActionResult<ApiResponse<User>>> GetUser(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null) return NotFound();
-            return Ok(user);
+             return Ok(ApiResponse<User>.Success(user));
         }
 
         // POST: api/users/register
@@ -48,7 +48,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // POST: api/users/login
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginDto dto)
+        public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Login([FromBody] LoginDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user == null) return Unauthorized("Invalid credentials");
@@ -67,7 +67,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
                 LastName = user.LastName
             };
 
-            return Ok(response);
+            return Ok(ApiResponse<AuthResponseDto>.Success(response)); //return CreatedAtAction(nameof(GetUser), new { id = user.Id }, response);
         }
 
         // POST: api/users/logout

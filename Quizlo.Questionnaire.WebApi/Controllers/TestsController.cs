@@ -17,7 +17,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         /// <summary>Returns every test created by the currently-logged-in user.</summary>
         [HttpGet]                                // GET api/tests
-        public async Task<ActionResult<IEnumerable<TestDetailsDto>>> GetMyTests(
+        public async Task<ActionResult<IEnumerable<ApiResponse<TestDetailsDto>>>> GetMyTests(
             CancellationToken ct)
         {
             // Identity uses the NameIdentifier claim to store User.Id
@@ -25,7 +25,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
                 return Unauthorized("User id not found in token.");
 
             var tests = await _svc.GetUserTestsAsync(userId, ct);
-            return Ok(tests);
+            return Ok(ApiResponse<IEnumerable<TestDetailsDto>>.Success(tests));
         }
 
         /// POST api/tests
@@ -51,7 +51,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         /// <summary>Submit all answers for the specified test.</summary>
         [HttpPost("{testId:int}/submit")]
-        public async Task<ActionResult<TestSubmissionResultDto>> Submit(
+        public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(
             int testId,
             [FromBody] SubmitTestAnswersRequest request,
             CancellationToken ct)
@@ -60,7 +60,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
                 return BadRequest("Answers collection cannot be empty.");
 
             var result = await _svc.SubmitAnswersAsync(testId, request, ct);
-            return Ok(result);
+            return Ok(ApiResponse<TestSubmissionResultDto>.Success(result));
         }
     }
 

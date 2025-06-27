@@ -105,7 +105,7 @@ export class Login {
         next: (res: any) => {
           if (res.isSuccess) {
             console.log(res);
-            this.router.navigate(['/dashboards/sales']);
+            this.router.navigate(['/test']);
             this.toastr.success('login successful', 'Royal रसोई', {
               timeOut: 3000,
               positionClass: 'toast-top-right',
