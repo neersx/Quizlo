@@ -11,47 +11,42 @@
                     </span>
                     <div class="p-3 mb-4 rounded currency-exchange-area">
                         <div class="row gy-3">
-                            <div class="col-xxl-3 col-12">
+                            <!-- <div class="col-xxl-3 col-12">
                                 <input type="text" class="form-control" value="0.0453" placeholder="Enter Amount">
-                            </div>
-                            <div class="col-xxl-2 col-12">
-                                <div>
-                                    <spk-ng-select 
-                                [options]="SellCoins"
+                            </div> -->
+                            <div class="col-xxl-6 col-12">
+                                <div *ngIf="exams">
+                                <spk-ng-select 
+                                [options]="exams"
                                 [selectClass]="''"
                                 [clearable]="true"
-                                [multi]="true"
+                                [multi]="false"
                                 [searchable]="true"
-                                [placeholder]="'Bitcoin'"
+                                [placeholder]="'Exam Name'"
                                 [additionalProperties]="{}"
-                                (change)="handleSelectChange($event)">
+                                (change)="handleExamChange($event)">
                                 </spk-ng-select>
                                    
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-12 text-center">
-                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-success btn-icon btn-sm my-2 rounded-pill"><i class="ti ti-arrows-exchange fs-19 align-middle"></i></a>
-                            </div>
-                            <div class="col-xxl-3 col-12">
-                                <input type="text" class="form-control" value="1350.93" placeholder="Exchange Amount">
-                            </div>
-                            <div class="col-xxl-2 col-12">
+                            
+                            <div class="col-xxl-6 col-12">
                                 <spk-ng-select 
-                                [options]="Currency"
+                                [options]="languages"
                                 [selectClass]="''"
                                 [clearable]="true"
                                 [multi]="true"
                                 [searchable]="true"
-                                [placeholder]="'USD'"
+                                [placeholder]="'Select Language'"
                                 [additionalProperties]="{}"
-                                (change)="handleSelectChange($event)">
+                                (change)="handleLanguageChange($event)">
                                 </spk-ng-select>
                              
                             </div>
                         </div>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-success btn-wave">Exchange Now</button>
+                        <a (click)="startTest()" class="btn btn-danger btn-wave">Start Your Test Now</a>
                     </div>
                 </div>
             </div>

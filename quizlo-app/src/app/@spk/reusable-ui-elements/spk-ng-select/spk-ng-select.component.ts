@@ -66,5 +66,6 @@ onSelectionChange(selected: any): void {
 
   onValueChange(event: any) {
     console.log('Selected Value:', event);
+    this.change.emit(event);
   }
 }

@@ -9,11 +9,11 @@ import { SubmitAnswerDto } from '../model/answer.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExamService {
-  private baseUrl = `${environment.apiUrl}/api/Exams`;
+  private baseUrl = `${environment.apiUrl}/exams`;
 
   constructor(private http: HttpClient) {}
 
-  getExams(pageNumber: number = 1, pageSize: number = 10, search?: string): Observable<Exam[]> {
+  getExams(pageNumber: number = 1, pageSize: number = 100, search?: string): Observable<Exam[]> {
     let params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
@@ -39,29 +39,3 @@ export class ExamService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
-
-
-@Injectable({ providedIn: 'root' })
-export class TestService {
-  private baseUrl = `${environment.apiUrl}/api/Tests`;
-
-  constructor(private http: HttpClient) {}
-
-  getTests(): Observable<TestDetailsDto[]> {
-    return this.http.get<TestDetailsDto[]>(this.baseUrl);
-  }
-
-  getTest(id: number): Observable<TestDetailsDto> {
-    return this.http.get<TestDetailsDto>(`${this.baseUrl}/${id}`);
-  }
-
-  createTest(request: CreateTestRequest): Observable<TestDetailsDto> {
-    return this.http.post<TestDetailsDto>(this.baseUrl, request);
-  }
-
-  submitTestAnswers(testId: number, answers: SubmitAnswerDto[]): Observable<TestSubmissionResultDto> {
-    const url = `${this.baseUrl}/${testId}/submit`;
-    return this.http.post<TestSubmissionResultDto>(url, { answers });
-  }
-}
-

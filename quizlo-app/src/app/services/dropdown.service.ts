@@ -1,18 +1,18 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { TestDetailsDto, CreateTestRequest, TestSubmissionResultDto } from '../model/questions.model';
-import { SubmitAnswerDto } from '../model/answer.model';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { SubmitAnswerDto } from "../pages/ai-tests/model/answer.model";
+import { TestDetailsDto, CreateTestRequest, TestSubmissionResultDto } from "../pages/ai-tests/model/questions.model";
 
 @Injectable({ providedIn: 'root' })
-export class TestService {
-  private baseUrl = `${environment.apiUrl}/tests`;
+export class DropdownService {
+  private baseUrl = `${environment.apiUrl}/dropdown`;
 
   constructor(private http: HttpClient) {}
 
-  getTests(): Observable<TestDetailsDto[]> {
-    return this.http.get<TestDetailsDto[]>(this.baseUrl);
+  getLanguagesDropdown(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/languages`);
   }
 
   getTest(id: number): Observable<TestDetailsDto> {
@@ -28,3 +28,4 @@ export class TestService {
     return this.http.post<TestSubmissionResultDto>(url, { answers });
   }
 }
+

@@ -2,6 +2,8 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angul
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../../shared/sharedmodule';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TestService } from '../services/test-service';
 
 @Component({
   selector: 'app-live-test',
@@ -12,9 +14,66 @@ import { SharedModule } from '../../../shared/sharedmodule';
 })
 export class LiveTest {
   thumbsSwiper: any;
+
+  error = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private testService: TestService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const examId   = Number(params['examId']);
+      const language = params['language'];
+      if (!examId || !language) {
+        this.error = 'Missing examId or language';
+        return;
+      }
+      this.createAndNavigateToTest(examId, language);
+    });
+  }
+
+  private createAndNavigateToTest(examId: number, language: string) {
+    const today = new Date();
+const formatted = today.toLocaleDateString('en-GB', {
+  day:   '2-digit',
+  month: '2-digit',
+  year:  'numeric'
+});
+// e.g. "28/06/2025"
+const title = `${formatted.replace(/\//g, '-')} Mock Test`;
+
+    const payload: any = {
+      examId,     // adjust as needed
+      subject: 'All',             // or your dynamic subject
+      language,
+      difficulty: 3,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
+      title,      // or build from exam name
+      duration: '00:00:00'        // e.g. HH:MM:SS
+    };
+
+    this.testService.createTest(payload).subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess && resp.data) {
+        console.log(resp.data);
+
+        } else {
+          this.error = resp.message ?? 'Could not start test';
+        }
+      },
+      error: err => {
+        this.error = err.message || 'Server error';
+      }
+    });
+  }
+
   setThumbsSwiper(swiper: any) {
     this.thumbsSwiper = swiper;
   }
+
+
   ngAfterViewInit(): void {
 		const swiperEl = this.swiperContainer.nativeElement;
 	
