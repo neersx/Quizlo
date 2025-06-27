@@ -1,0 +1,43 @@
+<div class="card custom-card mb-3">
+  <div class="card-body">
+      <div class="d-flex align-items-start justify-content-between mb-3">
+          <div class="task-badges">
+              <span class="badge {{idBg}} m-1">{{ taskId }}</span>
+              @for(badge of taskBadges;track $index){
+              <span class="badge {{badge.type}} m-1" >{{ badge.label }}</span>
+              }
+          </div>
+          <spk-dropdowns [Customclass]="'dropdown'" [class]="'btn-sm btn-light no-caret'"
+    [Menuclass]="'dropdown-menu'" [Id]="'dropdownMenuOffset'" [Icon]="true" [IconClass]="'ri-more-2-fill'">
+    <li><a class="dropdown-item" ngbDropdownItem>View</a></li>
+    <li><a class="dropdown-item" ngbDropdownItem>Edit</a></li>
+    <li><a class="dropdown-item" ngbDropdownItem>Delete</a></li>
+</spk-dropdowns>
+      </div>
+      <h6 class="fw-medium mb-1 fs-15">{{ taskTitle }}</h6>
+      <p class="kanban-task-description">{{ taskDescription }}</p>
+      <div class="kanban-card-footer">
+          <span class="badge bg-{{priorityBg}}-transparent m-1">{{ taskPriority }}</span>
+          <span class="badge bg-secondary-transparent m-1">{{taskStatus}}</span>
+      </div>
+  </div>
+  <div class="p-3 border-top border-block-start-dashed">
+      <div class="d-flex align-items-center flex-row-reverse justify-content-between">
+          <div class="avatar-list-stacked">
+            @for(avatar of avatars;track $index){
+              <span class="avatar avatar-sm avatar-rounded">
+                  <img [src]="avatar" alt="img">
+              </span>
+            }
+          </div>
+          <div>
+              <a href="javascript:void(0);" class="me-2 text-secondary">
+                  <span class="me-1"><i class="ri-thumb-up-fill align-middle fw-normal"></i></span><span class="fw-medium fs-12">{{ likes }}</span>
+              </a>
+              <a href="javascript:void(0);" class="text-info">
+                  <span class="me-1"><i class="ri-message-2-line align-middle fw-normal"></i></span><span class="fw-medium fs-12">{{ comments }}</span>
+              </a>
+          </div>
+      </div>
+  </div>
+</div>

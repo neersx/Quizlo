@@ -1,0 +1,103 @@
+<div class="card custom-card {{nft.cardClass}}">
+    <div class="{{nft.bodyClass}}">
+@if(nft.time){
+    <div class="mb-0 text-fixed-white bg-info nft-auction-time">
+         {{nft.time}}
+    </div>
+}
+        <div class="position-relative {{nft.imageClass}}">
+            <img [src]="nft.image" class="card-img-top nft-img1" alt="...">
+            @if(nft.likes){
+
+                <span class="badge nft-like-badge text-fixed-white"><i class="ri-heart-fill me-1 text-danger align-middle d-inline-block"></i>{{nft.likes}}</span>
+            }
+            @else{
+                <p class="mb-0 text-fixed-white bg-info nft-auction-time">  {{nft.time1}} </p>
+            }
+        </div>
+@if(nft.likes1){
+    <div>
+        <div class="{{nft.titleClass}}">
+            <p class="fs-15 mb-2 fw-semibold">{{nft.title}}</p>
+                <div class="ms-auto">
+                     <span class="badge bg-danger-transparent">
+                    <i class="ri-heart-fill me-1 text-danger align-middle d-inline-block"></i>{{nft.likes1}}</span> 
+                </div>
+            </div>
+            <div class="d-flex mb-3 align-items-center flex-wrap gap-2">
+                <div class="lh-1">
+                    <span class="avatar avatar-rounded avatar-{{nft.avatarSize}}">
+                        <img [src]="nft.image1" alt="">
+                    </span>
+                </div>
+                <div class="flex-fill">
+                    <p class="mb-1 fs-12 fw-medium">{{nft.name}} </p>
+                    <p class="fs-11 op-8 mb-0 lh-1">-{{nft.mail}}</p>
+                    
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 pt-1">
+                <p class="mb-0 {{nft.bidClass}}">Current Bid :</p>
+                <h6 class="fw-semibold mb-0 bid-amt align-middle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="65" viewBox="0 0 40 65">
+                        <g fill="none" fill-rule="evenodd">
+                        <g fill-rule="nonzero" transform="translate(-227 -93)">
+                            <g transform="translate(227 93)"><g>
+                            <path fill="#8A92B2" d="M20.1.8v23.3c0 .1-.1.2-.2.2-.7.3-1.3.6-2 .9-.9.4-1.9.8-2.8 1.3L11.8 28l-2.7 1.2-3.3 1.5c-.9.4-1.8.8-2.8 1.3-.7.3-1.5.7-2.2 1-.1 0-.1.1-.2 0H.5c.3-.5.6-.9.9-1.4 1.6-2.7 3.3-5.4 4.9-8.1 1.7-2.9 3.5-5.8 5.2-8.7 1.6-2.7 3.2-5.4 4.8-8 1.2-2 2.4-3.9 3.5-5.9.2 0 .2-.1.3-.1-.1 0 0 0 0 0z"></path>
+                            <path fill="#454A75" d="M39.5 33c-1.5 1-3.1 1.9-4.6 2.8-4.9 2.9-9.7 5.7-14.6 8.6-.1 0-.1.1-.2.1s-.1-.1-.1-.1v-.3-19.5-.3c0-.1.1-.1.2-.1.4.2.8.4 1.3.6 1.2.6 2.5 1.1 3.7 1.7 1.1.5 2.1 1 3.2 1.4 1.1.5 2.1 1 3.2 1.5.9.4 1.9.8 2.8 1.3.9.4 1.9.8 2.8 1.3.7.3 1.4.7 2.2 1 0-.1 0 0 .1 0z"></path>
+                            <path fill="#8A92B2" d="M20.1 64.1s-.1 0 0 0c-.1 0-.1 0-.2-.1-2-2.8-3.9-5.5-5.9-8.3l-6-8.4c-1.9-2.7-3.9-5.4-5.8-8.2L.7 37c0-.1-.1-.1-.1-.2.1 0 .1.1.2.1 2.7 1.6 5.5 3.2 8.2 4.8 3.1 1.9 6.3 3.7 9.4 5.6.5.3 1.1.6 1.6.9.1 0 .1.1.1.2V64.1z"></path><path fill="gray" d="M.6 33s.1 0 0 0c.1 0 .1 0 0 0 0 .1 0 .1 0 0z"></path>
+                            <path fill="#62688F" d="M.7 33.1c0-.1 0-.1 0 0 1-.5 2-.9 3-1.4l3.9-1.8c1-.5 2-.9 3-1.4 1.4-.7 2.9-1.3 4.3-2 1-.4 2-.9 3-1.3.7-.3 1.4-.6 2.1-1 .1 0 .1-.1.2-.1V44.5c-.1.1-.1 0-.2 0-.3-.2-.6-.3-.8-.5L.9 33.2c-.1-.1-.2-.1-.2-.1zM39.4 36.8c0 .1 0 .1-.1.2-5.8 8.2-11.6 16.3-17.4 24.5-.6.9-1.2 1.7-1.8 2.6V64v-.2-15.3-.3c1.3-.8 2.6-1.6 3.9-2.3l15.3-9c0-.1.1-.1.1-.1z"></path>
+                            <path fill="#62688F" d="M20.1 24.2V24 1.1.9l19.2 31.8c.1.1.2.2.2.3-.4-.2-.8-.4-1.3-.6-.5-.2-1-.5-1.5-.7-.3-.1-.6-.3-1-.4-.5-.2-1.1-.5-1.6-.7-.3-.1-.6-.3-.9-.4l-2.1-.9c-.4-.2-.7-.3-1.1-.5-.5-.2-1-.5-1.5-.7-.3-.1-.6-.3-.9-.4l-2.1-.9c-.4-.2-.7-.3-1.1-.5-.5-.2-1-.5-1.5-.7-.3-.2-.7-.3-1-.5l-1.8-.9z"></path></g></g></g>
+                        </g>
+                    </svg>
+                    {{nft.value}}
+                </h6>
+            </div>
+            <div class="d-grid">
+                <a href="javascript:void(0);" class="btn btn-primary mb-md-0">Place Bid</a>
+            </div>
+        
+    </div>
+}
+@else{
+
+    <div class="{{nft.titleClass}}">
+        <p class="fs-15 mb-2 fw-semibold">{{nft.title}}</p>
+            
+        
+        <div class="d-flex mb-3 align-items-center flex-wrap gap-2">
+            <div class="lh-1">
+                <span class="avatar avatar-rounded avatar-{{nft.avatarSize}}">
+                    <img [src]="nft.image1" alt="">
+                </span>
+            </div>
+            <div class="flex-fill">
+                <p class="mb-0 fs-12 fw-medium">{{nft.name}} </p>
+                <p class="fs-11 op-8 mb-0 lh-1">-{{nft.mail}}</p>
+                
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="mb-0 {{nft.bidClass}}">Current Bid :</p>
+            <h6 class="fw-semibold mb-0 bid-amt align-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="65" viewBox="0 0 40 65">
+                    <g fill="none" fill-rule="evenodd">
+                    <g fill-rule="nonzero" transform="translate(-227 -93)">
+                        <g transform="translate(227 93)"><g>
+                        <path fill="#8A92B2" d="M20.1.8v23.3c0 .1-.1.2-.2.2-.7.3-1.3.6-2 .9-.9.4-1.9.8-2.8 1.3L11.8 28l-2.7 1.2-3.3 1.5c-.9.4-1.8.8-2.8 1.3-.7.3-1.5.7-2.2 1-.1 0-.1.1-.2 0H.5c.3-.5.6-.9.9-1.4 1.6-2.7 3.3-5.4 4.9-8.1 1.7-2.9 3.5-5.8 5.2-8.7 1.6-2.7 3.2-5.4 4.8-8 1.2-2 2.4-3.9 3.5-5.9.2 0 .2-.1.3-.1-.1 0 0 0 0 0z"></path>
+                        <path fill="#454A75" d="M39.5 33c-1.5 1-3.1 1.9-4.6 2.8-4.9 2.9-9.7 5.7-14.6 8.6-.1 0-.1.1-.2.1s-.1-.1-.1-.1v-.3-19.5-.3c0-.1.1-.1.2-.1.4.2.8.4 1.3.6 1.2.6 2.5 1.1 3.7 1.7 1.1.5 2.1 1 3.2 1.4 1.1.5 2.1 1 3.2 1.5.9.4 1.9.8 2.8 1.3.9.4 1.9.8 2.8 1.3.7.3 1.4.7 2.2 1 0-.1 0 0 .1 0z"></path>
+                        <path fill="#8A92B2" d="M20.1 64.1s-.1 0 0 0c-.1 0-.1 0-.2-.1-2-2.8-3.9-5.5-5.9-8.3l-6-8.4c-1.9-2.7-3.9-5.4-5.8-8.2L.7 37c0-.1-.1-.1-.1-.2.1 0 .1.1.2.1 2.7 1.6 5.5 3.2 8.2 4.8 3.1 1.9 6.3 3.7 9.4 5.6.5.3 1.1.6 1.6.9.1 0 .1.1.1.2V64.1z"></path><path fill="gray" d="M.6 33s.1 0 0 0c.1 0 .1 0 0 0 0 .1 0 .1 0 0z"></path>
+                        <path fill="#62688F" d="M.7 33.1c0-.1 0-.1 0 0 1-.5 2-.9 3-1.4l3.9-1.8c1-.5 2-.9 3-1.4 1.4-.7 2.9-1.3 4.3-2 1-.4 2-.9 3-1.3.7-.3 1.4-.6 2.1-1 .1 0 .1-.1.2-.1V44.5c-.1.1-.1 0-.2 0-.3-.2-.6-.3-.8-.5L.9 33.2c-.1-.1-.2-.1-.2-.1zM39.4 36.8c0 .1 0 .1-.1.2-5.8 8.2-11.6 16.3-17.4 24.5-.6.9-1.2 1.7-1.8 2.6V64v-.2-15.3-.3c1.3-.8 2.6-1.6 3.9-2.3l15.3-9c0-.1.1-.1.1-.1z"></path>
+                        <path fill="#62688F" d="M20.1 24.2V24 1.1.9l19.2 31.8c.1.1.2.2.2.3-.4-.2-.8-.4-1.3-.6-.5-.2-1-.5-1.5-.7-.3-.1-.6-.3-1-.4-.5-.2-1.1-.5-1.6-.7-.3-.1-.6-.3-.9-.4l-2.1-.9c-.4-.2-.7-.3-1.1-.5-.5-.2-1-.5-1.5-.7-.3-.1-.6-.3-.9-.4l-2.1-.9c-.4-.2-.7-.3-1.1-.5-.5-.2-1-.5-1.5-.7-.3-.2-.7-.3-1-.5l-1.8-.9z"></path></g></g></g>
+                    </g>
+                </svg>
+                {{nft.value}}
+            </h6>
+        </div>
+        <div class="d-grid">
+            <a href="javascript:void(0);" class="btn btn-primary mb-md-0 mb-4">Place Bid</a>
+        </div>
+    </div>
+}
+    </div>
+</div>

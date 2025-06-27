@@ -1,0 +1,36 @@
+
+    <div class="card custom-card">
+      <div class="card-header">
+        <div class="card-title">{{title }}</div>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <div class="lh-1">
+              <span class="avatar avatar-rounded">
+                <img [src]="imgSrc" alt="">
+              </span>
+            </div>
+            <div>
+              <span class="d-block text-muted fs-12 fw-normal">Available {{currencySymbol }}</span>
+              <span class="fw-medium fs-15">{{available }}</span>
+            </div>
+          </div>
+          <div>
+            <span class="fw-medium">{{usdValue }} USD</span>
+            <span class="d-block text-muted fs-12 fw-normal">In USD</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex gap-2 flex-wrap">
+          <div class="flex-fill">
+            <button class="btn btn-primary-light btn-w-lg btn-wave w-100">Deposit</button>
+          </div>
+          <div class="flex-fill">
+            <button class="btn btn-success-light btn-w-lg btn-wave w-100">Withdraw</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  

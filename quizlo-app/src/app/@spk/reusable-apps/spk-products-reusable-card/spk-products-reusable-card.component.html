@@ -1,0 +1,58 @@
+
+  <div class="card custom-card card-style-2">
+    <div class="card-body p-0">
+      <div class="top-left-badge">
+          @if(product.trending){
+              <div  class="badge bg-{{product.color}} d-inline-flex gap-1 lh-1 align-items-center text-fixed-white mb-1">
+                <div class="badge-icon"><i class="ti ti-bolt"></i></div>
+                <div class="badge-text">Trending</div>
+              </div>
+          }
+          @if(product.discount){
+
+              <div  class="badge bg-{{product.color1}} d-inline-block">{{product.discount }}</div>
+          }
+      </div>
+      <div class="card-img-top border-bottom border-block-end-dashed">
+        <div class="btns-container-1 align-items-center gap-1">
+          <a href="javascript:void(0);" class="btn btn-icon btn-info rounded-circle" data-bs-toggle="tooltip" ngbTooltip="Quick View"><i class="bx bx-search"></i></a>
+          <a routerLink="/apps/ecommerce/wishlist" class="btn btn-icon btn-success rounded-circle" data-bs-toggle="tooltip" ngbTooltip="Add to Wishlist"><i class="bx bx-heart align-center"></i></a>
+          <a href="javascript:void(0);" class="btn btn-icon btn-secondary rounded-circle" data-bs-toggle="tooltip" ngbTooltip="Compare"><i class="bx bx-adjust"></i></a>
+        </div>
+        <div class="img-box-2 p-2">
+          <img [src]="product.imageUrl" alt="img" class="scale-img img-fluid w-100 bg-light rounded">
+        </div>
+      </div>
+      <div class="p-3">
+        <h6 class="mb-1 fw-semibold fs-16"><a routerLink="/apps/ecommerce/productdetails">{{ product.title }}</a></h6>
+        <div class="d-flex align-items-end justify-content-between flex-wrap">
+          <div class="flex-grow-1">
+            <div class="d-flex align-items-baseline fs-11">
+              <div class="min-w-fit-content">
+                  <span class="text-warning"><i class="bi bi-star-fill me-1"></i></span>
+                  <span class="text-warning"><i class="bi bi-star-fill me-1"></i></span>
+                  <span class="text-warning"><i class="bi bi-star-fill me-1"></i></span>
+                  <span class="text-warning"><i class="bi bi-star-half me-1"></i></span>
+              </div>
+              <p class="mb-1 ms-1 min-w-fit-content text-muted">
+                <span>({{ product.ratingsCount }})</span>
+                <span>Ratings</span>
+              </p>
+            </div>
+            <a href="javascript:void(0);" class="text-primary fs-13 fw-semibold">{{ product.series }}</a>
+          </div>
+          <div class="min-w-fit-content">
+            <h5 class="fw-medium mb-0">{{ product.price }}</h5>
+            @if(product.originalPrice){
+
+                <span  class="fs-13 ms-2 text-muted text-decoration-line-through">{{ product.originalPrice }}</span>
+            }
+          </div>
+        </div>
+        <div class="d-grid mt-3"> <a routerLink="/apps/ecommerce/cart" class="btn btn-primary"> Add to cart </a> </div>
+      </div>
+    </div>
+  </div>
+
+
+

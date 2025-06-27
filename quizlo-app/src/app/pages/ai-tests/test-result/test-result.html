@@ -1,1 +1,492 @@
-<p>test-result works!</p>
+<app-page-header firstTitle="Apps" title="NFT Details" title1="NFT" activeTitle="NFT Details" ></app-page-header>
+
+  <!-- Start::row-1 -->
+  <div class="card custom-card overflow-hidden">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xxl-4 col-xl-12">
+                <div class="swiper swiper-preview-details bg-light product-details-page">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card custom-card">
+                                <div class="card-header justify-content-between">
+                                    <div class="card-title">Total Orders
+                                    </div>
+                
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center text-center bg-light p-3 rounded-1 order-content">
+                                        <div>
+                                            <p class="mb-1">Total Orders</p>
+                                            <h4 class="text-primary mb-0">12,500</h4>
+                                        </div>
+                                        <div class="text-end">
+                                            <p class="mb-1">Overall Growth from Last Year</p>
+                                            <h5 class="text-success mb-0">+15%</h5>
+                                        </div>
+                                    </div>
+                                    <div id="total-orders">
+                                        <spk-apexcharts [chartOptions]="chartOptions1"></spk-apexcharts>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-8 col-xl-12">
+                <div class="card custom-card shadow-none border mb-0 mt-3 mt-xxl-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-12 mt-xxl-0 mt-3">
+                                <div class="d-flex gap-2 align-items-center justify-content-between mb-3">
+                                    <div>
+                                        <p class="fs-18 fw-medium mb-0">Vibrant Symphony - NFT Digital Art</p>
+                                        <span class="mb-0 fw-medium fs-15">Digital Art NFT <i class="ri-checkbox-circle-fill text-primary" data-bs-toggle="tooltip" ngbTooltip="Verified"></i></span> 
+                                    </div>
+                                    <p class="fs-18 text-end ms-auto mb-0">
+                                        <i class="ri-heart-3-fill text-danger align-middle"></i>
+                                        <span class="fw-medium text-muted"><a class="text-info fs-14" href="javascript:void(0);">  (2.4k Likes)</a></span>
+                                    </p>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="fs-15 fw-medium mb-1">Description :</p>
+                                    <p class="text-muted mb-0">
+                                        "Vibrant Symphony" is a mesmerizing NFT artwork created by a renowned digital artist. This unique piece takes viewers on a journey through a vivid and ethereal world, where vibrant colors blend seamlessly with abstract forms. The artwork is a digital representation of the artist's imagination, combining elements of surrealism and futuristic aesthetics.
+                                    </p>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-xxl-12">
+                                        <div class="ecommerce-assurance">
+                                            <div class="d-flex justify-content-between gap-2 align-items-center flex-wrap">
+                                                <div>
+                                                    <p class="fs-14 fw-medium mb-2">Highest Bid :</p>
+                                                    <div class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
+                                                        <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt="">
+                                                    </div>
+                                                    <h4 class="mb-2 d-inline-block text-success">  2.9ETH</h4>
+                                                    <p class="text-muted mb-0 fs-12"> Highest Bid By <span class="text-primary fw-medium">&#64;abstract65</span></p>
+                                                </div>
+                                                <div>
+                                                    <p class="fs-14 fw-medium mb-2">Blockchain :</p>
+                                                    <div class="d-flex gap-1 align-items-center">
+                                                        <div class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
+                                                            <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt="">
+                                                        </div>
+                                                        <h6 class="mb-0">  Ethereum</h6>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="fs-14 fw-medium mb-2">Sales Ends in :</p>
+                                                    <p class="nft-details-auction-time bg-light px-3 py-1 text-default rounded-pill mb-0 shadow-sm"><i class="ri-time-line"></i> 07hrs : 33m : 45s</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
+                                        <p class="mb-2 fs-15 fw-medium">Collection:</p>
+                                        <div class="d-flex align-items-center fw-medium">
+                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img src="./assets/images/nft-images/2.jpg" alt=""></span>
+                                            Digital Art NFT
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
+                                        <p class="mb-2 fs-15 fw-medium">Owned By:</p>
+                                        <div class="d-flex align-items-center fw-medium">
+                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img src="./assets/images/faces/9.jpg" alt=""></span>
+                                            Henry Milo
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
+                                        <p class="mb-2 fs-15 fw-medium">Published :</p>
+                                        <span class="d-block fw-medium">24, Jul 2024 - 12:45PM</span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-12">
+                                        <p class="mb-2 fs-15 fw-medium">Price:
+                                            <span class="ms-3 badge bg-success-transparent">30% Off</span>
+                                        </p>
+                                        <p class="mb-0">
+                                            <span class="h3">
+                                                <span class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
+                                                    <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt=""></span>2.299<sup class="fs-14">.00 </sup></span>
+                                                <span class="mb-0 text-muted fs-12"><s>  ETH2,599.00</s>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mt-4 align-items-end justify-content-between">
+                                    <div class="col-xl-6">
+                                        <div class="d-flex gap-1 mb-2 mb-xl-0">
+                                            <button class="btn btn-primary mb-0 btn-wave flex-fill me-1 waves-effect waves-light">Place a bid</button>
+                                            <button class="btn btn-secondary-light mb-0 btn-wave flex-fill waves-effect waves-light">Buy Now</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3">
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <p class="fs-12 bg-primary-transparent badge rounded-pill text-end mb-0">
+                                                <i class="ri-eye-line text-primary me-2 align-middle"></i>
+                                                <span class="fw-medium"><a href="javascript:void(0);"></a>3.5k Views</span>
+                                            </p>
+                                            <p class="fs-12 bg-primary-transparent badge rounded-pill text-end mb-0">
+                                                <i class="ri-share-line text-primary me-2 align-middle"></i>
+                                                <span class="fw-medium"><a href="javascript:void(0);"></a>Share</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+
+<!--Start::row-2 -->
+<div class="row">
+    <div class="col-xxl-4 col-sm-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">Product Details :</div>
+                <a href="javascript:void(0);" class="btn btn-light btn-sm text-muted ms-auto">
+                    View More
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <spk-reusable-tables tableClass=" text-nowrap table-bordered"> 
+                    @for(detail of nftDetails;track $index){
+
+                        <tr>
+                            <th scope="row" class="fw-medium">{{ detail.label }}</th>
+                            <td>{{ detail.value }}</td>
+                          </tr>
+                    }
+                    </spk-reusable-tables>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">
+                    Key Features :
+                </div>
+                <a href="javascript:void(0);" class="btn btn-light btn-sm text-muted ms-auto">
+                    View More
+                </a>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0 list-unstyled">
+                    <li class="mb-3">
+                        <span class="fw-medium">NFT Title:</span> "Vibrant Symphony"
+                    </li>
+                    <li class="mb-3">
+                        <span class="fw-medium">Edition:</span> Limited edition of 25
+                    </li>
+                    <li class="mb-3">
+                        <span class="fw-medium">Tags:</span> #digitalart, #sunset, #mystical, #dreamscape
+                    </li>
+                    <li class="mb-3">
+                        <span class="fw-medium">Creation Date:</span> July 1, 2024
+                    </li>
+                    <li class="mb-3">
+                        <span class="fw-medium">Average Rating:</span> 4.8/5
+                    </li>
+                    <li class="mb-3">
+                        <span class="fw-medium">Dimensions:</span> 3000x2000 pixels
+                    </li>
+                    <li class="mb-1">
+                        <span class="fw-medium">Exhibition History:</span> Digital Art Expo 2024 - Gallery XYZ, New York City
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">
+                    Reviews & Ratings
+                </div>
+                <a href="javascript:void(0);" class="btn btn-light btn-sm text-muted ms-auto">
+                    View All
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-2 lh-1">
+                                <i class="ri-star-fill fs-26 text-warning"></i>
+                            </div>
+                            <div class="lh-1">
+                                <p class="mb-0 fw-medium">4.5 out of 5<span class="mb-0 text-muted fs-11 fw-normal"> Based on (2.1k) ratings</span></p>
+                            </div>
+                        </div>
+                        <div class="swiper crypto-swiper swiper-basic swiper-backface-hidden">
+                            <div class="swiper-wrapper">
+                                <swiper-container 
+                                #swiperContainer
+                                class="swiper mySwiper" 
+                                space-between="30"
+                                slides-per-view="1"
+                                slides-per-group="1"
+                                autoplay-delay="2000"  autoplay-disable-on-interaction="false"
+                              >
+                                  <swiper-slide >
+                                    <div class="border rounded p-3">
+                                        <div class="d-sm-flex d-block align-items-top mb-3">
+                                            <div class="d-flex flex-fill">
+                                                <div class="me-2">
+                                                    <span class="avatar avatar-sm avatar-rounded">
+                                                        <img src="./assets/images/faces/15.jpg" alt="">
+                                                    </span>
+                                                </div>
+                                                <div class="lh-1 me-2">
+                                                    <p class="mb-1 fw-medium fs-14">Christopher <span class="text-success"></span></p>
+                                                    <div class="mb-1">
+                                                        <span class="fs-11 text-muted">
+                                                            24 Nov, 2024 - 10:54PM
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 ms-auto text-end">
+                                                <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                <i class="ri-star-half-fill align-middle text-warning align-middle fs-12 me-1"></i>
+                                                 <span class="align-middle"> 4.1</span>
+                                            </div>
+                                        </div>
+                                        <div class="ps-sm-4 ps-0 mb-3">
+                                            <p class="fw-medium mb-1 ps-2">Vibrant Symphony 😍</p>
+                                            <p class="mb-0 fs-12 text-muted ps-2">Vibrant Symphony is an extraordinary NFT that immerses you in a world of vivid colors and imaginative landscapes.</p>
+                                        </div>                                            
+                                        <div class="product-images ps-sm-4 ps-0">
+                                            <div class="row">
+                                                <div class="col-xl-6">
+                                                    <div class="">
+                                                        <a href="javascript:void(0);" class="avatar avatar-sm m-1">
+                                                            <img src="./assets/images/nft-images/13.jpg" alt="">
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="avatar avatar-sm m-1">
+                                                            <img src="./assets/images/nft-images/3.jpg" alt="">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6 d-flex align-items-end justify-content-sm-end mt-sm-0 mt-2">
+                                                    <button class="btn btn-sm btn-primary-light me-2">Report abuse</button>
+                                                    <button class="btn btn-sm btn-icon btn-info-light me-2">
+                                                        <i class="ri-thumb-up-line"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-icon btn-secondary-light">
+                                                        <i class="ri-thumb-down-line"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <div class="border rounded p-3">
+                                            <div class="d-sm-flex d-block align-items-top mb-3">
+                                                <div class="d-flex flex-fill">
+                                                    <div class="me-2">
+                                                        <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="./assets/images/faces/10.jpg" alt="">
+                                                        </span>
+                                                    </div>
+                                                    <div class="lh-1 me-2">
+                                                        <p class="mb-1 fw-medium fs-14">Sarah Johnson <span class="text-success"></span></p>
+                                                        <div class="mb-1">
+                                                            <span class="fs-11 text-muted">
+                                                                30 Apr, 2024 - 03:22PM
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-1 ms-auto text-end">
+                                                    <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                    <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                    <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                    <i class="ri-star-half-fill align-middle text-warning align-middle fs-12 me-1"></i>
+                                                    <i class="ri-star-line align-middle text-warning align-middle fs-12 me-1"></i>
+                                                    <span class="align-middle"> 3.7</span>
+                                                </div>
+                                            </div>
+                                            <div class="ps-sm-4 ps-0 mb-3">
+                                                <p class="fw-medium mb-1 ps-2">Enchanting Dreamscape</p>
+                                                <p class="mb-0 fs-12 text-muted ps-2">Enchanting Dreamscape offers a surreal journey through dream-like imagery and subtle symbolism.</p>
+                                            </div>                                            
+                                            <div class="product-images ps-sm-4 ps-0">
+                                                <div class="row">
+                                                    <div class="col-xl-6">
+                                                        <div class="">
+                                                            <a href="javascript:void(0);" class="avatar avatar-sm m-1">
+                                                                <img src="./assets/images/nft-images/6.jpg" alt="">
+                                                            </a>
+                                                            <a href="javascript:void(0);" class="avatar avatar-sm m-1">
+                                                                <img src="./assets/images/nft-images/7.jpg" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 d-flex align-items-end justify-content-sm-end mt-sm-0 mt-2">
+                                                        <button class="btn btn-sm btn-primary-light me-2">Report abuse</button>
+                                                        <button class="btn btn-sm btn-icon btn-info-light me-2">
+                                                            <i class="ri-thumb-up-line"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-icon btn-secondary-light">
+                                                            <i class="ri-thumb-down-line"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>  
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <div class="border rounded p-3">
+                                            <div class="d-sm-flex d-block align-items-top mb-3">
+                                                <div class="d-flex flex-fill">
+                                                    <div class="me-2">
+                                                        <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="./assets/images/faces/12.jpg" alt="">
+                                                        </span>
+                                                    </div>
+                                                    <div class="lh-1 me-2">
+                                                        <p class="mb-1 fw-medium fs-14">Emily Brown <span class="text-success"></span></p>
+                                                        <div class="mb-1">
+                                                            <span class="fs-11 text-muted">
+                                                                15 May, 2024 - 09:15AM
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-1 ms-auto text-end">
+                                                    <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                    <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                    <i class="ri-star-fill align-middle text-warning align-middle me-1"></i>
+                                                    <i class="ri-star-half-fill align-middle text-warning align-middle fs-12 me-1"></i>
+                                                    <i class="ri-star-line align-middle text-warning align-middle fs-12 me-1"></i>
+                                                    <span class="align-middle"> 3.8</span>
+                                                </div>
+                                            </div>
+                                            <div class="ps-sm-4 ps-0 mb-3">
+                                                <p class="fw-medium mb-1 ps-2">Oceanic Serenity 🌊</p>
+                                                <p class="mb-0 fs-12 text-muted ps-2">Oceanic Serenity captivates with its tranquil underwater scenes and ethereal marine life.</p>
+                                            </div>                                            
+                                            <div class="product-images ps-sm-4 ps-0">
+                                                <div class="row">
+                                                    <div class="col-xl-6">
+                                                        <div class="">
+                                                            <a href="javascript:void(0);" class="avatar avatar-sm m-1">
+                                                                <img src="./assets/images/nft-images/6.jpg" alt="">
+                                                            </a>
+                                                            <a href="javascript:void(0);" class="avatar avatar-sm m-1">
+                                                                <img src="./assets/images/nft-images/3.jpg" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 d-flex align-items-end justify-content-sm-end mt-sm-0 mt-2">
+                                                        <button class="btn btn-sm btn-primary-light me-2">Report abuse</button>
+                                                        <button class="btn btn-sm btn-icon btn-info-light me-2">
+                                                            <i class="ri-thumb-up-line"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-icon btn-secondary-light">
+                                                            <i class="ri-thumb-down-line"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </swiper-slide>
+                                    </swiper-container>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-2 -->
+
+<!--Start::row-3 -->
+<div class="row">
+    <div class="col-xxl-3 col-sm-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Popular NFT's :
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive">
+                    <spk-reusable-tables tableClass="table-bordered text-nowrap mt-1">
+
+                        @for(nft of nftItems;track $index){
+                            <tr>
+                              <td>
+                                <a href="javascript:void(0);">
+                                  <div class="d-flex align-items-top">
+                                    <div class="avatar me-2">
+                                      <img [src]="nft.imageUrl" alt="{{ nft.name }}">
+                                    </div>
+                                    <div class="flex-fill">
+                                      <p class="mb-1 fs-14 fw-medium similar-product-name text-truncate">{{ nft.name }}</p>
+                                      <p class="mb-0">
+                                        <span class="badge bg-success">{{ nft.likes }}<i class="ri-heart-3-fill align-middle ms-1"></i></span>
+                                        <span class="text-muted ms-1">({{ nft.totalLikes }})</span>
+                                      </p>
+                                    </div>
+                                    <div class="text-center">
+                                      <p class="mb-0 fs-16 fw-medium">
+                                        <span class="avatar avatar-xs avatar-rounded p-1"><img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt=""></span>{{ nft.price }}
+                                      </p>
+                                      <p class="mb-0 text-muted">
+                                        <s><span class="avatar avatar-xs avatar-rounded p-1"><img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt=""></span>{{ nft.oldPrice }}</s>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </a>
+                              </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="d-grid">
+                              <button class="btn btn-secondary-light">View All NFT's</button>
+                            </td>
+                          </tr>
+                    </spk-reusable-tables>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9">
+        <div class="d-flex gap-1 align-items-center justify-content-between mb-3">
+            <h6 class="fw-medium mb-0">Explore More NFT's:</h6>
+            <a href="javascript:void(0);" class="btn btn-primary-light btn-sm ms-auto">
+                View More
+            </a>
+        </div>
+        <div class="row">
+            @for(nft of cardData1;track $index){
+                <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <app-spk-nft-card
+                     [nft]="nft">
+                     </app-spk-nft-card>
+                </div>
+            }
+          
+        </div>
+    </div>
+</div>
+<!--End::row-3 -->

@@ -1,0 +1,70 @@
+<div class="card custom-card featured-jobs shadow-none border">
+    <div class="card-body">
+        @if(job.ngbDropdown){
+          <spk-dropdowns [Customclass]="'float-end dropdown ms-auto'"  [class]="'btn btn-white btn-icon btn-sm text-muted rounded-pill no-caret'" [Icon]="true" [IconClass]="'fe fe-more-vertical align-middle'" 
+          [Menuclass]="'dropdown-menu dropdown-menu-end'"  >
+          <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Add To Favourite</a></li>
+         <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Save</a></li>
+      </spk-dropdowns>
+        
+        }
+ 
+      <div class="d-flex mb-3 flex-wrap gap-2 align-items-center">
+        @if(job.imgSrc){
+
+            <span class="avatar avatar-md border p-1">
+              <img [src]="job.imgSrc" alt="" />
+            </span>
+        }
+        @else{
+            <span class="avatar avatar-md avatar-rounded bg-{{job.iconbg}}-transparent border"> <i
+                class="bi bi-laptop"></i> </span>
+        }
+        <div>
+          <h5 class="fw-medium mb-0 d-flex align-items-center">
+            <a href="javascript:void(0);">{{ job.jobTitle }}</a>
+          </h5>
+          <a href="javascript:void(0);" class="text-muted">{{ job.companyName }}</a>
+        </div>
+        @if(job.icons) {
+          <div class="ms-auto d-flex gap-1 flex-xxl-nowrap"> 
+            <a   ngbTooltip="Add to Wishlist"  placement="'auto'" class="avatar avatar-sm avatar-rounded bg-success-transparent" ><span><i class="bx bx-heart"></i></span></a>
+            <a   ngbTooltip="Featured Jobs"  placement="'auto'" class="avatar avatar-sm avatar-rounded bg-warning-transparent" ><span><i class="bi bi-star-fill"></i></span></a>
+
+            
+                      </div>
+      }
+      </div>
+      <div class="popular-tags mb-3 d-flex gap-2 flex-wrap">
+        <a href="javascript:void(0);" class="badge rounded-pill {{job.locationClass}}">
+          <i class="ri-map-pin-line me-1"></i> {{ job.location }}
+        </a>
+        <a href="javascript:void(0);" class="badge rounded-pill {{job.experienceClass}} ">
+            <i class="ri-time-line me-1"></i> {{ job.experience }}
+          </a>
+          @if(job.openings){
+              <a href="javascript:void(0);" class="badge rounded-pill fs-11 border border-success border-opacity-10 text-success bg-success-transparent">
+                <i class="ri-briefcase-line me-1"></i> {{ job.openings }} Openings
+              </a>
+              <a href="javascript:void(0);" class="badge rounded-pill fs-11 border border-info border-opacity-10 text-info bg-info-transparent">
+                <i class="ri-graduation-cap-line me-1"></i> {{ job.education }}
+              </a>
+              <a href="javascript:void(0);" class="badge rounded-pill fs-11 border border-warning border-opacity-10 text-warning bg-warning-transparent">
+                <i class="ri-sun-line me-1"></i> {{ job.jobType }}
+              </a>
+          }
+        
+      </div>
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h6 class="fw-medium mb-0">{{ job.salaryRange }}</h6>
+        <a href="javascript:void(0);" class="btn btn-primary btn-sm  {{job.buttonClass}}">
+          Apply Now 
+          @if(job.buttonIcon){
+
+              <i class="fe fe-arrow-right transform-arrow ms-2 lh-base"></i>
+          }
+        </a>
+      </div>
+    </div>
+  </div>
+  
