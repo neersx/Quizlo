@@ -13,24 +13,31 @@ import { AuthInterceptor } from './services/interceptors/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
+    provideZonelessChangeDetection(), 
+    // 1) Router
+    provideRouter(routes),
+
+    // 2) HTTP + interceptors
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    provideAnimations(),
-    provideHttpClient(
-      withFetch(),               // ← enables fetch() support
-      withInterceptorsFromDi()   // ← lets @Inject(HttpInterceptor) still work
+    provideHttpClient(              // polyfill fetch()
+      withInterceptorsFromDi()    // use the HTTP_INTERCEPTORS token
     ),
-    importProvidersFrom( // required by ngx-toastr if you want animations
-      HttpClientModule,         // provides HttpClient
+
+    // 3) UI modules
+    importProvidersFrom(
+      SharedModule,               // any standalone @NgModule you need
       NgbModule,
-      SharedModule,
-      ToastrModule.forRoot({    // <-- wires up ToastConfig & ToastrService
+      ToastrModule.forRoot({      // toastr needs its own provider
         positionClass: 'toast-bottom-right',
-        timeOut: 3000,
+        timeOut: 3000
       })
     ),
-    provideRouter(routes), provideClientHydration(withEventReplay())
+
+    // 4) Animations
+    provideAnimations(),         // or provideNoopAnimations() on the server
+
+    // 5) SSR hydration (if you’re using it)
+    provideClientHydration(withEventReplay())
   ]
 };
 

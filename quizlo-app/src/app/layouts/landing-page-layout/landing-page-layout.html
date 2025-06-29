@@ -148,7 +148,34 @@
 
             <!-- Start::header-content-right -->
             <div class="header-content-right">
-
+            <!-- Start::header-element -->
+            <li class="header-element dropdown" ngbDropdown >
+                <!-- Start::header-link|dropdown-toggle -->
+                <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <img src="./assets/images/faces/15.jpg" alt="img" class="avatar custom-header-avatar avatar-rounded">
+                        </div>
+                    </div>
+                </a>
+                <!-- End::header-link|dropdown-toggle -->
+                <ul ngbDropdownMenu class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
+                    <li>
+                        <div ngbDropdownItem class="dropdown-item text-center border-bottom">
+                            <span>
+                                "User Neeraj"
+                            </span>
+                            <span class="d-block fs-12 text-muted">Designer</span>
+                        </div>
+                    </li>
+                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-user p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Profile</a></li>
+                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-database p-1 rounded-circle bg-primary-transparent klist me-2 fs-16"></i>File Manger<span class="badge bg-success text-fixed-white ms-auto fs-9">2</span></a></li>
+                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-mail p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Mail Inbox</a></li>
+                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-settings p-1 rounded-circle bg-primary-transparent ings me-2 fs-16"></i>Settings</a></li>
+                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>Log Out</a></li>
+                </ul>
+            </li>  
+            <!-- End::header-element -->
                 <!-- Start::header-element -->
                 <div class="header-element align-items-center">
                     <!-- Start::header-link|switcher-icon -->

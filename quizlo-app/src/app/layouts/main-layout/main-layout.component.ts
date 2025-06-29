@@ -34,7 +34,7 @@ import { SpkLandingFeaturesComponent } from '../../@spk/reusable-pages/spk-landi
 import { SpkLandingServicesCardComponent } from '../../@spk/reusable-pages/spk-landing-services-card/spk-landing-services-card.component';
 import { SpkLandingTeamCardComponent } from '../../@spk/reusable-pages/spk-landing-team-card/spk-landing-team-card.component';
 import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-landing-testimonial/spk-landing-testimonial.component';
-
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-main-page-layout',
@@ -71,6 +71,7 @@ export class MainQuizLayoutComponent {
   onToggle() {}
   thumbsSwiper: any;
   constructor(
+    public auth: AuthService,
     public renderer: Renderer2,
     private el: ElementRef,
     private elementRef: ElementRef,

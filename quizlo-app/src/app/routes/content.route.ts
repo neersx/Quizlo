@@ -17,7 +17,7 @@ export const content: Routes = [
   // },
 ];
 @NgModule({
-  // imports: [RouterModule.forRoot(admin)],
+  imports: [RouterModule.forRoot(content)],
   exports: [RouterModule],
 })
 export class SaredRoutingModule {}
