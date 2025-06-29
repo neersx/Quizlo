@@ -17,5 +17,11 @@
         [JsonPropertyName("questions")]
         public List<QuestionDto> Questions { get; set; } = [];
     }
+    
+     public record QuestionsRequestDto(
+        int TestId,
+        bool CanGetAiQuestions
+     );
+
 
 }

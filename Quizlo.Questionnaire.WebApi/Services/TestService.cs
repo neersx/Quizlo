@@ -17,7 +17,9 @@ public interface ITestService
        CancellationToken ct = default);
     Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int createdByUserId,
                                          CancellationToken ct = default);
-
+    Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync (
+        CreateTestRequest req,
+        CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
 
     Task<TestSubmissionResultDto> SubmitAnswersAsync(
@@ -73,6 +75,25 @@ public class TestService : ITestService
             .ToListAsync(ct);
     }
 
+    public async Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync (
+        CreateTestRequest req,
+        CancellationToken ct = default)
+    {
+        if (req.Id == null)
+            throw new ArgumentNullException(nameof(req.Id));
+
+        if (req.HasAiQuestions)
+        {
+            var env = await GetAIGeneratedQuestions(req, ct);
+            return env.Questions!;
+        }
+        else
+        {
+            var testQuestions = await GetTestAsync(req.Id, ct);
+            return testQuestions.Questions!;
+        }
+    }
+
     public async Task<TestDetailsDto> CreateTestAsync(
             CreateTestRequest req, int userId, CancellationToken ct = default)
     {
@@ -84,11 +105,7 @@ public class TestService : ITestService
                    ?? throw new KeyNotFoundException($"Exam {req.ExamId} not found");
 
         // ── remote call to n8n ────────────────────────────────────────────
-        string raw = await GetAIGeneratedQuestions(exam, req, ct);
-        var env = System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw,
-                      new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                   ?? throw new ApplicationException("Empty n8n response");
-
+        var env = await GetAIGeneratedQuestions(req, ct);
         var aiQuestions = env.Questions!;               // short alias
 
         //------------------------------------------------------------------
@@ -173,21 +190,21 @@ public class TestService : ITestService
     }
 
 
-    private async Task<string> GetAIGeneratedQuestions(Exam exam, CreateTestRequest req, CancellationToken ct)
+    private async Task<N8nResponseDto> GetAIGeneratedQuestions(CreateTestRequest req, CancellationToken ct)
     {
         var client = _http.CreateClient();
         client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
 
         var query = new Dictionary<string, string?>
         {
-            ["examName"] = exam.Name,
-            ["examCode"] = exam.Code,
+            ["examName"] = req.ExamName,
+            ["examCode"] = req.ExamCode,
             ["numberOfQuestions"] = req.NumberOfQuestions.ToString() ?? "",
             ["difficultyLevel"] = req.Difficulty.ToString() ?? "Mix",
             ["subject"] = req.Subject ?? "All",
             ["language"] = req.Language,
-            ["testId"] = "1",
-            ["examId"] = exam.Id.ToString(),
+            ["testId"] = "0",
+            ["examId"] = req.ExamId.ToString(),
             ["testTitle"] = req.Title,
         };
 
@@ -197,7 +214,11 @@ public class TestService : ITestService
         using var resp = await client.GetAsync(webhookUrl, ct);
         resp.EnsureSuccessStatusCode();
 
-        return await resp.Content.ReadAsStringAsync(ct);
+        var raw = await resp.Content.ReadAsStringAsync(ct);
+
+        return System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw,
+                      new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? throw new ApplicationException("Empty n8n response");
     }
 
     // Update the mapping of Difficulty property in the GetTestAsync method to convert DifficultyLevel to string.

@@ -19,9 +19,9 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             // reflect all public const fields on IndianLanguages
             var langs = typeof(IndianLanguages)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-                .Where(fi => fi.IsLiteral && !fi.IsInitOnly)
-                .Select(fi => fi.GetRawConstantValue() as string!)
-                .Select(str => new SelectOptionDto { Label = str, Value = str })
+                .Where(static fi => fi.IsLiteral && !fi.IsInitOnly)
+                .Select(static fi => fi.GetRawConstantValue() as string!)
+                .Select(static str => new SelectOptionDto { Label = str, Value = str })
                 .ToList();
 
             return Ok(ApiResponse<List<SelectOptionDto>>.Success(

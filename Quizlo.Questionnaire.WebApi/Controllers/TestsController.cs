@@ -31,7 +31,18 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         /// POST api/tests
         [HttpPost]
         [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create([FromBody] CreateTestRequest request,
+        public async Task<IActionResult> CreateTest([FromBody] CreateTestRequest request,
+                                                CancellationToken ct)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var dto = await _svc.CreateTestAsync(request, userId, ct);
+
+            return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, dto);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
+        public async Task<IActionResult> GetTestQuestions([FromBody] CreateTestRequest request,
                                                 CancellationToken ct)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);

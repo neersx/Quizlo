@@ -8,15 +8,24 @@ import { SharedModule } from '../../../shared/sharedmodule';
 import { SpkCategoriesCardComponent } from '../../../@spk/reusable-dashboards/spk-podcast-dashboard/spk-categories-card/spk-categories-card.component';
 import { SpkRecommendationsCardComponent } from '../../../@spk/reusable-dashboards/spk-podcast-dashboard/spk-recommendations-card/spk-recommendations-card.component';
 import { SpkShortcutCardComponent } from '../../../@spk/reusable-dashboards/spk-podcast-dashboard/spk-shortcut-card/spk-shortcut-card.component';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-prepare-test',
-  imports: [SharedModule,NgbDropdownModule,SpkDropdownsComponent,SpkShortcutCardComponent,SpkCategoriesCardComponent,SpkRecommendationsCardComponent,CommonModule,ApexChartComponent,
+  imports: [RouterModule, SharedModule,NgbDropdownModule,SpkDropdownsComponent,SpkShortcutCardComponent,SpkCategoriesCardComponent,SpkRecommendationsCardComponent,CommonModule,ApexChartComponent,
     SpkReusableTablesComponent],
   templateUrl: './prepare-test.html',
   styleUrl: './prepare-test.scss'
 })
 export class PrepareTest {
+
+  constructor(private router: Router) {}
+
+
+  takeTest() {
+    this.router.navigate(['/test/exams']);
+  }
+
   chartOptions:any = {
     series: [{
       name: 'Hours',

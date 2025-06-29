@@ -43,6 +43,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [MaxLength(1000)]
         public string? Notes { get; set; }
 
+        public string? Type { get; set; } = "PreDefined";
         public string Status { get; set; } = TestStatus.NotStarted;
         public ICollection<TestQuestion> TestQuestions { get; set; }
         //public ICollection<Attempt> Attempts { get; set; }

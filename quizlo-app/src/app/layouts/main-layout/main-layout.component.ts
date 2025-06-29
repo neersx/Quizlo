@@ -71,7 +71,6 @@ export class MainQuizLayoutComponent {
   onToggle() {}
   thumbsSwiper: any;
   constructor(
-    public auth: AuthService,
     public renderer: Renderer2,
     private el: ElementRef,
     private elementRef: ElementRef,
