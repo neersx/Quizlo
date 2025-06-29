@@ -1,11 +1,15 @@
 import { Injectable,NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 export interface User {
-  uid: string;
+  id: number;
   email: string;
-  displayName: string;
-  photoURL: string;
-  emailVerified: boolean;
+  displayName?: string;
+  firstName?: string,
+  lastName?: string,
+  photoURL?: string;
+  emailVerified?: boolean;
+  phoneNumbe?: string;
+  phoneNumberConfirmed?: boolean,
 }
 @Injectable({
   providedIn: 'root',
@@ -102,7 +106,7 @@ export class AuthService {
     const userData: User = {
       email: user.email,
       displayName: user.displayName,
-      uid: user.uid,
+      id: user.uid,
       photoURL: user.photoURL || 'src/favicon.ico',
       emailVerified: user.emailVerified
     };

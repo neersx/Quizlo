@@ -18,7 +18,7 @@
                                             class="desktop-white">
                                     </a>
                                 </div>
-                                <form [formGroup]="loginForm" (ngSubmit)="login()">
+                                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                     @if(errorMessage.length > 0){
                                     <p class="text-danger">
                                         {{errorMessage}}</p>
@@ -66,8 +66,8 @@
                                         </div>
                                     </div>
                                     <div class="d-grid mt-4">
-                                        <button [disabled]="!loginForm.valid || authservice.showLoader" autofocus
-                                            [class.loader--text]="authservice.showLoader" class="btn btn-primary{{
+                                        <button [disabled]="!loginForm.valid || authService.showLoader" autofocus
+                                            [class.loader--text]="authService.showLoader" class="btn btn-primary{{
                                             disabled
                                           }}">Sign In</button>
                                     </div>
@@ -105,7 +105,7 @@
                                     </a>
                                 </div>
 
-                                <form [formGroup]="loginForm" (ngSubmit)="Submit()">
+                                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                     @if(errorMessage.length > 0){
 
                                     <p class="text-danger">
@@ -156,8 +156,8 @@
                                         </div>
                                     </div>
                                     <div class="d-grid mt-4">
-                                        <button [disabled]="!loginForm.valid || authservice.showLoader" autofocus
-                                            [class.loader--text]="authservice.showLoader" class="btn btn-primary{{
+                                        <button [disabled]="!loginForm.valid || authService.showLoader" autofocus
+                                            [class.loader--text]="authService.showLoader" class="btn btn-primary{{
                                                 disabled
                                               }}">Sign In</button>
                                     </div>

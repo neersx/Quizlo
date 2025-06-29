@@ -1,19 +1,13 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, Renderer2 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router, RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// src/app/auth/login.component.ts
+import { Component, OnInit, OnDestroy, Inject, Renderer2, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser, DOCUMENT }                      from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule }         from '@angular/forms';
+import { Router, RouterModule }                                            from '@angular/router';
+import { NgbModule }                                                       from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService }                                                   from 'ngx-toastr';
 import { AuthService } from '../../../services/identity/auth.service';
-import { SharedModule } from '../../../shared/sharedmodule';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '../../../shared/sharedmodule';
 
 @Component({
   selector: 'app-login',
@@ -32,58 +26,23 @@ import { HttpClientModule } from '@angular/common/http';
     templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login {
-  public showPassword: boolean = false;
-
+export class Login implements OnInit, OnDestroy {
+  loginForm!: FormGroup;
+  showPassword = false;
   toggleClass = 'off-line';
   active = 'Angular';
-  firestoreModule: any;
-  databaseModule: any;
-  authModule: any;
-  public togglePassword() {
-    this.showPassword = !this.showPassword;
-    if (this.toggleClass === 'line') {
-      this.toggleClass = 'off-line';
-    } else {
-      this.toggleClass = 'line';
-    }
-  }
   disabled = '';
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private elementRef: ElementRef,
-    private sanitizer: DomSanitizer,
-    public authservice: AuthService,
-    private router: Router,
-    private formBuilder: FormBuilder,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private renderer: Renderer2,
+    private fb: FormBuilder,
+    public readonly authService: AuthService,
+    private router: Router,
     private toastr: ToastrService
-  ) {
-    // AngularFireModule.initializeApp(environment.firebase);
-    document.body.classList.add('authentication-background');
-    const bodyElement = this.renderer.selectRootElement('body', true);
-    this.renderer.setAttribute(bodyElement, 'class', 'cover1 justify-center');
-  }
+  ) {}
 
-
-  ngOnDestroy(): void {
-    document.body.classList.remove('authentication-background');
-   
-  }
-  ngOnInit(): void {
-    if( this.authservice.currentUser !== null) {
-      this.router.navigate(['/']);
-    }
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required]],
-      password: ['', Validators.required],
-    });
-  }
-
-  // firebase
-
-  phoneNumber = '';
-  password = '';
   errorMessage = ''; // validation _error handle
   _error: { name: string; message: string } = { name: '', message: '' }; // for firbase _error handle
 
@@ -92,76 +51,55 @@ export class Login {
     this._error = { name: '', message: '' };
   }
 
-  login() {
-    // this.disabled = "btn-loading"
-    this.clearErrorMessage();
-    if (
-      this.validateForm(
-        this.loginForm.value.email,
-        this.loginForm.value.password
-      )
-    ) {
-      this.authservice.login(this.loginForm.value).subscribe({
-        next: (res: any) => {
-          if (res.isSuccess) {
-            console.log(res);
-            this.router.navigate(['/test']);
-            this.toastr.success('login successful', 'Royal रसोई', {
-              timeOut: 3000,
-              positionClass: 'toast-top-right',
-            });
-          }
-          console.clear();
-        },
-        error: (_error: any) => {
-          this._error = _error;
-          this.router.navigate(['/']);
-        },
-      });
-    } else {
-      this.toastr.error('Invalid details', 'zeno', {
-        timeOut: 3000,
-        positionClass: 'toast-top-right',
-      });
+  ngOnInit(): void {
+    // Protect route if already logged in
+    if (isPlatformBrowser(this.platformId) && this.authService.currentUser) {
+      this.router.navigate(['/']);
+      return;
     }
+
+    // Apply body classes
+    this.renderer.addClass(this.document.body, 'authentication-background');
+    this.renderer.addClass(this.document.body, 'cover1');
+    this.renderer.addClass(this.document.body, 'justify-center');
+
+    // Build the form
+    this.loginForm = this.fb.group({
+      email:    ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
 
-  validateForm(phoneNumber: string, password: string) {
-    if (phoneNumber.length === 0) {
-      this.errorMessage = 'please enter phoneNumber id';
-      return false;
-    }
-
-    if (password.length === 0) {
-      this.errorMessage = 'please enter password';
-      return false;
-    }
-
-    if (password.length < 6) {
-      this.errorMessage = 'password should be at least 6 char';
-      return false;
-    }
-
-    this.errorMessage = '';
-    return true;
+  ngOnDestroy(): void {
+    // Clean up body classes
+    this.renderer.removeClass(this.document.body, 'authentication-background');
+    this.renderer.removeClass(this.document.body, 'cover1');
+    this.renderer.removeClass(this.document.body, 'justify-center');
   }
 
-  //angular
-  public loginForm!: FormGroup;
-  public error: any = '';
-
-  get form() {
+  get f() {
     return this.loginForm.controls;
   }
 
-  Submit() {
-    if (this.loginForm.valid) {
-      this.login();
-    } else {
-      this.toastr.error('Invalid details', 'zeno', {
-        timeOut: 3000,
-        positionClass: 'toast-top-right',
-      });
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.toastr.error('Please enter valid email and password', 'Login Error');
+      return;
     }
+
+    this.authService.login(this.loginForm.value).subscribe({
+      next: () => {
+        this.toastr.success('Login successful', 'Welcome');
+        this.router.navigate(['/test']);
+      },
+      error: err => {
+        const msg = err.error?.message || 'Login failed. Please try again.';
+        this.toastr.error(msg, 'Login Error');
+      }
+    });
   }
 }
