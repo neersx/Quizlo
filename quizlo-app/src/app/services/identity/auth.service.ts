@@ -69,7 +69,7 @@ export class AuthService {
       localStorage.removeItem(this.storageUserKey);
     }
     this.userSubject.next(null);
-    this.router.navigate(['/']);
+    // this.router.navigate(['/']);
   }
 
   /** Retrieves token from localStorage (SSR-safe) */

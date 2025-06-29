@@ -22,10 +22,11 @@ namespace Quizlo.Questionnaire.WebApi.Services
             var q = _context.Exams.AsQueryable();
             if (!string.IsNullOrEmpty(search))
                 q = q.Where(e => EF.Functions.Like(e.Id.ToString(), $"%{search}%"));
-            return await q.Include(e => e.Tests)
+            var result = await q
                           .Skip((pageNumber - 1) * pageSize)
                           .Take(pageSize)
                           .ToListAsync();
+            return result;
         }
 
         public async Task<Exam> CreateExamAsync(Exam exam)

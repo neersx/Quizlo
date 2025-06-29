@@ -23,7 +23,8 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             [FromQuery] string search = null)
         {
             var exams = await _examService.GetExamsAsync(pageNumber, pageSize, search);
-            return Ok(ApiResponse<IEnumerable<Exam>>.Success(exams));
+            var result = ApiResponse<IEnumerable<Exam>>.Success(exams);
+            return Ok(result);
         }
 
         // GET: api/exams/5

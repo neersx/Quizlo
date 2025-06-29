@@ -40,7 +40,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, dto);
         }
 
-        [HttpGet]
+        [HttpGet("questions")]
         [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> GetTestQuestions([FromBody] CreateTestRequest request,
                                                 CancellationToken ct)

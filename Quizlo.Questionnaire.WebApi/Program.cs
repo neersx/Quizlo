@@ -8,6 +8,7 @@ using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Data.Seed;
 using Quizlo.Questionnaire.WebApi.Services;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,7 +63,11 @@ builder.Services.AddScoped<ITestService, TestService>();
 
 
 // 6. Controllers, Swagger, CORS
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.MaxDepth = 64; // optional: increase if you need
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
