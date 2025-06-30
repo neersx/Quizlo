@@ -22,8 +22,8 @@ export class TestService {
   }
 
   createTest(request: CreateTestRequest): Observable<any> {
-    // return this.http.post<TestDetailsDto>(this.baseUrl, request);
-    return of(this.mockResponse);
+    return this.http.post<TestDetailsDto>(this.baseUrl, request);
+    // return of(this.mockResponse);
   }
 
   submitTestAnswers(testId: number, answers: SubmitAnswerDto[]): Observable<TestSubmissionResultDto> {
@@ -81,7 +81,7 @@ export class TestService {
               "correctOptionIds": "B",
               "selectedOptionIds": null,
               "isCorrect": false,
-              "isMultipleSelect": false,
+              "isMultipleSelect": true,
               "marks": 2,
               "options": [
                   "A. மிகவும் பலவீனம் வாய்ந்த வாயுக்கள்",
@@ -181,7 +181,7 @@ export class TestService {
               "correctOptionIds": "A",
               "selectedOptionIds": null,
               "isCorrect": false,
-              "isMultipleSelect": false,
+              "isMultipleSelect": true,
               "marks": 3,
               "options": [
                   "A. எப்போது தெரியாது",
@@ -401,7 +401,7 @@ export class TestService {
               "correctOptionIds": "B",
               "selectedOptionIds": null,
               "isCorrect": false,
-              "isMultipleSelect": false,
+              "isMultipleSelect": true,
               "marks": 3,
               "options": [
                   "A. பொருளின் இயங்கும் சக்தி",

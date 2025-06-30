@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './test-window.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TestWindow implements OnInit {
+export class TestWindow implements OnInit, OnDestroy {
 @Input() testData : TestDetailsModel = {
   id: 0,
   title: '',
@@ -45,8 +45,36 @@ ngOnInit(): void {
   this.startTimer();
   this.loadSavedAnswers();
   this.startAutoSave();
+  document.addEventListener('visibilitychange', this.visibilityChangeHandler);
+  // window.addEventListener('blur', this.windowBlurHandler);
+  // window.addEventListener('focus', this.windowFocusHandler);
   this.cdr.detectChanges();
 }
+
+windowBlurHandler = () => {
+  alert('You have left the test window. Please return immediately!');
+};
+windowFocusHandler = () => {
+  // Optionally, handle when they return
+};
+
+wasWarned = false;
+
+visibilityChangeHandler = () => {
+  if (document.visibilityState === 'hidden') {
+    // The user switched tab, minimized, or left the page
+    this.showWarning();
+  }
+};
+
+showWarning() {
+  if (!this.wasWarned) {
+    alert('You have switched away from the test window. Please do not leave the test screen.');
+    this.wasWarned = true; // or track the count if you want to block after N times
+  }
+  // Optionally: Track attempts, submit test, etc.
+}
+
 
 get currentQuestion() {
   const questions = this.testData?.questions;
@@ -86,6 +114,7 @@ ngOnDestroy(): void {
   if (this.timerInterval) {
     clearInterval(this.timerInterval);
   }
+  document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
 }
 
 private startTimer(): void {

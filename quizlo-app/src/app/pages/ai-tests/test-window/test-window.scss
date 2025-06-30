@@ -124,7 +124,7 @@
         width: 45px;
         height: 45px;
         border: 2px solid #e9ecef;
-        background: white;
+        background: rgb(218, 214, 214);
         border-radius: 50%;
         cursor: pointer;
         font-weight: 600;
@@ -247,6 +247,7 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
   
             &:hover {
               border-color: #4facfe;
@@ -268,6 +269,7 @@
             .option-text {
               font-size: 1em;
               font-weight: 500;
+              color: #242425;
             }
           }
         }

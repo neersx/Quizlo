@@ -81,20 +81,23 @@
             <div *ngIf="question.options" class="options-container">
               <label 
                 *ngFor="let option of question?.options; let i = index"
-                class="option"
+                class="option form-check-label"
                 [class.selected]="isOptionSelected(question.id, fromCharCode(65 + i))">
                 
                 <!-- Single Select (Radio) -->
+                <div class="form-check">
                 <input 
                   *ngIf="!question.isMultipleSelect"
                   type="radio"
+                  class="form-check-input"
                   [name]="'question_' + question.id"
                   [value]="fromCharCode(65 + i)"
                   [checked]="isOptionSelected(question.id, fromCharCode(65 + i))"
                   (change)="onSingleOptionSelect(question.id, fromCharCode(65 + i))">
-                
+                </div>
                 <!-- Multiple Select (Checkbox) -->
                 <input 
+                *ngIf="question.isMultipleSelect"
                   type="checkbox"
                   [name]="'question_' + question.id"
                   [value]="charFromCode(i)"
@@ -113,12 +116,12 @@
                 [disabled]="currentQuestionIndex() === 0">
                 ← Previous
               </button>
-              
+             
               <button *ngIf="testData && testData.questions && testData.questions.length"
                 class="nav-button next-btn"
                 (click)="nextQuestion()"
-                [disabled]="[currentQuestionIndex() === (testData?.questions?.length ?? 0) - 1]">
-                Next →
+                [disabled]="currentQuestionIndex() === (testData?.questions?.length ?? 0) - 1">
+                Next → 
               </button>
             </div>
           </div>
