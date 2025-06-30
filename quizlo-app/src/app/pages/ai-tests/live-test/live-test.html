@@ -1,7 +1,7 @@
-<app-page-header firstTitle="Exams" title="Test" title1="Start Test" activeTitle="Start you test"></app-page-header>
+<app-page-header firstTitle="Exams" title="Start Your Test" title1="Test" activeTitle="Start your test"></app-page-header>
 <!-- Start::row-1 -->
 <div class="row">
-    <div class="col-xxl-9">
+    <div class="col-xxl-12">
         <div class="card">
             <div class="card-body">
                 <div class="card custom-card overflow-hidden job-info-banner">
@@ -55,16 +55,16 @@
                                 </a>
                                 <p class="mb-0 mt-4 pt-3"><i class="bi bi-info-circle text-info"
                                         data-bs-toggle="tooltip" placement="top" ngbTooltip="20 days left"></i> <span
-                                        class="fw-medium"> 20 days left </span> to apply for this job</p>
+                                        class="fw-medium"> Read Instructions </span> before start the Test</p>
                                 <div class="d-flex gap-2 flex-wrap mt-3 justify-content-end">
-                                    <a href="javascript:void(0);" class="btn mb-0 btn-primary"> Apply Now</a>
-                                    <a href="javascript:void(0);" class="btn mb-0 btn-icon btn-success-light btn-wave">
+                                    <button type="button" class="btn btn-primary btn-sm btn-wave">Read Instructions</button>
+                                    <!-- <a href="javascript:void(0);" class="btn mb-0 btn-icon btn-success-light btn-wave">
                                         <i class="ri-heart-line"></i>
                                     </a>
                                     <a href="javascript:void(0);"
                                         class="btn mb-0 btn-icon btn-info-light btn-wave me-0">
                                         <i class="ri-share-line"></i>
-                                    </a>
+                                    </a> -->
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                 <p class="op-9">Welcome to <b>Quizlo Ai</b> – your gateway to practicing for entrance exams and many more. This online mock test is designed to provide a real exam experience and help you evaluate your preparation effectively. Please read the following guidelines carefully before starting your test.</p>
                 <p class="mb-4 op-9">By attempting this test, you agree to adhere to the platform's rules to ensure a fair and smooth assessment process. All your responses will be recorded and reviewed as per the platform’s assessment criteria.</p>
                 
-                <h6 class="fw-medium">General Terms & Conditions</h6>
+                <!-- <h6 class="fw-medium">General Terms & Conditions</h6>
                 <ol class="list-group border-0 list-unstyled list-group-numbered mb-3">
                     <li class="list-group-item border-0 py-1">By starting the test, you confirm that all the information provided is accurate and the attempt is solely by you.</li>
                     <li class="list-group-item border-0 py-1">You must not use any unfair means, reference materials, or seek external help during the test.</li>
@@ -88,7 +88,7 @@
                     <li class="list-group-item border-0 py-1">Any attempt to misuse the platform or manipulate test results will result in disqualification and possible suspension of your account.</li>
                     <li class="list-group-item border-0 py-1">By participating, you agree to Quizlo Ai’s Privacy Policy and Terms of Service.</li>
                 </ol>
-        
+         -->
                 <h6 class="fw-medium">Test Guidelines</h6>
                 <ol class="list-group border-0 list-unstyled list-group-numbered mb-0">
                     <li class="list-group-item border-0 py-1">Carefully read each question and all available options before selecting your answer.</li>
@@ -100,15 +100,18 @@
                 </ol>
             </div>
         </div>
+
+        <div *ngIf="testDetails" class="card custom-card">
+            <app-test-window [testData]="testDetails"></app-test-window>
+        </div>
         <div class="card custom-card border shadow-none bg-primary-transparent border border-primary border-opacity-10">
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-lg-8">
-                        <h5 class="fw-medium mb-3">
-                            <i class="bi bi-info-circle me-2 p-2 bg-primary text-fixed-white fs-15 lh-1 align-middle rounded-circle"></i>
-                            Please review all instructions before starting your test.
-                        </h5>
-                        <span class="text-muted mb-0 fs-14">Best of luck with your exam! Stay calm, stay focused, and do your best.</span>
+                        <h5 class="fw-medium mb-3"><i
+                                class="ri-book-line me-2 p-2 bg-primary text-fixed-white fs-15 lh-1 align-middle rounded-circle"></i>
+                                Please review all instructions before starting your test.</h5>
+                        <span class="text-muted mb-0 fs-14">Best of luck with your exam! Stay calm, stay focused, and do your best!</span>
                     </div>
                     <div class="col-lg-4 text-end">
                         <a href="javascript:void(0);" class="btn btn-success btn-lg" role="button">
@@ -119,230 +122,6 @@
             </div>
         </div>
         
-    </div>
-    <div class="col-xxl-3">
-        <div class="card custom-card">
-            <div class="card-header">
-                <div class="card-title">Job Highlights</div>
-            </div>
-            <div class="card-body">
-                <div class="mb-2 fs-14 d-flex align-items-center">
-                    <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-info-transparent">
-                        <i class="ri-map-pin-line"></i>
-                    </span>
-                    <span class="text-muted">Work Location</span>
-                    <span class="ms-auto fw-medium">
-                        Bangalore
-                    </span>
-                </div>
-                <div class="mb-2 d-flex align-items-center">
-                    <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-danger-transparent">
-                        <i class="ri-time-line"></i>
-                    </span>
-                    <span class="text-muted">Flexible Hours</span>
-                    <span class="ms-auto fw-medium">
-                        9:00AM -6:00PM
-                    </span>                                                         
-
-                </div>
-                <div class="mb-2 d-flex align-items-center">
-                    <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-success-transparent">
-                        <i class="ri-cash-line"></i>
-                    </span>
-                    <span class="text-muted">Competitive Salary</span>
-                    <span class="ms-auto fw-medium">
-                        35,000 +
-                    </span>
-
-                </div>
-                <div class="mb-0 d-flex align-items-center">
-                    <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-info-transparent">
-                        <i class="ri-award-line"></i>
-                    </span>
-                    <span class="text-muted">Employee Benefits</span>
-                    <span class="ms-auto fw-medium">
-                        Award
-                    </span>
-
-                </div>
-            </div>
-        </div>
-        <div class="">
-            <h6 class="fw-medium mb-3">Related Jobs</h6>
-           
-            <swiper-container #swiperContainer
-                class="swiper swiper-vertical overflow-hidden swiper-related-jobs swiper-initialized swiper-backface-hidden mb-3"
-                space-between="8" slides-per-view="2" direction="vertical" autoplay-delay="2500"
-                autoplay-disable-on-interaction="false">
-
-                <swiper-slide>
-                    <div class="card custom-card featured-jobs shadow-none border">
-                        <div class="card-body">
-                            <div class="d-flex mb-3 flex-sm-wrap gap-2 flex-xxl-nowrap">
-                                <div> <span class="avatar avatar-md border p-1"> <img
-                                            src="./assets/images/media/jobs/2.png" alt=""> </span> </div>
-                                <div class="ms-1 flex-grow-1 w-sm-75 text-truncate">
-                                    <h6 class="fw-medium mb-0 d-flex align-items-center text-truncate w-sm-75"><a
-                                            href="javascript:void(0);" class="w-75 text-truncate"> Frontend
-                                            Developer</a></h6> <a href="javascript:void(0);" class="fs-12 text-muted"><i
-                                            class="bi bi-building"></i> InnovateZ Solutions</a>
-                                </div>
-                                <div class="ms-auto d-flex gap-1 flex-xxl-nowrap"> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-success text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Add to wishlist"
-                                        ngbTooltip="Add to wishlist"><span><i class="bi bi-heart"></i></span></a> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-warning text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Featured Jobs"
-                                        ngbTooltip="Featured Jobs"><span><i class="bi bi-star-fill"></i></span></a> </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="popular-tags mb-3 d-flex gap-1 flex-wrap flex-xxl-nowrap">
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-geo-alt me-1"></i> San Francisco, CA</a>
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-mortarboard me-1"></i> 2+ Yrs Exp.</a>
-                                </div>
-                                <h6 class="fw-medium mb-0">$50k - $80k</h6>
-                            </div>
-                            <a href="javascript:void(0);" class="fw-medium btn btn-sm btn-primary-light d-grid text-nowrap">
-                                Apply Now
-                            </a>
-                        </div>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="card custom-card featured-jobs shadow-none border">
-                        <div class="card-body">
-                            <div class="d-flex mb-3 flex-sm-wrap gap-2 flex-xxl-nowrap">
-                                <div> <span class="avatar avatar-md avatar-rounded bg-danger-transparent border"> <i
-                                            class="bi bi-laptop"></i> </span> </div>
-                                <div class="ms-1 flex-grow-1 w-sm-75 text-truncate">
-                                    <h6 class="fw-medium mb-0 d-flex align-items-center text-truncate w-sm-75"><a
-                                            href="javascript:void(0);" class="w-75 text-truncate"> Backend Developer</a>
-                                    </h6> <a href="javascript:void(0);" class="fs-12 text-muted"><i
-                                            class="bi bi-building"></i> Tech Solutions Inc.</a>
-                                </div>
-                                <div class="ms-auto d-flex gap-1 flex-xxl-nowrap"> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-success text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Add to wishlist"
-                                        ngbTooltip="Add to wishlist"><span><i
-                                                class="bi bi-heart"></i></span></a> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-warning text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Featured Jobs"
-                                        ngbTooltip="Featured Jobs"><span><i
-                                                class="bi bi-star-fill"></i></span></a> </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <div class="popular-tags mb-3 d-flex gap-1 flex-wrap flex-xxl-nowrap">
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-geo-alt me-1"></i> New York, NY</a>
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-mortarboard me-1"></i> 3+ Yrs Exp.</a>
-                                </div>
-                                <h6 class="fw-medium mb-0">$60k - $90k</h6>
-                            </div>
-                            <a href="javascript:void(0);" class="fw-medium btn btn-sm btn-primary-light d-grid text-nowrap">
-                                Apply Now
-                            </a>
-                        </div>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="card custom-card featured-jobs shadow-none border">
-                        <div class="card-body">
-                            <div class="d-flex mb-3 flex-sm-wrap gap-2 flex-xxl-nowrap">
-                                <div> <span class="avatar avatar-md avatar-rounded bg-warning border"> <i
-                                            class="bi bi-laptop"></i> </span> </div>
-                                <div class="ms-1 flex-grow-1 w-sm-75 text-truncate">
-                                    <h6 class="fw-medium mb-0 d-flex align-items-center text-truncate w-sm-75"><a
-                                            href="javascript:void(0);" class="w-75 text-truncate"> UI/UX Designer</a>
-                                    </h6> <a href="javascript:void(0);" class="fs-12 text-muted"><i
-                                            class="bi bi-building"></i> Creative Designs Co.</a>
-                                </div>
-                                <div class="ms-auto d-flex gap-1 flex-xxl-nowrap"> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-success text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Add to wishlist"
-                                        ngbTooltip="Add to wishlist"><span><i
-                                                class="bi bi-heart"></i></span></a> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-warning text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Featured Jobs"
-                                        ngbTooltip="Featured Jobs"><span><i
-                                                class="bi bi-star-fill"></i></span></a> </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <div class="popular-tags mb-3 d-flex gap-1 flex-wrap flex-xxl-nowrap">
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-geo-alt me-1"></i> Seattle, WA</a>
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-mortarboard me-1"></i> 3+ Yrs Exp.</a>
-                                </div>
-                                <h6 class="fw-medium mb-0">$70k - $100k</h6>
-                            </div>
-                            <a href="javascript:void(0);" class="fw-medium btn btn-sm btn-primary-light d-grid text-nowrap">
-                                Apply Now
-                            </a>
-                        </div>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="card custom-card featured-jobs shadow-none border">
-                        <div class="card-body">
-                            <div class="d-flex mb-3 flex-sm-wrap gap-2 flex-xxl-nowrap">
-                                <div> <span class="avatar avatar-md avatar-rounded bg-info-transparent border"> <i
-                                            class="bi bi-laptop"></i> </span> </div>
-                                <div class="ms-1 flex-grow-1 w-sm-75 text-truncate">
-                                    <h6 class="fw-medium mb-0 d-flex align-items-center text-truncate w-sm-75"><a
-                                            href="javascript:void(0);" class="w-75 text-truncate"> Full Stack
-                                            Developer</a></h6> <a href="javascript:void(0);" class="fs-12 text-muted"><i
-                                            class="bi bi-building"></i> TechGurus Ltd.</a>
-                                </div>
-                                <div class="ms-auto d-flex gap-1 flex-xxl-nowrap"> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-success text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Add to wishlist"
-                                        ngbTooltip="Add to wishlist"><span><i
-                                                class="bi bi-heart"></i></span></a> <a href="javascript:void(0);"
-                                        class="avatar avatar-sm avatar-rounded bg-warning text-fixed-white"
-                                        data-bs-toggle="tooltip" placement="auto" aria-label="Featured Jobs"
-                                        ngbTooltip="Featured Jobs"><span><i
-                                                class="bi bi-star-fill"></i></span></a> </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="popular-tags mb-3 d-flex gap-1 flex-wrap flex-xxl-nowrap">
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-geo-alt me-1"></i> Los Angeles, CA</a>
-                                    <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default"><i
-                                            class="bi bi-mortarboard me-1"></i> 5+ Yrs Exp.</a>
-                                </div>
-                                <h6 class="fw-medium mb-0">$80k - $120k</h6>
-                            </div>
-                            <a href="javascript:void(0);" class="fw-medium btn btn-sm btn-primary-light d-grid text-nowrap">
-                                Apply Now
-                            </a>
-                        </div>
-                    </div>
-                </swiper-slide>
-            </swiper-container>
-
-          
-
-
-        </div>
-        <div class="card custom-card">
-            <div class="card-body">
-                <h6 class="fw-medium mb-3">Subscribe to Job Alerts</h6>
-                <div class="input-group mb-3">
-                    <input type="email" class="form-control" placeholder="Your Email Address" aria-label="job-email"
-                        aria-describedby="job-subscribe">
-                    <button class="btn btn-primary" type="button" id="job-subscribe">Subscribe</button>
-                </div>
-                <label class="form-check-label">
-                    By subscribing, you accept our <a href="javascript:void(0);" class="text-success"><u>privacy
-                            policy</u></a>.
-                </label>
-            </div>
-        </div>
     </div>
 </div>
 <!-- End::row-1 -->
