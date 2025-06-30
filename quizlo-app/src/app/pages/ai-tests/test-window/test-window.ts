@@ -48,6 +48,21 @@ ngOnInit(): void {
   this.cdr.detectChanges();
 }
 
+get currentQuestion() {
+  const questions = this.testData?.questions;
+  const idx = this.currentQuestionIndex?.();
+  if (
+    Array.isArray(questions) &&
+    typeof idx === 'number' &&
+    idx >= 0 &&
+    idx < questions.length
+  ) {
+    return questions[idx];
+  }
+  return undefined;
+}
+
+
 // Computed properties
 formattedTime = computed(() => {
   const total = this.timeRemaining();

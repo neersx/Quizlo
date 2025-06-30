@@ -58,11 +58,11 @@
         </div>
   
         <!-- Current Question -->
-        <div class="question-container" *ngIf="testData && testData?.questions && testData?.questions[currentQuestionIndex()] as question">
+        <div class="question-container" *ngIf="currentQuestion as question">
           <div class="question-card">
             <div class="question-header">
               <span class="question-number">Question {{ question.questionNo }}</span>
-              <span class="difficulty-badge" [ngClass]="getDifficultyClass(question?.difficulty)">
+              <span class="difficulty-badge" [ngClass]="getDifficultyClass(question.difficulty)">
                 {{ question.difficulty }}
               </span>
               <span *ngIf="question.marks" class="question-marks">
