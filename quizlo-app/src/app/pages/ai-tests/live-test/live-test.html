@@ -16,33 +16,36 @@
                                             <img src="./assets/images/media/jobs/2.png" alt="">
                                         </span>
                                     </div>
-                                    <div>
-                                        <h5 class="fw-medium mb-0 d-flex align-items-center"><a
-                                                href="javascript:void(0);" class="">Frontend Developer</a></h5>
-                                        <a href="javascript:void(0);" class="fs-12 text-muted"><i
-                                                class="bi bi-building"></i> Spruko Technologies PRIVATE LIMITED</a>
+                                    <div *ngIf="testDetails">
+                                        <h5 class="fw-medium mb-0 d-flex align-items-center">
+                                          <a href="javascript:void(0);" class="">{{ testDetails?.examCode }}</a>
+                                        </h5>
+                                        <a href="javascript:void(0);" class="fs-12 text-muted">
+                                          <i class="bi bi-building"></i> {{ testDetails?.examName }}
+                                        </a>
                                         <div class="d-flex mt-3">
-                                            <div>
-                                                <p class="mb-1"><i class="bi bi-geo-alt me-1"></i>Bangalore, Karnataka
-                                                </p>
-                                                <p><i class="bi bi-briefcase me-1"></i>2 - 4 Yrs Exp.</p>
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="mb-1"><i class="bi bi-coin me-1"></i><span
-                                                        class="fw-medium">25,000 - 35,000</span> / per month
-                                                    (+incentives)</p>
-                                                <p><i class="bi bi-mortarboard  me-1"></i>Graduate and Above</p>
-                                            </div>
+                                          <div>
+                                            <p class="mb-1"><i class="bi bi-geo-alt me-1"></i>Online, INDIA</p>
+                                            <p *ngIf="testDetails?.questions"><i class="bi bi-briefcase me-1"></i>
+                                              Total Questions: {{ testDetails?.questions?.length }}</p>
+                                          </div>
+                                          <div class="ms-4">
+                                            <p class="mb-1"><i class="bi bi-coin me-1"></i>
+                                              <span class="fw-medium">Language: {{ testDetails?.language }}</span>
+                                            </p>
+                                            <p><i class="bi bi-mortarboard  me-1"></i>Subject : {{ testDetails?.subject }}</p>
+                                          </div>
                                         </div>
                                         <div class="popular-tags">
-                                            <a href="javascript:void(0);"
-                                                class="badge rounded-pill bg-light text-default me-1"><i
-                                                    class="bi bi-clock me-1"></i>Full Time</a>
-                                            <a href="javascript:void(0);"
-                                                class="badge rounded-pill bg-light text-default me-1"><i
-                                                    class="bi bi-briefcase me-1"></i>8 Openings</a>
+                                          <a href="javascript:void(0);" class="badge rounded-pill bg-light text-warning me-1">
+                                            <i class="bi bi-clock me-1"></i>{{ testDetails?.difficulty }}
+                                          </a>
+                                          <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default me-1">
+                                            <i class="bi bi-briefcase me-1"></i>Not Started
+                                          </a>
                                         </div>
-                                    </div>
+                                      </div>
+                                      
                                 </div>
                             </div>
                             <div class="text-end ms-auto">
@@ -72,63 +75,50 @@
         </div>
         <div class="card custom-card">
             <div class="card-body">
-                <h6 class="fw-medium">Job Description</h6>
-                <p class="op-9">We are seeking a skilled Frontend Developer to join our dynamic team. In this role, you
-                    will be responsible for implementing visual elements that users see and interact with in web
-                    applications. You will work closely with designers and backend developers to bridge the gap between
-                    graphical design and technical implementation, ensuring an optimized and responsive user experience.
-                </p>
-                <p class="mb-4 op-9">As a Frontend Developer, you will use your expertise in HTML, CSS, and JavaScript
-                    frameworks to translate UI/UX design wireframes into high-quality code. You will collaborate with
-                    cross-functional teams to deliver scalable and maintainable frontend solutions that meet business
-                    objectives and user needs.</p>
-
-                <h6 class="fw-medium">Key Responsibilities</h6>
+                <h6 class="fw-medium">Test Description and Guidelines</h6>
+                <p class="op-9">Welcome to <b>Quizlo Ai</b> – your gateway to practicing for entrance exams and many more. This online mock test is designed to provide a real exam experience and help you evaluate your preparation effectively. Please read the following guidelines carefully before starting your test.</p>
+                <p class="mb-4 op-9">By attempting this test, you agree to adhere to the platform's rules to ensure a fair and smooth assessment process. All your responses will be recorded and reviewed as per the platform’s assessment criteria.</p>
+                
+                <h6 class="fw-medium">General Terms & Conditions</h6>
                 <ol class="list-group border-0 list-unstyled list-group-numbered mb-3">
-                    <li class="list-group-item border-0 py-1">Develop responsive web pages and web applications based on
-                        provided designs and specifications.</li>
-                    <li class="list-group-item border-0 py-1">Collaborate with UX/UI designers and backend developers to
-                        deliver seamless user interfaces.</li>
-                    <li class="list-group-item border-0 py-1">Optimize application performance and ensure cross-browser
-                        compatibility.</li>
-                    <li class="list-group-item border-0 py-1">Implement front-end components and libraries using modern
-                        frameworks such as React, Angular, or Vue.js.</li>
-                    <li class="list-group-item border-0 py-1">Conduct thorough testing of user interfaces to identify
-                        and fix UI issues and bugs.</li>
+                    <li class="list-group-item border-0 py-1">By starting the test, you confirm that all the information provided is accurate and the attempt is solely by you.</li>
+                    <li class="list-group-item border-0 py-1">You must not use any unfair means, reference materials, or seek external help during the test.</li>
+                    <li class="list-group-item border-0 py-1">Do not attempt to refresh, close, or switch browser tabs/windows during the test. Such actions may lead to automatic test submission or disqualification.</li>
+                    <li class="list-group-item border-0 py-1">All responses submitted are final. Once you submit the test, no changes can be made.</li>
+                    <li class="list-group-item border-0 py-1">Any attempt to misuse the platform or manipulate test results will result in disqualification and possible suspension of your account.</li>
+                    <li class="list-group-item border-0 py-1">By participating, you agree to Quizlo Ai’s Privacy Policy and Terms of Service.</li>
                 </ol>
-                <h6 class="fw-medium">Requirements</h6>
-                <ul class="list-group border-0 list-unstyled list-group-numbered mb-3">
-                    <li class="list-group-item border-0 py-1">Bachelor's degree in Computer Science, Engineering, or a
-                        related field, or equivalent practical experience.</li>
-                    <li class="list-group-item border-0 py-1">Proven experience as a Frontend Developer or similar role,
-                        with a strong portfolio demonstrating frontend development skills.</li>
-                    <li class="list-group-item border-0 py-1">Proficiency in HTML5, CSS3, JavaScript, and frontend
-                        frameworks/libraries (e.g., React, Angular, Vue.js).</li>
-                    <li class="list-group-item border-0 py-1">Experience with version control systems (e.g., Git) and
-                        modern development workflows.</li>
-                    <li class="list-group-item border-0 py-1">Understanding of responsive design principles and
-                        mobile-first approach.</li>
-                </ul>
+        
+                <h6 class="fw-medium">Test Guidelines</h6>
+                <ol class="list-group border-0 list-unstyled list-group-numbered mb-0">
+                    <li class="list-group-item border-0 py-1">Carefully read each question and all available options before selecting your answer.</li>
+                    <li class="list-group-item border-0 py-1">Monitor the timer displayed on your screen and manage your time wisely. The test will automatically submit when the time ends.</li>
+                    <li class="list-group-item border-0 py-1">Click “Save” or “Next” after each answer to ensure your responses are recorded.</li>
+                    <li class="list-group-item border-0 py-1">You may navigate between questions if the test allows. Please check test-specific navigation rules before starting.</li>
+                    <li class="list-group-item border-0 py-1">In case of technical issues, do not refresh the page. Contact support immediately if you face any interruptions.</li>
+                    <li class="list-group-item border-0 py-1">Submit your test before the allotted time ends. Unsubmitted tests will be automatically submitted when time runs out.</li>
+                </ol>
             </div>
         </div>
         <div class="card custom-card border shadow-none bg-primary-transparent border border-primary border-opacity-10">
             <div class="card-body">
                 <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <h5 class="fw-medium mb-3"><i
-                                class="ri-briefcase-line me-2 p-2 bg-primary text-fixed-white fs-15 lh-1 align-middle rounded-circle"></i>Explore
-                            Job Opportunities</h5>
-                        <span class="text-muted mb-0 fs-14">Find exciting job opportunities that match your skills and
-                            interests. Join us to make a difference!</span>
+                    <div class="col-lg-8">
+                        <h5 class="fw-medium mb-3">
+                            <i class="bi bi-info-circle me-2 p-2 bg-primary text-fixed-white fs-15 lh-1 align-middle rounded-circle"></i>
+                            Please review all instructions before starting your test.
+                        </h5>
+                        <span class="text-muted mb-0 fs-14">Best of luck with your exam! Stay calm, stay focused, and do your best.</span>
                     </div>
-                    <div class="col-lg-6 text-end">
-                        <a href="javascript:void(0);" class="btn btn-primary btn-lg" role="button">
-                            <i class="ri-share-line me-2 align-middle d-inline-block"></i>Sign up Now
+                    <div class="col-lg-4 text-end">
+                        <a href="javascript:void(0);" class="btn btn-success btn-lg" role="button">
+                            <i class="bi bi-arrow-right-circle me-2 align-middle d-inline-block"></i>Start Test Now
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+        
     </div>
     <div class="col-xxl-3">
         <div class="card custom-card">

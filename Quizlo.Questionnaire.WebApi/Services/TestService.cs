@@ -243,6 +243,7 @@ public class TestService : ITestService
                             MarksScored = t.MarksScored,
                             TotalMarks = t.TotalMarks,
                             ExamName = t.Exam.Name,
+                            ExamCode = t.Exam.Code,
                             Questions = t.TestQuestions
                                          .OrderBy(tq => tq.Order)
                                          .Select(tq => new QuestionDto

@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../../shared/sharedmodule';
@@ -6,21 +6,42 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
 import { QuestionModel } from '../model/questions.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-live-test',
-  imports: [SharedModule,NgbTooltipModule,FormsModule],
+  imports: [SharedModule,NgbTooltipModule,FormsModule, CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './live-test.html',
-  styleUrl: './live-test.scss'
+  styleUrl: './live-test.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LiveTest {
   thumbsSwiper: any;
-  testDetails: TestDetailsModel | null = null;
+  testDetails: TestDetailsModel = {
+    id: 0,
+    title: '',
+    language: '',
+    subject: '',
+    duration: '',
+    createdAt: '',
+    examId: 0,
+    totalQuestions: 0,
+    totalMarks: 0,
+    marksScored: 0,
+    examName: '',
+    examCode: '',
+    status: 'Not Started',
+    questions: [],
+    difficulty: ''
+  };
+  
   questions: QuestionModel[] = [];
   error: string = '';
+  payload: any = {};
 
   constructor(
+    private cdr: ChangeDetectorRef, 
     private route: ActivatedRoute,
     private testService: TestService,
     private router: Router
@@ -35,11 +56,14 @@ export class LiveTest {
       const subject  = params['subject'];
       const difficulty = params['difficulty'];
 
+      this.testDetails = { ...this.testDetails, examCode: code, examName, language, subject, difficulty, examId};
+
       if (!examId || !language) {
         this.error = 'Missing examId or language';
         return;
       }
       this.createAndNavigateToTest(examId, language, code, examName, subject, difficulty);
+      this.cdr.markForCheck();
     });
   }
 
@@ -50,7 +74,7 @@ export class LiveTest {
     // e.g. "28/06/2025"
     const title = `${examCode}-${formatted.replace(/\//g, '-')} Mock Test`;
 
-    const payload: any = {
+    this.payload = {
       examId,     // adjust as needed
       subject,       // or your dynamic subject
       language,
@@ -61,7 +85,7 @@ export class LiveTest {
       duration: '00:00:00'        // e.g. HH:MM:SS
     };
 
-    this.startTest(payload);
+    this.startTest(this.payload);
   }
 
   startTest(payload: any) {
@@ -76,6 +100,7 @@ export class LiveTest {
           }));
           console.log('Test Details:', this.testDetails);
           console.log('Questions:', this.questions);
+          this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Could not start test';
         }
@@ -170,31 +195,5 @@ parseOptions(optionsJson: string): string[] {
 
     }
   ];
-  // jobs=[
-  //   {
-  //     src:"./assets/images/media/jobs/2.png",
-  //     role:"Frontend Developer",
-  //     company:" InnovateZ Solutions",
-  //     location:"San Francisco, CA",
-  //     exp:"2",
-  //     salary:"$50k - $80k"
-  //   },
-  //   {
-  //     src:"./assets/images/media/jobs/2.png",
-  //     role:"Backend Developer",
-  //     company:"Tech Solutions Inc.",
-  //     location:"New York, NY",
-  //     exp:"3",
-  //     salary:"$60k - $90k"
-  //   },
-  //   {
-  //     src:"./assets/images/media/jobs/2.png",
-  //     role:"Backend Developer",
-  //     company:"Tech Solutions Inc.",
-  //     location:"New York, NY",
-  //     exp:"3",
-  //     salary:"$60k - $90k"
-  //   },
-  // ]
 }
 

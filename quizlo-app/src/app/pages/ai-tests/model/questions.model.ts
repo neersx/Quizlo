@@ -15,12 +15,14 @@ export interface Exam {
   export interface QuestionModel {
     id?: number;
     questionText?: string;
+    questionNo?: number;
     optionsJson?: string;
     type?: number;
-    difficulty?: number;
+    difficulty?: string;
     explanation?: string;
     correctOptionIds?: string;
-    selectedOptionIds?: string;
+    selectedOptionIds?: any;
+    isMultipleSelect?: boolean;
     isCorrect?: boolean;
     marks?: number;
     answeredAt?: string;
