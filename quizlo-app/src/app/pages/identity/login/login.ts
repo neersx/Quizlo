@@ -2,7 +2,7 @@
 import { Component, OnInit, OnDestroy, Inject, Renderer2, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser, DOCUMENT }                      from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule }         from '@angular/forms';
-import { Router, RouterModule }                                            from '@angular/router';
+import { Router, RouterModule, ActivatedRoute }                                            from '@angular/router';
 import { NgbModule }                                                       from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService }                                                   from 'ngx-toastr';
 import { AuthService } from '../../../services/identity/auth.service';
@@ -38,6 +38,7 @@ export class Login implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private renderer: Renderer2,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     public readonly authService: AuthService,
     private router: Router,
     private toastr: ToastrService
@@ -94,7 +95,9 @@ export class Login implements OnInit, OnDestroy {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.toastr.success('Login successful', 'Welcome');
-        this.router.navigate(['/test']);
+        console.log('Login successful, currentUser:', this.authService.currentUser);
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/test'; // or any default
+        this.router.navigateByUrl(returnUrl);
       },
       error: err => {
         const msg = err.error?.message || 'Login failed. Please try again.';

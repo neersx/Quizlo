@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Input,
 import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-test-window',
@@ -146,6 +147,7 @@ private startAutoSave(): void {
   }, 30000); // Auto-save every 30 seconds
 }
 
+// Save answers to localStorage
 private saveAnswers(): void {
   try {
     localStorage.setItem('bitsat_answers', JSON.stringify(this.answers()));
@@ -154,13 +156,44 @@ private saveAnswers(): void {
   }
 }
 
-onSingleOptionSelect(questionId: number = -1, optionValue: string): void {
+// Handle single-select (radio)
+onSingleOptionSelect(questionId: number, optionValue: string): void {
   const currentAnswers = { ...this.answers() };
   currentAnswers[`question_${questionId}`] = optionValue;
   this.answers.set(currentAnswers);
   this.saveAnswers();
 }
 
+// Handle multiple-select (checkbox)
+onMultipleOptionSelect(questionId: number, optionValue: string, event: Event): void {
+  const checked = (event.target as HTMLInputElement).checked;
+  const currentAnswers = { ...this.answers() };
+  const answerKey = `question_${questionId}`;
+  let selected = Array.isArray(currentAnswers[answerKey])
+    ? [...currentAnswers[answerKey] as string[]]
+    : [];
+
+  if (checked) {
+    if (!selected.includes(optionValue)) {
+      selected.push(optionValue);
+    }
+  } else {
+    selected = selected.filter(val => val !== optionValue);
+  }
+  currentAnswers[answerKey] = selected;
+  this.answers.set(currentAnswers);
+  this.saveAnswers();
+}
+
+
+// Check if an option is selected (works for single & multiple)
+isOptionSelected(questionId: number, optionValue: string): boolean {
+  const answer = this.answers()[`question_${questionId}`];
+  if (Array.isArray(answer)) return answer.includes(optionValue);
+  return answer === optionValue;
+}
+
+// Helper to get "A", "B", "C", etc.
 charFromCode(index: number): string {
   return String.fromCharCode(65 + index);
 }
@@ -169,47 +202,6 @@ fromCharCode(index: number): string {
   return String.fromCharCode(65 + index);
 }
 
-
-onMultipleOptionSelect(questionId: number = -1, optionValue: string, isChecked: boolean): void {
-  const currentAnswers = { ...this.answers() };
-  const questionKey = `question_${questionId}`;
-  
-  if (!currentAnswers[questionKey]) {
-    currentAnswers[questionKey] = [];
-  }
-
-  const currentSelections = currentAnswers[questionKey] as string[];
-  
-  if (isChecked) {
-    if (!currentSelections.includes(optionValue)) {
-      currentSelections.push(optionValue);
-    }
-  } else {
-    const index = currentSelections.indexOf(optionValue);
-    if (index > -1) {
-      currentSelections.splice(index, 1);
-    }
-  }
-
-  // Remove the question from answers if no options are selected
-  if (currentSelections.length === 0) {
-    delete currentAnswers[questionKey];
-  }
-
-  this.answers.set(currentAnswers);
-  this.saveAnswers();
-}
-
-isOptionSelected(questionId: number = -1, optionValue: string): boolean {
-  const questionKey = `question_${questionId}`;
-  const answer = this.answers()[questionKey];
-  
-  if (Array.isArray(answer)) {
-    return answer.includes(optionValue);
-  }
-  
-  return answer === optionValue;
-}
 
 getDifficultyClass(difficulty: string = 'medium'): string {
   switch (difficulty.toLowerCase()) {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../../shared/sharedmodule';
@@ -6,8 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
 import { QuestionModel } from '../model/questions.model';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TestWindow } from '../test-window/test-window';
+import { AuthService } from '../../../services/identity/auth.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-live-test',
@@ -45,7 +47,9 @@ export class LiveTest {
     private cdr: ChangeDetectorRef, 
     private route: ActivatedRoute,
     private testService: TestService,
-    private router: Router
+    private readonly auth : AuthService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +67,17 @@ export class LiveTest {
         this.error = 'Missing examId or language';
         return;
       }
+
+      if (isPlatformBrowser(this.platformId)) {
+        const currentUser = localStorage.getItem('current_user');
+        if (!currentUser) {
+          alert('You are not logged in');
+          const returnUrl = this.router.url;
+          this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
+          return;
+        }
+      }
+
       this.createAndNavigateToTest(examId, language, code, examName, subject, difficulty);
       this.cdr.markForCheck();
     });

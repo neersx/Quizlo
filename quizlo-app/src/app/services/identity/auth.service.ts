@@ -32,11 +32,22 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('storage', () => {
+        const user = this.readUserFromStorage();
+        this.userSubject.next(user);
+      });
+    }
+  }
 
   /** Expose the current user synchronously */
   public get currentUser(): User | null {
     return this.userSubject.value;
+  }
+
+  public get isLoggedIn(): boolean {
+    return !!this.currentUser;
   }
 
   /** Call this to log in; returns the User on success */
@@ -98,5 +109,6 @@ export class AuthService {
       localStorage.setItem(this.storageUserKey, JSON.stringify(user));
     }
     this.userSubject.next(user);
+    console.log('userSubject now:', this.userSubject.value);
   }
 }
