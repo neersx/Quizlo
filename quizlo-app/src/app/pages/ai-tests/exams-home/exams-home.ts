@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from '../../../shared/sharedmodule';
@@ -13,22 +13,35 @@ import { Router, RouterModule } from '@angular/router';
   selector: 'app-exams-home',
   imports: [SharedModule,NgApexchartsModule,NgSelectModule,SpkNgSelectComponent, CommonModule, RouterModule],
   templateUrl: './exams-home.html',
-  styleUrl: './exams-home.scss'
+  styleUrl: './exams-home.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExamsHome implements OnInit {
   selectedLanguage = 'English'; 
-  selectedExam = '';
+  isSubjectsLoading = false;
+  selectedDifficulty = { label: 'Mix', value: 'Mix' };
+  selectedSubject = '';
+  selectedExam: any | null = null;
   exams: Exam[] = [];
+  subjects: any[] = [];
   languages: any[] = [];
   loading = false;
   error = '';
 
-  constructor(private examService: ExamService,  private router: Router, private dropdownService: DropdownService) {}
+  constructor(private cdr: ChangeDetectorRef, private examService: ExamService,  private router: Router, private dropdownService: DropdownService) {}
 
   ngOnInit() {
     this.fetchLanguageDropdown();
     this.fetchExams();
+    this.cdr.detectChanges(); 
   }
+
+  difficultyOptions = [
+    { label: 'Easy', value: 0 },
+    { label: 'Medium', value: 1 },
+    { label: 'Hard', value: 2 },
+    { label: 'Mix', value: 3 }
+  ];
 
   fetchLanguageDropdown() {
     this.dropdownService.getLanguagesDropdown().subscribe({
@@ -56,9 +69,10 @@ export class ExamsHome implements OnInit {
         if (resp.isSuccess) {
           this.exams = resp.data.map((exam: any) => ({
             label: `${exam.code} - ${exam.name}`, name: exam.name,
-            value: exam.id!
+            value: exam.id!,
+            code: exam.code
           }));
-          console.log(this.exams);
+          this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load exams';
         }
@@ -72,11 +86,12 @@ export class ExamsHome implements OnInit {
     });
   }
 
+
   startTest() {
     this.loading = true;
     this.error = '';
     this.router.navigate(['/test/live-test'], {
-      queryParams: { examId: this.selectedExam, language: this.selectedLanguage }
+      queryParams: { code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value }
     });
   }
 
@@ -86,7 +101,33 @@ export class ExamsHome implements OnInit {
   } 
 
   handleExamChange(value: any | any[]) {
+    this.isSubjectsLoading = true;
+    this.selectedExam = value;
+    if (this.selectedExam) {
+      this.examService.getSubjectsByExamId(+this.selectedExam.value)
+      .subscribe({
+        next: (subjects: any) => {
+          this.subjects = subjects;
+          this.isSubjectsLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.subjects = [];
+          this.isSubjectsLoading = false;
+        }
+      });
+    } else {
+      this.subjects = [];
+    }
+    this.cdr.markForCheck(); 
+  }
+
+  handleSubjectChange(value: any | any[]) {
     console.log(value);
-    this.selectedExam = value.value;
+    this.selectedSubject = value.value;
+  }
+
+  handleDifficultyChange(event: any) {
+    this.selectedDifficulty = event; // or event.value if single-select
   }
 }

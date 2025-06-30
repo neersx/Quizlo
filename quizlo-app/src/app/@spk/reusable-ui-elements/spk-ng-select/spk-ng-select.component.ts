@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 interface Option {
@@ -8,8 +9,7 @@ interface Option {
 }
 @Component({
   selector: 'spk-ng-select',
-  standalone: true,
-  imports: [NgSelectModule,FormsModule],
+  imports: [CommonModule, NgSelectModule,FormsModule, ReactiveFormsModule],
   templateUrl: './spk-ng-select.component.html',
   styleUrl: './spk-ng-select.component.scss'
 })
@@ -30,6 +30,8 @@ export class SpkNgSelectComponent {
   @Input() additionalProperties: { [key: string]: any } = {};
   @Output() change: EventEmitter<Option | Option[]> = new EventEmitter(); // Emit value change
   @Input() extraProps: any = {};
+  @Input() message: string = '';
+  @Input() messageType: 'success' | 'error' | 'warning' | 'info' | 'default' = 'default';
   // @Input() extraProps: { [key: string]: any } = {}; 
 prop: any;
 image: any;
@@ -68,4 +70,36 @@ onSelectionChange(selected: any): void {
     console.log('Selected Value:', event);
     this.change.emit(event);
   }
+
+  getMessageClass() {
+    switch (this.messageType) {
+      case 'success':
+        return ' text-success';
+      case 'error':
+        return ' text-danger';
+      case 'warning':
+        return ' text-warning';
+      case 'info':
+        return ' text-info';
+      default:
+        return ' text-default';
+    }
+  }
+
+  getMessageIcon() {
+    switch (this.messageType) {
+      case 'success':
+        return '✔️'; // Or Font Awesome class: 'fa fa-check-circle text-success'
+      case 'error':
+        return '❌'; // Or: 'fa fa-times-circle text-danger'
+      case 'warning':
+        return '⚠️'; // Or: 'fa fa-exclamation-triangle text-warning'
+      case 'info':
+        return 'ℹ️'; // Or: 'fa fa-info-circle text-info'
+      default:
+        return '💬'; // Or: 'fa fa-comment-alt text-secondary'
+    }
+  }
+  
+  
 }

@@ -1,13 +1,15 @@
-<app-page-header firstTitle="Apps" title="Currency Exchange" title1="Crypto" activeTitle="Currency Exchange" ></app-page-header>
- <!-- Start::row-1 -->
- <div class="row">
+<app-page-header firstTitle="Apps" title="Currency Exchange" title1="Crypto"
+    activeTitle="Currency Exchange"></app-page-header>
+<!-- Start::row-1 -->
+<div class="row">
     <div class="col-xl-12">
         <div class="card custom-card currency-exchange-card">
             <div class="card-body p-5 d-flex align-items-center justify-content-center z-1">
                 <div class="container">
                     <h3 class="text-fixed-white text-center">Buy and Sell Coins without additional fees</h3>
                     <span class="d-block fs-16 text-fixed-white text-center op-8 mb-4">
-                        Buy now and get +50% extra bonus Minimum pre-sale amount 100 Crypto Coin. We accept BTC crypto-currency..
+                        Buy now and get +50% extra bonus Minimum pre-sale amount 100 Crypto Coin. We accept BTC
+                        crypto-currency..
                     </span>
                     <div class="p-3 mb-4 rounded currency-exchange-area">
                         <div class="row gy-3">
@@ -16,34 +18,49 @@
                             </div> -->
                             <div class="col-xxl-6 col-12">
                                 <div *ngIf="exams">
-                                <spk-ng-select 
-                                [options]="exams"
-                                [selectClass]="''"
-                                [clearable]="true"
-                                [multi]="false"
-                                [searchable]="true"
-                                [placeholder]="'Exam Name'"
-                                [additionalProperties]="{}"
-                                (change)="handleExamChange($event)">
-                                </spk-ng-select>
-                                   
+                                    <spk-ng-select [options]="exams" [selectClass]="''" [clearable]="true"
+                                        [multi]="false" [searchable]="true" [placeholder]="'Select Your Exam'"
+                                        [additionalProperties]="{}" [message]="'Exam is mandatory to start the test'"
+                                        [messageType]="'info'" (change)="handleExamChange($event)">
+                                    </spk-ng-select>
+
                                 </div>
                             </div>
-                            
-                            <div class="col-xxl-6 col-12">
-                                <spk-ng-select 
-                                [options]="languages"
-                                [selectClass]="''"
-                                [clearable]="true"
-                                [multi]="true"
-                                [searchable]="true"
-                                [placeholder]="'Select Language'"
-                                [additionalProperties]="{}"
-                                (change)="handleLanguageChange($event)">
+
+                            <div class="col-xxl-3 col-12">
+                                <spk-ng-select [options]="languages" [selectClass]="''" [clearable]="true"
+                                    [multi]="true" [searchable]="true" [placeholder]="'Select Language'"
+                                    [additionalProperties]="{}" (change)="handleLanguageChange($event)">
                                 </spk-ng-select>
-                             
+
+                            </div>
+
+                            <div class="col-xxl-3 col-12">
+                                <spk-ng-select [options]="difficultyOptions" [selectClass]="''" [clearable]="true"
+                                    [multi]="false" [searchable]="false" [placeholder]="'Select Difficulty'"
+                                    [additionalProperties]="{}" (change)="handleDifficultyChange($event)">
+                                </spk-ng-select>
                             </div>
                         </div>
+                      
+                        <div class="row gy-3 p-3 mb-4">
+                            <div class="col-xxl-6 col-12">
+                                <div *ngIf="isSubjectsLoading" class="text-left my-4">
+                                    <button class="btn btn-default-light" type="button" disabled>
+                                        <span class="spinner-border spinner-border-sm align-middle" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading Subjects...
+                                    </button>
+                                </div>
+                                <div *ngIf="!isSubjectsLoading && subjects.length > 0">
+                                    <spk-ng-select [options]="subjects" [selectClass]="''" [clearable]="true"
+                                        [multi]="false" [searchable]="true" [placeholder]="'Choose Subject Name'"
+                                        [additionalProperties]="{}" (change)="handleSubjectChange($event)">
+                                    </spk-ng-select>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="text-center">
                         <a (click)="startTest()" class="btn btn-danger btn-wave">Start Your Test Now</a>
@@ -54,19 +71,3 @@
     </div>
 </div>
 <!--End::row-1 -->
-
-    <!-- Start:: row-2 -->
-    <div class="row justify-content-center">
-      
-    
-        <div class="col-xl-12">
-             <div class="text-center my-4">
-                <button class="btn btn-primary-light" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm align-middle" role="status"
-                        aria-hidden="true"></span>
-                    Loading...
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- End:: row-2 -->

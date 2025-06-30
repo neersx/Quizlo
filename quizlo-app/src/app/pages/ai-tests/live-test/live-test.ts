@@ -27,29 +27,30 @@ export class LiveTest {
     this.route.queryParams.subscribe(params => {
       const examId   = Number(params['examId']);
       const language = params['language'];
+      const code = params['code'];
+      const subject  = params['subject'];
+      const difficulty = params['difficulty'];
+
       if (!examId || !language) {
         this.error = 'Missing examId or language';
         return;
       }
-      this.createAndNavigateToTest(examId, language);
+      this.createAndNavigateToTest(examId, language, code, subject, difficulty);
     });
   }
 
-  private createAndNavigateToTest(examId: number, language: string) {
+  private createAndNavigateToTest(examId: number, language: string, examCode: string = '', subject: string = 'All', difficulty: string = 'Mix') {
     const today = new Date();
-const formatted = today.toLocaleDateString('en-GB', {
-  day:   '2-digit',
-  month: '2-digit',
-  year:  'numeric'
-});
-// e.g. "28/06/2025"
-const title = `${formatted.replace(/\//g, '-')} Mock Test`;
+    const formatted = today.toLocaleDateString('en-IN', { day:   '2-digit', month: '2-digit', year:  'numeric'
+    });
+    // e.g. "28/06/2025"
+    const title = `${examCode}-${formatted.replace(/\//g, '-')} Mock Test`;
 
     const payload: any = {
       examId,     // adjust as needed
-      subject: 'All',             // or your dynamic subject
+      subject,       // or your dynamic subject
       language,
-      difficulty: 3,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
+      difficulty,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
       title,      // or build from exam name
       duration: '00:00:00'        // e.g. HH:MM:SS
     };

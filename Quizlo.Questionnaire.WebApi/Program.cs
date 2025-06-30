@@ -60,6 +60,7 @@ builder.Services.AddScoped<JwtTokenService>();
 
 builder.Services.AddHttpClient();          // for webhook
 builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddScoped<IDropdownService, DropdownService>();
 
 
 // 6. Controllers, Swagger, CORS

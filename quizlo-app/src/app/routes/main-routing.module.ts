@@ -21,7 +21,7 @@ export const admin: Routes = [
           import('../pages/ai-tests/test-result/test-result').then((m) => m.TestResult),
       },
       {
-        path: 'exams',
+        path: 'select-exam',
         loadComponent: () =>
           import('../pages/ai-tests/exams-home/exams-home').then((m) => m.ExamsHome),
       },

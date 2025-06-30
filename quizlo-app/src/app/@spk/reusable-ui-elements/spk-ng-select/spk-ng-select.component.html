@@ -17,3 +17,8 @@
   (change)="onSelectionChange($event)">
 <ng-content></ng-content>
 </ng-select>
+
+<div *ngIf="message" [ngClass]="getMessageClass()" class="d-flex align-items-center gap-2">
+  <span style="font-size:1.2em;">{{ getMessageIcon() }}</span>
+  <span>{{ message }}</span>
+</div>

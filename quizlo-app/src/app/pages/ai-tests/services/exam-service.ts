@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { User } from '../../../shared/services/auth.service';
 import { Exam, TestDetailsDto, CreateTestRequest, TestSubmissionResultDto } from '../model/questions.model';
 import { environment } from '../../../../environments/environment';
@@ -10,7 +10,7 @@ import { SubmitAnswerDto } from '../model/answer.model';
 @Injectable({ providedIn: 'root' })
 export class ExamService {
   private baseUrl = `${environment.apiUrl}/exams`;
-
+  private dropdownUrl = `${environment.apiUrl}/dropdown`;
   constructor(private http: HttpClient) {}
 
   getExams(pageNumber: number = 1, pageSize: number = 100, search?: string): Observable<Exam[]> {
@@ -37,5 +37,12 @@ export class ExamService {
 
   deleteExam(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  getSubjectsByExamId(examId: number): Observable<any[]> {
+    return this.http.get<any>(`${this.dropdownUrl}/subjects-by-exam/${examId}`)
+      .pipe(
+        map(resp => resp.data as any[])
+      );
   }
 }

@@ -10,5 +10,5 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'test', renderMode: RenderMode.Client },
   { path: 'test/live-test', renderMode: RenderMode.Client },
   { path: 'test/test-result', renderMode: RenderMode.Client },
-  { path: 'test/exams', renderMode: RenderMode.Client },
+  { path: 'test/select-exam', renderMode: RenderMode.Client },
 ];

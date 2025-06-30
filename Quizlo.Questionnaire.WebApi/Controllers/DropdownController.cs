@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.DTO;
 using Quizlo.Questionnaire.WebApi.Helpers.Constants;
+using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Controllers
 {
@@ -13,6 +14,12 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
     [Route("api/[controller]")]
     public class DropdownController : ControllerBase
     {
+        private readonly IDropdownService _ddService;
+        public DropdownController(IDropdownService ddService)
+        {
+            _ddService = ddService;
+        }
+
         [HttpGet("languages")]
         public ActionResult<ApiResponse<List<SelectOptionDto>>> GetAll()
         {
@@ -27,6 +34,16 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             return Ok(ApiResponse<List<SelectOptionDto>>.Success(
                 langs,
                 message: "Languages fetched successfully"
+            ));
+        }
+
+        [HttpGet("subjects-by-exam/{examId}")]
+        public async Task<IActionResult> GetSubjectsByExam(int examId)
+        {
+            var subjects = await _ddService.GetSubjectsByExamIdAsync(examId);
+             return Ok(ApiResponse<List<SelectOptionDto>>.Success(
+                subjects,
+                message: "Exam Subjects fetched successfully"
             ));
         }
     }
