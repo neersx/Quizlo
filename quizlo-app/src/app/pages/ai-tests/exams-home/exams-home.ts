@@ -91,7 +91,7 @@ export class ExamsHome implements OnInit {
     this.loading = true;
     this.error = '';
     this.router.navigate(['/test/live-test'], {
-      queryParams: { code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value }
+      queryParams: { examname: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value ?? 3 }
     });
   }
 

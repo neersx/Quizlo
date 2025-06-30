@@ -37,7 +37,8 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var dto = await _svc.CreateTestAsync(request, userId, ct);
 
-            return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, dto);
+            var apiResponse = ApiResponse<TestDetailsDto>.Success(dto, "Test created successfully", StatusCodes.Status201Created);
+            return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, apiResponse);
         }
 
         [HttpGet("questions")]

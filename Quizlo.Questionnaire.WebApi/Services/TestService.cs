@@ -114,7 +114,7 @@ public class TestService : ITestService
         var test = new Test
         {
             ExamId = exam.Id,
-            Title = req.Title ?? $"{exam.Name} Mock Test - {DateTime.UtcNow:yyyy-MM-dd}",
+            Title = req.Title,
             Duration = TimeSpan.FromMinutes(env.TotalTimeToAnswer),
             DurationCompltedIn = TimeSpan.Zero,
             Subject = req.Subject ?? "All",

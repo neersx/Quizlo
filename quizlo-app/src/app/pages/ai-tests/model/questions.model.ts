@@ -12,7 +12,7 @@ export interface Exam {
   // -------------------------------------------
   // models/question.model.ts
   // -------------------------------------------
-  export interface Question {
+  export interface QuestionModel {
     id?: number;
     questionText?: string;
     optionsJson?: string;

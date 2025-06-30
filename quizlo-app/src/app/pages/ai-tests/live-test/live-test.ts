@@ -4,6 +4,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../../shared/sharedmodule';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from '../services/test-service';
+import { TestDetailsModel } from '../model/tests.model';
+import { QuestionModel } from '../model/questions.model';
 
 @Component({
   selector: 'app-live-test',
@@ -14,8 +16,9 @@ import { TestService } from '../services/test-service';
 })
 export class LiveTest {
   thumbsSwiper: any;
-
-  error = '';
+  testDetails: TestDetailsModel | null = null;
+  questions: QuestionModel[] = [];
+  error: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +31,7 @@ export class LiveTest {
       const examId   = Number(params['examId']);
       const language = params['language'];
       const code = params['code'];
+      const examName = params['examName'];
       const subject  = params['subject'];
       const difficulty = params['difficulty'];
 
@@ -35,11 +39,11 @@ export class LiveTest {
         this.error = 'Missing examId or language';
         return;
       }
-      this.createAndNavigateToTest(examId, language, code, subject, difficulty);
+      this.createAndNavigateToTest(examId, language, code, examName, subject, difficulty);
     });
   }
 
-  private createAndNavigateToTest(examId: number, language: string, examCode: string = '', subject: string = 'All', difficulty: string = 'Mix') {
+  private createAndNavigateToTest(examId: number, language: string, examCode: string = '', examName: string = '', subject: string = 'All', difficulty: number = 3) {
     const today = new Date();
     const formatted = today.toLocaleDateString('en-IN', { day:   '2-digit', month: '2-digit', year:  'numeric'
     });
@@ -50,16 +54,28 @@ export class LiveTest {
       examId,     // adjust as needed
       subject,       // or your dynamic subject
       language,
-      difficulty,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
+      examCode,
+      examName,
+      difficulty: +difficulty,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
       title,      // or build from exam name
       duration: '00:00:00'        // e.g. HH:MM:SS
     };
 
+    this.startTest(payload);
+  }
+
+  startTest(payload: any) {
     this.testService.createTest(payload).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
-        console.log(resp.data);
-
+          this.testDetails = resp.data as TestDetailsModel;
+          // Optional: Parse Options from optionsJson for each question
+          this.questions = (this.testDetails?.questions || []).map((q: any) => ({
+            ...q,
+            options: q.options
+          }));
+          console.log('Test Details:', this.testDetails);
+          console.log('Questions:', this.questions);
         } else {
           this.error = resp.message ?? 'Could not start test';
         }
@@ -69,6 +85,15 @@ export class LiveTest {
       }
     });
   }
+
+  // Helper to parse options from JSON string
+parseOptions(optionsJson: string): string[] {
+  try {
+    return JSON.parse(optionsJson);
+  } catch {
+    return [];
+  }
+}
 
   setThumbsSwiper(swiper: any) {
     this.thumbsSwiper = swiper;
