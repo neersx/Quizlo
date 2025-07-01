@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApexChartComponent } from '../../../@spk/apex-chart/apex-chart.component';
 import { SpkDropdownsComponent } from '../../../@spk/reusable-ui-elements/spk-dropdowns/spk-dropdowns.component';
@@ -9,21 +9,53 @@ import { SpkCategoriesCardComponent } from '../../../@spk/reusable-dashboards/sp
 import { SpkRecommendationsCardComponent } from '../../../@spk/reusable-dashboards/spk-podcast-dashboard/spk-recommendations-card/spk-recommendations-card.component';
 import { SpkShortcutCardComponent } from '../../../@spk/reusable-dashboards/spk-podcast-dashboard/spk-shortcut-card/spk-shortcut-card.component';
 import { Router, RouterModule } from '@angular/router';
+import { ExamService } from '../services/exam-service';
+import { Exam } from '../model/questions.model';
 
 @Component({
   selector: 'app-prepare-test',
-  imports: [RouterModule, SharedModule,NgbDropdownModule,SpkDropdownsComponent,SpkShortcutCardComponent,SpkCategoriesCardComponent,SpkRecommendationsCardComponent,CommonModule,ApexChartComponent,
+  imports: [CommonModule, RouterModule, SharedModule,NgbDropdownModule,SpkDropdownsComponent,SpkShortcutCardComponent,SpkCategoriesCardComponent,SpkRecommendationsCardComponent,CommonModule,ApexChartComponent,
     SpkReusableTablesComponent],
   templateUrl: './prepare-test.html',
-  styleUrl: './prepare-test.scss'
+  styleUrl: './prepare-test.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PrepareTest {
+export class PrepareTest implements OnInit {
+  exams: Exam[] = [];
+  loading = false;
+  error = '';
+  constructor(private router: Router, private cdr: ChangeDetectorRef, private examService: ExamService, ) {}
 
-  constructor(private router: Router) {}
+  ngOnInit() {
+    this.fetchExams();
+  }
 
-
+  fetchExams(page = 1, size = 10): void {
+    this.loading = true;
+    this.error = '';
+    this.examService.getExams(page, size).subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess) {
+          this.exams = resp.data.map((exam: any) => ({
+            label: `${exam.code} - ${exam.name}`, name: exam.name,
+            value: exam.id!,
+            code: exam.code
+          }));
+          this.cdr.markForCheck();
+        } else {
+          this.error = resp.message ?? 'Failed to load exams';
+        }
+      },
+      error: err => {
+        this.error = err.message || 'Server error';
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
   takeTest() {
-    this.router.navigate(['/test/exams']);
+    this.router.navigate(['/test/select-exam']);
   }
 
   chartOptions:any = {

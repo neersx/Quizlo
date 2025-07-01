@@ -1,4 +1,4 @@
-import { mergeApplicationConfig, ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { mergeApplicationConfig, ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
 import { provideServerRendering, withRoutes } from '@angular/ssr';
 import { appConfig } from './app.config';
 import { serverRoutes } from './app.routes.server';
@@ -12,6 +12,7 @@ import { provideAnimations, provideNoopAnimations } from '@angular/platform-brow
 
 const serverConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideServerRendering(withRoutes(serverRoutes)),
     provideRouter(routes),
     provideAnimations(),

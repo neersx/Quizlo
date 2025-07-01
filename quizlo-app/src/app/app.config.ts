@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -8,10 +8,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/sharedmodule';
 import { AuthInterceptor } from './services/interceptors/auth-interceptor';
-import 'zone.js';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(), 
     // 1) Router
     provideRouter(routes),
 

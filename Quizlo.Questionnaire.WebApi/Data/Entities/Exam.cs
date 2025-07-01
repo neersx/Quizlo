@@ -24,6 +24,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [MaxLength(50)]
         public string Type { get; set; }
 
+        public bool IsTrending { get; set; } = false;
+
         [Required]
         public DateTime CreatedAt { get; set; }
 
