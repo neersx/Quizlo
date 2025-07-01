@@ -41,10 +41,10 @@
                             class="ti ti-arrow-narrow-right ms-1"></i> </a>
                 </div>
 
-                <div *ngIf="exams && exams.length > 0" class="row">
+                <div *ngIf="exams && exams.length > 0"  class="row">
                     @for (card of exams; track $index) {
-                    <div class="col-xxl-4 col-md-4 col-sm-6 col-12">
-                        <spk-shortcut-card [title]="card.code" [subtitle]="card.name" >
+                    <div *ngIf="card" class="col-xxl-4 col-md-4 col-sm-6 col-12">
+                        <spk-shortcut-card [title]="card.code" [subtitle]="card.name"  [cssClass]="card.cssClass || 'card-bg-primary'">
                         </spk-shortcut-card>
                     </div>
                     }
@@ -60,7 +60,7 @@
 <div class="row">
     <div class="col-xl-9">
         <div class="mb-4 d-flex align-items-center justify-content-between">
-            <h6 class="fw-medium mb-0">Categories</h6>
+            <h6 class="fw-medium mb-0">Our Blog Posts Categories</h6>
             <a href="javascript:void(0);" class="fs-12 text-muted tag-link"> View All<i
                     class="ti ti-arrow-narrow-right ms-1"></i> </a>
         </div>
@@ -81,15 +81,15 @@
             </div>
         </div>
         <div class="mb-4 d-flex align-items-center justify-content-between">
-            <h6 class="fw-medium mb-0">Recommendations :</h6>
-            <a href="javascript:void(0);" class="fs-12 text-muted tag-link"> View All<i
+            <h6 class="fw-medium mb-0">Most Popular Blogs :</h6>
+            <a href="/blogs" class="fs-12 text-muted tag-link"> View All<i
                     class="ti ti-arrow-narrow-right ms-1"></i> </a>
         </div>
         <div class="row">
-            @for (podcast of podcasts; track $index) {
+            @for (podcast of blogs; track $index) {
             <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                <spk-recommendations-card [imageUrl]="podcast.imageUrl" [title]="podcast.title"
-                    [author]="podcast.author" [duration]="podcast.duration" [plays]="podcast.plays">
+                <spk-recommendations-card [imageUrl]="podcast.image" [title]="podcast.title"
+                    [author]="podcast.author" [duration]="podcast.date">
                 </spk-recommendations-card>
             </div>
             }
@@ -102,49 +102,25 @@
                     <div class="card-body p-0">
                         <div class="d-flex align-items-start gap-3 mb-0 p-3 pb-3">
                             <div class="flex-fill">
-                                <span class="fw-medium d-block text-fixed-white">PLAYING NOW</span>
+                                <span class="fw-medium d-block text-fixed-white">TOP BLOG</span>
                             </div>
                         </div>
                         <div class="text-center mb-5 pb-1">
                             <span class="avatar avatar-rounded mb-4 podcast-playing-now-avatar shadow">
-                                <img src="./assets/images/media/podcast/1.jpg" alt="">
+                                <img src="https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp" alt="">
                             </span>
                             <a href="javascript:void(0);">
-                                <h6 class="fw-medium mb-1 text-fixed-white">Random Ramblings</h6>
+                                <h6 class="fw-medium mb-1 text-fixed-white">Top Mistakes
+                                    Students Make in Mock Tests — and How to Fix Them</h6>
                             </a>
-                            <span class="text-fixed-white op-8 fs-12">By Alice Mumbleton</span>
+                            <span class="text-fixed-white op-8 fs-12">By Sushant Gupta</span>
                         </div>
                         <div class="p-3 py-4 bg-white-transparent">
                             <div class="row justify-content-center">
-                                <div class="col-xl-9">
-                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 lh-1">
-                                        <a href="javascript:void(0);">
-                                            <i class="ri-repeat-2-fill fs-5 text-fixed-white"></i>
-                                        </a>
-                                        <a href="javascript:void(0);">
-                                            <i class="ri-skip-back-line fs-5 text-fixed-white"></i>
-                                        </a>
-                                        <a href="javascript:void(0);">
-                                            <i class="ri-play-circle-line fs-3 text-fixed-white"></i>
-                                        </a>
-                                        <a href="javascript:void(0);">
-                                            <i class="ri-skip-forward-line fs-5 text-fixed-white"></i>
-                                        </a>
-                                        <a href="javascript:void(0);">
-                                            <i class="ri-shuffle-fill fs-5 text-fixed-white"></i>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex gap-3 align-items-center mt-3">
-                                        <div class="fs-12 text-fixed-white">12.25</div>
-                                        <div class="progress progress-xs progress-animate podcast-playing-progress"
-                                            role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar progress-bar-secondary bg-fixed-white"
-                                                style="width: 80%">
-                                            </div>
-                                        </div>
-                                        <div class="fs-12 text-fixed-white">23.45</div>
-                                    </div>
+                                <div class="text-center">
+                                    <a href="/blogs/blog-details" class="btn btn-warning me-1 ng-star-inserted">Read More >> </a>
                                 </div>
+                              
                             </div>
                         </div>
                     </div>

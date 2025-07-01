@@ -13,4 +13,5 @@ export class SpkShortcutCardComponent {
   @Input() subtitle: string = '';
   @Input() itemCount: number = 0;
   @Input() bgColor: string = '';
+  @Input() cssClass?: string = 'card-bg-warning';
 }

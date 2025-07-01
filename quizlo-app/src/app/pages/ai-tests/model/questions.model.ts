@@ -5,6 +5,7 @@ export interface Exam {
     country?: string;
     category?: string;
     type?: string;
+    cssClass: string;
     createdAt: string;
     createdByUserId?: number;
   }
