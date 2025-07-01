@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CarouselModule, OwlOptions, SlidesOutputData } from 'ngx-owl-carousel-o';
 import { SpkBlogImageCardComponent } from '../../../@spk/reusable-pages/spk-blog-image-card/spk-blog-image-card.component';
@@ -8,9 +8,10 @@ import { SharedModule } from '../../../shared/sharedmodule';
   selector: 'app-blogs-list',
   imports: [SharedModule,RouterModule,CarouselModule,SpkBlogImageCardComponent], 
   templateUrl: './blogs-list.html',
-  styleUrl: './blogs-list.scss'
+  styleUrl: './blogs-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BlogsList {
+export class BlogsList implements OnInit {
   customOptions: OwlOptions = {
     loop: true,
     rtl: false,
@@ -41,20 +42,25 @@ export class BlogsList {
 
   activeSlides!: SlidesOutputData;
 
+  constructor( private cdr: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.getPassedData(this.activeSlides);
+    this.cdr.markForCheck();
+  }
+
   slidesStore: any[] = [
     {
-      src: './assets/images/media/blog/1.jpg',
+      src: 'https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp',
     },
     {
-      src: './assets/images/media/blog/3.jpg',
-    },
-    {
-      src: './assets/images/media/blog/2.jpg',
+      src: 'https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp',
     },
   ];
 
   getPassedData(data: SlidesOutputData) {
     this.activeSlides = data;
+    this.cdr.detectChanges();
   }
 
   blogPosts1 = [
@@ -90,7 +96,7 @@ export class BlogsList {
       title: "AI in Education: Transforming Exam Preparation",
       urlName:"ai-in-education",
       description: "Explore how artificial intelligence is revolutionizing the educational landscape, making learning smarter and more efficient.",
-      image: "/https://miro.medium.com/v2/resize:fit:1024/1*5Kais5SIlrU8ZmBfH5cSEw.jpeg",
+      image: "https://miro.medium.com/v2/resize:fit:1024/1*5Kais5SIlrU8ZmBfH5cSEw.jpeg",
       author: "Quizlo Ai",
       date: "25, Jun 2025 - 11:30",
       heartColor: 'ri-heart-line text-danger',
