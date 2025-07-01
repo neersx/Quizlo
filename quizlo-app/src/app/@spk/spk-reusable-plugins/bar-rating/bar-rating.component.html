@@ -1,0 +1,22 @@
+<ng-template #starTemplate let-fill="fill">
+    <span class="star" [class.full]="fill === 100">
+      <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+    </span>
+  </ng-template>
+
+  <ngb-rating
+    [(rate)]="selected"
+    (hover)="onHover($event)"
+    (hover)="onHover($event)" (leave)="onLeave()" [readonly]="readonly"
+    [readonly]="readonly"
+    [starTemplate]="starTemplate"
+    [max]="maxStars"
+    class="ng-rating me-3"
+    [formControl]="control"
+    (rateChange)="onRateChange($event)"
+  >
+  <ng-content></ng-content>
+</ngb-rating>
+
+
+

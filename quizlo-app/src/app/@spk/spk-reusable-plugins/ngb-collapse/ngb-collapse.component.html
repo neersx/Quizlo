@@ -1,0 +1,19 @@
+<div class="collapse-container">
+    @for(item of items;track $index){
+
+        <ng-container >
+          <p class="mb-0">
+            <button class="btn btn-{{item.collapseClass}} collapsed mb-2 me-1" (click)="item.isCollapsed = !item.isCollapsed" role="button"
+              [attr.aria-expanded]="!item.isCollapsed" [attr.aria-controls]="item.targetId">
+              {{ item.triggerText }}
+            </button>
+          </p>
+          <div [ngbCollapse]="item.isCollapsed" [attr.id]="item.targetId" [horizontal]="item.horizontal" >
+            <div class="card card-body mb-0" [style.width]="item.width">
+              {{ item.bodyText }}
+            </div>
+          </div>
+        </ng-container>
+    }
+  </div>
+  

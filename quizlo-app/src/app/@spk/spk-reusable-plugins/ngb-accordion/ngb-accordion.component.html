@@ -1,0 +1,20 @@
+<!-- accordion.component.html -->
+<div ngbAccordion [closeOthers]="closeOthers" [class]="accodionClass" [id]="accordionId">
+    @for(item of accordionItems;track $index){
+        <ng-container>
+          <div ngbAccordionItem [class]="item.accodionItemClass" [collapsed]="item.collapsed">
+            <h2 ngbAccordionHeader [id]="item.headingId">
+              <button ngbAccordionButton type="button" data-bs-toggle="collapse" [attr.data-bs-target]="item.collapseId" [attr.aria-expanded]="!item.collapsed" [attr.aria-controls]="item.collapseId">
+                {{ item.title }}
+              </button>
+            </h2>
+            <div [id]="item.collapseId" ngbAccordionCollapse [attr.aria-labelledby]="item.headingId">
+              <div ngbAccordionBody [innerHTML]="item.body">
+                {{ item.body }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+    }
+  </div>
+  

@@ -1,0 +1,226 @@
+<app-page-header firstTitle="Pages" title="Blog" title1="Blog" activeTitle="Blog" ></app-page-header>
+
+           <!-- Start:: row-1 -->
+    <div class="row">
+        <div class="col-xxl-9">
+            <div class="row">
+                <div class="col-xxl-5">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card custom-card overflow-hidden">
+                                <div class="card-body p-0">
+                                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                                        <a routerLink="/pages/blog/blogdetails" class="stretched-link"></a>
+                                        <div class="carousel-inner rounded-0">
+                                            <owl-carousel-o [options]="customOptions" [dir]="customOptions.rtl ? 'rtl' : 'ltr'" >
+                                                @for(slide of slidesStore;track $index){
+                
+                                                    <ng-container >
+                                                      <ng-template carouselSlide>
+                                                        <!-- <div class="rtl:dir-rtl"> -->
+                                                            <div  class="carousel-item active">
+                                                                <img  [src]="slide.src"  src="./assets/images/media/blog/1.jpg" class="d-block w-100" alt="...">
+                                                            </div>
+                                                        <!-- </div> -->
+                                                        </ng-template>
+                                                        </ng-container>
+                                                }
+                                                    </owl-carousel-o>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                        <h5 class="fw-semibold lh-base"><a routerLink="/pages/blog/blogdetails">The Serene Beauty of Nature's Landscape</a></h5>
+                                        <p class="mb-3">Nature offers breathtaking landscapes, from lush green valleys to towering mountain peaks. The harmony of colors, textures, and forms creates a sense of peace and wonder.<a href="javascript:void(0);" class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read More</a></p>
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center flex-wrap gap-1">
+                                                <div class="avatar avatar-md avatar-rounded me-2">
+                                                    <img src="./assets/images/faces/1.jpg" alt="">
+                                                </div>
+                                                <div>
+                                                    <p class="mb-0 fw-medium">Emily Davis</p>
+                                                    <p class="text-muted fs-12 mb-0">25, Mar 2024 - 14:20</p>
+                                                </div>
+                                            </div>
+                                            <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
+                                                <i class="ri-heart-line text-danger"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="card custom-card overflow-hidden">
+                                <div class="card-body p-0">
+                                    <img src="./assets/images/media/blog/6.jpg" class="d-block w-100" alt="...">
+                                    <div class="p-3">
+                                        <h5 class="fw-semibold"><a routerLink="/pages/blog/blogdetails">Harmony in the Wilderness</a></h5>
+                                        <p class="mb-3">Nature offers breathtaking landscapes, from lush green valleys</p>
+                                        <p class="mb-3">The wilderness is a sanctuary of life, where plants and creatures coexist in perfect balance.<a href="javascript:void(0);" class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read More</a></p>
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center flex-wrap gap-1">
+                                                <div class="avatar avatar-md avatar-rounded me-2">
+                                                    <img src="./assets/images/faces/12.jpg" alt="">
+                                                </div>
+                                                <div>
+                                                    <p class="mb-0 fw-medium">Michael Smith</p>
+                                                    <p class="text-muted fs-12 mb-0">24, Mar 2024 - 12:45</p>
+                                                </div>
+                                            </div>
+                                            <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
+                                                <i class="ri-heart-line text-danger"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-7">
+                    <div class="row">
+                        @for (post of blogPosts1; track $index) {
+                            <div class="col-xl-6">
+                        <spk-blog-image-card
+          [imageUrl]="post.image"
+          [imageClass]="post.imageClass"
+          [title]="post.title"
+          [pageStyleClass]="post.pageStyleClass"
+          [description]="post.description"
+          [author]="post.author"
+          [TextColor]="post.TextColor"
+          [authorImageUrl]="post.avatar"
+          [date]="post.date"
+          [heartColor]="post.heartColor"
+        ></spk-blog-image-card>
+        </div>
+                        }
+                        
+                    </div>
+                </div>
+                @for (post of blogPosts; track $index) {
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <spk-blog-image-card
+  [imageUrl]="post.imageUrl"
+  [title]="post.title"
+  [description]="post.description"
+  [TextColor]="post.TextColor"
+  [author]="post.author"
+  [authorImageUrl]="post.authorImageUrl"
+  [date]="post.date"
+  [heartColor]="post.heartColor"
+  [badgeColor]="post.badgeColor"
+></spk-blog-image-card>
+</div>
+                }
+            </div>
+        </div>
+        <div class="col-xxl-3">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card custom-card overflow-hidden">
+                        <div class="card-header justify-content-between">
+                            <div class="card-title">
+                                Categories
+                            </div>
+                            <a href="javascript:void(0);" class="btn btn-light btn-wave btn-sm text-muted waves-effect waves-light">All<i class="ti ti-arrow-narrow-right ms-1 rtl-transform-icon d-inline-block"></i></a>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush list-style">
+                                @for (category of categories; track $index) {
+                                <li class="list-group-item">
+                                  <div class="d-flex align-items-center justify-content-between">
+                                    <span class="fw-medium">
+                                      <i [class]="category.icon + ' fs-14 p-1 rounded-2 me-2 d-inline-block align-middle lh-1 ' + category.iconBg + ' text-fixed-white'"></i>
+                                      {{ category.name }}
+                                    </span>
+                                    <span [class]="category.badgeClass">{{ category.count }}</span>
+                                  </div>
+                                </li>
+                               }
+                              </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="card custom-card overflow-hidden">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <div class="card-title">
+                                Related Blogs
+                            </div>
+                            <div>
+                                <span class="badge bg-primary-transparent rounded-pill">15</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                @for (comment of comments; track $index) {
+                                <li class="list-group-item border-bottom-0">
+                                  <div class="d-flex flew-wrap align-items-center gap-2">
+                                    <span class="avatar avatar-xl flex-shrink-0 me-1">
+                                      <img [src]="comment.avatar" class="img-fluid" alt="...">
+                                    </span>
+                                    <div class="flex-fill text-wrap">
+                                      <a href="javascript:void(0);" class="fs-14 fw-medium mb-0">{{ comment.name }}</a>
+                                      <p class="mb-1 text-muted">
+                                        {{ comment.message }}
+                                      </p>
+                                      <span class="text-muted fs-10">{{ comment.timestamp }}</span>
+                                    </div>
+                                  </div>
+                                </li>
+                            }
+                              </ul>
+                            <div class="p-3 pt-1">
+                                <button class="btn mx-auto btn-primary btn-loader text-center justify-content-center w-100">
+                                    <span class="me-2">Load More</span>
+                                    <span class="loading"><i class="ri-loader-4-line fs-16 align-middle"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="card custom-card overflow-hidden">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <div class="card-title">
+                                Featured Blogs
+                            </div>
+                            <div>
+                                <span class="badge bg-primary-transparent">23 Blogs</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                @for (user of users; track $index) {
+                                <li class="list-group-item">
+                                  <div class="d-flex flex-wrap align-items-center gap-3">
+                                    <span class="avatar avatar-lg">
+                                      <img [src]="user.avatar" class="img-fluid" alt="...">
+                                    </span>
+                                    <div class="flex-fill">
+                                      <a href="javascript:void(0);" class="fs-14 fw-medium mb-1">{{ user.name }}</a>
+                                      <p class="mb-0 mt-1">{{ user.description }}</p>
+                                    </div>
+                                    <div>
+                                      <button class="btn btn-icon btn-light btn-sm rtl-rotate">
+                                        <i class="ri-arrow-right-s-line"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </li>
+                            }
+                              </ul>
+                            <div class="p-3 pt-1 mt-1">
+                                <button class="btn mx-auto btn-primary-light btn-loader text-center justify-content-center w-100">
+                                    <span class="me-2">Load More</span>
+                                    <span class="loading"><i class="ri-loader-4-line fs-16 align-middle"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End:: row-1 -->

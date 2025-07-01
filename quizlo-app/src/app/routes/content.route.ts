@@ -9,12 +9,12 @@ export const content: Routes = [
       {path:'', loadChildren : () => import('../routes/main-routing.module').then(r => r.pagesRoutingModule)},
     ],
   },
-  // {
-  //   path: '',
-  //   children: [
-  //     {path:'catalogue', loadChildren : () => import('../../../app/components/catalogue/catalogue.routes').then(r => r.CatalougeRoutingModule)},
-  //   ],
-  // },
+  {
+    path: '',
+    children: [
+      {path:'', loadChildren : () => import('../../app/routes/blogs-routing.module').then(r => r.blogsRoutingModule)},
+    ],
+  },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(content)],

@@ -1,0 +1,32 @@
+<div class="{{mainClass}} "  gallerize>
+    @for (image of imageData; track $index) {
+    <div class="{{colClass}}">
+           <a href="javascript:void(0);" class="glightbox card {{lightboxClass}}" data-gallery="gallery1">
+               <img  [src]="image.srcUrl" alt="image" >
+               @if(imageTextContent){
+                   <div class="p-3 text-center bg-light"> 
+                    <div class="d-flex align-items-center gap-1 justify-content-center mb-1"> 
+                        <div class="avatar avatar-xs flex-shrink-0">
+                            <img [src]="image.textImgUrl" alt=""> 
+                        </div> 
+                        <div class="figure-caption fs-14 fw-medium text-default">{{image.Title}}</div> 
+                    </div> 
+                    <div class="fs-12 text-muted">{{image.ComponyTitle}}</div> 
+                </div>
+               }
+           </a>
+       </div>
+    }
+    @if(badge){
+        @for (image of imageData1; track $index) {
+        <a href="javascript:void(0);" class="glightbox card border-0 mb-0" data-gallery="gallery1" data-title="Compact Laptop (1/5)" data-type="image" data-draggable="true"> 
+            <div class="ecommerce-gallery d-block text-center">
+                <span class=" badge bg-info tag-badge">{{badge}}</span>
+                <img [src]="image.srcUrl" alt="image" class="">
+                <span class="p-3 py-2 rounded text-fixed-white view-lightbox ">View More Images</span>
+            </div>
+            </a>
+        }
+    }
+    <ng-content></ng-content>
+</div>

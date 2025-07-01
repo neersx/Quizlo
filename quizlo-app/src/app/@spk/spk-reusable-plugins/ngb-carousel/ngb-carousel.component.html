@@ -1,0 +1,24 @@
+<div [id]="carouselId" class="carousel slide {{carouselClass}}" data-bs-ride="carousel">
+    <ngb-carousel class="carousel-inner" [interval]="interval" [showNavigationArrows]="showNavigationArrows"
+        [showNavigationIndicators]="showNavigationIndicators">
+        @for(image of images; track $index){
+        @if(image.title){
+        <ng-template ngbSlide>
+            <img [src]="image.src" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="text-fixed-white">{{image.title}}</h5>
+                <p>{{image.description}}</p>
+            </div>
+        </ng-template>
+        }
+        @else {
+        <ng-template ngbSlide>
+
+            <div class="carousel-item" class="carousel-item active">
+                <img [src]="image" class="d-block w-100" alt="...">
+            </div>
+        </ng-template>
+        }
+        }
+    </ngb-carousel>
+</div>
