@@ -1,7 +1,7 @@
 <app-page-header firstTitle="Exams" title="Start Your Test" title1="Test" activeTitle="Start your test"></app-page-header>
 <!-- Start::row-1 -->
 <div class="row">
-    <div class="col-xxl-12">
+    <div *ngIf="testDetails && !canLoadQuestions" class="col-xxl-12">
         <div class="card">
             <div class="card-body">
                 <div class="card custom-card overflow-hidden job-info-banner">
@@ -79,16 +79,6 @@
                 <p class="op-9">Welcome to <b>Quizlo Ai</b> – your gateway to practicing for entrance exams and many more. This online mock test is designed to provide a real exam experience and help you evaluate your preparation effectively. Please read the following guidelines carefully before starting your test.</p>
                 <p class="mb-4 op-9">By attempting this test, you agree to adhere to the platform's rules to ensure a fair and smooth assessment process. All your responses will be recorded and reviewed as per the platform’s assessment criteria.</p>
                 
-                <!-- <h6 class="fw-medium">General Terms & Conditions</h6>
-                <ol class="list-group border-0 list-unstyled list-group-numbered mb-3">
-                    <li class="list-group-item border-0 py-1">By starting the test, you confirm that all the information provided is accurate and the attempt is solely by you.</li>
-                    <li class="list-group-item border-0 py-1">You must not use any unfair means, reference materials, or seek external help during the test.</li>
-                    <li class="list-group-item border-0 py-1">Do not attempt to refresh, close, or switch browser tabs/windows during the test. Such actions may lead to automatic test submission or disqualification.</li>
-                    <li class="list-group-item border-0 py-1">All responses submitted are final. Once you submit the test, no changes can be made.</li>
-                    <li class="list-group-item border-0 py-1">Any attempt to misuse the platform or manipulate test results will result in disqualification and possible suspension of your account.</li>
-                    <li class="list-group-item border-0 py-1">By participating, you agree to Quizlo Ai’s Privacy Policy and Terms of Service.</li>
-                </ol>
-         -->
                 <h6 class="fw-medium">Test Guidelines</h6>
                 <ol class="list-group border-0 list-unstyled list-group-numbered mb-0">
                     <li class="list-group-item border-0 py-1">Carefully read each question and all available options before selecting your answer.</li>
@@ -100,10 +90,6 @@
                 </ol>
             </div>
         </div>
-
-        <div *ngIf="testDetails" class="card custom-card">
-            <app-test-window [testData]="testDetails"></app-test-window>
-        </div>
         <div class="card custom-card border shadow-none bg-primary-transparent border border-primary border-opacity-10">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -113,15 +99,24 @@
                                 Please review all instructions before starting your test.</h5>
                         <span class="text-muted mb-0 fs-14">Best of luck with your exam! Stay calm, stay focused, and do your best!</span>
                     </div>
-                    <div class="col-lg-4 text-end">
-                        <a href="javascript:void(0);" class="btn btn-success btn-lg" role="button">
+                    <div class="col-lg-4">
+                        <a *ngIf="!isLoadingQuestions" (click)="startTestNow()" class="btn btn-success btn-lg" role="button">
                             <i class="bi bi-arrow-right-circle me-2 align-middle d-inline-block"></i>Start Test Now
                         </a>
+                        <button *ngIf="isLoadingQuestions" class="btn btn-success-light btn-lg" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                            Loading Questions
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
+    <div class="col-xxl-12" *ngIf="testDetails && canLoadQuestions">
+        <div  class="card custom-card">
+            <app-test-window [testData]="testDetails"></app-test-window>
+        </div>
+    </div>
+
 </div>
 <!-- End::row-1 -->

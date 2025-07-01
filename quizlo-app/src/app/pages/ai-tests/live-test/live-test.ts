@@ -21,6 +21,7 @@ import { take } from 'rxjs';
 })
 export class LiveTest {
   thumbsSwiper: any;
+  canLoadQuestions = false;
   testDetails: TestDetailsModel = {
     id: 0,
     title: '',
@@ -40,6 +41,7 @@ export class LiveTest {
   };
   
   questions: QuestionModel[] = [];
+  isLoadingQuestions = false;
   error: string = '';
   payload: any = {};
 
@@ -101,10 +103,10 @@ export class LiveTest {
       duration: '00:00:00'        // e.g. HH:MM:SS
     };
 
-    this.startTest(this.payload);
+    this.loadTest(this.payload);
   }
 
-  startTest(payload: any) {
+  loadTest(payload: any) {
     this.testService.createTest(payload).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
@@ -125,6 +127,16 @@ export class LiveTest {
         this.error = err.message || 'Server error';
       }
     });
+  }
+
+  startTestNow() {
+    this.isLoadingQuestions = true;
+    setTimeout(() => {
+      this.canLoadQuestions = true;
+      this.isLoadingQuestions = false;
+      this.cdr.detectChanges();
+    }, 3000);
+    this.cdr.markForCheck();
   }
 
   // Helper to parse options from JSON string
