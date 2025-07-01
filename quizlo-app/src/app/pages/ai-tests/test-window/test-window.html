@@ -1,165 +1,150 @@
 <!-- bitsat-questionnaire.component.html -->
 <div *ngIf="testData" class="questionnaire-container">
-    <!-- Timer -->
-    <div class="timer" [class.warning]="timeRemaining() < 300">
-      ⏰ {{ formattedTime() }}
-    </div>
-  
-    <!-- Main Container -->
-    <div class="container">
-      <!-- Header -->
-      <div class="header">
-        <h1>{{ testData.title }}</h1>
-        <p>{{ testData.examName }}</p>
-        
-        <div class="test-info">
-          <div class="info-card">
-            <h3>Language</h3>
-            <p>{{ testData.language }}</p>
-          </div>
-          <div class="info-card">
-            <h3>Duration</h3>
-            <p>{{ testData.duration }}</p>
-          </div>
-          <div class="info-card">
-            <h3>Total Marks</h3>
-            <p>{{ testData.totalMarks }}</p>
-          </div>
-          <div class="info-card">
-            <h3>Difficulty</h3>
-            <p>{{ testData.difficulty }}</p>
-          </div>
+  <!-- Timer -->
+  <div class="timer" [class.warning]="timeRemaining() < 300">
+    ⏰ {{ formattedTime() }}
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>{{ testData.title }}</h1>
+      <p>{{ testData.examName }}</p>
+
+      <div class="test-info">
+        <div class="info-card">
+          <h3>Language</h3>
+          <p>{{ testData.language }}</p>
         </div>
-        
-        <!-- Progress Bar -->
-        <div *ngIf="testData && testData.questions" class="progress-container">
-          <div class="progress-info">
-            <span>Progress: {{ answeredQuestionsCount() }}/{{ testData.questions.length }}</span>
-            <span>{{ progressPercentage() | number:'1.0-0' }}%</span>
+        <div class="info-card">
+          <h3>Duration</h3>
+          <p>{{ testData.duration }}</p>
+        </div>
+        <div class="info-card">
+          <h3>Total Marks</h3>
+          <p>{{ testData.totalMarks }}</p>
+        </div>
+        <div class="info-card">
+          <h3>Difficulty</h3>
+          <p>{{ testData.difficulty }}</p>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div *ngIf="testData && testData.questions" class="progress-container">
+        <div class="progress-info">
+          <span>Progress: {{ answeredQuestionsCount() }}/{{ testData.questions.length }}</span>
+          <span>{{ progressPercentage() | number:'1.0-0' }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="progressPercentage()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Content -->
+    <div class="test-content" *ngIf="!isTestSubmitted()">
+      <!-- Question Navigation -->
+      <div class="question-navigation">
+        <button *ngFor="let question of testData?.questions; let i = index" class="nav-btn"
+          [class.active]="currentQuestionIndex() === i" [class.answered]="answers()['question_' + question.id]"
+          (click)="goToQuestion(i)">
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <!-- Current Question -->
+      <div class="question-container" *ngIf="currentQuestion as question">
+        <div class="question-card">
+          <div class="question-header">
+            <span class="question-number">Question {{ question.questionNo }}</span>
+            <span class="difficulty-badge" [ngClass]="getDifficultyClass(question.difficulty)">
+              {{ question.difficulty }}
+            </span>
+            <span *ngIf="question.marks" class="question-marks">
+              {{ question.marks }} Mark{{ question.marks > 1 ? 's' : '' }}
+            </span>
           </div>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="progressPercentage()"></div>
+
+          <!-- Multiple Select Indicator -->
+          <div class="multiple-select-note" *ngIf="question?.isMultipleSelect">
+            📝 Multiple selections allowed for this question
+          </div>
+
+          <div class="question-text">{{ question?.questionText }}</div>
+
+          <!-- Options -->
+          <div *ngIf="question.options" class="options-container">
+            <label *ngFor="let option of question.options; let i = index" class="option form-check-label"
+              [class.selected]="isOptionSelected(question.id ?? -1, charFromCode(i))">
+
+              <!-- Single Select (Radio) -->
+              <div class="form-check" *ngIf="!question.isMultipleSelect">
+                <input type="radio" class="form-check-input" [name]="'question_' + question.id"
+                  [value]="charFromCode(i)" [checked]="isOptionSelected(question.id ?? -1, charFromCode(i))"
+                  (change)="onSingleOptionSelect(question.id ?? -1, charFromCode(i))">
+                <span class="option-text">{{ option }}</span>
+              </div>
+              <!-- Multiple Select (Checkbox) -->
+              <div class="form-check" *ngIf="question?.isMultipleSelect">
+                <input type="checkbox" class="form-check-input"
+                  [name]="'question_' + question?.id + '_' + charFromCode(i)" [value]="charFromCode(i)"
+                  [checked]="isOptionSelected(question?.id ?? -1, charFromCode(i))"
+                  (change)="onMultipleOptionSelect(question?.id ?? -1, charFromCode(i), $event)">
+                <span class="option-text">{{ option }}</span>
+              </div>
+            </label>
+          </div>
+
+
+          <!-- Navigation Buttons -->
+          <div class="question-navigation-buttons">
+            <button class="nav-button prev-btn" (click)="previousQuestion()" [disabled]="currentQuestionIndex() === 0">
+              ← Previous
+            </button>
+
+            <button *ngIf="testData && testData.questions && testData.questions.length" class="nav-button next-btn"
+              (click)="nextQuestion()" [disabled]="currentQuestionIndex() === (testData.questions.length) - 1">
+              Next →
+            </button>
           </div>
         </div>
       </div>
-  
-      <!-- Test Content -->
-      <div class="test-content" *ngIf="!isTestSubmitted()">
-        <!-- Question Navigation -->
-        <div class="question-navigation">
-          <button 
-            *ngFor="let question of testData?.questions; let i = index"
-            class="nav-btn"
-            [class.active]="currentQuestionIndex() === i"
-            [class.answered]="answers()['question_' + question.id]"
-            (click)="goToQuestion(i)">
-            {{ i + 1 }}
-          </button>
-        </div>
-  
-        <!-- Current Question -->
-        <div class="question-container" *ngIf="currentQuestion as question">
-          <div class="question-card">
-            <div class="question-header">
-              <span class="question-number">Question {{ question.questionNo }}</span>
-              <span class="difficulty-badge" [ngClass]="getDifficultyClass(question.difficulty)">
-                {{ question.difficulty }}
-              </span>
-              <span *ngIf="question.marks" class="question-marks">
-                {{ question.marks }} Mark{{ question.marks > 1 ? 's' : '' }}
-              </span>
-            </div>
-  
-            <!-- Multiple Select Indicator -->
-            <div class="multiple-select-note" *ngIf="question?.isMultipleSelect">
-              📝 Multiple selections allowed for this question
-            </div>
-  
-            <div class="question-text">{{ question?.questionText }}</div>
-  
-            <!-- Options -->
-            <div *ngIf="question.options" class="options-container">
-              <label *ngFor="let option of question.options; let i = index"
-                     class="option form-check-label"
-                     [class.selected]="isOptionSelected(question.id ?? -1, charFromCode(i))">
-            
-                <!-- Single Select (Radio) -->
-                <div class="form-check" *ngIf="!question.isMultipleSelect">
-                  <input 
-                    type="radio"
-                    class="form-check-input"
-                    [name]="'question_' + question.id"
-                    [value]="charFromCode(i)"
-                    [checked]="isOptionSelected(question.id ?? -1, charFromCode(i))"
-                    (change)="onSingleOptionSelect(question.id ?? -1, charFromCode(i))">
-                  <span class="option-text">{{ option }}</span>
-                </div>
-                <!-- Multiple Select (Checkbox) -->
-                <div class="form-check" *ngIf="question?.isMultipleSelect">
-                  <input 
-                    type="checkbox"
-                    class="form-check-input"
-                    [name]="'question_' + question?.id + '_' + charFromCode(i)"
-                    [value]="charFromCode(i)"
-                    [checked]="isOptionSelected(question?.id ?? -1, charFromCode(i))"
-                    (change)="onMultipleOptionSelect(question?.id ?? -1, charFromCode(i), $event)">
-                  <span class="option-text">{{ option }}</span>
-                </div>
-              </label>
-            </div>
-            
-  
-            <!-- Navigation Buttons -->
-            <div class="question-navigation-buttons">
-              <button 
-                class="nav-button prev-btn"
-                (click)="previousQuestion()"
-                [disabled]="currentQuestionIndex() === 0">
-                ← Previous
-              </button>
-             
-              <button *ngIf="testData && testData.questions && testData.questions.length"
-                class="nav-button next-btn"
-                (click)="nextQuestion()"
-                [disabled]="currentQuestionIndex() === (testData.questions.length) - 1">
-                Next → 
-              </button>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Submit Section -->
-        <div class="submit-container">
+
+      <!-- Submit Section -->
+      <div class="row submit-container">
+        <div class="submit-card">
           <div class="submit-info">
             <p>Answered: {{ answeredQuestionsCount() }}/{{ testData.questions?.length }} questions</p>
             <p>Time Remaining: {{ formattedTime() }}</p>
           </div>
-          <button 
-            class="submit-btn"
-            (click)="submitTest()"
-            [disabled]="answeredQuestionsCount() === 0">
+          <button class="submit-btn" (click)="submitTest()" [disabled]="answeredQuestionsCount() === 0">
             Submit Test
           </button>
-        </div>
-      </div>
   
-      <!-- Test Completed -->
-      <div *ngIf="testData && testData.questions && isTestSubmitted()" class="test-completed">
-        <div class="completion-message">
-          <h2>🎉 Test Completed Successfully!</h2>
-          <p>Your test has been submitted and is being processed.</p>
-          <div class="completion-stats">
-            <div class="stat">
-              <span class="stat-value">{{ answeredQuestionsCount() }}</span>
-              <span class="stat-label">Questions Answered</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value">{{ testData.questions.length }}</span>
-              <span class="stat-label">Total Questions</span>
-            </div>
-          </div>
-          <button class="reset-btn" (click)="resetTest()">Take Test Again</button>
         </div>
+
       </div>
     </div>
   </div>
+
+  <!-- Test Completed -->
+  <div *ngIf="testData && testData.questions && isTestSubmitted()" class="test-completed">
+    <div class="completion-message">
+      <h2>🎉 Test Completed Successfully!</h2>
+      <p>Your test has been submitted and is being processed.</p>
+      <div class="completion-stats">
+        <div class="stat">
+          <span class="stat-value">{{ answeredQuestionsCount() }}</span>
+          <span class="stat-label">Questions Answered</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ testData.questions.length }}</span>
+          <span class="stat-label">Total Questions</span>
+        </div>
+      </div>
+      <button class="reset-btn" (click)="resetTest()">Take Test Again</button>
+    </div>
+  </div>
+</div>
