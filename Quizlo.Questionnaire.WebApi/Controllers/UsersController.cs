@@ -6,7 +6,7 @@ using Quizlo.Questionnaire.WebApi.Services;
 
 namespace Quizlo.Questionnaire.WebApi.Controllers
 {
-    public class RegisterDto { public string Email { get; set; } public string Password { get; set; } public string FirstName { get; set; } public string LastName { get; set; } public string PhoneNumber { get; set; } }
+    public class RegisterDto { public string Email { get; set; } public string Password { get; set; } public string FullName { get; set; } public string PhoneNumber { get; set; } }
     public class LoginDto { public string Email { get; set; } public string Password { get; set; } }
 
     [ApiController]
@@ -42,7 +42,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register([FromBody] RegisterDto dto)
         {
-            var user = await _userService.CreateUserAsync(dto.Email, dto.Password, dto.FirstName, dto.LastName, dto.PhoneNumber);
+            var user = await _userService.CreateUserAsync(dto.Email, dto.Password, dto.FullName.Split(' ')[0], dto.FullName.Split(' ')[1], dto.PhoneNumber);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 

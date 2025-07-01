@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'spk-shortcut-card',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './spk-shortcut-card.component.html',
   styleUrl: './spk-shortcut-card.component.scss'
 })

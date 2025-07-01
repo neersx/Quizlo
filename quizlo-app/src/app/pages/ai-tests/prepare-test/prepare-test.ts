@@ -18,7 +18,7 @@ import { Exam } from '../model/questions.model';
     SpkReusableTablesComponent],
   templateUrl: './prepare-test.html',
   styleUrl: './prepare-test.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class PrepareTest implements OnInit {
   exams: Exam[] = [];
@@ -30,7 +30,7 @@ export class PrepareTest implements OnInit {
     this.fetchExams();
   }
 
-  fetchExams(page = 1, size = 10): void {
+  fetchExams(page = 1, size = 6): void {
     this.loading = true;
     this.error = '';
     this.examService.getExams(page, size).subscribe({
@@ -41,7 +41,7 @@ export class PrepareTest implements OnInit {
             value: exam.id!,
             code: exam.code
           }));
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load exams';
         }
@@ -51,6 +51,7 @@ export class PrepareTest implements OnInit {
       },
       complete: () => {
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

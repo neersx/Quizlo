@@ -11,7 +11,8 @@
             </span>
             <div>
               <span class="fw-medium">{{ title }}</span>
-              <span class="fs-12 d-block fw-medium text-muted">{{ itemCount }} Items</span>
+              <span *ngIf="itemCount > 0" class="fs-12 d-block fw-medium text-muted">{{ itemCount }} Items</span>
+              <!-- <span class="fs-12 d-block fw-medium text-muted">{{ subtitle }} Items</span> -->
             </div>
           </div>
         </a>

@@ -8,6 +8,7 @@ import { Router }                          from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../../models/api-response.model';
 import { User } from '../../shared/services/auth.service';
+import { RegisterDto } from '../../pages/identity/models/register.model';
 
 interface LoginData {
   token:     string;
@@ -71,6 +72,10 @@ export class AuthService {
           return user;
         })
       );
+  }
+
+  register(registerDto: RegisterDto): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register`, registerDto);
   }
 
   /** Clears storage and redirects home */

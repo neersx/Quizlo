@@ -18,27 +18,27 @@
                                     </div>
                                     <div *ngIf="testDetails">
                                         <h5 class="fw-medium mb-0 d-flex align-items-center">
-                                          <a href="javascript:void(0);" class="">{{ testDetails?.examCode }}</a>
+                                          <a href="javascript:void(0);" class="">{{ testDetails.examCode }}</a>
                                         </h5>
                                         <a href="javascript:void(0);" class="fs-12 text-muted">
-                                          <i class="bi bi-building"></i> {{ testDetails?.examName }}
+                                          <i class="bi bi-building"></i> {{ testDetails.examName }}
                                         </a>
                                         <div class="d-flex mt-3">
                                           <div>
                                             <p class="mb-1"><i class="bi bi-geo-alt me-1"></i>Online, INDIA</p>
                                             <p *ngIf="testDetails?.questions"><i class="bi bi-briefcase me-1"></i>
-                                              Total Questions: {{ testDetails?.questions?.length }}</p>
+                                              Total Questions: {{ testDetails.questions?.length }}</p>
                                           </div>
                                           <div class="ms-4">
                                             <p class="mb-1"><i class="bi bi-coin me-1"></i>
-                                              <span class="fw-medium">Language: {{ testDetails?.language }}</span>
+                                              <span class="fw-medium">Language: {{ testDetails.language }}</span>
                                             </p>
-                                            <p><i class="bi bi-mortarboard  me-1"></i>Subject : {{ testDetails?.subject }}</p>
+                                            <p><i class="bi bi-mortarboard  me-1"></i>Subject : {{ testDetails.subject }}</p>
                                           </div>
                                         </div>
                                         <div class="popular-tags">
                                           <a href="javascript:void(0);" class="badge rounded-pill bg-light text-warning me-1">
-                                            <i class="bi bi-clock me-1"></i>{{ testDetails?.difficulty }}
+                                            <i class="bi bi-clock me-1"></i>{{ testDetails.difficulty }}
                                           </a>
                                           <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default me-1">
                                             <i class="bi bi-briefcase me-1"></i>Not Started

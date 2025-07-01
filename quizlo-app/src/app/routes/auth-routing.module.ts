@@ -12,6 +12,13 @@ export const admin: Routes = [
           ),
       },
       {
+        path: 'register',
+        loadComponent: () =>
+          import('../pages/identity/register/register').then(
+            (m) => m.Register
+          ),
+      },
+      {
         path: 'reset-password',
         loadComponent: () =>
           import('../pages/identity/reset-password/reset-password').then(

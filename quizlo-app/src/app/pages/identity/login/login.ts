@@ -1,10 +1,10 @@
 // src/app/auth/login.component.ts
 import { Component, OnInit, OnDestroy, Inject, Renderer2, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser, DOCUMENT }                      from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule }         from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute }                                            from '@angular/router';
-import { NgbModule }                                                       from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService }                                                   from 'ngx-toastr';
+import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/identity/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../../shared/sharedmodule';
@@ -23,7 +23,7 @@ import { SharedModule } from '../../../shared/sharedmodule';
     { provide: ToastrService, useClass: ToastrService },
     AuthService
   ],
-    templateUrl: './login.html',
+  templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login implements OnInit, OnDestroy {
@@ -42,7 +42,7 @@ export class Login implements OnInit, OnDestroy {
     public readonly authService: AuthService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   errorMessage = ''; // validation _error handle
   _error: { name: string; message: string } = { name: '', message: '' }; // for firbase _error handle
@@ -66,7 +66,7 @@ export class Login implements OnInit, OnDestroy {
 
     // Build the form
     this.loginForm = this.fb.group({
-      email:    ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -104,5 +104,9 @@ export class Login implements OnInit, OnDestroy {
         this.toastr.error(msg, 'Login Error');
       }
     });
+  }
+
+  register(): void {
+    this.router.navigate(['/auth/register']);
   }
 }

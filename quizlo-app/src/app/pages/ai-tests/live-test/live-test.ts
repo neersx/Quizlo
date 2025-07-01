@@ -13,7 +13,7 @@ import { take } from 'rxjs';
 
 @Component({
   selector: 'app-live-test',
-  imports: [SharedModule,NgbTooltipModule,FormsModule, CommonModule, TestWindow],
+  imports: [SharedModule, NgbTooltipModule, FormsModule, CommonModule, TestWindow],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './live-test.html',
   styleUrl: './live-test.scss',
@@ -39,31 +39,31 @@ export class LiveTest {
     questions: [],
     difficulty: ''
   };
-  
+
   questions: QuestionModel[] = [];
   isLoadingQuestions = false;
   error: string = '';
   payload: any = {};
 
   constructor(
-    private cdr: ChangeDetectorRef, 
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private testService: TestService,
-    private readonly auth : AuthService,
+    private readonly auth: AuthService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const examId   = Number(params['examId']);
+      const examId = Number(params['examId']);
       const language = params['language'];
       const code = params['code'];
       const examName = params['examName'];
-      const subject  = params['subject'];
+      const subject = params['subject'];
       const difficulty = params['difficulty'];
 
-      this.testDetails = { ...this.testDetails, examCode: code, examName, language, subject, difficulty, examId};
+      this.testDetails = { ...this.testDetails, examCode: code, examName, language, subject, difficulty, examId };
 
       if (!examId || !language) {
         this.error = 'Missing examId or language';
@@ -87,7 +87,8 @@ export class LiveTest {
 
   private createAndNavigateToTest(examId: number, language: string, examCode: string = '', examName: string = '', subject: string = 'All', difficulty: number = 3) {
     const today = new Date();
-    const formatted = today.toLocaleDateString('en-IN', { day:   '2-digit', month: '2-digit', year:  'numeric'
+    const formatted = today.toLocaleDateString('en-IN', {
+      day: '2-digit', month: '2-digit', year: 'numeric'
     });
     // e.g. "28/06/2025"
     const title = `${examCode}-${formatted.replace(/\//g, '-')} Mock Test`;
@@ -140,13 +141,13 @@ export class LiveTest {
   }
 
   // Helper to parse options from JSON string
-parseOptions(optionsJson: string): string[] {
-  try {
-    return JSON.parse(optionsJson);
-  } catch {
-    return [];
+  parseOptions(optionsJson: string): string[] {
+    try {
+      return JSON.parse(optionsJson);
+    } catch {
+      return [];
+    }
   }
-}
 
   setThumbsSwiper(swiper: any) {
     this.thumbsSwiper = swiper;
@@ -156,6 +157,6 @@ parseOptions(optionsJson: string): string[] {
   ngAfterViewInit(): void {
 
   }
-  
+
 }
 
