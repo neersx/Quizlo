@@ -84,35 +84,72 @@ export class BlogDetails implements OnInit, OnDestroy {
   }
 
   blogs = [
-    { 
-      imgSrc: './assets/images/media/blog/11.jpg', 
-      category: 'Nature', 
-      title: 'The Wonders of Nat...', 
-      date: '18 Jan 2024, 15:46', 
+    {
+      title: "Effective Exam Preparation Techniques",
+      urlName: "effective-exam-preparation",
+      description: "Discover proven methods to maximize your study time and improve your performance in competitive exams.",
+      image: "/assets/images/media/blog/4.jpg",
+      author: "Quizlo Ai",
+      date: "01, Jul 2025 - 09:00",
+      heartColor: 'ri-heart-line text-danger',
+      pageStyleClass: 'p-3 pb-0 rounded-5',
+      imageClass: 'rounded-3',
+      textColor: 'primary',
+      avatar: "./assets/images/faces/5.jpg",
+      link: "/blogs/blog-details/effective-exam-preparation",
+      category: "exam-prep-tips",
+       color: 'text-danger'
+    },
+    {
+      title: "Cracking NEET: Tips from Toppers",
+      urlName: "cracking-neet-tips",
+      description: "Gain valuable insights and strategies directly from NEET toppers to enhance your exam readiness.",
+      image: "/assets/images/media/blog/4.jpg",
+      author: "Quizlo Ai",
+      date: "28, Jun 2025 - 15:00",
+      heartColor: 'ri-heart-line text-danger',
+      pageStyleClass: 'p-3 pb-0 rounded-5',
+      imageClass: 'rounded-3',
+      textColor: 'success',
+      avatar: "./assets/images/faces/5.jpg",
+      link: "/blogs/blog-details/cracking-neet-tips",
+      category: "exam-insights",
       color: 'text-primary' 
     },
-    { 
-      imgSrc: './assets/images/media/blog/12.jpg', 
-      category: 'Tourism', 
-      title: 'Embarking on a Touris...', 
-      date: '20 Feb 2024, 03:03', 
-      color: 'text-success' 
+    {
+      title: "AI in Education: Transforming Exam Preparation",
+      urlName: "ai-in-education",
+      description: "Explore how artificial intelligence is revolutionizing the educational landscape, making learning smarter and more efficient.",
+      image: "/assets/images/media/blog/12.jpg",
+      author: "Quizlo Ai",
+      date: "25, Jun 2025 - 11:30",
+      heartColor: 'ri-heart-line text-danger',
+      pageStyleClass: 'p-3 pb-0 rounded-5',
+      imageClass: 'rounded-3',
+      textColor: 'info',
+      avatar: "./assets/images/faces/5.jpg",
+      link: "/blogs/blog-details/ai-in-education",
+      category: "tech-learning",
+       color: 'text-success'
     },
-    { 
-      imgSrc: './assets/images/media/blog/10.jpg', 
-      category: 'Technology', 
-      title: 'Navigating the Digit...', 
-      date: '05 Feb 2024, 16:23', 
-      color: 'text-info' 
-    },
-    { 
-      imgSrc: './assets/images/media/blog/13.jpg', 
-      category: 'Networking', 
-      title: 'More Designing on ...', 
-      date: '13 Mar 2024, 20:14', 
-      color: 'text-secondary' 
+    {
+      title: "Stay Motivated During Exam Preparation",
+      urlName: "stay-motivated-exam-prep",
+      description: "Learn techniques to maintain motivation and effectively manage stress during your exam preparation journey.",
+      image: "./assets/images/media/blog/11.jpg",
+      author: "Quizlo Ai",
+      date: "22, Jun 2025 - 14:45",
+      heartColor: 'ri-heart-line text-danger',
+      pageStyleClass: 'p-3 pb-0 rounded-5',
+      imageClass: 'rounded-3',
+      textColor: 'warning',
+      avatar: "./assets/images/faces/5.jpg",
+      link: "/blogs/blog-details/stay-motivated-exam-prep",
+      category: "motivation",
+       color: 'text-danger'
     }
   ];
+  
   categories = [
     { icon: 'ri-brush-fill', label: 'Desiging', count: 13, iconBgColor: 'bg-primary',bgColor: 'bg-primary-transparent', textColor: 'text-fixed-white' },
     { icon: 'ri-pencil-fill', label: 'Modern', count: 36, iconBgColor: 'bg-success',bgColor: 'bg-success-transparent', textColor: 'text-fixed-white' },

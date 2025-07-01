@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 export const admin: Routes = [
   {path:'blogs',children:[
     {
-      path: 'list',
+      path: '',
       loadComponent: () =>
         import('../pages/blogs/blogs-list/blogs-list').then((m) => m.BlogsList),
     },
