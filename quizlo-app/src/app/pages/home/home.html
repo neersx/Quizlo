@@ -212,52 +212,7 @@
                             </a>
                         </li>
                         <!-- End::slide -->
-                        <!-- Start::slide -->
-                        <li class="slide has-sub" [ngClass]="expande ? 'open' : ''">
-                            <a href="javascript:void(0);" class="side-menu__item" [class.active]="expande"
-                                [class.active]="isActive" (click)="toggleExpand()">
-                                <span class="side-menu__label me-2">More</span>
-                                <i class="fe fe-chevron-right side-menu__angle op-8"></i>
-                            </a>
-                            <ul class="slide-menu child1" [class.active]="expande"
-                                [ngStyle]="{ display: expande ? 'block' : 'none' }">
-                                <li class="slide">
-                                    <a (click)="scroll(services)" value="services" class="side-menu__item">Services</a>
-                                </li>
-                                <li class="slide">
-                                    <a (click)="scroll(features)" value="features" class="side-menu__item">Features</a>
-                                </li>
 
-                                <li class="slide has-sub" [class.open]="expande1">
-                                    <a href="javascript:void(0);" class="side-menu__item" (click)="expande1 = !expande1"
-                                        [class.open]="expande1">Level-2
-                                        <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                    <ul class="slide-menu child2" [class.active]="expande1"
-                                        [ngStyle]="{ 'display': expande1 ? 'block' : 'none' }">
-                                        <li class="slide">
-                                            <a href="javascript:void(0);" class="side-menu__item">Level-2-1</a>
-                                        </li>
-                                        <li class="slide has-sub" (click)="expande2 = !expande2"
-                                            [class.open]="expande2">
-                                            <a href="javascript:void(0);" class="side-menu__item">Level-2-2
-                                                <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                            <ul class="slide-menu child3" [class.active]="expande2"
-                                                [ngStyle]="{ 'display': expande2 ? 'block' : 'none' }">
-                                                <li class="slide">
-                                                    <a href="javascript:void(0);"
-                                                        class="side-menu__item">Level-2-2-1</a>
-                                                </li>
-                                                <li class="slide has-sub">
-                                                    <a href="javascript:void(0);"
-                                                        class="side-menu__item">Level-2-2-2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- End::slide -->
                         <!-- Start::slide -->
                         <li class="slide">
                             <a (click)="scroll(pricing)" value="pricing" class="side-menu__item">
@@ -265,7 +220,23 @@
                             </a>
                         </li>
                         <!-- End::slide -->
-                        
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a href="/test/select-exam" class="side-menu__item">
+                                <span class="side-menu__label">Take Test</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a href="/test" class="side-menu__item">
+                                <span class="side-menu__label">All Exams</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
                         <!-- Start::slide -->
                         <li class="slide">
                             <a (click)="scroll(testimonials)" value="testimonials" class="side-menu__item">
@@ -1147,7 +1118,8 @@
                             <a routerLink="/dashboards/sales" class="d-inline-block mb-2"><img
                                     src="./assets/images/brand-logos/desktop-white.png" width="100px" alt="img"></a>
                             <p class="mb-4 op-8 fs-15">
-                                Quizlo Ai is a leading online platform that provides AI-generated mock tests. Contact us on below detail.
+                                Quizlo Ai is a leading online platform that provides AI-generated mock tests. Contact us
+                                on below detail.
                             </p>
                             <ul class="list-unstyled mb-0">
                                 <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link"><i
@@ -1156,7 +1128,8 @@
                                             class="fe fe-mail me-2 d-inline-block fs-16"></i>quizloai&#64;gmail.com</a>
                                 </li>
                                 <li class="list-item"><a href="javascript:void(0);" class="footer-link"><i
-                                            class="fe fe-map-pin me-2 d-inline-block fs-16"></i>Mumbai, Maharastra, INDIA </a>
+                                            class="fe fe-map-pin me-2 d-inline-block fs-16"></i>Mumbai, Maharastra,
+                                        INDIA </a>
                                 </li>
                             </ul>
                             <div class="footer-btn-list d-flex align-items-center mt-3">
@@ -1179,7 +1152,7 @@
                             <ul class="list-unstyled footer-icon mb-0">
                                 <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">About
                                         company</a></li>
-                               
+
                                 <li class="list-item mb-2"><a routerLink="/pages/blog/blog" class="footer-link">News
                                         &amp; Blog</a></li>
                                 <li class="list-item mb-2"><a href="javascript:void(0);"

@@ -148,34 +148,45 @@
 
             <!-- Start::header-content-right -->
             <div class="header-content-right">
-            <!-- Start::header-element -->
-            <li class="header-element dropdown" ngbDropdown >
-                <!-- Start::header-link|dropdown-toggle -->
-                <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <img src="../../../../assets/images/faces/15.jpg"  alt="img" class="avatar custom-header-avatar avatar-rounded">
+                <!-- Start::header-element -->
+                <li class="header-element dropdown" ngbDropdown>
+                    <!-- Start::header-link|dropdown-toggle -->
+                    <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle"
+                        id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <img src="../../../../assets/images/faces/15.jpg" alt="img"
+                                    class="avatar custom-header-avatar avatar-rounded">
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <!-- End::header-link|dropdown-toggle -->
-                <ul ngbDropdownMenu class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                    <li>
-                        <div ngbDropdownItem class="dropdown-item text-center border-bottom">
-                            <span>
-                                "User Neeraj"
-                            </span>
-                            <span class="d-block fs-12 text-muted">Designer</span>
-                        </div>
-                    </li>
-                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-user p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Profile</a></li>
-                    <!-- <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-database p-1 rounded-circle bg-primary-transparent klist me-2 fs-16"></i>File Manger<span class="badge bg-success text-fixed-white ms-auto fs-9">2</span></a></li>
+                    </a>
+                    <!-- End::header-link|dropdown-toggle -->
+                    <ul ngbDropdownMenu
+                        class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end"
+                        aria-labelledby="mainHeaderProfile">
+                        <li>
+                            <div ngbDropdownItem class="dropdown-item text-center border-bottom">
+                                <span>
+                                    "User Neeraj"
+                                </span>
+                                <span class="d-block fs-12 text-muted">Designer</span>
+                            </div>
+                        </li>
+                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                href="javascript:void(0);"><i
+                                    class="fe fe-user p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Profile</a>
+                        </li>
+                        <!-- <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-database p-1 rounded-circle bg-primary-transparent klist me-2 fs-16"></i>File Manger<span class="badge bg-success text-fixed-white ms-auto fs-9">2</span></a></li>
                     <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-mail p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Mail Inbox</a></li>
                     <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-settings p-1 rounded-circle bg-primary-transparent ings me-2 fs-16"></i>Settings</a></li> -->
-                    <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>Log Out</a></li>
-                </ul>
-            </li>  
-            <!-- End::header-element -->
+                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                href="javascript:void(0);"><i
+                                    class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>Log
+                                Out</a></li>
+                    </ul>
+                </li>
+                <!-- End::header-element -->
 
             </div>
             <!-- End::header-content-right -->
@@ -211,82 +222,37 @@
                     <ul class="main-menu">
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item" value="home" >
+                            <a href="/home" class="side-menu__item" value="home">
                                 <span class="side-menu__label">Home</span>
                             </a>
                         </li>
                         <!-- End::slide -->
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item" value="about">
-                                <span class="side-menu__label">About</span>
-                            </a>
-                        </li>
-                        <!-- End::slide -->
-                        <!-- Start::slide -->
-                        <li class="slide has-sub" [ngClass]="expande ? 'open' : ''">
-                            <a href="javascript:void(0);" class="side-menu__item" [class.active]="expande"
-                                [class.active]="isActive" (click)="toggleExpand()">
-                                <span class="side-menu__label me-2">More</span>
-                                <i class="fe fe-chevron-right side-menu__angle op-8"></i>
-                            </a>
-                            <ul class="slide-menu child1" [class.active]="expande"
-                                [ngStyle]="{ display: expande ? 'block' : 'none' }">
-                                <li class="slide">
-                                    <a value="services" class="side-menu__item">Services</a>
-                                </li>
-                                <li class="slide">
-                                    <a  value="features" class="side-menu__item">Features</a>
-                                </li>
-
-                                <li class="slide has-sub" [class.open]="expande1">
-                                    <a href="javascript:void(0);" class="side-menu__item" (click)="expande1 = !expande1"
-                                        [class.open]="expande1">Level-2
-                                        <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                    <ul class="slide-menu child2" [class.active]="expande1"
-                                        [ngStyle]="{ 'display': expande1 ? 'block' : 'none' }">
-                                        <li class="slide">
-                                            <a href="javascript:void(0);" class="side-menu__item">Level-2-1</a>
-                                        </li>
-                                        <li class="slide has-sub" (click)="expande2 = !expande2"
-                                            [class.open]="expande2">
-                                            <a href="javascript:void(0);" class="side-menu__item">Level-2-2
-                                                <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                            <ul class="slide-menu child3" [class.active]="expande2"
-                                                [ngStyle]="{ 'display': expande2 ? 'block' : 'none' }">
-                                                <li class="slide">
-                                                    <a href="javascript:void(0);"
-                                                        class="side-menu__item">Level-2-2-1</a>
-                                                </li>
-                                                <li class="slide has-sub">
-                                                    <a href="javascript:void(0);"
-                                                        class="side-menu__item">Level-2-2-2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- End::slide -->
-                        <!-- Start::slide -->
-                        <li class="slide">
-                            <a value="pricing" class="side-menu__item">
+                            <a href="/home#pricing" value="pricing" class="side-menu__item">
                                 <span class="side-menu__label">Pricing</span>
                             </a>
                         </li>
                         <!-- End::slide -->
-                        
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a  value="testimonials" class="side-menu__item">
-                                <span class="side-menu__label">Testimonials</span>
+                            <a href="/test/select-exam" class="side-menu__item">
+                                <span class="side-menu__label">Take Test</span>
                             </a>
                         </li>
                         <!-- End::slide -->
+
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a  value="contact" class="side-menu__item">
+                            <a href="/test" class="side-menu__item">
+                                <span class="side-menu__label">All Exams</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a href="/home#contact" value="contact" class="side-menu__item">
                                 <span class="side-menu__label">Contact Us</span>
                             </a>
                         </li>
@@ -343,22 +309,15 @@
                     <ul class="main-menu">
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item">
+                            <a href="/home" class="side-menu__item">
                                 <span class="side-menu__label">Home</span>
-                            </a>
-                        </li>
-                        <!-- End::slide -->
-                        <!-- Start::slide -->
-                        <li class="slide">
-                            <a class="side-menu__item">
-                                <span class="side-menu__label">About</span>
                             </a>
                         </li>
                         <!-- End::slide -->
 
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item">
+                            <a href="/home#pricing" class="side-menu__item">
                                 <span class="side-menu__label">Pricing</span>
                             </a>
                         </li>
@@ -366,14 +325,30 @@
 
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item">
-                                <span class="side-menu__label">Testimonials</span>
+                            <a href="/test/select-exam" class="side-menu__item">
+                                <span class="side-menu__label">Take Test</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a href="/test" class="side-menu__item">
+                                <span class="side-menu__label">All Exams</span>
                             </a>
                         </li>
                         <!-- End::slide -->
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item">
+                            <a href="/blogs" class="side-menu__item">
+                                <span class="side-menu__label">Blogs</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a href="/home#contact" class="side-menu__item">
                                 <span class="side-menu__label">Contact Us</span>
                             </a>
                         </li>
@@ -384,40 +359,60 @@
                             width="24" height="24" viewBox="0 0 24 24">
                             <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
                         </svg></div>
- 
-                      <!-- Start::header-content-right -->
-            <div class="header-content-right">
-                <!-- Start::header-element -->
-                <li class="header-element dropdown" ngbDropdown >
-                    <!-- Start::header-link|dropdown-toggle -->
-                    <a href="javascript:void(0);" ngbDropdownToggle class="header-link" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <img src="../../../../assets/images/faces/15.jpg" alt="img" class="avatar custom-header-avatar avatar-rounded">
-                            </div>
-                        </div>
-                    </a>
-                    <!-- End::header-link|dropdown-toggle -->
-                    <ul ngbDropdownMenu class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                        <li>
-                            <div ngbDropdownItem class="dropdown-item text-center border-bottom">
-                                <span>
-                                    "User Neeraj"
-                                </span>
-                                <span class="d-block fs-12 text-muted">Designer</span>
-                            </div>
-                        </li>
-                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-user p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Profile</a></li>
-                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-database p-1 rounded-circle bg-primary-transparent klist me-2 fs-16"></i>File Manger<span class="badge bg-success text-fixed-white ms-auto fs-9">2</span></a></li>
-                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-mail p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Mail Inbox</a></li>
-                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-settings p-1 rounded-circle bg-primary-transparent ings me-2 fs-16"></i>Settings</a></li>
-                        <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>Log Out</a></li>
-                    </ul>
-                </li>  
 
-    
-                </div>
-                <!-- End::header-content-right -->
+                    <!-- Start::header-content-right -->
+                    <div class="header-content-right">
+                        <!-- Start::header-element -->
+                        <li class="header-element dropdown" ngbDropdown>
+                            <!-- Start::header-link|dropdown-toggle -->
+                            <a href="javascript:void(0);" ngbDropdownToggle class="header-link" id="mainHeaderProfile"
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <img src="../../../../assets/images/faces/15.jpg" alt="img"
+                                            class="avatar custom-header-avatar avatar-rounded">
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- End::header-link|dropdown-toggle -->
+                            <ul ngbDropdownMenu
+                                class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end"
+                                aria-labelledby="mainHeaderProfile">
+                                <li>
+                                    <div ngbDropdownItem class="dropdown-item text-center border-bottom">
+                                        <span>
+                                            "User Neeraj"
+                                        </span>
+                                        <span class="d-block fs-12 text-muted">Designer</span>
+                                    </div>
+                                </li>
+                                <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                        href="javascript:void(0);"><i
+                                            class="fe fe-user p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Profile</a>
+                                </li>
+                                <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                        href="javascript:void(0);"><i
+                                            class="fe fe-database p-1 rounded-circle bg-primary-transparent klist me-2 fs-16"></i>File
+                                        Manger<span class="badge bg-success text-fixed-white ms-auto fs-9">2</span></a>
+                                </li>
+                                <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                        href="javascript:void(0);"><i
+                                            class="fe fe-mail p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Mail
+                                        Inbox</a></li>
+                                <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                        href="javascript:void(0);"><i
+                                            class="fe fe-settings p-1 rounded-circle bg-primary-transparent ings me-2 fs-16"></i>Settings</a>
+                                </li>
+                                <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                        href="javascript:void(0);"><i
+                                            class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>Log
+                                        Out</a></li>
+                            </ul>
+                        </li>
+
+
+                    </div>
+                    <!-- End::header-content-right -->
                 </nav>
                 <!-- End::nav -->
 
@@ -435,7 +430,7 @@
                 <router-outlet></router-outlet>
             </div>
         </section>
-     
+
 
         <!-- Start:: Section-11 -->
         <footer class="footer mt-auto text-fixed-white position-relative">
