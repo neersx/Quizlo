@@ -3,6 +3,7 @@ import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-test-window',
@@ -29,15 +30,16 @@ export class TestWindow implements OnInit, OnDestroy {
   questions: [],
   difficulty: ''
 };
+result : any;
 // Reactive signals for state management
 answers = signal<{ [key: string]: string | string[] }>({});
 timeRemaining = signal<number>(70 * 60); // 70 minutes in seconds
 isTestSubmitted = signal<boolean>(false);
 currentQuestionIndex = signal<number>(0);
 
-constructor(private cdr: ChangeDetectorRef) {  
-
-}
+constructor(private cdr: ChangeDetectorRef, private router: Router) {
+  
+}  
 
 // Timer variables
 private timerInterval: any;
@@ -269,7 +271,7 @@ private processSubmission(submissionData: any): void {
   }
   
 
-  const result = {
+  this.result = {
     totalQuestions: this.testData?.questions?.length,
     answeredQuestions: Object.keys(submissionData.answers).length,
     correctAnswers: correctAnswers,
@@ -278,8 +280,8 @@ private processSubmission(submissionData: any): void {
     percentage: (score / (this.testData?.totalMarks ?? 1)) * 100
   };
 
-  console.log('Test Result:', result);
-  alert(`Test Submitted Successfully!\n\nScore: ${score}/${this.testData.totalMarks}\nCorrect Answers: ${correctAnswers}/${this.testData?.questions?.length}\nPercentage: ${result.percentage.toFixed(2)}%`);
+  console.log('Test Result:', this.result);
+  alert(`Test Submitted Successfully!\n\nScore: ${score}/${this.testData.totalMarks}\nCorrect Answers: ${correctAnswers}/${this.testData?.questions?.length}\nPercentage: ${this.result.percentage.toFixed(2)}%`);
 }
 
 resetTest(): void {
@@ -308,6 +310,11 @@ previousQuestion(): void {
   if (current > 0) {
     this.currentQuestionIndex.set(current - 1);
   }
+}
+
+exitTest(): void {
+  this.resetTest();
+  this.router.navigate(['/test']);
 }
 
 }

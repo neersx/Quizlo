@@ -73,7 +73,33 @@
 
       .info-card {
         background: rgba(255, 255, 255, 0.1);
-        padding: 15px;
+        padding: 5px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+
+        h3 {
+          font-size: 0.9em;
+          opacity: 0.8;
+          margin-bottom: 5px;
+        }
+
+        p {
+          font-size: 1.1em;
+          font-weight: 600;
+          opacity: 1;
+        }
+      }
+    }
+
+    .test-result {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+
+      .result-card {
+        background: rgb(226 119 56);
+        padding: 10px;
         border-radius: 10px;
         backdrop-filter: blur(10px);
 

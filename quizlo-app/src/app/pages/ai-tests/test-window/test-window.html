@@ -31,6 +31,25 @@
         </div>
       </div>
 
+      <div *ngIf="result && testData.questions" class="test-result">
+        <div class="result-card">
+          <h3>Questions Answered</h3>
+          <p>{{ answeredQuestionsCount() }} / {{ testData.questions.length }}</p>
+        </div>
+        <div class="result-card">
+          <h3>Your Test Score</h3>
+          <p>{{ result.score }}/{{ this.testData.totalMarks }}</p>
+        </div>
+        <div class="result-card">
+          <h3>Completed In Duration</h3>
+          <p>{{ result.correctAnswers }} Minutes</p>
+        </div>
+        <div *ngIf="result.percentage" class="result-card">
+          <h3>Percentage</h3>
+          <p>{{ result.percentage.toFixed(2) }}%</p>
+        </div>
+      </div>
+
       <!-- Progress Bar -->
       <div *ngIf="testData && testData.questions" class="progress-container">
         <div class="progress-info">
@@ -130,21 +149,13 @@
   </div>
 
   <!-- Test Completed -->
-  <div *ngIf="testData && testData.questions && isTestSubmitted()" class="test-completed">
-    <div class="completion-message">
-      <h2>🎉 Test Completed Successfully!</h2>
-      <p>Your test has been submitted and is being processed.</p>
-      <div class="completion-stats">
-        <div class="stat">
-          <span class="stat-value">{{ answeredQuestionsCount() }}</span>
-          <span class="stat-label">Questions Answered</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">{{ testData.questions.length }}</span>
-          <span class="stat-label">Total Questions</span>
-        </div>
-      </div>
-      <button class="reset-btn" (click)="resetTest()">Take Test Again</button>
+  <div *ngIf="testData && testData.questions && isTestSubmitted()" class="row submit-container">
+    <div class="submit-card">
+      <h2 style="color: dimgrey;">🎉 Test Completed Successfully!</h2>
+      <!-- <button class="reset-btn" (click)="resetTest()">Take Test Again</button> -->
+      <button class="submit-btn" (click)="exitTest()" [disabled]="answeredQuestionsCount() === 0">
+        Exit Test
+      </button>
     </div>
   </div>
 </div>
