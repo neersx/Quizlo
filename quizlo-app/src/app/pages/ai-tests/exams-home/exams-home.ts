@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from '../../../shared/sharedmodule';
 import { SpkNgSelectComponent } from '../../../@spk/reusable-ui-elements/spk-ng-select/spk-ng-select.component';
 import { Exam } from '../model/questions.model';
 import { ExamService } from '../services/exam-service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DropdownService } from '../../../services/dropdown.service';
 import { Router, RouterModule } from '@angular/router';
 
@@ -26,9 +26,13 @@ export class ExamsHome implements OnInit {
   subjects: any[] = [];
   languages: any[] = [];
   loading = false;
+  loadingTest = false;
   error = '';
 
-  constructor(private cdr: ChangeDetectorRef, private examService: ExamService,  private router: Router, private dropdownService: DropdownService) {}
+  constructor(private cdr: ChangeDetectorRef, 
+    private examService: ExamService,  private router: Router, 
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private dropdownService: DropdownService) {}
 
   ngOnInit() {
     this.fetchLanguageDropdown();
@@ -88,11 +92,32 @@ export class ExamsHome implements OnInit {
 
 
   startTest() {
-    this.loading = true;
+    this.loadingTest = true;
+    setTimeout(() => {
+
+      if(this.isUserLoggedIn()) {
+        this.router.navigate(['/test/live-test'], {
+          queryParams: { examname: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value ?? 3 }
+        });
+      } else {
+        this.router.navigate(['/auth/login'], {
+          queryParams: { returnUrl: this.router.url }
+        });
+      }
+      this.loadingTest = false;
+      this.cdr.markForCheck();
+    }, 2000);
+
     this.error = '';
-    this.router.navigate(['/test/live-test'], {
-      queryParams: { examname: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value ?? 3 }
-    });
+   
+  }
+
+  isUserLoggedIn() : boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+      return !!currentUser;
+    }
+    return false;
   }
 
   handleLanguageChange(value: any | any[]) {

@@ -30,15 +30,21 @@
                                               Total Questions: {{ testDetails.questions?.length }}</p>
                                           </div>
                                           <div class="ms-4">
-                                            <p class="mb-1"><i class="bi bi-coin me-1"></i>
+                                            <p class="mb-1"><i class="bi bi-book me-1"></i>
                                               <span class="fw-medium">Language: {{ testDetails.language }}</span>
                                             </p>
                                             <p><i class="bi bi-mortarboard  me-1"></i>Subject : {{ testDetails.subject }}</p>
                                           </div>
+                                          <div class="ms-4">
+                                            <p class="mb-1"><i class="bi bi-coin me-1"></i>
+                                              <span class="fw-medium">Difficulty: {{ testDetails.difficulty ?? 'Medium' }}</span>
+                                            </p>
+                                          
+                                          </div>
                                         </div>
                                         <div class="popular-tags">
-                                          <a href="javascript:void(0);" class="badge rounded-pill bg-light text-warning me-1">
-                                            <i class="bi bi-clock me-1"></i>{{ testDetails.difficulty }}
+                                          <a href="javascript:void(0);" class="badge rounded-pill bg-light text-primary me-2">
+                                            <i class="bi bi-clock me-1"></i>{{ convertDurationToText(testDetails.duration) }}
                                           </a>
                                           <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default me-1">
                                             <i class="bi bi-briefcase me-1"></i>Not Started
@@ -103,9 +109,9 @@
                         <a *ngIf="!isLoadingQuestions" (click)="startTestNow()" class="btn btn-success btn-lg" role="button">
                             <i class="bi bi-arrow-right-circle me-2 align-middle d-inline-block"></i>Start Test Now
                         </a>
-                        <button *ngIf="isLoadingQuestions" class="btn btn-success-light btn-lg" type="button" disabled>
+                        <button *ngIf="isLoadingQuestions" class="btn btn-success-primary btn-lg" type="button" disabled>
                             <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
-                            Loading Questions
+                            Loading Questions...
                         </button>
                     </div>
                 </div>

@@ -129,6 +129,29 @@ export class LiveTest {
     });
   }
 
+  convertDurationToText(duration: string | undefined): string {
+    if (!duration) {
+      return '';
+    }
+  
+    const [hours, minutes, seconds] = duration.split(':').map(Number);
+    const parts: string[] = [];
+  
+    if (hours > 0) {
+      parts.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`);
+    }
+    if (minutes > 0) {
+      parts.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`);
+    }
+    if (seconds > 0 && hours === 0) {
+      // usually seconds are not shown if hours exist
+      parts.push(`${seconds} ${seconds === 1 ? 'second' : 'seconds'}`);
+    }
+  
+    return parts.join(' ');
+  }
+  
+
   startTestNow() {
     this.isLoadingQuestions = true;
     setTimeout(() => {

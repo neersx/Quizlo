@@ -1,4 +1,4 @@
-<app-page-header firstTitle="Apps" title="Currency Exchange" title1="Crypto"
+<app-page-header firstTitle="Home" title="Select your exam" title1="Test"
     activeTitle="Currency Exchange"></app-page-header>
 <!-- Start::row-1 -->
 <div class="row">
@@ -6,10 +6,9 @@
         <div class="card custom-card currency-exchange-card">
             <div class="card-body p-5 d-flex align-items-center justify-content-center z-1">
                 <div class="container">
-                    <h3 class="text-fixed-white text-center">Buy and Sell Coins without additional fees</h3>
+                    <h3 class="text-fixed-white text-center">Let’s Get You Exam-Ready!</h3>
                     <span class="d-block fs-16 text-fixed-white text-center op-8 mb-4">
-                        Buy now and get +50% extra bonus Minimum pre-sale amount 100 Crypto Coin. We accept BTC
-                        crypto-currency..
+                        Choose your exam preferences to get started on a realistic practice session.
                     </span>
                     <div class="p-3 mb-4 rounded currency-exchange-area">
                         <div class="row gy-3">
@@ -63,7 +62,13 @@
 
                     </div>
                     <div class="text-center">
-                        <a (click)="startTest()" class="btn btn-danger btn-wave">Start Your Test Now</a>
+                     
+                    
+                        <button *ngIf="loadingTest"  class="btn btn-light" type="button" disabled>
+                            <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
+                            Loading you Test. Please wait...
+                        </button>
+                        <button *ngIf="!loadingTest" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-danger btn-wave">Start Your Test Now</button>
                     </div>
                 </div>
             </div>

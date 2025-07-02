@@ -38,7 +38,7 @@ export class TestService {
             "id": 5,
             "title": "IBPS_PO-30-06-2025 Mock Test",
             "language": "English",
-            "subject": "",
+            "subject": "All",
             "duration": "01:00:00",
             "createdAt": "2025-06-30T17:00:50.419866",
             "examId": 8,
