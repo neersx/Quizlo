@@ -51,8 +51,7 @@ export class ExamsHome implements OnInit {
     const exam: any = this.localStorageService.getItem(LocalStorageKeys.UserPreferences);
    
     if (exam && exam.defaultExam) {
-      this.selectedExam = { label: exam.defaultExam.name, value: exam.defaultExam.value, code: exam.defaultExam.code };
-      console.log('User selectedExam:', this.selectedExam);
+      this.selectedExam = { label: exam.defaultExam.label, name: exam.defaultExam.name, value: exam.defaultExam.value, code: exam.defaultExam.code };
     }
 
     this.cdr.markForCheck(); 
@@ -115,7 +114,7 @@ export class ExamsHome implements OnInit {
 
       if(this.isUserLoggedIn()) {
         this.router.navigate(['/test/live-test'], {
-          queryParams: { examname: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value ?? 3 }
+          queryParams: { examName: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value ?? 3 }
         });
       } else {
         this.router.navigate(['/auth/login'], {

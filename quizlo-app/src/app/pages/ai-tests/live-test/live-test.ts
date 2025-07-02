@@ -107,6 +107,7 @@ export class LiveTest {
   }
 
   loadTest(payload: any) {
+    this.isLoadingQuestions = true;
     this.testService.createTest(payload).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
@@ -116,6 +117,7 @@ export class LiveTest {
             ...q,
             options: q.options
           }));
+          this.isLoadingQuestions = false;
           console.log('Test Details:', this.testDetails);
           console.log('Questions:', this.questions);
           this.cdr.detectChanges();

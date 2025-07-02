@@ -6,7 +6,7 @@ export interface LocalStorageValues {
   [LocalStorageKeys.UserPreferences]: {
     theme?: 'light' | 'dark';
     language?: string;
-    defaultExam?: {value: string, code: string, label: string};
+    defaultExam?: {value: string, code: string, label: string, name: string};
     examLanguage?: string;
   };
   [LocalStorageKeys.AppSettings]: {

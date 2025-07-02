@@ -22,8 +22,8 @@ export class TestService {
   }
 
   createTest(request: CreateTestRequest): Observable<any> {
-    // return this.http.post<TestDetailsDto>(this.baseUrl, request);
-    return of(this.mockResponse);
+    return this.http.post<TestDetailsDto>(this.baseUrl, request);
+    // return of(this.mockResponse);
   }
 
   submitTestAnswers(testId: number | undefined, answers: SubmitAnswerDto[]): Observable<TestSubmissionResultDto> {
