@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { TestDetailsDto, CreateTestRequest, TestSubmissionResultDto } from '../model/questions.model';
-import { SubmitAnswerDto } from '../model/answer.model';
+import { AnswerPayload, SubmitAnswerDto } from '../model/answer.model';
 import { ApiResponse } from '../../../models/api-response.model';
 import { TestDetailsModel } from '../model/tests.model';
 
@@ -26,7 +26,7 @@ export class TestService {
     return of(this.mockResponse);
   }
 
-  submitTestAnswers(testId: number, answers: SubmitAnswerDto[]): Observable<TestSubmissionResultDto> {
+  submitTestAnswers(testId: number | undefined, answers: SubmitAnswerDto[]): Observable<TestSubmissionResultDto> {
     const url = `${this.baseUrl}/${testId}/submit`;
     return this.http.post<TestSubmissionResultDto>(url, { answers });
   }

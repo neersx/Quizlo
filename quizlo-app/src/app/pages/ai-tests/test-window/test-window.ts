@@ -2,17 +2,23 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Input,
 import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { AnswerPayload } from '../model/answer.model';
+import { TestService } from '../services/test-service';
+
+type RawAnswers = Record<string, string | string[]>;
+type AnswerSignalType = { [key: string]: string | string[] };
 
 @Component({
   selector: 'app-test-window',
   imports: [CommonModule, FormsModule],
   templateUrl: './test-window.html',
+  providers: [TestService],
   styleUrl: './test-window.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestWindow implements OnInit, OnDestroy {
+  
   @Input() testData: TestDetailsModel = {
     id: 0,
     title: '',
@@ -37,7 +43,9 @@ export class TestWindow implements OnInit, OnDestroy {
   isTestSubmitted = signal<boolean>(false);
   currentQuestionIndex = signal<number>(0);
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router) {
+  constructor(private cdr: ChangeDetectorRef, private router: Router,
+    private testService: TestService
+  ) {
 
   }
 
@@ -163,6 +171,7 @@ export class TestWindow implements OnInit, OnDestroy {
     const currentAnswers = { ...this.answers() };
     currentAnswers[`question_${questionId}`] = optionValue;
     this.answers.set(currentAnswers);
+    console.log(this.answers());
     this.saveAnswers();
   }
 
@@ -214,10 +223,44 @@ export class TestWindow implements OnInit, OnDestroy {
     }
   }
 
+
+  mapAnswersSignalToPayload(raw: AnswerSignalType): AnswerPayload {
+    const answers = Object.entries(raw).map(([key, value]) => {
+      // extract question id from key
+      const idMatch = key.match(/^question_(\d+)$/);
+      const questionId = idMatch ? +idMatch[1] : 0;
+  
+      // always store as array
+      const selectedIds = Array.isArray(value) ? value : [value];
+  
+      return { questionId, selectedIds };
+    });
+  
+    return { answers };
+  }
+
   submitTest(isAutoSubmit: boolean = false): void {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
+
+    const rawAnswers = this.answers();  // read the signal value
+    const payload = this.mapAnswersSignalToPayload(rawAnswers);
+    console.log('payload:', payload);
+
+    // Clear saved answers
+    localStorage.removeItem('bitsat_answers');
+
+    this.testService.submitTestAnswers(this.testData.id, payload.answers).subscribe(
+      (response : any) => {
+      // Mark test as submitted
+      this.isTestSubmitted.set(true);
+        console.log('Test submitted successfully:', response);
+      },
+      (error : any) => {
+        console.error('Error submitting test:', error);
+      }
+    )
 
     const submissionData = {
       testId: this.testData.id,
@@ -226,15 +269,6 @@ export class TestWindow implements OnInit, OnDestroy {
       isAutoSubmit: isAutoSubmit,
       timeSpent: (70 * 60) - this.timeRemaining()
     };
-
-    console.log('Test submitted:', submissionData);
-
-    // Clear saved answers
-    localStorage.removeItem('bitsat_answers');
-
-    // Mark test as submitted
-    this.isTestSubmitted.set(true);
-
     // In a real application, you would send this data to your backend
     this.processSubmission(submissionData);
   }
@@ -281,7 +315,7 @@ export class TestWindow implements OnInit, OnDestroy {
     };
 
     console.log('Test Result:', this.result);
-    alert(`Test Submitted Successfully!\n\nScore: ${score}/${this.testData.totalMarks}\nCorrect Answers: ${correctAnswers}/${this.testData?.questions?.length}\nPercentage: ${this.result.percentage.toFixed(2)}%`);
+    // alert(`Test Submitted Successfully!\n\nScore: ${score}/${this.testData.totalMarks}\nCorrect Answers: ${correctAnswers}/${this.testData?.questions?.length}\nPercentage: ${this.result.percentage.toFixed(2)}%`);
   }
 
   resetTest(): void {
