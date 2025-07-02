@@ -8,6 +8,8 @@ import { ExamService } from '../services/exam-service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DropdownService } from '../../../services/dropdown.service';
 import { Router, RouterModule } from '@angular/router';
+import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
+import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys';
 
 @Component({
   selector: 'app-exams-home',
@@ -32,12 +34,28 @@ export class ExamsHome implements OnInit {
   constructor(private cdr: ChangeDetectorRef, 
     private examService: ExamService,  private router: Router, 
     @Inject(PLATFORM_ID) private platformId: Object,
+    private localStorageService: LocalStorageService,
     private dropdownService: DropdownService) {}
 
   ngOnInit() {
     this.fetchLanguageDropdown();
     this.fetchExams();
+    this.initializeDefaultValues();
     this.cdr.detectChanges(); 
+  }
+
+  initializeDefaultValues() {
+    this.selectedLanguage = 'English';
+    this.selectedDifficulty = { label: 'Mix', value: 'Mix' };
+    this.selectedSubject = 'All';
+    const exam: any = this.localStorageService.getItem(LocalStorageKeys.UserPreferences);
+   
+    if (exam && exam.defaultExam) {
+      this.selectedExam = { label: exam.defaultExam.name, value: exam.defaultExam.value, code: exam.defaultExam.code };
+      console.log('User selectedExam:', this.selectedExam);
+    }
+
+    this.cdr.markForCheck(); 
   }
 
   difficultyOptions = [
@@ -65,7 +83,7 @@ export class ExamsHome implements OnInit {
     });
   }
 
-  fetchExams(page = 1, size = 10): void {
+  fetchExams(page = 1, size = 1000): void {
     this.loading = true;
     this.error = '';
     this.examService.getExams(page, size).subscribe({
@@ -128,6 +146,7 @@ export class ExamsHome implements OnInit {
   handleExamChange(value: any | any[]) {
     this.isSubjectsLoading = true;
     this.selectedExam = value;
+    this.localStorageService.setItem(LocalStorageKeys.UserPreferences, {defaultExam: value});
     if (this.selectedExam) {
       this.examService.getSubjectsByExamId(+this.selectedExam.value)
       .subscribe({
