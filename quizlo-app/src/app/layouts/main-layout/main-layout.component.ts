@@ -8,13 +8,15 @@ import {
   ViewChild,
   PLATFORM_ID,
   inject,
+  Inject,
+  OnInit,
 } from '@angular/core';
 import {
   CommonModule,
   ViewportScroller,
   isPlatformBrowser,
 } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgxColorsModule } from 'ngx-colors';
 import {
   NgbOffcanvas,
@@ -34,7 +36,8 @@ import { SpkLandingFeaturesComponent } from '../../@spk/reusable-pages/spk-landi
 import { SpkLandingServicesCardComponent } from '../../@spk/reusable-pages/spk-landing-services-card/spk-landing-services-card.component';
 import { SpkLandingTeamCardComponent } from '../../@spk/reusable-pages/spk-landing-team-card/spk-landing-team-card.component';
 import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-landing-testimonial/spk-landing-testimonial.component';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from '../../services/identity/auth.service';
+
 
 @Component({
   selector: 'app-main-page-layout',
@@ -59,9 +62,10 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'
 })
-export class MainQuizLayoutComponent {
+export class MainQuizLayoutComponent implements OnInit {
   isYearly: boolean = false;
   localdata: any = localStorage;
+  user: any;
   
   get WindowPreSize(): number[] {
     return [window.innerWidth];
@@ -75,8 +79,12 @@ export class MainQuizLayoutComponent {
     private el: ElementRef,
     private elementRef: ElementRef,
     private sanitizer: DomSanitizer,
-    private viewScroller: ViewportScroller
+    private viewScroller: ViewportScroller,
+    private readonly authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router, private activatedRoute: ActivatedRoute
   ) {
+    this.getCurrentUser();
     document.body.classList.add('landing-body');
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
@@ -106,6 +114,23 @@ export class MainQuizLayoutComponent {
   input1: string = '#00897B';
   scrolled: boolean = false;
   SwitcherService: any;
+
+  ngOninit(): void {
+    this.getCurrentUser();
+  }
+
+  getCurrentUser() {
+    if (isPlatformBrowser(this.platformId)) {
+      const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+      this.user = currentUser;
+      // if (!currentUser) {
+      //   const returnUrl = this.router.url;
+      //   this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
+      //   return;
+      // }
+    }
+  }
+    
 
   setThumbsSwiper(swiper: any) {
     this.thumbsSwiper = swiper;
@@ -424,319 +449,13 @@ export class MainQuizLayoutComponent {
   sanitizeIcon(svg: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
-  aboutCards = [
-    {
-      icon: 'bx bx-layer',
-      iconColor: 'bg-primary-transparent',
-      title: 'Easy to Customize',
-      content:
-        'Magna dolore elitr ut et labore stet dolor tempor at ipsum, amet quis nostrum exercitationem.',
-    },
-    {
-      icon: 'bx bx-package',
-      iconColor: 'bg-secondary-transparent text-secondary',
-      title: 'Simplified Code',
-      content:
-        'At vero eos et accusamus et iusto odio dignissimos ducimus qui quidem rerum facilis reprehenderi.',
-    },
-    {
-      icon: 'bx bx-analyse',
-      iconColor: 'bg-info-transparent text-info',
-      title: 'Multiple Demos',
-      content:
-        'Blanditiis praesentium voluptatum deleniti atque corrupti quos dolores rerum hic tenetur.',
-    },
-  ];
-  basicAccordions = [
-    {
-      title: 'Where can I subscribe to your newsletter?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingOne',
-      collapseId: 'collapseOne',
-      collapsed: false,
-    },
-    {
-      title: 'Where can in edit my address?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingTwo',
-      collapseId: 'collapseTwo',
-      collapsed: true,
-    },
-    {
-      title: 'What are your opening hours?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingThree',
-      collapseId: 'collapseThree',
-      collapsed: true,
-    },
-    {
-      title: 'Do I have the right to return an item?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFour',
-      collapseId: 'collapseFour',
-      collapsed: true,
-    },
-    {
-      title: 'General Terms & Conditions (GTC)',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFive',
-      collapseId: 'collapseFive',
-      collapsed: true,
-    },
-    {
-      title: 'Do I need to create an account to make an order?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingSix',
-      collapseId: 'collapseSix',
-      collapsed: true,
-    },
-  ];
-  basicAccordions1 = [
-    {
-      title: 'General Terms & Conditions (GTC)',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingOne',
-      collapseId: 'collapseOne',
-      collapsed: true,
-    },
-    {
-      title: 'Do I need to create an account to make an order?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingTwo',
-      collapseId: 'collapseTwo',
-      collapsed: true,
-    },
-    {
-      title: 'Where can I subscribe to your newsletter?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingThree',
-      collapseId: 'collapseThree',
-      collapsed: true,
-    },
-    {
-      title: 'Where can in edit my address?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFour',
-      collapseId: 'collapseFour',
-      collapsed: true,
-    },
-    {
-      title: 'What are your opening hours?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFive',
-      collapseId: 'collapseFive',
-      collapsed: true,
-    },
-    {
-      title: 'Do I have the right to return an item?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingSix',
-      collapseId: 'collapseSix',
-      collapsed: false,
-    },
-  ];
- servicecards = [
-  {
-    image: '../../assets/images/exams/jee.jpg',
-    title: 'NEET UG',
-    description: 'AI-generated full-length NEET mocks with real-exam timing, section-wise breakdown, and instant score reports.',
-  },
-  {
-    image: '../../assets/images/exams/main.jpg',
-    title: 'JEE Main',
-    description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
-  },
-  {
-    image: '../../assets/images/exams/jee.jpg',
-    title: 'JEE Advanced',
-    description: 'Replicate the toughest JEE Advanced interface with AI-crafted questions and topic mastery insights.',
-  },
-  {
-    image: '../../assets/images/exams/upsc.jpg',
-    title: 'UPSC Civil Services',
-    description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
-  },
-  {
-    image: '../../assets/images/exams/ssc.jpg',
-    title: 'SSC CGL',
-    description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
-  },
-  {
-    image: '../../assets/images/exams/ibps.jpg',
-    title: 'IBPS PO',
-    description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
-  },
-  {
-    image: 'https://source.unsplash.com/200x200/?rbi',
-    title: 'RBI Grade B',
-    description: 'Fully automated RBI Grade B practice tests, seamless UI, and AI-backed topic-wise analytics.',
-  },
-  {
-    image: 'https://source.unsplash.com/200x200/?gate-exam',
-    title: 'GATE',
-    description: 'AI-powered GATE mock exams with strict time limits, sectional scoring and instant performance dashboards.',
-  },
-];
 
- featuresCard = [
-  {
-    iconClass: 'bi bi-brightness-alt-high',
-    title: 'AI-Generated Question Bank',
-    description: 'Endless, exam-accurate questions created on-the-fly by our AI engine.',
-    textColorClass: 'text-primary',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-speedometer2',
-    title: 'Real-Exam Interface',
-    description: 'Full-screen timed tests that replicate the look & feel of the official exams.',
-    textColorClass: 'text-secondary',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-bar-chart-line',
-    title: 'Instant Performance Analytics',
-    description: 'Detailed topic-wise reports and percentile ranking delivered immediately.',
-    textColorClass: 'text-info',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-sliders',
-    title: 'Adaptive Difficulty',
-    description: 'Questions dynamically adjust in real-time based on your mastery level.',
-    textColorClass: 'text-warning',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-clock-history',
-    title: 'Custom Test Scheduling',
-    description: 'Create recurring mock-test schedules with calendar reminders and streak tracking.',
-    textColorClass: 'text-danger',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-book-half',
-    title: 'Detailed Solutions & Explanations',
-    description: 'Step-by-step answer breakdowns with references to key concepts.',
-    textColorClass: 'text-success',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-phone',
-    title: 'Mobile-Responsive & Offline Mode',
-    description: 'Practice anytime, anywhere—offline downloads let you prep without internet.',
-    textColorClass: 'text-pink',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-people',
-    title: 'Peer-Comparison & Leaderboards',
-    description: 'See how you stack up against fellow aspirants in real-time leaderboards.',
-    textColorClass: 'text-purple',
-    cardClass: 'bg-image add-class',
-  },
-];
 
-  teamMembers = [
-    {
-      name: 'Hadley Kylin',
-      role: 'Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/1.jpg',
-      backgroundColor: 'teal',
-      badgeColor: 'primary',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-    {
-      name: 'Owen Foster',
-      role: 'Board Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/8.jpg',
-      backgroundColor: 'teal',
-      badgeColor: 'success',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-    {
-      name: 'Stephen Roy',
-      role: 'Creative Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/11.jpg',
-      backgroundColor: 'success',
-      badgeColor: 'info',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-    {
-      name: 'Jasmine Della',
-      role: 'Board Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/4.jpg',
-      backgroundColor: 'orange',
-      badgeColor: 'secondary',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-  ];
-  reviews = [
-    {
-      name: 'Jenny Kingston',
-      email: 'jennykingston345@gmail.com',
-      avatar: './assets/images/faces/1.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '16 days ago',
-    },
-    {
-      name: 'Alex Carey',
-      email: 'alexcarey21@gmail.com',
-      avatar: './assets/images/faces/5.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '1 month ago',
-    },
-    {
-      name: 'Brenda Hans',
-      email: 'brendahans@gmail.com',
-      avatar: './assets/images/faces/3.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '12 days ago',
-    },
-    {
-      name: 'Json Taylor',
-      email: 'jsontaylor@gmail.com',
-      avatar: './assets/images/faces/9.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 4.5,
-      daysAgo: '9 days ago',
-    },
-    {
-      name: 'Amanda Nanes',
-      email: 'amandananes212@gmail.com',
-      avatar: './assets/images/faces/8.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '6 days ago',
-    },
-    {
-      name: 'Lucas Tope',
-      email: 'lucastope1999@gmail.com',
-      avatar: './assets/images/faces/10.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '10 days ago',
-    },
-  ];
+logout() {
+  this.authService.logout();
+  this.user = null;
+}
+
 
   eventTriggered: boolean = false;
   screenWidth!: number;

@@ -2,7 +2,9 @@ import {
   Component,
   ElementRef,
   HostListener,
+  Inject,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   inject,
 } from '@angular/core';
@@ -13,6 +15,7 @@ import { AppStateService } from '../../services/app-state.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from '../../../services/identity/auth.service';
+import { isPlatformBrowser } from '@angular/common';
 interface Item {
   id: number;
   name: string;
@@ -44,6 +47,7 @@ export class HeaderComponent implements OnInit {
     public renderer: Renderer2,
     public modalService:NgbModal,
     private readonly authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router, private activatedRoute: ActivatedRoute
   ) {
     this.checkUserLogin();
@@ -52,7 +56,50 @@ export class HeaderComponent implements OnInit {
 
   private offcanvasService = inject(NgbOffcanvas);
 
+    // Search
+    public menuItems!: Menu[];
+    public items!: Menu[];
+    public text!: string;
+    public SearchResultEmpty: boolean = false;
+  
+    ngOnInit(): void {
+      const storedSelectedItem = localStorage.getItem('selectedItem');
+      // this.updateSelectedItem();
+    // If there's no selected item stored, set a default one
+    if (!storedSelectedItem) {
+      this.selectedItem = "Sales Dashboard"; // You can set any default item here
+      localStorage.setItem('selectedItem', this.selectedItem);
+    } else {
+      this.selectedItem = storedSelectedItem;
+    }
+      this.navServices.items.subscribe((menuItems) => {
+        this.items = menuItems;
+      });
+      // To clear and close the search field by clicking on body
+      document.querySelector('.main-content')?.addEventListener('click', () => {
+        this.clearSearch();
+      });
+      this.text = '';
+      this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+        this.updateSelectedItem();
+      });
+  
+    }
 
+getCurrentUser() {
+  const user = this.authService.currentUser;
+  console.log('Current User:', user);
+  if (isPlatformBrowser(this.platformId)) {
+    const currentUser = localStorage.getItem('current_user');
+    if (!currentUser) {
+      alert('You are not logged in');
+      const returnUrl = this.router.url;
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
+      return;
+    }
+  }
+}
+  
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
@@ -282,36 +329,7 @@ export class HeaderComponent implements OnInit {
     event.stopPropagation();
   }
 
-  // Search
-  public menuItems!: Menu[];
-  public items!: Menu[];
-  public text!: string;
-  public SearchResultEmpty: boolean = false;
 
-  ngOnInit(): void {
-   
-    const storedSelectedItem = localStorage.getItem('selectedItem');
-    // this.updateSelectedItem();
-  // If there's no selected item stored, set a default one
-  if (!storedSelectedItem) {
-    this.selectedItem = "Sales Dashboard"; // You can set any default item here
-    localStorage.setItem('selectedItem', this.selectedItem);
-  } else {
-    this.selectedItem = storedSelectedItem;
-  }
-    this.navServices.items.subscribe((menuItems) => {
-      this.items = menuItems;
-    });
-    // To clear and close the search field by clicking on body
-    document.querySelector('.main-content')?.addEventListener('click', () => {
-      this.clearSearch();
-    });
-    this.text = '';
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
-      this.updateSelectedItem();
-    });
-
-  }
   
   private updateSelectedItem() {
     const dashboard = this.activatedRoute.snapshot.firstChild?.url[0]?.path;

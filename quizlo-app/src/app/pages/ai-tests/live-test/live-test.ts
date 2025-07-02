@@ -49,7 +49,6 @@ export class LiveTest {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private testService: TestService,
-    private readonly auth: AuthService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
@@ -70,15 +69,15 @@ export class LiveTest {
         return;
       }
 
-      if (isPlatformBrowser(this.platformId)) {
-        const currentUser = localStorage.getItem('current_user');
-        if (!currentUser) {
-          alert('You are not logged in');
-          const returnUrl = this.router.url;
-          this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
-          return;
-        }
-      }
+      // if (isPlatformBrowser(this.platformId)) {
+      //   const currentUser = localStorage.getItem('current_user');
+      //   if (!currentUser) {
+      //     alert('You are not logged in');
+      //     const returnUrl = this.router.url;
+      //     this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
+      //     return;
+      //   }
+      // }
 
       this.createAndNavigateToTest(examId, language, code, examName, subject, difficulty);
       this.cdr.markForCheck();

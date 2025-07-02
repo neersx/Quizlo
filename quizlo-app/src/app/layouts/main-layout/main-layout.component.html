@@ -358,12 +358,18 @@
                     <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
                             width="24" height="24" viewBox="0 0 24 24">
                             <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
-                        </svg></div>
+                        </svg>
+                    </div>
 
                     <!-- Start::header-content-right -->
                     <div class="header-content-right">
+                       
+                        <a *ngIf="!user" style="color: blue;" routerLink="/auth/login" class="btn btn-wave btn-success">
+                            Sign In
+                        </a>
+                       
                         <!-- Start::header-element -->
-                        <li class="header-element dropdown" ngbDropdown>
+                        <li *ngIf="user" class="header-element dropdown" ngbDropdown>
                             <!-- Start::header-link|dropdown-toggle -->
                             <a href="javascript:void(0);" ngbDropdownToggle class="header-link" id="mainHeaderProfile"
                                 data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -381,16 +387,16 @@
                                 <li>
                                     <div ngbDropdownItem class="dropdown-item text-center border-bottom">
                                         <span>
-                                            "User Neeraj"
+                                            {{user.firstName}} {{user.lastName}}
                                         </span>
-                                        <span class="d-block fs-12 text-muted">Designer</span>
+                                        <span class="d-block fs-12 text-muted">Student</span>
                                     </div>
                                 </li>
                                 <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
                                         href="javascript:void(0);"><i
                                             class="fe fe-user p-1 rounded-circle bg-primary-transparent me-2 fs-16"></i>Profile</a>
                                 </li>
-                                <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
+                                <!-- <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
                                         href="javascript:void(0);"><i
                                             class="fe fe-database p-1 rounded-circle bg-primary-transparent klist me-2 fs-16"></i>File
                                         Manger<span class="badge bg-success text-fixed-white ms-auto fs-9">2</span></a>
@@ -402,17 +408,16 @@
                                 <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
                                         href="javascript:void(0);"><i
                                             class="fe fe-settings p-1 rounded-circle bg-primary-transparent ings me-2 fs-16"></i>Settings</a>
-                                </li>
+                                </li> -->
                                 <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center"
-                                        href="javascript:void(0);"><i
+                                        (click)="logout()"><i
                                             class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>Log
                                         Out</a></li>
                             </ul>
                         </li>
-
-
                     </div>
                     <!-- End::header-content-right -->
+        
                 </nav>
                 <!-- End::nav -->
 
