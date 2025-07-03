@@ -1,5 +1,6 @@
 // src/app/core/models/local-storage-values.model.ts
 
+import { Dropdown } from "../../models/dropdown.model";
 import { LocalStorageKeys } from "./localstorage-keys";
 
 export interface LocalStorageValues {
@@ -7,6 +8,7 @@ export interface LocalStorageValues {
     theme?: 'light' | 'dark';
     language?: string;
     defaultExam?: {value: string, code: string, label: string, name: string};
+    examSubjects?: Dropdown[];
     examLanguage?: string;
   };
   [LocalStorageKeys.AppSettings]: {

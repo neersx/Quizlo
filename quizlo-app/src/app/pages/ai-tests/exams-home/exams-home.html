@@ -17,8 +17,9 @@
                             </div> -->
                             <div class="col-xxl-6 col-12">
                                 <div *ngIf="exams">
+                                    {{ selectedExam | json }}
                                     <spk-ng-select [options]="exams" [selectClass]="''" [clearable]="true"
-                                        [multi]="false" [searchable]="true" [placeholder]="'Select Your Exam'"
+                                        [multi]="false" [searchable]="true" [defaultValue]="selectedExam" [placeholder]="'Select Your Exam'"
                                         [additionalProperties]="{}" [message]="'Exam is mandatory to start the test'"
                                         [messageType]="'info'" (change)="handleExamChange($event)">
                                     </spk-ng-select>
@@ -35,15 +36,6 @@
                             </div>
 
                             <div class="col-xxl-3 col-12">
-                                <spk-ng-select [options]="difficultyOptions" [selectClass]="''" [clearable]="true"
-                                    [multi]="false" [searchable]="false" [placeholder]="'Select Difficulty'"
-                                    [additionalProperties]="{}" (change)="handleDifficultyChange($event)">
-                                </spk-ng-select>
-                            </div>
-                        </div>
-                      
-                        <div class="row gy-3 p-3 mb-4">
-                            <div class="col-xxl-6 col-12">
                                 <div *ngIf="isSubjectsLoading" class="text-left my-4">
                                     <button class="btn btn-default-light" type="button" disabled>
                                         <span class="spinner-border spinner-border-sm align-middle" role="status"
@@ -59,6 +51,8 @@
                                 </div>
                             </div>
                         </div>
+                      
+               
 
                     </div>
                     <div class="text-center">

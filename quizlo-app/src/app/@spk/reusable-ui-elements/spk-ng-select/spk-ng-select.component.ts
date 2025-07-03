@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, Renderer2, SimpleChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -11,11 +11,12 @@ interface Option {
   selector: 'spk-ng-select',
   imports: [CommonModule, NgSelectModule,FormsModule, ReactiveFormsModule],
   templateUrl: './spk-ng-select.component.html',
-  styleUrl: './spk-ng-select.component.scss'
+  styleUrl: './spk-ng-select.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpkNgSelectComponent {
   @Input() options: any = []; // Options for the select
-  @Input() defaultValue: any=[];   // Default value for the select
+  @Input() defaultValue: any;   // Default value for the select
   @Input() id: string='';       // Additional classes
   @Input() mainClass: string='';       // Additional classes
   @Input() maxSelectedItems!: number;       // Additional classes
@@ -40,10 +41,19 @@ image: any;
 onSelectionChange(selected: any): void {
   this.selectedChange.emit(selected);
 }
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
+  constructor(private renderer: Renderer2, private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     this.applyAdditionalProperties();
+    this.cdr.detectChanges();
+  }
+
+  ngOnChanges(changes: any) {
+    if (changes.defaultValue && !changes.defaultValue.firstChange) {
+      // re-assign so ngModel picks it up
+      this.defaultValue = changes.defaultValue.currentValue;
+      this.cdr.detectChanges();
+    }
   }
 
   // Apply additional properties using Renderer2
@@ -67,7 +77,6 @@ onSelectionChange(selected: any): void {
   }
 
   onValueChange(event: any) {
-    console.log('Selected Value:', event);
     this.change.emit(event);
   }
 
@@ -100,6 +109,4 @@ onSelectionChange(selected: any): void {
         return '💬'; // Or: 'fa fa-comment-alt text-secondary'
     }
   }
-  
-  
 }

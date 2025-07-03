@@ -10,6 +10,7 @@ import { DropdownService } from '../../../services/dropdown.service';
 import { Router, RouterModule } from '@angular/router';
 import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
 import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys';
+import { Dropdown } from '../../../models/dropdown.model';
 
 @Component({
   selector: 'app-exams-home',
@@ -25,7 +26,7 @@ export class ExamsHome implements OnInit {
   selectedSubject = '';
   selectedExam: any | null = null;
   exams: Exam[] = [];
-  subjects: any[] = [];
+  subjects: Dropdown[] = [];
   languages: any[] = [];
   loading = false;
   loadingTest = false;
@@ -48,10 +49,12 @@ export class ExamsHome implements OnInit {
     this.selectedLanguage = 'English';
     this.selectedDifficulty = { label: 'Mix', value: 'Mix' };
     this.selectedSubject = 'All';
-    const exam: any = this.localStorageService.getItem(LocalStorageKeys.UserPreferences);
+    const userpreference: any = this.localStorageService.getItem(LocalStorageKeys.UserPreferences);
    
-    if (exam && exam.defaultExam) {
-      this.selectedExam = { label: exam.defaultExam.label, name: exam.defaultExam.name, value: exam.defaultExam.value, code: exam.defaultExam.code };
+    if (userpreference && userpreference.defaultExam) {
+      const exam = userpreference.defaultExam;
+      this.selectedExam = { label: exam.label, name: exam.name, value: exam.value, code: exam.code };
+      this.subjects = userpreference.examSubjects ?? [];
     }
 
     this.cdr.markForCheck(); 
@@ -145,12 +148,13 @@ export class ExamsHome implements OnInit {
   handleExamChange(value: any | any[]) {
     this.isSubjectsLoading = true;
     this.selectedExam = value;
-    this.localStorageService.setItem(LocalStorageKeys.UserPreferences, {defaultExam: value});
+
     if (this.selectedExam) {
       this.examService.getSubjectsByExamId(+this.selectedExam.value)
       .subscribe({
         next: (subjects: any) => {
           this.subjects = subjects;
+          this.localStorageService.setItem(LocalStorageKeys.UserPreferences, {defaultExam: value, examSubjects: subjects});
           this.isSubjectsLoading = false;
           this.cdr.markForCheck();
         },
