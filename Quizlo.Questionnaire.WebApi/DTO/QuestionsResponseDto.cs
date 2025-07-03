@@ -11,7 +11,7 @@
         public int TotalQuestions { get; set; }
 
         [JsonPropertyName("totalMarks")]
-        public int totalMarks { get; set; }
+        public int TotalMarks { get; set; }
 
 
         [JsonPropertyName("questions")]

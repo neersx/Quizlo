@@ -24,6 +24,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         [NotMapped]
         public bool IsMultipleSelect { get; set; }
         public double? Marks { get; init; }
+        public decimal? MinusMarks { get; set; }
 
         [NotMapped]
         public string[] Options

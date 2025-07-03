@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quizlo.Questionnaire.WebApi.Data.Entities
 {
@@ -25,6 +24,10 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public string Type { get; set; }
 
         public bool IsTrending { get; set; } = false;
+        public bool IsActive { get; set; } = false;
+        public string? ImageUrl { get; set; }
+
+        public string? ExamGuidelines { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }

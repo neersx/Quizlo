@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quizlo.Questionnaire.WebApi.Data;
 
@@ -11,9 +12,11 @@ using Quizlo.Questionnaire.WebApi.Data;
 namespace Quizlo.Questionnaire.WebApi.Migrations
 {
     [DbContext(typeof(QuizDbContext))]
-    partial class QuizDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250703094401_MinusMarksMigration")]
+    partial class MinusMarksMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,12 +53,6 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
 
                     b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ExamGuidelines")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");

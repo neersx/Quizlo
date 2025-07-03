@@ -122,7 +122,7 @@ public class TestService : ITestService
             CreatedAt = DateTime.UtcNow,
             CreatedByUserId = userId,
             Status = TestStatus.NotStarted,
-            TotalMarks = env.totalMarks
+            TotalMarks = env.TotalMarks
         };
 
         var questions = aiQuestions.Select(q => new Question
