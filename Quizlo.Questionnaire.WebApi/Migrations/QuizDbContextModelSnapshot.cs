@@ -230,6 +230,9 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
+                    b.Property<double?>("EachQuesMarks")
+                        .HasColumnType("float");
+
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 

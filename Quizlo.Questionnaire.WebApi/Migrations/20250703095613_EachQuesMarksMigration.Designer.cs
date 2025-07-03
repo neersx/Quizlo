@@ -12,7 +12,7 @@ using Quizlo.Questionnaire.WebApi.Data;
 namespace Quizlo.Questionnaire.WebApi.Migrations
 {
     [DbContext(typeof(QuizDbContext))]
-    [Migration("20250703095332_EachQuesMarksMigration")]
+    [Migration("20250703095613_EachQuesMarksMigration")]
     partial class EachQuesMarksMigration
     {
         /// <inheritdoc />
@@ -232,6 +232,9 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
+
+                    b.Property<double?>("EachQuesMarks")
+                        .HasColumnType("float");
 
                     b.Property<int>("ExamId")
                         .HasColumnType("int");

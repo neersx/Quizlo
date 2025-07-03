@@ -20,7 +20,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
         public int TotalQuestions { get; set; } = 0;
         public decimal? MinusMarks { get; set; }
-        public decimal? EachQuesMarks { get;}
+        public double? EachQuesMarks { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
