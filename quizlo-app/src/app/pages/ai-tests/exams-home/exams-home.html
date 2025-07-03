@@ -17,7 +17,6 @@
                             </div> -->
                             <div class="col-xxl-6 col-12">
                                 <div *ngIf="exams">
-                                    {{ selectedExam | json }}
                                     <spk-ng-select [options]="exams" [selectClass]="''" [clearable]="true"
                                         [multi]="false" [searchable]="true" [defaultValue]="selectedExam" [placeholder]="'Select Your Exam'"
                                         [additionalProperties]="{}" [message]="'Exam is mandatory to start the test'"
@@ -70,3 +69,65 @@
     </div>
 </div>
 <!--End::row-1 -->
+
+<div *ngIf="tests && tests.length > 0" class="row">
+    <div class="row justify-content-center">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center flex-wrap gap-2">
+                        <h5 class="fw-medium mb-0 flex-grow-1">Find Your <span class="fw-normal fs-18"> Tests History</span> </h5>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+        @for (test of tests; track $index) {
+        <div class="col-xl-4">
+            <div class="card custom-card">
+              <div class="card-body">
+                <div class="float-end">
+                  <a href="javascript:void(0);" class="avatar avatar-rounded bg-primary-transparent avatar-sm" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add to Wishlist" ngbTooltip="Add to Wishlist">
+                    <span><i class="bi bi-heart"></i></span>
+                  </a>
+                </div>
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                  <span class="avatar avatar-xl border border-dashed p-3 avatar-rounded">
+                    <img [src]="'./assets/images/company-logos/'" alt="">
+                  </span>
+                  <div class="ms-2 mt-2">
+                    <h6 class="fw-medium mb-1 d-flex align-items-center">
+                      <a href="javascript:void(0);">{{ test.title }} <i class="ri-verified-badge-fill text-secondary fs-13" data-bs-toggle="tooltip" ngbTooltip="Verified company"></i></a>
+                    </h6>
+                    <div class="d-flex gap-2 mb-3 flex-wrap">
+                      <a href="javascript:void(0);"><i class="ri-map-pin-2-line text-info"></i> {{ test.language }} </a>
+                      <p class="mb-0 text-muted">Date taken - {{ test.createdAt | date: 'dd-MMM-yyyy hh:mm' }}</p>
+                    </div> 
+                    <div class="d-flex align-items-center mb-2 fs-12 text-muted flex-wrap">
+                      <p class="fs-12 mb-0">Your Score : </p>
+                      <a href="javascript:void(0);" class="ms-1 min-w-fit-content text-muted">
+                        <span> {{test.marksScored}} / {{ test.totalMarks }}</span> 
+                      </a>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center flex-wrap">
+                      <a href="javascript:void(0);" class="badge badge-md fs-11 rounded-pill bg-success-transparent me-1" >
+                        <i class="bi bi-people me-1"></i>No. of Questions : {{ test.totalQuestions }}
+                      </a>
+                      <a href="javascript:void(0);" class="badge badge-md fs-11 rounded-pill bg-info-transparent">
+                        <i class="bi bi-briefcase me-1"></i>Status : {{ test.status }}
+                      </a>
+                    </div>  
+                  </div>                                            
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="d-grid">
+                  <a href="javascript:void(0);" class="btn btn-wave btn-primary">
+                    View Details <i class="ri-arrow-right-line align-middle rtl-transform-icon"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+    </div>
+</div>
