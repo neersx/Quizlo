@@ -17,7 +17,7 @@ public interface ITestService
        CancellationToken ct = default);
     Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int createdByUserId,
                                          CancellationToken ct = default);
-    Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync (
+    Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(
         CreateTestRequest req,
         CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
@@ -64,18 +64,20 @@ public class TestService : ITestService
                 Language = t.Language,
                 Subject = t.Subject,
                 Duration = (TimeSpan)t.Duration,
+                DurationCompltedIn = t.DurationCompltedIn,
                 CreatedAt = t.CreatedAt,
                 ExamId = t.ExamId,
                 TotalQuestions = t.TestQuestions.Count,   // COUNT(*) in SQL
                 TotalMarks = t.TotalMarks,
                 MarksScored = t.MarksScored,
                 ExamName = t.Exam.Name,
-                ExamCode = t.Exam.Code
+                ExamCode = t.Exam.Code,
+                Status = t.Status
             })
             .ToListAsync(ct);
     }
 
-    public async Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync (
+    public async Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(
         CreateTestRequest req,
         CancellationToken ct = default)
     {
@@ -298,6 +300,12 @@ public class TestService : ITestService
                     q.AnsweredAt = DateTime.UtcNow;
                     if (q.IsCorrect == true) correct++;
                 }
+
+                // Persist overall test marks
+                test.TotalMarks = total;
+                test.MarksScored = correct;
+                var percentage = total == 0 ? 0 : Math.Round(correct * 100.0 / total, 2);
+                test.Status = percentage > 70 ? TestStatus.Passed : TestStatus.Failed;
 
                 await _db.SaveChangesAsync(ct);
                 await tx.CommitAsync(ct);

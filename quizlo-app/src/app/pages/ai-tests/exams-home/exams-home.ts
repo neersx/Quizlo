@@ -208,4 +208,11 @@ export class ExamsHome implements OnInit {
   handleDifficultyChange(event: any) {
     this.selectedDifficulty = event; // or event.value if single-select
   }
+
+   // fallback handler
+   onIconError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.src = '../assets/images/exams/icons/exam.png';
+    this.cdr.markForCheck();
+  }
 }

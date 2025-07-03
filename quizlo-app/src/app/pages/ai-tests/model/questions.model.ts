@@ -6,6 +6,7 @@ export interface Exam {
     category?: string;
     type?: string;
     cssClass: string;
+    imageUrl?: string;
     createdAt: string;
     createdByUserId?: number;
   }

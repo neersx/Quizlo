@@ -30,7 +30,7 @@ export class PrepareTest implements OnInit {
     this.fetchExams();
   }
 
-  fetchExams(page = 1, size = 6): void {
+  fetchExams(page = 1, size = 4): void {
     this.loading = true;
     this.error = '';
     this.examService.getExams(page, size).subscribe({

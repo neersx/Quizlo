@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './spk-shortcut-card.component.scss'
 })
 export class SpkShortcutCardComponent {
-  @Input() icon: string = '';
+  @Input() icon: string | undefined = '';
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() itemCount: number = 0;

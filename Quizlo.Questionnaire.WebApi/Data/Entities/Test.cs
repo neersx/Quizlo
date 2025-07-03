@@ -26,7 +26,6 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
         [Required]
         public TimeSpan? Duration { get; set; }
-        [Required]
         public TimeSpan? DurationCompltedIn { get; set; }
 
         [Required]
@@ -36,14 +35,14 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public int CreatedByUserId { get; set; }
 
         public User CreatedBy { get; set; }
-        public double? TotalMarks { get; init; }
-        public double? MarksScored { get; init; }
+        public double? TotalMarks { get; set; }
+        public double? MarksScored { get; set; }
         [MaxLength(1000)]
         public string? TestRules { get; set; }
         [MaxLength(1000)]
         public string? Notes { get; set; }
 
-        public string? Type { get; set; } = "PreDefined";
+        public string? Type { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;
         public ICollection<TestQuestion> TestQuestions { get; set; }
         //public ICollection<Attempt> Attempts { get; set; }

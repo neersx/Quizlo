@@ -9,6 +9,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string Language { get; set; } = default!;
         public string? Subject { get; set; } = default!;
         public TimeSpan Duration { get; set; }
+        public TimeSpan? DurationCompltedIn { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ExamId { get; set; }
         public int TotalQuestions { get; set; }
