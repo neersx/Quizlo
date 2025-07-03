@@ -35,8 +35,8 @@
                             </div>
 
                             <div class="col-xxl-3 col-12">
-                                <div *ngIf="isSubjectsLoading" class="text-left my-4">
-                                    <button class="btn btn-default-light" type="button" disabled>
+                                <div *ngIf="isSubjectsLoading" class="text-left">
+                                    <button class="btn btn-success-light" type="button" disabled>
                                         <span class="spinner-border spinner-border-sm align-middle" role="status"
                                             aria-hidden="true"></span>
                                         Loading Subjects...
@@ -50,16 +50,13 @@
                                 </div>
                             </div>
                         </div>
-                      
-               
-
+        
                     </div>
                     <div class="text-center">
                      
-                    
                         <button *ngIf="loadingTest"  class="btn btn-light" type="button" disabled>
                             <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
-                            Loading you Test. Please wait...
+                            Loading your Test. Please wait...
                         </button>
                         <button *ngIf="!loadingTest" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-danger btn-wave">Start Your Test Now</button>
                     </div>
@@ -119,13 +116,13 @@
                   </div>                                            
                 </div>
               </div>
-              <div class="card-footer">
+              <!-- <div class="card-footer">
                 <div class="d-grid">
                   <a href="javascript:void(0);" class="btn btn-wave btn-primary">
                     View Details <i class="ri-arrow-right-line align-middle rtl-transform-icon"></i>
                   </a>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         }

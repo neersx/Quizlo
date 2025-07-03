@@ -76,7 +76,6 @@ export class ExamsHome implements OnInit {
   ];
 
   loadTests() {
-    this.loadingTest = true;
     this.error = '';
     this.testService.getTests().subscribe({
       next: (resp: any) => {
@@ -150,7 +149,7 @@ export class ExamsHome implements OnInit {
 
       if (this.isUserLoggedIn()) {
         this.router.navigate(['/test/live-test'], {
-          queryParams: { examName: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject, difficulty: this.selectedDifficulty.value ?? 3 }
+          queryParams: { examName: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject }
         });
       } else {
         this.router.navigate(['/auth/login'], {

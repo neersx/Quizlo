@@ -8,10 +8,10 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         string ExamName,
         string ExamCode,
         int NumberOfQuestions,
-        string? Subject,
-        string? Language,
-        DifficultyLevel Difficulty,
         string? Title,
-        bool HasAiQuestions,
-        TimeSpan? Duration);
+        string? Subject,
+        string? Language = "English",
+        DifficultyLevel Difficulty = DifficultyLevel.Mix,
+        bool HasAiQuestions = false,
+        TimeSpan? Duration = null);
 }

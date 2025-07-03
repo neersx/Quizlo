@@ -98,7 +98,7 @@ export class LiveTest {
       language,
       examCode,
       examName,
-      difficulty: +difficulty,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
+      difficulty: 3,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
       title,      // or build from exam name
       duration: '00:00:00'        // e.g. HH:MM:SS
     };
