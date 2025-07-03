@@ -15,6 +15,12 @@ export const content: Routes = [
       {path:'', loadChildren : () => import('../../app/routes/blogs-routing.module').then(r => r.blogsRoutingModule)},
     ],
   },
+  {
+    path: '',
+    children: [
+      {path:'', loadChildren : () => import('../../app/routes/user-profile-routing.module').then(r => r.userProfileRoutingModule)},
+    ],
+  },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(content)],
