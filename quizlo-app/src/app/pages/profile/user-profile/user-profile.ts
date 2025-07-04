@@ -9,6 +9,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SpkProfileReusableCardComponent } from '../../../@spk/reusable-pages/spk-profile-reusable-card/spk-profile-reusable-card.component';
 import { SpkGalleryComponent } from '../../../@spk/spk-reusable-plugins/spk-gallery/spk-gallery.component';
 import { SpkNgSelectComponent } from '../../../@spk/reusable-ui-elements/spk-ng-select/spk-ng-select.component';
+import { UserProfileModel } from '../user-profile.model';
+import { Observable } from 'rxjs';
+import { ProfileService } from '../user-profile.service';
+import { CommonModule, NgIf, NgForOf, AsyncPipe } from '@angular/common';
 const data = [
   {
     srcUrl: './assets/images/media/media-40.jpg',
@@ -77,13 +81,18 @@ const data = [
 ];
 @Component({
   selector: 'app-user-profile',
-  imports: [SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkProfileReusableCardComponent,SpkNgSelectComponent,SpkGalleryComponent,
+  imports: [     CommonModule,
+    FormsModule,
+    NgbNavModule,
+    AsyncPipe,SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkProfileReusableCardComponent,SpkNgSelectComponent,SpkGalleryComponent,
     GalleryModule,LightboxModule, OverlayscrollbarsModule,SpkNgSelectComponent,FormsModule,ReactiveFormsModule],
+
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.scss'
 })
 
 export class UserProfile {
+  user$: Observable<UserProfileModel> | undefined;
 
   Skills=[
     {label:"Project Management",value:1},
@@ -103,9 +112,10 @@ export class UserProfile {
   selectedSkill=[1,2,3,4,5,6,7,8,9,10,11,12]
   imageData = data;
   items!: GalleryItem[];
-  constructor(public gallery: Gallery, public lightbox: Lightbox) {}
+  constructor(public gallery: Gallery, public lightbox: Lightbox, 
+    private profileService: ProfileService) {}
   ngOnInit() {
-    /** Basic Gallery Example */
+    this.user$ = this.profileService.getProfile();
 
     // Creat gallery items
     this.items = this.imageData.map(
@@ -126,6 +136,18 @@ export class UserProfile {
     // Load items into the lightbox gallery ref
     lightboxRef.load(this.items);
   }
+  /** helper to split comma-separated skills */
+  getSkills(user: UserProfileModel): string[] {
+    return user.skills ? user.skills.split(',').map(s => s.trim()) : [];
+  }
+
+  /** helper to calculate age */
+  getAge(dob?: string): number | null {
+    if (!dob) return null;
+    const diff = Date.now() - new Date(dob).getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+  }
+
   profiles = [
     {
       name: 'Della Jasmine',

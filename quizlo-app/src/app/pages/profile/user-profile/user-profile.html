@@ -1,895 +1,210 @@
 <app-page-header title="User Profile" title1="Pages" activeTitle="Profile"></app-page-header>
 <!-- Start:: row-1 -->
-<div class="row">
+<div class="row" *ngIf="user$ | async as user">
     <div class="col-xl-12">
-        <div class="card custom-card profile-card">
-            <div class="profile-banner-img">
-                <img src="./assets/images/media/media-3.jpg" class="card-img-top" alt="...">
-            </div>
-            <div class="card-body pb-0 position-relative">
-                <div class="row profile-content">
-                    <div class="col-xl-9">
-                        <div class="card custom-card overflow-hidden border custom-tabs">
-                            <div class="card-body">
-                                <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs tab-style-6 mb-3 p-0"
-                                    id="myTab" role="tablist">
-                                    <li [ngbNavItem]="1" class="nav-item" role="presentation">
-                                        <button ngbNavLink class="nav-link w-100 text-start" id="profile-about-tab"
-                                            data-bs-toggle="tab" data-bs-target="#profile-about-tab-pane" type="button"
-                                            role="tab" aria-controls="profile-about-tab-pane"
-                                            aria-selected="true">About</button>
-                                        <ng-template ngbNavContent>
-                                            <div class="tab-pane show active p-0 border-0" id="profile-about-tab-pane"
-                                                role="tabpanel" aria-labelledby="profile-about-tab" tabindex="0">
-                                                <ul class="list-group list-group-flush border rounded-3">
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3"><span
-                                                                class="me-1">&#10024;</span>About Info :</span>
-                                                        <p class="text-muted mb-2">
-                                                            Hello, I'm [Your Name], a dedicated [Your
-                                                            Profession/Interest] based in [Your Location]. I have a
-                                                            genuine passion for [Your Hobbies/Interests] and enjoy
-                                                            delving into the nuances of [Your Industry/Field].
-                                                        </p>
-                                                        <p class="text-muted mb-0">
-                                                            Specializing in [Your Specialization/Area of Expertise], I
-                                                            strive to infuse innovation into every project I undertake.
-                                                            With a track record of [Key Achievements] and valuable
-                                                            experiences, I'm committed to continual growth and eagerly
-                                                            anticipate the opportunities that lie ahead.
-                                                        </p>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">Contact Info :</span>
-                                                        <div class="text-muted">
-                                                            <p class="mb-3">
-                                                                <span
-                                                                    class="avatar avatar-sm avatar-rounded text-primary p-1 bg-primary-transparent me-2">
-                                                                    <i class="ri-mail-line align-middle fs-15"></i>
-                                                                </span>
-                                                                <span class="fw-medium text-default">Email : </span>
-                                                                spencer.robin22&#64;example.com
-                                                            </p>
-                                                            <p class="mb-3">
-                                                                <span
-                                                                    class="avatar avatar-sm avatar-rounded text-success p-1 bg-success-transparent me-2">
-                                                                    <i class="ri-map-pin-line align-middle fs-15"></i>
-                                                                </span>
-                                                                <span class="fw-medium text-default">Website : </span>
-                                                                www.yourwebsite.com
-                                                            </p>
-                                                            <p class="mb-3">
-                                                                <span
-                                                                    class="avatar avatar-sm avatar-rounded text-info p-1 bg-info-transparent me-2">
-                                                                    <i class="ri-building-line align-middle fs-15"></i>
-                                                                </span>
-                                                                <span class="fw-medium text-default">Location : </span>
-                                                                City, Country
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                <span
-                                                                    class="avatar avatar-sm avatar-rounded text-secondary p-1 bg-secondary-transparent me-2">
-                                                                    <i class="ri-phone-line align-middle fs-15"></i>
-                                                                </span>
-                                                                <span class="fw-medium text-default">Phone : </span> +1
-                                                                (222) 111 - 57840
-                                                            </p>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">Skills :</span>
-                                                        <div class="w-75">
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Leadership</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Project
-                                                                    Management</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Technical
-                                                                    Proficiency</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Communication</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span class="badge bg-light text-muted m-1 border">Team
-                                                                    Building</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Problem-Solving</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Strategic
-                                                                    Thinking</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Decision
-                                                                    Making</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Adaptability</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Stakeholder
-                                                                    Management</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Conflict
-                                                                    Resolution</span>
-                                                            </a>
-                                                            <a href="javascript:void(0);">
-                                                                <span
-                                                                    class="badge bg-light text-muted m-1 border">Continuous
-                                                                    Improvement</span>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">Social Media :</span>
-                                                        <div class="d-flex align-items-center gap-5 flex-wrap">
-                                                            <div class="d-flex align-items-center gap-3 me-2 flex-wrap">
-                                                                <div>
-                                                                    <span class="avatar avatar-md bg-primary"><i
-                                                                            class="ri-github-line fs-16"></i></span>
-                                                                </div>
-                                                                <div>
-                                                                    <span
-                                                                        class="d-block fw-medium text-primay">Github</span>
-                                                                    <span
-                                                                        class="text-muted fw-medium">github.com/spruko</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center gap-3 me-2 flex-wrap">
-                                                                <div>
-                                                                    <span class="avatar avatar-md bg-success"><i
-                                                                            class="ri-twitter-x-line fs-16"></i></span>
-                                                                </div>
-                                                                <div>
-                                                                    <span
-                                                                        class="d-block fw-medium text-primay1">Twitter</span>
-                                                                    <span
-                                                                        class="text-muted fw-medium">twitter.com/spruko.me</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center gap-3 me-2 flex-wrap">
-                                                                <div>
-                                                                    <span class="avatar avatar-md bg-info"><i
-                                                                            class="ri-linkedin-line fs-16"></i></span>
-                                                                </div>
-                                                                <div>
-                                                                    <span
-                                                                        class="d-block fw-medium text-primay2">Linkedin</span>
-                                                                    <span
-                                                                        class="text-muted fw-medium">linkedin.com/in/spruko</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center gap-3 flex-wrap">
-                                                                <div>
-                                                                    <span class="avatar avatar-md bg-secondary"><i
-                                                                            class="ri-briefcase-line fs-16"></i></span>
-                                                                </div>
-                                                                <div>
-                                                                    <span class="d-block fw-medium text-primay3">My
-                                                                        Portfolio</span>
-                                                                    <span
-                                                                        class="text-muted fw-medium">spruko.com/</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </ng-template>
-                                    </li>
-                                    <li [ngbNavItem]="2" class="nav-item" role="presentation">
-                                        <button ngbNavLink class="nav-link w-100 text-start" id="edit-profile-tab"
-                                            data-bs-toggle="tab" data-bs-target="#edit-profile-tab-pane" type="button"
-                                            role="tab" aria-controls="edit-profile-tab-pane" aria-selected="true">Edit
-                                            Profile</button>
-                                        <ng-template ngbNavContent>
-                                            <div class="tab-pane p-0 border-0" id="edit-profile-tab-pane"
-                                                role="tabpanel" aria-labelledby="edit-profile-tab" tabindex="0">
-                                                <ul class="list-group list-group-flush border rounded-3">
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">Personal Info
-                                                            :</span>
-                                                        <div class="row gy-3 align-items-center">
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">User Name :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder" value="Spencer Robin">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">First Name :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder" value="Spencer">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Last Name :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder" value="Robin">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Designation :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder"
-                                                                    value="Software Development Manager">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">Contact Info :</span>
-                                                        <div class="row gy-3 align-items-center">
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Email :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="email" class="form-control"
-                                                                    placeholder="Placeholder"
-                                                                    value="spencer.robin22&#64;example.com">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Phone :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder"
-                                                                    value="+1 (222) 111 - 57840">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Website :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder"
-                                                                    value="www.yourwebsite.com">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Location :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder" value="City, Country">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">Social Info :</span>
-                                                        <div class="row gy-3 align-items-center">
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Github :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder" value="github.com/spruko">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Twitter :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder"
-                                                                    value="twitter.com/spruko.me">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Linkedin :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder"
-                                                                    value="linkedin.com/in/spruko">
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Portfolio :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Placeholder" value="spruko.com/">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">About Info :</span>
-                                                        <div class="row gy-3 align-items-center">
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">Biographical Info :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <textarea class="form-control" id="text-area" rows="4">Hello, I'm [Your Name], a dedicated [Your Profession/Interest] based in [Your Location]. I have a genuine passion for [Your Hobbies/Interests] and enjoy delving into the nuances of [Your Industry/Field].
-            
-                                                                            Specializing in [Your Specialization/Area of Expertise], I strive to infuse innovation into every project I undertake. With a track record of [Key Achievements] and valuable experiences, I'm committed to continual growth and eagerly anticipate the opportunities that lie ahead.
-                                                                        </textarea>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item p-3">
-                                                        <span class="fw-medium fs-15 d-block mb-3">SKILLS :</span>
-                                                        <div class="row gy-3 align-items-center">
-                                                            <div class="col-xl-3">
-                                                                <div class="lh-1">
-                                                                    <span class="fw-medium">skills :</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xl-9">
-                                                                <spk-ng-select [options]="selectedSkills1" [id]="'toMail'" [selectClass]="''"
-                                                                [defaultValue]="selectedSkills" [clearable]="true" [searchable]="true" [multiple]="true"
-                                                                [hideSelected]="true" placeholder="1 Day" >
-                                                            </spk-ng-select>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </ng-template>
-                                    </li>
-                                    <li [ngbNavItem]="3" class="nav-item" role="presentation">
-                                        <button ngbNavLink class="nav-link w-100 text-start" id="timeline-tab"
-                                            data-bs-toggle="tab" data-bs-target="#timeline-tab-pane" type="button"
-                                            role="tab" aria-controls="timeline-tab-pane"
-                                            aria-selected="false">Timeline</button>
-                                        <ng-template ngbNavContent>
-                                            <div class="tab-pane" id="timeline-tab-pane" role="tabpanel"
-                                                aria-labelledby="timeline-tab" tabindex="0">
-                                                <ul class="list-unstyled profile-timeline">
-                                                    <li>
-                                                        <div>
-                                                            <span
-                                                                class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar">
-                                                                <img src="./assets/images/faces/3.jpg" alt="">
-                                                            </span>
-                                                            <div class="d-flex gap-2 flex-wrap mb-2">
-                                                                <p class="mb-0">
-                                                                    <span class="fw-semibold">Photos </span>from their
-                                                                    recent vacation and writes a caption describing
-                                                                    their experience..
-                                                                </p>
-                                                                <span class="text-end ms-auto fs-11 text-muted">15,May
-                                                                    2024 - 18:47</span>
-                                                            </div>
-                                                            <p class="profile-activity-media mb-0">
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-17.jpg"
-                                                                        alt="">
-                                                                </a>
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-18.jpg"
-                                                                        alt="">
-                                                                </a>
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-19.jpg"
-                                                                        alt="">
-                                                                </a>
-                                                            </p>
-                                                            <div
-                                                                class="d-flex align-items-end justify-content-between gap-2 flex-wrap">
-                                                                <div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Leadership</span>
-                                                                    </a>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Solving</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="btn-list text-end">
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-message-3-line"></i> 4</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-success-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-thumb-up-line"></i> 2</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-info-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-heart-line"></i> 3</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div>
-                                                            <span
-                                                                class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                <img src="./assets/images/faces/11.jpg" alt="">
-                                                            </span>
-                                                            <div class="d-flex gap-2 flex-wrap mb-2">
-                                                                <p class="mb-0">
-                                                                    Friend comments on the post, expressing admiration
-                                                                    for the picturesque location a. <span
-                                                                        class="text-primary fw-medium text-decoration-underline">#Trip-photos</span>.
-                                                                </p>
-                                                                <span class="text-end ms-auto fs-11 text-muted">18,Dec
-                                                                    2024 - 12:16</span>
-                                                            </div>
-                                                            <p class="text-muted mb-0">
-                                                                Asking about the user's favorite part of the trip.
-                                                                emporibus inventore ullam tempora eligendi libero sequi
-                                                                dignissimos cumque, et a sint tenetur consequatur omnis!
-                                                            </p>
-                                                            <div
-                                                                class="d-flex align-items-end justify-content-between gap-2 flex-wrap">
-                                                                <div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Leadership</span>
-                                                                    </a>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Solving</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="btn-list text-end">
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-message-3-line"></i> 4</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-success-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-thumb-up-line"></i> 2</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-info-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-heart-line"></i> 3</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div>
-                                                            <span
-                                                                class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                <img src="./assets/images/faces/4.jpg" alt="">
-                                                            </span>
-                                                            <div class="d-flex gap-2 flex-wrap mb-2">
-                                                                <p class="text-muted mb-0">
-                                                                    <span class="text-default"><span
-                                                                            class="text-success fw-medium">Varun Sonu
-                                                                        </span> asking for recommendations on places to
-                                                                        visit in the vacation destination</span>.
-                                                                </p>
-                                                                <span class="text-end ms-auto fs-11 text-muted">26,May
-                                                                    2024 - 12:45</span>
-                                                            </div>
-                                                            <p class="profile-activity-media mb-2">
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/file-manager/3.png"
-                                                                        alt="">
-
-                                                                </a>
-                                                                <span class="fs-11 text-muted">432.87KB</span>
-                                                            </p>
-                                                            <div
-                                                                class="d-flex align-items-end justify-content-between gap-2 flex-wrap">
-                                                                <div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Leadership</span>
-                                                                    </a>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Solving</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="btn-list text-end">
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-message-3-line"></i> 4</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-success-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-thumb-up-line"></i> 2</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-info-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-heart-line"></i> 3</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div>
-                                                            <span
-                                                                class="avatar avatar-sm bg-success avatar-rounded profile-timeline-avatar">
-                                                                K
-                                                            </span>
-                                                            <div class="d-flex gap-2 flex-wrap mb-2">
-                                                                <p class="text-muted mb-0">
-                                                                    <span class="text-default">On a trending news topic,
-                                                                        offering their perspective and engaging with
-                                                                        other group members' <span
-                                                                            class="text-info fw-medium text-decoration-underline">#viewpoints</span></span>.
-                                                                </p>
-                                                                <span class="text-end ms-auto fs-11 text-muted">28,May
-                                                                    2024 - 22:09</span>
-                                                            </div>
-                                                            <p class="profile-activity-media mb-2">
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-75.jpg"
-                                                                        alt="">
-                                                                </a>
-                                                            </p>
-                                                            <div
-                                                                class="d-flex align-items-end justify-content-between gap-2 flex-wrap">
-                                                                <div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Leadership</span>
-                                                                    </a>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Solving</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="btn-list text-end">
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-message-3-line"></i> 4</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-success-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-thumb-up-line"></i> 2</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-info-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-heart-line"></i> 3</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div>
-                                                            <span
-                                                                class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                <img src="./assets/images/faces/5.jpg" alt="">
-                                                            </span>
-                                                            <div class="d-flex gap-2 flex-wrap mb-1">
-                                                                <p class="text-muted mb-0">
-                                                                    <span class="text-default">Reminiscing about a
-                                                                        memorable trip they took together and suggesting
-                                                                        planning another adventure soon. <span
-                                                                            class="fw-semibold text-secondary text-decoration-underline">#Europe</span>
-                                                                        trip was a landmark in our lifes!</span>.
-                                                                </p>
-                                                                <span class="text-end ms-auto fs-11 text-muted">29,May
-                                                                    2024 - 16:42</span>
-                                                            </div>
-                                                            <p class="text-muted">"Every time, our Europe trip still
-                                                                lies vividly before our eyes."</p>
-                                                            <p class="profile-activity-media mb-0">
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-59.jpg"
-                                                                        class="m-1" alt="">
-                                                                </a>
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-60.jpg"
-                                                                        class="m-1" alt="">
-                                                                </a>
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-61.jpg"
-                                                                        class="m-1" alt="">
-                                                                </a>
-                                                            </p>
-                                                            <div
-                                                                class="d-flex align-items-end justify-content-between gap-2 flex-wrap">
-                                                                <div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Leadership</span>
-                                                                    </a>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Solving</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="btn-list text-end">
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-message-3-line"></i> 4</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-success-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-thumb-up-line"></i> 2</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-info-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-heart-line"></i> 3</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div>
-                                                            <span
-                                                                class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                <img src="./assets/images/media/media-39.jpg" alt="">
-                                                            </span>
-                                                            <div class="d-flex gap-2 flex-wrap mb-1">
-                                                                <p class="mb-1">
-                                                                    <span
-                                                                        class="fw-semibold text-info">Invitation</span>
-                                                                    to a virtual networking event from a professional
-                                                                    connection, expressing interest and RSVPing for
-                                                                    attendance.
-                                                                </p>
-                                                                <span class="text-end ms-auto fs-11 text-muted">06,Jun
-                                                                    2024 - 08:40</span>
-                                                            </div>
-                                                            <p class="profile-activity-media mb-0">
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-26.jpg"
-                                                                        alt="">
-                                                                </a>
-                                                                <a href="javascript:void(0);">
-                                                                    <img src="./assets/images/media/media-29.jpg"
-                                                                        alt="">
-                                                                </a>
-                                                            </p>
-                                                            <div
-                                                                class="d-flex align-items-end justify-content-between gap-2 flex-wrap">
-                                                                <div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Leadership</span>
-                                                                    </a>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span
-                                                                            class="badge bg-light text-muted m-1 border">#Solving</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="btn-list text-end">
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-message-3-line"></i> 4</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-success-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-thumb-up-line"></i> 2</button>
-                                                                    <button
-                                                                        class="btn btn-sm btn-info-light btn-wave waves-effect waves-light"><i
-                                                                            class="ri-heart-line"></i> 3</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </ng-template>
-                                    </li>
-                                    <li [ngbNavItem]="4" class="nav-item" role="presentation">
-                                        <button ngbNavLink class="nav-link w-100 text-start" id="gallery-tab"
-                                            data-bs-toggle="tab" data-bs-target="#gallery-tab-pane" type="button"
-                                            role="tab" aria-controls="gallery-tab-pane"
-                                            aria-selected="false">Gallery</button>
-                                        <ng-template ngbNavContent>
-                                            <div class="tab-pane p-0 border-0" id="gallery-tab-pane" role="tabpanel"
-                                                aria-labelledby="gallery-tab" tabindex="0">
-                                                <spk-gallery [mainClass]="'row'" [colClass]="'col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12'" [imageData]="imageData"></spk-gallery>
-
-                                            </div>
-                                        </ng-template>
-                                    </li>
-                                    <li [ngbNavItem]="5" class="nav-item" role="presentation">
-                                        <button ngbNavLink class="nav-link w-100 text-start" id="friends-tab"
-                                            data-bs-toggle="tab" data-bs-target="#friends-tab-pane" type="button"
-                                            role="tab" aria-controls="friends-tab-pane"
-                                            aria-selected="false">Friends</button>
-                                        <ng-template ngbNavContent>
-                                            <div class="tab-pane p-0 border-0" id="friends-tab-pane" role="tabpanel"
-                                                aria-labelledby="friends-tab" tabindex="0">
-                                                <div class="row">
-                                                    @for (profile of profiles; track $index) {
-                                                    <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                        <app-spk-profile-reusable-card [name]="profile.name"
-                                                            [email]="profile.email" [role]="profile.role"
-                                                            [avatar]="profile.avatar" [badgeClass]="profile.badgeClass">
-                                                        </app-spk-profile-reusable-card>
-                                                    </div>
-                                                    }
-                                                    <div class="col-xl-12">
-                                                        <div class="text-center">
-                                                            <button class="btn btn-primary-light btn-wave">Show
-                                                                All</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </ng-template>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="profile-tabs" [ngbNavOutlet]="nav">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="card custom-card overflow-hidden border">
-                            <div class="card-body border-bottom border-block-end-dashed">
-                                <div class="text-center">
-                                    <span class="avatar avatar-xxl avatar-rounded online mb-3">
-                                        <img src="./assets/images/faces/11.jpg" alt="">
-                                    </span>
-                                    <h5 class="fw-semibold mb-1">Spencer Robin</h5>
-                                    <span class="d-block fw-medium text-muted mb-2">Software Development Manager</span>
-                                    <p class="fs-12 mb-0 text-muted"> <span class="me-3"><i
-                                                class="ri-building-line me-1 align-middle"></i>Hamburg</span> <span><i
-                                                class="ri-map-pin-line me-1 align-middle"></i>Germany</span> </p>
-                                </div>
-                            </div>
-                            <div class="d-flex mb-0 flex-wrap gap-3 p-3 border-bottom border-block-end-dashed">
-                                <div class="border-dashed rounded text-center flex-fill">
-                                    <div class="main-card-icon mb-2 success">
-                                        <div class="avatar avatar-sm bg-success">
-                                            <i class="fs-15 ti ti-user-check"></i>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex gap-2 justify-content-center align-items-end">
-                                        <p class="fw-semibold fs-20 mb-0">15k</p>
-                                        <p class="mb-1 text-muted">Followers</p>
-                                    </div>
-                                </div>
-                                <div class="border-dashed rounded text-center flex-fill">
-                                    <div class="main-card-icon mb-2 secondary">
-                                        <div class="avatar avatar-sm bg-secondary">
-                                            <i class="fs-15 ti ti-user-plus"></i>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex gap-2 justify-content-center align-items-end">
-                                        <p class="fw-semibold fs-20 mb-0">241</p>
-                                        <p class="mb-1 text-muted">Following</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-3 pb-1 d-flex flex-wrap justify-content-between">
-                                <div class="fw-medium fs-15 text-success">
-                                    Basic Info :
-                                </div>
-                            </div>
-                            <div class="card-body border-bottom border-block-end-dashed p-0">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item pt-2 border-0">
-                                        <div><span class="fw-medium me-2">Name :</span><span class="text-muted">Spencer
-                                                Robin</span></div>
-                                    </li>
-                                    <li class="list-group-item pt-2 border-0">
-                                        <div><span class="fw-medium me-2">Designation :</span><span
-                                                class="text-muted">Software Development Manager</span></div>
-                                    </li>
-                                    <li class="list-group-item pt-2 border-0">
-                                        <div><span class="fw-medium me-2">Email :</span><span
-                                                class="text-muted">spencer.robin22&#64;example.com</span></div>
-                                    </li>
-                                    <li class="list-group-item pt-2 border-0">
-                                        <div><span class="fw-medium me-2">Phone :</span><span class="text-muted">+1
-                                                (222) 111 - 57840</span></div>
-                                    </li>
-                                    <li class="list-group-item pt-2 border-0">
-                                        <div><span class="fw-medium me-2">Experience :</span><span class="text-muted">10
-                                                Years</span></div>
-                                    </li>
-                                    <li class="list-group-item pt-2 border-0">
-                                        <div><span class="fw-medium me-2">Age :</span><span class="text-muted">28</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="p-3 pb-1 d-flex flex-wrap justify-content-between">
-                                <div class="fw-medium fs-15 text-success">
-                                    Followers :
-                                </div>
-                                <a href="javascript:void(0);" class="fs-12 text-muted"> View All<i
-                                        class="ti ti-arrow-narrow-right ms-1"></i> </a>
-                            </div>
-                            <div class="card-body p-0">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item border-0 py-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="lh-1">
-                                                <span class="avatar avatar-sm avatar-rounded">
-                                                    <img src="./assets/images/faces/1.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="flex-fill">
-                                                <span class="fw-medium">Iliana Lilly</span>
-                                            </div>
-                                            <div>
-                                                <button class="btn btn-sm btn-icon btn-primary-light"> <i
-                                                        class="ri-add-line lh-1 align-middle"></i> </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item border-0 py-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="lh-1">
-                                                <span class="avatar avatar-sm avatar-rounded">
-                                                    <img src="./assets/images/faces/14.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="flex-fill">
-                                                <span class="fw-medium">Charlie Edson</span>
-                                            </div>
-                                            <div>
-                                                <button class="btn btn-sm btn-icon btn-primary-light"> <i
-                                                        class="ri-add-line lh-1 align-middle"></i> </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item border-0 py-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="lh-1">
-                                                <span class="avatar avatar-sm avatar-rounded">
-                                                    <img src="./assets/images/faces/3.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="flex-fill">
-                                                <span class="fw-medium">Aurora Reed</span>
-                                            </div>
-                                            <div>
-                                                <button class="btn btn-sm btn-icon btn-primary-light"> <i
-                                                        class="ri-add-line lh-1 align-middle"></i> </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item border-0 py-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="lh-1">
-                                                <span class="avatar avatar-sm avatar-rounded">
-                                                    <img src="./assets/images/faces/10.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="flex-fill">
-                                                <span class="fw-medium">Spencer Robin</span>
-                                            </div>
-                                            <div>
-                                                <button class="btn btn-sm btn-icon btn-primary-light"> <i
-                                                        class="ri-add-line lh-1 align-middle"></i> </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                  
-                </div>
-            </div>
+      <div class="card custom-card profile-card">
+        <!-- banner (static or replace with user.bannerUrl if you add one) -->
+        <div class="profile-banner-img">
+          <img src="assets/images/media/media-3.jpg" class="card-img-top" alt="banner">
         </div>
+  
+        <div class="card-body pb-0 position-relative">
+          <div class="row profile-content">
+            <div class="col-xl-9">
+              <div class="card custom-card overflow-hidden border custom-tabs">
+                <div class="card-body">
+                  <ul
+                    ngbNav
+                    #nav="ngbNav"
+                    [activeId]="1"
+                    class="nav nav-tabs tab-style-6 mb-3 p-0"
+                    id="myTab"
+                    role="tablist"
+                  >
+                    <li [ngbNavItem]="1" class="nav-item" role="presentation">
+                      <button
+                        ngbNavLink
+                        class="nav-link w-100 text-start"
+                        type="button"
+                      >
+                        About
+                      </button>
+                      <ng-template ngbNavContent>
+                        <div class="tab-pane show active p-0 border-0" tabindex="0">
+                          <ul class="list-group list-group-flush border rounded-3">
+                            <!-- About Info -->
+                            <li class="list-group-item p-3">
+                              <span class="fw-medium fs-15 d-block mb-3">
+                                <span class="me-1">✦</span>About Info :
+                              </span>
+                              <p class="text-muted mb-2">{{ user.about }}</p>
+                            </li>
+  
+                            <!-- Contact Info -->
+                            <li class="list-group-item p-3">
+                              <span class="fw-medium fs-15 d-block mb-3">Contact Info :</span>
+                              <div class="text-muted">
+                                <p class="mb-3">
+                                  <i class="ri-mail-line align-middle fs-15 text-primary me-2"></i>
+                                  <span class="fw-medium">Email:</span>
+                                  {{ user.email }}
+                                </p>
+                                <p class="mb-3" *ngIf="user.city || user.country">
+                                  <i class="ri-map-pin-line align-middle fs-15 text-success me-2"></i>
+                                  <span class="fw-medium">Location:</span>
+                                  <!-- {{ [user.city, user.state, user.country]
+                                        .filter(x => x)
+                                        .join(', ') }} -->
+                                </p>
+                                <p class="mb-0" *ngIf="getAge(user.dateOfBirth) !== null">
+                                  <i class="ri-calendar-line align-middle fs-15 text-info me-2"></i>
+                                  <span class="fw-medium">Age:</span>
+                                  {{ getAge(user.dateOfBirth) }}
+                                </p>
+                              </div>
+                            </li>
+  
+                            <!-- Skills -->
+                            <li class="list-group-item p-3" *ngIf="user.skills">
+                              <span class="fw-medium fs-15 d-block mb-3">Skills :</span>
+                              <div class="w-75">
+                                <ng-container *ngFor="let skill of getSkills(user)">
+                                  <span class="badge bg-light text-muted m-1 border">
+                                    {{ skill }}
+                                  </span>
+                                </ng-container>
+                              </div>
+                            </li>
+  
+                            <!-- Social Media -->
+                            <li class="list-group-item p-3">
+                              <span class="fw-medium fs-15 d-block mb-3">Social Media :</span>
+                              <div class="d-flex align-items-center gap-5 flex-wrap">
+                                <ng-container *ngIf="user.linkedin">
+                                  <a [href]="user.linkedin" target="_blank" class="d-flex align-items-center gap-2">
+                                    <i class="ri-linkedin-line fs-20 text-info"></i>
+                                    <span class="text-muted">{{ user.linkedin }}</span>
+                                  </a>
+                                </ng-container>
+                                <ng-container *ngIf="user.twitter">
+                                  <a [href]="user.twitter" target="_blank" class="d-flex align-items-center gap-2">
+                                    <i class="ri-twitter-line fs-20 text-primary"></i>
+                                    <span class="text-muted">{{ user.twitter }}</span>
+                                  </a>
+                                </ng-container>
+                                <ng-container *ngIf="user.facebook">
+                                  <a [href]="user.facebook" target="_blank" class="d-flex align-items-center gap-2">
+                                    <i class="ri-facebook-line fs-20 text-primary"></i>
+                                    <span class="text-muted">{{ user.facebook }}</span>
+                                  </a>
+                                </ng-container>
+                                <ng-container *ngIf="user.instagram">
+                                  <a [href]="user.instagram" target="_blank" class="d-flex align-items-center gap-2">
+                                    <i class="ri-instagram-line fs-20 text-danger"></i>
+                                    <span class="text-muted">{{ user.instagram }}</span>
+                                  </a>
+                                </ng-container>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </ng-template>
+                    </li>
+  
+                    <li [ngbNavItem]="2" class="nav-item" role="presentation">
+                      <button ngbNavLink class="nav-link w-100 text-start" type="button">
+                        Edit Profile
+                      </button>
+                      <ng-template ngbNavContent>
+                        <div class="tab-pane p-0 border-0" tabindex="0">
+                          <!-- reuse same grouped fields but bind to a FormGroup if you want reactive forms -->
+                          <form class="list-group list-group-flush border rounded-3 p-3">
+                            <div class="row gy-3">
+                              <div class="col-md-6">
+                                <label class="fw-medium">First Name</label>
+                                <input class="form-control" [(ngModel)]="user.firstName" name="firstName" />
+                              </div>
+                              <div class="col-md-6">
+                                <label class="fw-medium">Last Name</label>
+                                <input class="form-control" [(ngModel)]="user.lastName" name="lastName" />
+                              </div>
+                              <div class="col-md-6">
+                                <label class="fw-medium">Profession</label>
+                                <input class="form-control" [(ngModel)]="user.profession" name="profession" />
+                              </div>
+                              <div class="col-md-6">
+                                <label class="fw-medium">City</label>
+                                <input class="form-control" [(ngModel)]="user.city" name="city" />
+                              </div>
+                              <!-- add other fields similarly... -->
+                              <div class="col-12 text-end">
+                                <button class="btn btn-primary" type="submit">Save Changes</button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </ng-template>
+                    </li>
+                  </ul>
+  
+                  <div class="tab-content" [ngbNavOutlet]="nav"></div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- sidebar -->
+            <div class="col-xl-3">
+              <div class="card custom-card overflow-hidden border">
+                <div class="card-body border-bottom border-block-end-dashed text-center">
+                  <span class="avatar avatar-xxl avatar-rounded online mb-3">
+                    <img
+                      [src]="user.imageUrl || 'assets/images/faces/placeholder.png'"
+                      alt="{{ user.firstName }} {{ user.lastName }}"
+                    />
+                  </span>
+                  <h5 class="fw-semibold mb-1">
+                    {{ user.firstName }} {{ user.lastName }}
+                  </h5>
+                  <span class="d-block fw-medium text-muted mb-2">
+                    {{ user.designation }}
+                  </span>
+                  <p class="fs-12 mb-0 text-muted">
+                    <i class="ri-building-line me-1 align-middle"></i>
+                    {{ user.company }}
+                  </p>
+                </div>
+  
+                <div class="p-3">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item border-0 py-2">
+                      <div>
+                        <span class="fw-medium me-2">Email :</span>
+                        <span class="text-muted">{{ user.email }}</span>
+                      </div>
+                    </li>
+                    <li class="list-group-item border-0 py-2" *ngIf="getAge(user.dateOfBirth) !== null">
+                      <div>
+                        <span class="fw-medium me-2">Age :</span>
+                        <span class="text-muted">{{ getAge(user.dateOfBirth) }}</span>
+                      </div>
+                    </li>
+                    <li class="list-group-item border-0 py-2">
+                      <div>
+                        <span class="fw-medium me-2">Location :</span>
+                        <span class="text-muted">
+                          <!-- {{ [user.city, user.country].filter(x => x).join(', ') }} -->
+                        </span>
+                      </div>
+                    </li>
+                    <!-- add more basic info as needed -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  
 <!-- End:: row-1 -->

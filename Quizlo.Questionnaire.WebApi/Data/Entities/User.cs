@@ -50,8 +50,6 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [MaxLength(300)]
         public string? Headline { get; set; }
 
-
-
         public ICollection<UserRole> UserRoles { get; set; } = [];
     }
 
