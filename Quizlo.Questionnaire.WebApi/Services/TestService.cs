@@ -13,11 +13,13 @@ using AutoMapper;
 public interface ITestService
 {
 
-    Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync( int userId, CancellationToken ct = default);
+    Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(int userId, CancellationToken ct = default);
     Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int userId, CancellationToken ct = default);
     Task<TestDetailsDto> CreateInitialTestAsync(CreateTestRequest req, int userId, CancellationToken ct = default);
     Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(CreateTestRequest req, CancellationToken ct = default);
+    Task<IReadOnlyList<QuestionDto>> GetQuestionsByTestIdAsync(int testId, CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
+    Task<TestDetailsDto?> GetTestInfoAsync(int id, CancellationToken ct = default);
 
     Task<TestResultDto> GetTestResultAsync(int id, CancellationToken ct = default);
 
@@ -88,6 +90,28 @@ public class TestService : ITestService
         {
             var testQuestions = await GetTestAsync(req.Id, ct);
             return testQuestions.Questions!;
+        }
+    }
+
+    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsByTestIdAsync(int testId, CancellationToken ct = default)
+    {
+        if (testId == 0)
+            throw new ArgumentNullException(nameof(testId));
+
+        TestDetailsDto test = await GetTestAsync(testId, ct);
+
+        if (test == null)
+            throw new ArgumentNullException(nameof(test));
+
+        if (test.Questions.Count > 0)
+        {
+            var testQuestions = await GetTestAsync(testId, ct);
+            return testQuestions.Questions!;
+        }
+        else
+        {
+            var env = await GetAIGeneratedQuestions(test, ct);
+            return env.Questions!;
         }
     }
 
@@ -210,7 +234,7 @@ public class TestService : ITestService
         await _db.Tests.AddAsync(test, ct);
         await _db.SaveChangesAsync(ct);
 
-         return _mapper.Map<TestDetailsDto>(test);
+        return _mapper.Map<TestDetailsDto>(test);
 
     }
 
@@ -225,6 +249,37 @@ public class TestService : ITestService
             ["examCode"] = req.ExamCode,
             ["numberOfQuestions"] = req.NumberOfQuestions.ToString() ?? "",
             ["difficultyLevel"] = req.Difficulty.ToString() ?? "Mix",
+            ["subject"] = req.Subject ?? "All",
+            ["language"] = req.Language,
+            ["testId"] = "0",
+            ["examId"] = req.ExamId.ToString(),
+            ["testTitle"] = req.Title,
+        };
+
+        var webhookUrl = QueryHelpers.AddQueryString(_webhookUrl, query);
+        _log.LogInformation("Calling n8n webhook {Url}", webhookUrl);
+
+        using var resp = await client.GetAsync(webhookUrl, ct);
+        resp.EnsureSuccessStatusCode();
+
+        var raw = await resp.Content.ReadAsStringAsync(ct);
+
+        return System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw,
+                      new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? throw new ApplicationException("Empty n8n response");
+    }
+
+    private async Task<N8nResponseDto> GetAIGeneratedQuestions(TestDetailsDto req, CancellationToken ct)
+    {
+        var client = _http.CreateClient();
+        client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
+
+        var query = new Dictionary<string, string?>
+        {
+            ["examName"] = req.ExamName,
+            ["examCode"] = req.ExamCode,
+            ["numberOfQuestions"] = req.TotalQuestions.ToString() ?? "",
+            ["difficultyLevel"] = "Mix",
             ["subject"] = req.Subject ?? "All",
             ["language"] = req.Language,
             ["testId"] = "0",
@@ -287,6 +342,31 @@ public class TestService : ITestService
                         .FirstOrDefaultAsync(ct);
     }
 
+    public async Task<TestDetailsDto?> GetTestInfoAsync(int id, CancellationToken ct = default)
+    {
+        return await _db.Tests
+                        .AsNoTracking()
+                        .Include(t => t.Exam)
+                        .Where(t => t.Id == id)
+                        .Select(t => new TestDetailsDto
+                        {
+                            Id = t.Id,
+                            Title = t.Title,
+                            Duration = (TimeSpan)t.Duration,
+                            CreatedAt = t.CreatedAt,
+                            ExamId = t.ExamId,
+                            Subject = t.Subject,
+                            Language = t.Language,
+                            ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
+                            Status = t.Status,
+                            MarksScored = t.MarksScored,
+                            TotalMarks = t.TotalMarks,
+                            ExamName = t.Exam.Name,
+                            TotalQuestions = (int)t.TotalQuestions,
+                            ExamCode = t.Exam.Code
+                        }).FirstOrDefaultAsync(ct);
+    }
+
     public async Task<TestResultDto?> GetTestResultAsync(int id, CancellationToken ct = default)
     {
         return await _db.Tests.AsNoTracking().Include(t => t.Exam)
@@ -303,6 +383,7 @@ public class TestService : ITestService
                     Language = t.Language,
                     Status = t.Status,
                     MarksScored = t.MarksScored,
+                    TotalQuestions = (int)t.TotalQuestions,
                     TotalMarks = t.TotalMarks,
                     ExamName = t.Exam.Name,
                     ExamCode = t.Exam.Code

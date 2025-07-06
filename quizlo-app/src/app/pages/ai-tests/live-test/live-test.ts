@@ -64,12 +64,10 @@ export class LiveTest {
 
 
   loadTestDetails() {
-    this.isLoadingQuestions = true;
     this.testService.getTest(this.testId).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
           this.testDetails = resp.data as TestDetailsModel;
-          this.isLoadingQuestions = false;
           console.log('Test Details:', this.testDetails);
           this.cdr.detectChanges();
         } else {
@@ -107,11 +105,13 @@ export class LiveTest {
 
   startTestNow() {
     this.isLoadingQuestions = true;
+
     setTimeout(() => {
       this.canLoadQuestions = true;
       this.isLoadingQuestions = false;
+      this.router.navigate(['/test/test-window', this.testId]);
       this.cdr.detectChanges();
-    }, 3000);
+    }, 1000);
     this.cdr.markForCheck();
   }
 

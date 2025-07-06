@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerPayload } from '../model/answer.model';
 import { TestService } from '../services/test-service';
+import { QuestionModel } from '../model/questions.model';
 
 type RawAnswers = Record<string, string | string[]>;
 type AnswerSignalType = { [key: string]: string | string[] };
@@ -37,6 +38,7 @@ export class TestWindow implements OnInit, OnDestroy {
     difficulty: ''
   };
   result: any;
+  questions: QuestionModel[] = [];
   isLoadingQuestions = false;
   testDetails: TestDetailsModel | undefined;
   // Reactive signals for state management
@@ -51,6 +53,7 @@ export class TestWindow implements OnInit, OnDestroy {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.testId = idParam !== null ? +idParam : NaN;
     if (this.testId) {
+      this.loadTest();
       this.loadTestQuestions();
     }
   }
@@ -59,22 +62,40 @@ export class TestWindow implements OnInit, OnDestroy {
   private timerInterval: any;
 
   ngOnInit(): void {
-    this.startTimer();
-    this.loadSavedAnswers();
-    this.startAutoSave();
-    document.addEventListener('visibilitychange', this.visibilityChangeHandler);
-    // window.addEventListener('blur', this.windowBlurHandler);
-    // window.addEventListener('focus', this.windowFocusHandler);
-    this.cdr.detectChanges();
+    setTimeout(() => {
+     
+    }, 5000);
+
   }
 
   loadTestQuestions() {
     this.isLoadingQuestions = true;
+    this.testService.getTestQuestions(this.testId).subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess && resp.data) {
+          this.questions = resp.data as QuestionModel[];
+          this.isLoadingQuestions = false;
+          this.startTimer();
+          this.loadSavedAnswers();
+          this.startAutoSave();
+          document.addEventListener('visibilitychange', this.visibilityChangeHandler);
+          this.cdr.detectChanges();
+          console.log('Questions Details:', this.questions);
+        } else {
+          console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
+        }
+      },
+      error: err => {
+        console.error('Failed to load test details:', err);
+      }
+    });
+  }
+
+  loadTest() {
     this.testService.getTest(this.testId).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
           this.testDetails = resp.data as TestDetailsModel;
-          this.isLoadingQuestions = false;
           console.log('Test Details:', this.testDetails);
           this.cdr.detectChanges();
         } else {

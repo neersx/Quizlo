@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { TestDetailsDto, CreateTestRequest, TestSubmissionResultDto } from '../model/questions.model';
+import { TestDetailsDto, CreateTestRequest, TestSubmissionResultDto, QuestionModel } from '../model/questions.model';
 import { AnswerPayload, SubmitAnswerDto } from '../model/answer.model';
 import { ApiResponse } from '../../../models/api-response.model';
 import { TestDetailsModel } from '../model/tests.model';
@@ -21,13 +21,18 @@ export class TestService {
     return this.http.get<TestDetailsDto>(`${this.baseUrl}/${id}`);
   }
 
+  getTestQuestions(testId: number): Observable<ApiResponse<QuestionModel[]>> {
+    // return this.http.get<QuestionModel[]>(`${this.baseUrl}/${testId}/questions`);
+    return of(this.mockResponseQuestions);
+  }
+
   getTestResult(id: number): Observable<TestDetailsDto> {
     return this.http.get<TestDetailsDto>(`${this.baseUrl}/result/${id}`);
   }
 
   createTest(request: CreateTestRequest): Observable<any> {
     // return this.http.post<TestDetailsDto>(this.baseUrl, request);
-    return of(this.mockResponse);
+    return of(this.mockResponseQuestions);
   }
 
   createInitialTest(request: CreateTestRequest): Observable<any> {
@@ -41,23 +46,9 @@ export class TestService {
   }
 
     // Paste your hardcoded response here
-    private mockResponse: ApiResponse<TestDetailsModel> = {
+    private mockResponseQuestions: ApiResponse<QuestionModel[]> = {
         "isSuccess": true,
-        "data": {
-            "id": 5,
-            "title": "IBPS_PO-30-06-2025 Mock Test",
-            "language": "English",
-            "subject": "All",
-            "duration": "01:00:00",
-            "createdAt": "2025-06-30T17:00:50.419866",
-            "examId": 8,
-            "totalQuestions": 0,
-            "totalMarks": 48,
-            "marksScored": null,
-            "examName": "IBPS Probationary Officer",
-            "examCode": "IBPS_PO",
-            "status": "NotStarted",
-            "questions": [
+        "data": [
                 {
                     "id": 38,
                     "questionText": "If the sum of two numbers is 20 and their difference is 4, what are the numbers?",
@@ -458,8 +449,8 @@ export class TestService {
                         "D. Lungs"
                     ]
                 }
-            ]
-        },
+            ],
+
         "message": "Test created successfully",
         "statusCode": 201
     };
