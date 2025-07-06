@@ -19,7 +19,7 @@ export class ProfileService {
   }
 
   /** PUT updated profile fields */
-  updateProfile(payload: UpdateUserProfileModel): Observable<void> {
+  updateProfile(payload: any): Observable<void> {
     return this.http.put<void>(this.apiUrl, payload);
   }
 

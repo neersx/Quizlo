@@ -1,1 +1,193 @@
-<p>edit-profile works!</p>
+<div ngbNavContent>
+    <div
+      class="tab-pane p-0 border-0"
+      id="edit-profile-tab-pane"
+      role="tabpanel"
+      aria-labelledby="edit-profile-tab"
+      tabindex="0"
+    >
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <ul class="list-group list-group-flush border rounded-3">
+          <!-- Personal Info -->
+          <li class="list-group-item p-3">
+            <span class="fw-medium fs-15 d-block mb-3">
+              Personal Info:
+            </span>
+            <div class="row gy-3 align-items-center">
+              <div class="col-xl-3"><span class="fw-medium">User Name :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  readonly="true"
+                  class="form-control"
+                  formControlName="userName"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">First Name :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="firstName"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Last Name :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="lastName"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Designation :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="designation"
+                />
+              </div>
+            </div>
+          </li>
+  
+          <!-- Contact Info -->
+          <li class="list-group-item p-3">
+            <span class="fw-medium fs-15 d-block mb-3">
+              Contact Info :
+            </span>
+            <div class="row gy-3 align-items-center">
+              <div class="col-xl-3"><span class="fw-medium">Email :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Phone :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="phone"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Address :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="address"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">City :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="city"
+                />
+              </div>
+            </div>
+          </li>
+  
+          <!-- Social Info -->
+          <li class="list-group-item p-3">
+            <span class="fw-medium fs-15 d-block mb-3">
+              Social Info :
+            </span>
+            <div class="row gy-3 align-items-center">
+              <div class="col-xl-3"><span class="fw-medium">Github :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="github"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Twitter :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="twitter"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Linkedin :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="linkedin"
+                />
+              </div>
+  
+              <div class="col-xl-3"><span class="fw-medium">Portfolio :</span></div>
+              <div class="col-xl-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="portfolio"
+                />
+              </div>
+            </div>
+          </li>
+  
+          <!-- About Info -->
+          <li class="list-group-item p-3">
+            <span class="fw-medium fs-15 d-block mb-3">
+              About Info :
+            </span>
+            <div class="row gy-3 align-items-center">
+              <div class="col-xl-3"><span class="fw-medium">Biographical Info :</span></div>
+              <div class="col-xl-9">
+                <textarea
+                  class="form-control"
+                  rows="4"
+                  formControlName="about"
+                ></textarea>
+              </div>
+            </div>
+          </li>
+  
+          <!-- SKILLS -->
+          <!-- <li class="list-group-item p-3">
+            <span class="fw-medium fs-15 d-block mb-3">SKILLS :</span>
+            <div class="row gy-3 align-items-center">
+              <div class="col-xl-3"><span class="fw-medium">Skills :</span></div>
+              <div class="col-xl-9">
+                <spk-ng-select
+                  [options]="[]"
+                  formControlName="skills"
+                  [multiple]="true"
+                  [searchable]="true"
+                  [clearable]="true"
+                  placeholder="Select skills"
+                ></spk-ng-select>
+              </div>
+            </div>
+          </li> -->
+  
+          <!-- Submit button -->
+          <li class="list-group-item p-3 text-end">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="profileForm.invalid"
+            >
+              Save Changes
+            </button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+  

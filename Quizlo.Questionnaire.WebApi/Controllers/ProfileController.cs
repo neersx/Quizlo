@@ -61,8 +61,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
                 Headline = user.Headline,
                 Roles = roles
             };
-
-            return Ok(dto);
+            return Ok(ApiResponse<UserProfileDto>.Success(dto));
         }
 
         // PUT /api/profile
@@ -107,7 +106,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return NoContent();
+            return Ok(ApiResponse<UpdateUserProfileDto>.Success(model));
         }
 
         // DELETE /api/profile

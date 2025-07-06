@@ -14,7 +14,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
         public DateTime? DateOfBirth { get; set; }
         [MaxLength(50)]
-        public string Profession { get; set; } = "";
+        public string? Profession { get; set; }
         [MaxLength(100)]
         public string? City { get; set; }
         [MaxLength(100)]

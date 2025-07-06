@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { SharedModule } from '../../../shared/sharedmodule';
 import { NgbNavModule,NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { GalleryItem, Gallery, ImageItem, ImageSize, ThumbnailsPosition, GalleryModule } from 'ng-gallery';
@@ -13,6 +13,7 @@ import { UserProfileModel } from '../user-profile.model';
 import { Observable } from 'rxjs';
 import { ProfileService } from '../user-profile.service';
 import { CommonModule, NgIf, NgForOf, AsyncPipe } from '@angular/common';
+import { EditProfile } from '../edit-profile/edit-profile';
 const data = [
   {
     srcUrl: './assets/images/media/media-40.jpg',
@@ -84,38 +85,33 @@ const data = [
   imports: [     CommonModule,
     FormsModule,
     NgbNavModule,
+    AsyncPipe,
     AsyncPipe,SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkProfileReusableCardComponent,SpkNgSelectComponent,SpkGalleryComponent,
-    GalleryModule,LightboxModule, OverlayscrollbarsModule,SpkNgSelectComponent,FormsModule,ReactiveFormsModule],
-
+    GalleryModule,LightboxModule, OverlayscrollbarsModule,SpkNgSelectComponent,FormsModule,ReactiveFormsModule, EditProfile],
     templateUrl: './user-profile.html',
-    styleUrl: './user-profile.scss'
+    styleUrl: './user-profile.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class UserProfile {
   user$: Observable<UserProfileModel> | undefined;
+  user : any;
 
-  Skills=[
-    {label:"Project Management",value:1},
-    {label:"Data Analysis",value:2},
-    {label:"Marketing Strategy",value:3},
-    {label:"Graphic Design",value:4},
-    {label:"Content Creation",value:5},
-    {label:"Market Research",value:6},
-    {label:"Client Relations",value:7},
-    {label:"Event Planning",value:8},
-    {label:"Budgeting and Finance",value:9},
-    {label:"Negotiation Skills",value:10},
-    {label:"Team Collaboration",value:11},
-    {label:"Adaptability",value:12},
-
-  ]
   selectedSkill=[1,2,3,4,5,6,7,8,9,10,11,12]
   imageData = data;
   items!: GalleryItem[];
   constructor(public gallery: Gallery, public lightbox: Lightbox, 
-    private profileService: ProfileService) {}
+    private profileService: ProfileService, private cdr: ChangeDetectorRef) {}
+
+
   ngOnInit() {
     this.user$ = this.profileService.getProfile();
+
+    this.profileService.getProfile().subscribe((data : any) => {
+      this.user = data.data;
+      this.cdr.detectChanges();
+    });
+    /** Basic Gallery Example */
 
     // Creat gallery items
     this.items = this.imageData.map(
@@ -147,6 +143,14 @@ export class UserProfile {
     const diff = Date.now() - new Date(dob).getTime();
     return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
   }
+
+  getLocation(user: UserProfileModel): string {
+    const parts = [user.city, user.country]
+      .filter((x): x is string => !!x);
+      this.cdr.markForCheck();
+    return parts.length ? parts.join(', ') : 'N/A';
+  }
+  
 
   profiles = [
     {

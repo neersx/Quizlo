@@ -1,6 +1,9 @@
 // src/app/models/user-profile.model.ts
 
 export interface UserProfileModel {
+    phoneNumber: string | null | undefined;
+    githubUrl: string | null | undefined;
+    portfolioUrl: string | null | undefined;
     id: number;
     userName?: string;
     email?: string;
