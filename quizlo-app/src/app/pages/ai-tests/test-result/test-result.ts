@@ -73,6 +73,10 @@ loadChart() {
   this.cdr.markForCheck();
 }
 
+takeNewTest() {
+  this.router.navigate(['/test/select-exam']);
+}
+
 private formatDuration(dur: string): string {
   const [h, m, s] = dur.split(':').map(v => parseInt(v, 10));
   const hrs = h.toString().padStart(2, '0');
