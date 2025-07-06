@@ -69,16 +69,6 @@ export class LiveTest {
         return;
       }
 
-      // if (isPlatformBrowser(this.platformId)) {
-      //   const currentUser = localStorage.getItem('current_user');
-      //   if (!currentUser) {
-      //     alert('You are not logged in');
-      //     const returnUrl = this.router.url;
-      //     this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
-      //     return;
-      //   }
-      // }
-
       this.createAndNavigateToTest(examId, language, code, examName, subject, difficulty);
       this.cdr.markForCheck();
     });

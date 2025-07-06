@@ -22,6 +22,8 @@ public interface ITestService
         CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
 
+    Task<TestResultDto> GetTestResultAsync(int id, CancellationToken ct = default);
+
     Task<TestSubmissionResultDto> SubmitAnswersAsync(
        int testId,
        SubmitTestAnswersRequest request,
@@ -264,12 +266,30 @@ public class TestService : ITestService
                         .FirstOrDefaultAsync(ct);
     }
 
+    public async Task<TestResultDto?> GetTestResultAsync(int id, CancellationToken ct = default)
+    {
+        return await _db.Tests.AsNoTracking().Include(t => t.Exam)
+                .Where(t => t.Id == id)
+                .Select(t => new TestResultDto
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Duration = (TimeSpan)t.Duration,
+                    CreatedAt = t.CreatedAt,
+                    ExamId = t.ExamId,
+                    Subject = t.Subject,
+                    Language = t.Language,
+                    Status = t.Status,
+                    MarksScored = t.MarksScored,
+                    TotalMarks = t.TotalMarks,
+                    ExamName = t.Exam.Name,
+                    ExamCode = t.Exam.Code
+                })
+                .FirstOrDefaultAsync(ct);
+    }
 
-    // / Submit all answers for a given test in one shot.
-    public async Task<TestSubmissionResultDto> SubmitAnswersAsync(
-        int testId,
-        SubmitTestAnswersRequest req,
-        CancellationToken ct = default)
+
+    public async Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest req,CancellationToken ct = default)
     {
         if (req.Answers.Count == 0)
             throw new ArgumentException("No answers supplied.", nameof(req));
@@ -328,7 +348,6 @@ public class TestService : ITestService
         throw new InvalidOperationException("Could not submit answers due to concurrent edits.");
     }
 
-    // --------------------------------------------------------
 
     private static bool IsAnswerCorrect(Question q, string[] selected)
     {

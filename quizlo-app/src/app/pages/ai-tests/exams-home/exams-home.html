@@ -83,7 +83,7 @@
             <div class="card custom-card">
               <div class="card-body">
                 <div class="float-end">
-                  <a href="javascript:void(0);" class="avatar avatar-rounded bg-primary-transparent avatar-sm" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add to Wishlist" ngbTooltip="Add to Wishlist">
+                  <a  [routerLink]="['/test', 'test-result', test.id]" class="avatar avatar-rounded bg-primary-transparent avatar-sm" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add to Wishlist" ngbTooltip="Add to Wishlist">
                     <span><i class="bi bi-heart"></i></span>
                   </a>
                 </div>
@@ -96,7 +96,7 @@
 
                   <div class="ms-2 mt-2">
                     <h6 class="fw-medium mb-1 d-flex align-items-center">
-                      <a href="javascript:void(0);">{{ test.title }} <i class="ri-verified-badge-fill text-secondary fs-13" data-bs-toggle="tooltip" ngbTooltip="Verified company"></i></a>
+                      <a [routerLink]="['/test', 'test-result', test.id]">{{ test.title }} <i class="ri-verified-badge-fill text-secondary fs-13" data-bs-toggle="tooltip" ngbTooltip="Verified company"></i></a>
                     </h6>
                     <div class="d-flex gap-2 mb-3 flex-wrap">
                       <a href="javascript:void(0);"><i class="ri-map-pin-2-line text-info"></i> {{ test.language }} </a>

@@ -61,7 +61,10 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
                ? Ok(dto)
                : NotFound();
 
-        /// <summary>Submit all answers for the specified test.</summary>
+        [HttpGet("result/{id:int}", Name = nameof(GetTestResult))]
+        public async Task<IActionResult> GetTestResult(int id, CancellationToken ct)
+        => await _svc.GetTestResultAsync(id, ct) is { } dto ? Ok(dto) : NotFound();
+
         [HttpPost("{testId:int}/submit")]
         public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(
             int testId,

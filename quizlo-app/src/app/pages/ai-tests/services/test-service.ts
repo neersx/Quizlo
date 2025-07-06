@@ -21,6 +21,10 @@ export class TestService {
     return this.http.get<TestDetailsDto>(`${this.baseUrl}/${id}`);
   }
 
+  getTestResult(id: number): Observable<TestDetailsDto> {
+    return this.http.get<TestDetailsDto>(`${this.baseUrl}/result/${id}`);
+  }
+
   createTest(request: CreateTestRequest): Observable<any> {
     return this.http.post<TestDetailsDto>(this.baseUrl, request);
     // return of(this.mockResponse);
