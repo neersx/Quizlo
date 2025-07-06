@@ -8,26 +8,20 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using System.Data;
 using Quizlo.Questionnaire.WebApi.Helpers.Constants;
+using AutoMapper;
 
 public interface ITestService
 {
 
-    Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(
-       int userId,
-       CancellationToken ct = default);
-    Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int createdByUserId,
-                                         CancellationToken ct = default);
-    Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(
-        CreateTestRequest req,
-        CancellationToken ct = default);
+    Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync( int userId, CancellationToken ct = default);
+    Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int userId, CancellationToken ct = default);
+    Task<TestDetailsDto> CreateInitialTestAsync(CreateTestRequest req, int userId, CancellationToken ct = default);
+    Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(CreateTestRequest req, CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
 
     Task<TestResultDto> GetTestResultAsync(int id, CancellationToken ct = default);
 
-    Task<TestSubmissionResultDto> SubmitAnswersAsync(
-       int testId,
-       SubmitTestAnswersRequest request,
-       CancellationToken ct = default);
+    Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest request, CancellationToken ct = default);
 }
 
 public class TestService : ITestService
@@ -37,14 +31,17 @@ public class TestService : ITestService
     private readonly ILogger<TestService> _log;
     private readonly string _webhookUrl;
     private const int MaxRetries = 3;
+    private readonly IMapper _mapper;
 
     public TestService(QuizDbContext db,
                        IHttpClientFactory http,
                        IConfiguration cfg,
+                       IMapper mapper,
                        ILogger<TestService> log)
     {
         _db = db;
         _http = http;
+        _mapper = mapper;
         _log = log;
         _webhookUrl = cfg["N8n:WebhookUrl"]!; // -> appsettings.json
     }
@@ -194,6 +191,33 @@ public class TestService : ITestService
     }
 
 
+    public async Task<TestDetailsDto> CreateInitialTestAsync(CreateTestRequest req, int userId, CancellationToken ct = default)
+    {
+        var exam = await _db.Exams.AsNoTracking().FirstOrDefaultAsync(e => e.Id == req.ExamId, ct)
+            ?? throw new KeyNotFoundException($"Exam {req.ExamCode} was not found");
+
+        var test = new Test
+        {
+            ExamId = exam.Id,
+            Title = req.Title,
+            Duration = TimeSpan.FromMinutes(req.TotalQuestions * 2 ?? 40),
+            DurationCompltedIn = TimeSpan.Zero,
+            Subject = req.Subject ?? "All",
+            Language = req.Language ?? "English",
+            CreatedAt = DateTime.UtcNow,
+            TotalQuestions = req.TotalQuestions ?? 20,
+            CreatedByUserId = userId,
+            Status = TestStatus.NotStarted,
+            TotalMarks = req.TotalQuestions * 3
+        };
+
+        await _db.Tests.AddAsync(test, ct);
+        await _db.SaveChangesAsync(ct);
+
+         return _mapper.Map<TestDetailsDto>(test);
+
+    }
+
     private async Task<N8nResponseDto> GetAIGeneratedQuestions(CreateTestRequest req, CancellationToken ct)
     {
         var client = _http.CreateClient();
@@ -289,7 +313,7 @@ public class TestService : ITestService
     }
 
 
-    public async Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest req,CancellationToken ct = default)
+    public async Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest req, CancellationToken ct = default)
     {
         if (req.Answers.Count == 0)
             throw new ArgumentException("No answers supplied.", nameof(req));

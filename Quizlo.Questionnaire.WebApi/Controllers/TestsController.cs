@@ -41,6 +41,18 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, apiResponse);
         }
 
+        [HttpPost("create-initial-test")]
+        [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateInitialTest([FromBody] CreateTestRequest request,
+                                                CancellationToken ct)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var dto = await _svc.CreateInitialTestAsync(request, userId, ct);
+
+            var apiResponse = ApiResponse<TestDetailsDto>.Success(dto, "Initial Test created successfully", StatusCodes.Status201Created);
+            return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, apiResponse);
+        }
+
         [HttpGet("questions")]
         [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> GetTestQuestions([FromBody] CreateTestRequest request,

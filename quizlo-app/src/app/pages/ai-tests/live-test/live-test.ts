@@ -98,7 +98,7 @@ export class LiveTest {
 
   loadTest(payload: any) {
     this.isLoadingQuestions = true;
-    this.testService.createTest(payload).subscribe({
+    this.testService.createInitialTest(payload).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
           this.testDetails = resp.data as TestDetailsModel;

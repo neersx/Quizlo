@@ -13,5 +13,6 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         string? Language = "English",
         DifficultyLevel Difficulty = DifficultyLevel.Mix,
         bool HasAiQuestions = false,
+        int? TotalQuestions = 20,
         TimeSpan? Duration = null);
 }

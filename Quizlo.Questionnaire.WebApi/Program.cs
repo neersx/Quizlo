@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Data.Seed;
+using Quizlo.Questionnaire.WebApi.MapProfiles;
 using Quizlo.Questionnaire.WebApi.Services;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -50,6 +51,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
+
+// Register all Profiles in this assembly
+builder.Services.AddAutoMapper(typeof(TestProfile).Assembly);
 
 
 // 5. Register your services

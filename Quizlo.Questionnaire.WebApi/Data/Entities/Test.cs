@@ -39,6 +39,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public double? MarksScored { get; set; }
         [MaxLength(1000)]
         public string? TestRules { get; set; }
+
+         public int? TotalQuestions { get; set; } = 0;
         [MaxLength(1000)]
         public string? Notes { get; set; }
 
