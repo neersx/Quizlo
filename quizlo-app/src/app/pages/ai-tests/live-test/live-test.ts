@@ -22,6 +22,7 @@ import { take } from 'rxjs';
 export class LiveTest {
   thumbsSwiper: any;
   canLoadQuestions = false;
+  testId = 0;
   testDetails: TestDetailsModel = {
     id: 0,
     title: '',
@@ -54,62 +55,22 @@ export class LiveTest {
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const examId = Number(params['examId']);
-      const language = params['language'];
-      const code = params['code'];
-      const examName = params['examName'];
-      const subject = params['subject'];
-      const difficulty = params['difficulty'];
-
-      this.testDetails = { ...this.testDetails, examCode: code, examName, language, subject, difficulty, examId };
-
-      if (!examId || !language) {
-        this.error = 'Missing examId or language';
-        return;
-      }
-
-      this.createAndNavigateToTest(examId, language, code, examName, subject, difficulty);
-      this.cdr.markForCheck();
-    });
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.testId = idParam !== null ? +idParam : NaN;
+    if (this.testId) {
+      this.loadTestDetails();
+    }
   }
 
-  private createAndNavigateToTest(examId: number, language: string, examCode: string = '', examName: string = '', subject: string = 'All', difficulty: number = 3) {
-    const today = new Date();
-    const formatted = today.toLocaleDateString('en-IN', {
-      day: '2-digit', month: '2-digit', year: 'numeric'
-    });
-    // e.g. "28/06/2025"
-    const title = `${examCode}-${formatted.replace(/\//g, '-')} Mock Test`;
 
-    this.payload = {
-      examId,     // adjust as needed
-      subject,       // or your dynamic subject
-      language,
-      examCode,
-      examName,
-      difficulty: 1,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
-      title,      // or build from exam name
-      duration: '00:00:00'        // e.g. HH:MM:SS
-    };
-
-    this.loadTest(this.payload);
-  }
-
-  loadTest(payload: any) {
+  loadTestDetails() {
     this.isLoadingQuestions = true;
-    this.testService.createInitialTest(payload).subscribe({
+    this.testService.getTest(this.testId).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
           this.testDetails = resp.data as TestDetailsModel;
-          // Optional: Parse Options from optionsJson for each question
-          this.questions = (this.testDetails?.questions || []).map((q: any) => ({
-            ...q,
-            options: q.options
-          }));
           this.isLoadingQuestions = false;
           console.log('Test Details:', this.testDetails);
-          console.log('Questions:', this.questions);
           this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Could not start test';

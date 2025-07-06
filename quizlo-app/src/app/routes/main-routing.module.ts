@@ -11,7 +11,7 @@ export const admin: Routes = [
         import('../pages/ai-tests/prepare-test/prepare-test').then((m) => m.PrepareTest),
     },
     {
-        path: 'live-test',
+        path: 'live-test/:id',
         loadComponent: () =>
           import('../pages/ai-tests/live-test/live-test').then((m) => m.LiveTest),
       },

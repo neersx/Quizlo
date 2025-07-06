@@ -21,6 +21,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public double? MarksScored { get; init; }
         public string ExamName { get; set; } = default!;
         public string ExamCode { get; set; }
+        public string ImageUrl { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;
     }
 }

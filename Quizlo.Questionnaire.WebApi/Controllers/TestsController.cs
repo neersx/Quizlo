@@ -42,40 +42,85 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         }
 
         [HttpPost("create-initial-test")]
-        [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateInitialTest([FromBody] CreateTestRequest request,
-                                                CancellationToken ct)
+        [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateInitialTest([FromBody] CreateTestRequest request, CancellationToken ct)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var dto = await _svc.CreateInitialTestAsync(request, userId, ct);
 
-            var apiResponse = ApiResponse<TestDetailsDto>.Success(dto, "Initial Test created successfully", StatusCodes.Status201Created);
-            return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, apiResponse);
+            var apiResponse = ApiResponse<TestDetailsDto>.Success(
+                dto,
+                "Initial test created successfully",
+                StatusCodes.Status201Created
+            );
+
+            // CreatedAtRoute will still return 201
+            return CreatedAtRoute(
+                nameof(GetTest),               // assuming you have a GetTest(id) action
+                new { id = dto.Id },
+                apiResponse
+            );
         }
 
         [HttpGet("questions")]
-        [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status201Created)]
-        public async Task<IActionResult> GetTestQuestions([FromBody] CreateTestRequest request,
-                                                CancellationToken ct)
+        [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTestQuestions([FromBody] CreateTestRequest request, CancellationToken ct)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var dto = await _svc.CreateTestAsync(request, userId, ct);
 
-            return CreatedAtRoute(nameof(GetTest), new { id = dto.Id }, dto);
+            var apiResponse = ApiResponse<TestDetailsDto>.Success(
+                dto,
+                "Test questions retrieved successfully",
+                StatusCodes.Status200OK
+            );
+
+            return Ok(apiResponse);
         }
 
         /// GET api/tests/{id}
         [HttpGet("{id:int}", Name = nameof(GetTest))]
-        [ProducesResponseType(typeof(TestDetailsDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetTest(int id, CancellationToken ct)
-            => await _svc.GetTestAsync(id, ct) is { } dto
-               ? Ok(dto)
-               : NotFound();
+        {
+            var dto = await _svc.GetTestAsync(id, ct);
+            if (dto is not null)
+            {
+                var success = ApiResponse<TestDetailsDto>.Success(dto);
+                return Ok(success);
+            }
+            else
+            {
+                var failure = ApiResponse<TestDetailsDto>.Failure(
+                    $"Test with id {id} not found",
+                    StatusCodes.Status404NotFound
+                );
+                return NotFound(failure);
+            }
+        }
 
         [HttpGet("result/{id:int}", Name = nameof(GetTestResult))]
+        [ProducesResponseType(typeof(ApiResponse<TestResultDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<TestResultDto>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetTestResult(int id, CancellationToken ct)
-        => await _svc.GetTestResultAsync(id, ct) is { } dto ? Ok(dto) : NotFound();
+        {
+            var dto = await _svc.GetTestResultAsync(id, ct);
+            if (dto is not null)
+            {
+                var success = ApiResponse<TestResultDto>.Success(dto);
+                return Ok(success);
+            }
+            else
+            {
+                var failure = ApiResponse<TestResultDto>.Failure(
+                    $"Result for test id {id} not found",
+                    StatusCodes.Status404NotFound
+                );
+                return NotFound(failure);
+            }
+        }
+
 
         [HttpPost("{testId:int}/submit")]
         public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(

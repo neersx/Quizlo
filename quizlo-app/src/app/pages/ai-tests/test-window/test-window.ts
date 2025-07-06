@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Input,
 import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerPayload } from '../model/answer.model';
 import { TestService } from '../services/test-service';
 
@@ -18,7 +18,7 @@ type AnswerSignalType = { [key: string]: string | string[] };
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestWindow implements OnInit, OnDestroy {
-  
+  testId = 0;
   @Input() testData: TestDetailsModel = {
     id: 0,
     title: '',
@@ -37,6 +37,8 @@ export class TestWindow implements OnInit, OnDestroy {
     difficulty: ''
   };
   result: any;
+  isLoadingQuestions = false;
+  testDetails: TestDetailsModel | undefined;
   // Reactive signals for state management
   answers = signal<{ [key: string]: string | string[] }>({});
   timeRemaining = signal<number>(70 * 60); // 70 minutes in seconds
@@ -44,9 +46,13 @@ export class TestWindow implements OnInit, OnDestroy {
   currentQuestionIndex = signal<number>(0);
 
   constructor(private cdr: ChangeDetectorRef, private router: Router,
-    private testService: TestService
+    private testService: TestService,    private route: ActivatedRoute,
   ) {
-
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.testId = idParam !== null ? +idParam : NaN;
+    if (this.testId) {
+      this.loadTestQuestions();
+    }
   }
 
   // Timer variables
@@ -60,6 +66,25 @@ export class TestWindow implements OnInit, OnDestroy {
     // window.addEventListener('blur', this.windowBlurHandler);
     // window.addEventListener('focus', this.windowFocusHandler);
     this.cdr.detectChanges();
+  }
+
+  loadTestQuestions() {
+    this.isLoadingQuestions = true;
+    this.testService.getTest(this.testId).subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess && resp.data) {
+          this.testDetails = resp.data as TestDetailsModel;
+          this.isLoadingQuestions = false;
+          console.log('Test Details:', this.testDetails);
+          this.cdr.detectChanges();
+        } else {
+          console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
+        }
+      },
+      error: err => {
+        console.error('Failed to load test details:', err);
+      }
+    });
   }
 
   windowBlurHandler = () => {

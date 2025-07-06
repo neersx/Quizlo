@@ -3,7 +3,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from '../../../shared/sharedmodule';
 import { SpkNgSelectComponent } from '../../../@spk/reusable-ui-elements/spk-ng-select/spk-ng-select.component';
-import { Exam } from '../model/questions.model';
+import { Exam, TestDetailsDto } from '../model/questions.model';
 import { ExamService } from '../services/exam-service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DropdownService } from '../../../services/dropdown.service';
@@ -13,6 +13,7 @@ import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys'
 import { Dropdown } from '../../../models/dropdown.model';
 import { SpkDropdownsComponent } from '../../../@spk/reusable-ui-elements/spk-dropdowns/spk-dropdowns.component';
 import { TestService } from '../services/test-service';
+import { TestDetailsModel } from '../model/tests.model';
 
 @Component({
   selector: 'app-exams-home',
@@ -32,6 +33,7 @@ export class ExamsHome implements OnInit {
   languages: any[] = [];
   loading = false;
   loadingTest = false;
+  testDetails : TestDetailsModel | undefined;
   tests: any[] = [];
   error = '';
 
@@ -148,9 +150,8 @@ export class ExamsHome implements OnInit {
     setTimeout(() => {
 
       if (this.isUserLoggedIn()) {
-        this.router.navigate(['/test/live-test'], {
-          queryParams: { examName: `${this.selectedExam.name}`, code: `${this.selectedExam.code}`, examId: this.selectedExam.value, language: this.selectedLanguage, subject: this.selectedSubject }
-        });
+        const payload = this.getPayload();
+        this.loadTest(payload);
       } else {
         this.router.navigate(['/auth/login'], {
           queryParams: { returnUrl: this.router.url }
@@ -172,9 +173,48 @@ export class ExamsHome implements OnInit {
     return false;
   }
 
+  private getPayload() {
+    const today = new Date();
+    const formatted = today.toLocaleDateString('en-IN', {
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+    // e.g. "28/06/2025"
+    const title = `${this.selectedExam.code}${formatted.replace(/\//g, '-')} Mock Test`;
+
+    const payload = {
+      examId : this.selectedExam.value,     // adjust as needed
+      subject : this.selectedSubject,       // or your dynamic subject
+      language : this.selectedLanguage,
+      examCode : this.selectedExam.code,
+      examName : this.selectedExam.name,
+      difficulty: 1,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
+      title,      // or build from exam name
+      duration: '00:00:00'        // e.g. HH:MM:SS
+    };
+
+    return payload;
+  }
+
+    loadTest(payload: any) {
+      this.testService.createInitialTest(payload).subscribe({
+        next: (resp: any) => {
+          if (resp.isSuccess && resp.data) {
+            this.testDetails = resp.data as TestDetailsModel;
+            console.log('Test Details:', this.testDetails);
+            this.router.navigate(['/test/live-test/' + this.testDetails.id]);
+          } else {
+            this.error = resp.message ?? 'Could not start test';
+          }
+        },
+        error: err => {
+          this.error = err.message || 'Server error';
+        }
+      });
+    }
+
   handleLanguageChange(value: any | any[]) {
     console.log(value);
-    this.selectedLanguage = value.value;
+    this.selectedLanguage = value.label;
   }
 
   handleExamChange(value: any | any[]) {

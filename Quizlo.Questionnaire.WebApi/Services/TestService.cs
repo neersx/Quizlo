@@ -47,9 +47,7 @@ public class TestService : ITestService
     }
 
     /// <summary>All tests that belong to one user, most-recent first.</summary>
-    public async Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(
-        int userId,
-        CancellationToken ct = default)
+    public async Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(int userId, CancellationToken ct = default)
     {
         // NB: projection happens in SQL, so only the needed columns travel over the wire
         return await _db.Tests
@@ -76,9 +74,7 @@ public class TestService : ITestService
             .ToListAsync(ct);
     }
 
-    public async Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(
-        CreateTestRequest req,
-        CancellationToken ct = default)
+    public async Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(CreateTestRequest req, CancellationToken ct = default)
     {
         if (req.Id == null)
             throw new ArgumentNullException(nameof(req.Id));
@@ -267,6 +263,7 @@ public class TestService : ITestService
                             ExamId = t.ExamId,
                             Subject = t.Subject,
                             Language = t.Language,
+                            ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
                             Status = t.Status,
                             MarksScored = t.MarksScored,
                             TotalMarks = t.TotalMarks,
@@ -301,6 +298,7 @@ public class TestService : ITestService
                     Duration = (TimeSpan)t.Duration,
                     CreatedAt = t.CreatedAt,
                     ExamId = t.ExamId,
+                    ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
                     Subject = t.Subject,
                     Language = t.Language,
                     Status = t.Status,
