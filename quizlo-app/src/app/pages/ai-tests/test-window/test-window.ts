@@ -88,7 +88,7 @@ export class TestWindow implements OnInit, OnDestroy {
         if (resp.isSuccess && resp.data) {
           this.questions = resp.data as QuestionModel[];
           this.testData.questions = this.questions;
-          // this.isLoadingQuestions = false;
+          this.isLoadingQuestions = false;
           this.startTimer();
           this.loadSavedAnswers();
           this.startAutoSave();
@@ -111,7 +111,7 @@ export class TestWindow implements OnInit, OnDestroy {
       next: (resp: any) => {
         setTimeout(() => {
           this.isLoadingTest = false;
-        }, 3000);
+     
      
         if (resp.isSuccess && resp.data) {
           this.testDetails = resp.data as TestDetailsModel;
@@ -121,6 +121,7 @@ export class TestWindow implements OnInit, OnDestroy {
         } else {
           console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
         }
+      }, 3000);
       },
       error: err => {
         console.error('Failed to load test details:', err);
