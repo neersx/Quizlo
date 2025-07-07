@@ -8,12 +8,12 @@ import { ApexChartComponent } from '../../../@spk/apex-chart/apex-chart.componen
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
-import { error } from 'console';
 import { CommonModule } from '@angular/common';
+import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
 
 @Component({
   selector: 'app-test-result',
-  imports: [CommonModule, SharedModule, GalleryModule, NgbTooltipModule, SpkNftCardComponent, SpkReusableTablesComponent, ApexChartComponent],
+  imports: [CommonModule, SharedModule, GalleryModule, NgbTooltipModule, SpkNftCardComponent, SpkReusableTablesComponent, ApexChartComponent, TestSkeletonLoader],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './test-result.html',
   styleUrl: './test-result.scss',
@@ -25,6 +25,8 @@ export class TestResult implements AfterViewInit, OnInit {
   durationRaw = '00:40:00';            // ← from your API
   durationFormatted = '';
   percentage: any;
+  isLoading = true;
+  dotsConfig!: false;
   testId = 0;
 
   constructor(
@@ -40,7 +42,6 @@ export class TestResult implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-  
     if (!this.testId) return;
     this.getTestResultDetails(this.testId);
     this.cdr.markForCheck();
@@ -49,23 +50,25 @@ export class TestResult implements AfterViewInit, OnInit {
   getTestResultDetails(id: number) {
     this.testService.getTestResult(id).subscribe((result: any) => {
 
-      this.testResult = result;
-      this.durationFormatted = this.formatDuration(this.durationRaw);
-      if (this.testResult && this.testResult.marksScored && this.testResult.totalMarks) {
-        this.percentage = +((this.testResult.marksScored / this.testResult.totalMarks) * 100).toFixed(0);
-      } else {
-        this.percentage = 0;
+      if(result.isSuccess)
+      {
+        this.testResult = result.data;
+        this.durationFormatted = this.formatDuration(this.durationRaw);
+        if (this.testResult && this.testResult.marksScored && this.testResult.totalMarks) {
+          this.percentage = +((this.testResult.marksScored / this.testResult.totalMarks) * 100).toFixed(0);
+        } else {
+          this.percentage = 0;
+        }
+        this.loadChart();
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
-      this.loadChart();
-      this.cdr.detectChanges();
-
     })
   }
 
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
-  dotsConfig!: false;
 
 loadChart() {
   this.chartOptions1.series = [this.percentage?? 0];

@@ -52,7 +52,7 @@ export class TestWindow implements OnInit, OnDestroy {
   questionIndexes: number[] = [];
 
   currentVariant: 'default' | 'wave' | 'pulse' | 'building' = 'default';
-  
+
   variants = [
     { key: 'default' as const, name: 'Progressive' },
     { key: 'wave' as const, name: 'Wave Effect' },
@@ -61,7 +61,7 @@ export class TestWindow implements OnInit, OnDestroy {
   ];
 
   constructor(private cdr: ChangeDetectorRef, private router: Router,
-    private testService: TestService,    private route: ActivatedRoute,
+    private testService: TestService, private route: ActivatedRoute,
   ) {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.testId = idParam !== null ? +idParam : NaN;
@@ -76,7 +76,7 @@ export class TestWindow implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     setTimeout(() => {
-     
+
     }, 5000);
 
   }
@@ -111,17 +111,15 @@ export class TestWindow implements OnInit, OnDestroy {
       next: (resp: any) => {
         setTimeout(() => {
           this.isLoadingTest = false;
-     
-     
-        if (resp.isSuccess && resp.data) {
-          this.testDetails = resp.data as TestDetailsModel;
-          this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
-          console.log('Test Details:', this.testDetails);
-          this.cdr.detectChanges();
-        } else {
-          console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
-        }
-      }, 3000);
+          if (resp.isSuccess && resp.data) {
+            this.testDetails = resp.data as TestDetailsModel;
+            this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
+            console.log('Test Details:', this.testDetails);
+            this.cdr.detectChanges();
+          } else {
+            console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
+          }
+        }, 3000);
       },
       error: err => {
         console.error('Failed to load test details:', err);
@@ -300,13 +298,13 @@ export class TestWindow implements OnInit, OnDestroy {
       // extract question id from key
       const idMatch = key.match(/^question_(\d+)$/);
       const questionId = idMatch ? +idMatch[1] : 0;
-  
+
       // always store as array
       const selectedIds = Array.isArray(value) ? value : [value];
-  
+
       return { questionId, selectedIds };
     });
-  
+
     return { answers };
   }
 
@@ -318,7 +316,7 @@ export class TestWindow implements OnInit, OnDestroy {
     const rawAnswers = this.answers();  // read the signal value
     const answers = this.mapAnswersSignalToPayload(rawAnswers);
 
-    const payload : SubmitTestRequest = {
+    const payload: SubmitTestRequest = {
       testId: this.testId,
       answers: answers.answers,
       rawAnswers: this.answers(),
@@ -332,18 +330,18 @@ export class TestWindow implements OnInit, OnDestroy {
     localStorage.removeItem('bitsat_answers');
 
     this.testService.submitTestAnswers(this.testId, payload).subscribe(
-      (response : any) => {
-      // Mark test as submitted
-      this.isTestSubmitted.set(true);
+      (response: any) => {
+        // Mark test as submitted
+        this.isTestSubmitted.set(true);
+        this.processSubmission(payload);
+        this.router.navigate(['/test/test-result', this.testId]);
         console.log('Test submitted successfully:', response);
       },
-      (error : any) => {
+      (error: any) => {
         console.error('Error submitting test:', error);
       }
     )
 
-    // In a real application, you would send this data to your backend
-    this.processSubmission(payload);
   }
 
   private processSubmission(submissionData: SubmitTestRequest): void {
