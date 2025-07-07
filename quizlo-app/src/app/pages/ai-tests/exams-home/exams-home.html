@@ -58,7 +58,8 @@
                             <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
                             Loading your Test. Please wait...
                         </button>
-                        <button *ngIf="!loadingTest" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-success btn-wave">Start Your Test Now</button>
+                        <button *ngIf="!loadingTest && !tests || tests.length == 0" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-success btn-wave">Start Your Test Now</button>
+                        <button *ngIf="tests && tests.length > 0" class="btn btn-warning btn-wave">Finish Below Active Tests First</button>
                     </div>
                 </div>
             </div>
