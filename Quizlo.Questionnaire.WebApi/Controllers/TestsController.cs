@@ -133,9 +133,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
 
         [HttpPost("{testId:int}/submit")]
-        public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(
-            int testId,
-            [FromBody] SubmitTestAnswersRequest request,
+        public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(int testId,[FromBody] SubmitTestAnswersRequest request,
             CancellationToken ct)
         {
             if (request is null || request.Answers.Count == 0)

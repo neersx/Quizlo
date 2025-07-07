@@ -8,6 +8,11 @@
 
     public record SubmitTestAnswersRequest
     {
+        public int TestId { get; init; } = 0;
+        public TimeSpan DurationCompletedIn { get; init; } // minutes
+        public bool IsAutoSubmit { get; init; }
+        public DateTime? SubmissionTime { get; init; } = DateTime.UtcNow;
+
         public List<SubmitAnswerDto> Answers { get; init; } = [];
     }
 

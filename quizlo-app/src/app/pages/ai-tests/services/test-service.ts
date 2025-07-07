@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { TestDetailsDto, CreateTestRequest, TestSubmissionResultDto, QuestionModel } from '../model/questions.model';
-import { AnswerPayload, SubmitAnswerDto } from '../model/answer.model';
+import { AnswerPayload, SubmitAnswerDto, SubmitTestRequest } from '../model/answer.model';
 import { ApiResponse } from '../../../models/api-response.model';
 import { TestDetailsModel } from '../model/tests.model';
 
@@ -40,9 +40,9 @@ export class TestService {
 
   }
 
-  submitTestAnswers(testId: number | undefined, answers: SubmitAnswerDto[]): Observable<TestSubmissionResultDto> {
+  submitTestAnswers(testId: number | undefined, test: SubmitTestRequest): Observable<TestSubmissionResultDto> {
     const url = `${this.baseUrl}/${testId}/submit`;
-    return this.http.post<TestSubmissionResultDto>(url, { answers });
+    return this.http.post<TestSubmissionResultDto>(url, test);
   }
 
     // Paste your hardcoded response here

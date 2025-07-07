@@ -427,6 +427,9 @@ public class TestService : ITestService
                 // Persist overall test marks
                 test.TotalMarks = total;
                 test.MarksScored = correct;
+                test.DurationCompltedIn = req.DurationCompletedIn;
+                test.SubmissionTime = req.SubmissionTime;
+                
                 var percentage = total == 0 ? 0 : Math.Round(correct * 100.0 / total, 2);
                 test.Status = percentage > 70 ? TestStatus.Passed : TestStatus.Failed;
 

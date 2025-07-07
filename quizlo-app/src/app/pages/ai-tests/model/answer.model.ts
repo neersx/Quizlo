@@ -6,3 +6,12 @@ export interface SubmitAnswerDto {
  export interface AnswerPayload {
     answers: SubmitAnswerDto[];
   }
+
+  export interface SubmitTestRequest {
+    testId: number;
+    durationCompletedIn: string; // minutes
+    isAutoSubmit: boolean;
+    submissionTime: string;
+    rawAnswers?: any;
+    answers: SubmitAnswerDto[];
+  }

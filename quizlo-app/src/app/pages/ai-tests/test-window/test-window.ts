@@ -3,9 +3,10 @@ import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnswerPayload } from '../model/answer.model';
+import { AnswerPayload, SubmitTestRequest } from '../model/answer.model';
 import { TestService } from '../services/test-service';
 import { QuestionModel } from '../model/questions.model';
+import { GetTimeSpan } from '../../../utils/helpers/timespan.helper';
 
 type RawAnswers = Record<string, string | string[]>;
 type AnswerSignalType = { [key: string]: string | string[] };
@@ -74,6 +75,7 @@ export class TestWindow implements OnInit, OnDestroy {
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
           this.questions = resp.data as QuestionModel[];
+          this.testData.questions = this.questions;
           this.isLoadingQuestions = false;
           this.startTimer();
           this.loadSavedAnswers();
@@ -291,13 +293,22 @@ export class TestWindow implements OnInit, OnDestroy {
     }
 
     const rawAnswers = this.answers();  // read the signal value
-    const payload = this.mapAnswersSignalToPayload(rawAnswers);
+    const answers = this.mapAnswersSignalToPayload(rawAnswers);
+
+    const payload : SubmitTestRequest = {
+      testId: this.testId,
+      answers: answers.answers,
+      rawAnswers: this.answers(),
+      submissionTime: new Date().toISOString(),
+      isAutoSubmit: isAutoSubmit,
+      durationCompletedIn: GetTimeSpan((70 * 60) - this.timeRemaining())
+    };
     console.log('payload:', payload);
 
     // Clear saved answers
     localStorage.removeItem('bitsat_answers');
 
-    this.testService.submitTestAnswers(this.testData.id, payload.answers).subscribe(
+    this.testService.submitTestAnswers(this.testId, payload).subscribe(
       (response : any) => {
       // Mark test as submitted
       this.isTestSubmitted.set(true);
@@ -308,18 +319,11 @@ export class TestWindow implements OnInit, OnDestroy {
       }
     )
 
-    const submissionData = {
-      testId: this.testData.id,
-      answers: this.answers(),
-      submissionTime: new Date().toISOString(),
-      isAutoSubmit: isAutoSubmit,
-      timeSpent: (70 * 60) - this.timeRemaining()
-    };
     // In a real application, you would send this data to your backend
-    this.processSubmission(submissionData);
+    this.processSubmission(payload);
   }
 
-  private processSubmission(submissionData: any): void {
+  private processSubmission(submissionData: SubmitTestRequest): void {
     // Calculate score
     let score = 0;
     let correctAnswers = 0;
@@ -327,7 +331,7 @@ export class TestWindow implements OnInit, OnDestroy {
     if (this.testData?.questions) {
       this.testData?.questions.forEach(question => {
         const questionKey = `question_${question.id}`;
-        const userAnswer = submissionData.answers[questionKey];
+        const userAnswer = submissionData.rawAnswers[questionKey];
 
         if (userAnswer) {
           if (question.isMultipleSelect) {

@@ -27,6 +27,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [Required]
         public TimeSpan? Duration { get; set; }
         public TimeSpan? DurationCompltedIn { get; set; }
+        public DateTime? SubmissionTime { get; set; } = DateTime.UtcNow;
 
         [Required]
         public DateTime CreatedAt { get; set; }
