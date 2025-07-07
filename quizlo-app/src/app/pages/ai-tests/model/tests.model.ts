@@ -6,7 +6,7 @@ export interface TestDetailsModel {
     title?: string;
     language?: string;
     subject?: string;
-    duration?: string;        // In TS, use string for TimeSpan/Duration from C#
+    duration: string;        // In TS, use string for TimeSpan/Duration from C#
     createdAt?: string;       // ISO date string
     examId?: number;
     imageUrl?: string;

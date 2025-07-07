@@ -117,8 +117,8 @@ export class TestWindow implements OnInit, OnDestroy {
           this.isLoadingTest = false;
           if (resp.isSuccess && resp.data) {
             this.testDetails = resp.data as TestDetailsModel;
+            this.timeRemaining.set(+this.testDetails?.totalQuestions * 2 * 60);
             this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
-            console.log('Test Details:', this.testDetails);
             this.cdr.detectChanges();
           } else {
             console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
@@ -184,6 +184,17 @@ export class TestWindow implements OnInit, OnDestroy {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   });
 
+  private startTimer(): void {
+    this.timerInterval = setInterval(() => {
+      const current = this.timeRemaining();
+      if (current <= 0) {
+        this.submitTest(true); // Auto-submit when time is up
+        return;
+      }
+      this.timeRemaining.set(current - 1);
+    }, 1000);
+  }
+
   progressPercentage = computed(() => {
     const totalQuestions = this.testData?.questions?.length ?? 0;
     const answeredQuestions = Object.keys(this.answers())?.length ?? 0;
@@ -201,23 +212,11 @@ export class TestWindow implements OnInit, OnDestroy {
     document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
   }
 
-  private startTimer(): void {
-    this.timerInterval = setInterval(() => {
-      const current = this.timeRemaining();
-      if (current <= 0) {
-        this.submitTest(true); // Auto-submit when time is up
-        return;
-      }
-      this.timeRemaining.set(current - 1);
-    }, 1000);
-  }
-
   private loadSavedAnswers(): void {
     const saved = this.localStorage.getItem(LocalStorageKeys.UserTests)?.activeAnswers;
     if (saved) {
       try {
-        const parsedAnswers = JSON.parse(saved);
-        this.answers.set(parsedAnswers);
+        this.answers.set(saved);
       } catch (error) {
         console.error('Error loading saved answers:', error);
       }

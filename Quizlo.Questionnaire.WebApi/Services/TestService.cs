@@ -23,6 +23,8 @@ public interface ITestService
 
     Task<TestResultDto> GetTestResultAsync(int id, CancellationToken ct = default);
 
+    Task<IReadOnlyList<TestDetailsDto>>  GetUserActiveTestsAsync(int userId, CancellationToken ct = default);
+
     Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest request, CancellationToken ct = default);
 }
 
@@ -72,8 +74,29 @@ public class TestService : ITestService
                 ExamName = t.Exam.Name,
                 ExamCode = t.Exam.Code,
                 Status = t.Status
-            })
-            .ToListAsync(ct);
+            }).ToListAsync(ct);
+    }
+
+    public async Task<IReadOnlyList<TestDetailsDto>> GetUserActiveTestsAsync(int userId, CancellationToken ct = default)
+    {
+        return await _db.Tests.AsNoTracking().Where(t => t.CreatedByUserId == userId && t.Status == TestStatus.NotStarted)
+                        .Select(t => new TestDetailsDto
+                        {
+                            Id = t.Id,
+                            Title = t.Title,
+                            Language = t.Language,
+                            Subject = t.Subject,
+                            Duration = (TimeSpan)t.Duration,
+                            DurationCompltedIn = t.DurationCompltedIn,
+                            CreatedAt = t.CreatedAt,
+                            ExamId = t.ExamId,
+                            TotalQuestions = t.TestQuestions.Count,   // COUNT(*) in SQL
+                            TotalMarks = t.TotalMarks,
+                            MarksScored = t.MarksScored,
+                            ExamName = t.Exam.Name,
+                            ExamCode = t.Exam.Code,
+                            Status = t.Status
+                        }).ToListAsync(ct);
     }
 
     public async Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(CreateTestRequest req, CancellationToken ct = default)
@@ -172,7 +195,7 @@ public class TestService : ITestService
             testDto.Questions = questionsDto;
 
             return testDto;
-            
+
         }
 
         return testDetails;

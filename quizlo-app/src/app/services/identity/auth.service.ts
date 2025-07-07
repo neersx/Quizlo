@@ -94,6 +94,10 @@ export class AuthService {
     return localStorage.getItem(this.storageTokenKey);
   }
 
+  getUserActiveTests(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/active-tests`);
+  }
+
   /** Reads the persisted user JSON or null */
   private readUserFromStorage(): User | null {
     if (!isPlatformBrowser(this.platformId)) return null;

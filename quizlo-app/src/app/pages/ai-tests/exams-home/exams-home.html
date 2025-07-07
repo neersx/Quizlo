@@ -91,9 +91,6 @@
                   <span class="avatar avatar-xl border border-dashed avatar-rounded">
                     <img [src]="'../assets/images/exams/icons/' + test.examCode + '.png'"  (error)="onIconError($event)" [alt]="test.title">
                   </span>
-
-                 
-
                   <div class="ms-2 mt-2">
                     <h6 class="fw-medium mb-1 d-flex align-items-center">
                       <a [routerLink]="['/test', 'test-result', test.id]">{{ test.title }} <i class="ri-verified-badge-fill text-secondary fs-13" data-bs-toggle="tooltip" ngbTooltip="Verified company"></i></a>
@@ -109,10 +106,10 @@
                       </a>
                     </div>
                     <div class="d-flex gap-1 align-items-center flex-wrap">
-                      <a href="javascript:void(0);" class="badge badge-md fs-11 rounded-pill bg-success-transparent me-1" >
+                      <a href="javascript:void(0);" class="badge badge-md fs-11 rounded-pill bg-primary-transparent me-1" >
                         <i class="bi bi-people me-1"></i>No. of Questions : {{ test.totalQuestions }}
                       </a>
-                      <a href="javascript:void(0);" class="badge badge-md fs-11 rounded-pill bg-info-transparent">
+                      <a href="javascript:void(0);" class="badge badge-md fs-11 rounded-pill bg-danger-transparent">
                         <i class="bi bi-briefcase me-1"></i>Status : {{ test.status }}
                       </a>
                     </div>  

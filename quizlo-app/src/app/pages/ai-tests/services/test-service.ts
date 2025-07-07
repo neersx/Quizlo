@@ -37,7 +37,6 @@ export class TestService {
 
   createInitialTest(request: CreateTestRequest): Observable<any> {
     return this.http.post<TestDetailsDto>(`${this.baseUrl}/create-initial-test`, request);
-
   }
 
   submitTestAnswers(testId: number | undefined, test: SubmitTestRequest): Observable<TestSubmissionResultDto> {

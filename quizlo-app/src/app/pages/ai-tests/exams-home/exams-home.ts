@@ -14,6 +14,7 @@ import { Dropdown } from '../../../models/dropdown.model';
 import { SpkDropdownsComponent } from '../../../@spk/reusable-ui-elements/spk-dropdowns/spk-dropdowns.component';
 import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
+import { AuthService } from '../../../services/identity/auth.service';
 
 @Component({
   selector: 'app-exams-home',
@@ -35,11 +36,13 @@ export class ExamsHome implements OnInit {
   loadingTest = false;
   testDetails : TestDetailsModel | undefined;
   tests: any[] = [];
+  activeTests: any[] = [];
   error = '';
 
   constructor(private cdr: ChangeDetectorRef,
     private examService: ExamService, private router: Router,
     private testService: TestService,
+    private userService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private localStorageService: LocalStorageService,
     private dropdownService: DropdownService) { }
@@ -48,6 +51,7 @@ export class ExamsHome implements OnInit {
     this.fetchLanguageDropdown();
     this.fetchExams();
     this.initializeDefaultValues();
+   
     this.cdr.detectChanges();
   }
 
@@ -77,12 +81,31 @@ export class ExamsHome implements OnInit {
     { label: 'Mix', value: 3 }
   ];
 
+  getActiveTests() {
+    return this.userService.getUserActiveTests().subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess) {
+          this.activeTests = resp.data;
+          this.cdr.detectChanges();
+        } else {
+          this.error = resp.message ?? 'Failed to load tests';
+        }
+      },
+      error: (err: any) => {
+        this.error = err.message || 'Server error';
+      },
+      complete: () => {
+        this.loadingTest = false;
+      }
+    })
+  }
+
   loadTests() {
     this.error = '';
     this.testService.getTests().subscribe({
       next: (resp: any) => {
         if (resp.isSuccess) {
-          this.tests = resp.data;
+          this.tests = resp.data.filter((test: any) => test.status == 'Not Started');
           this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load tests';
@@ -142,6 +165,9 @@ export class ExamsHome implements OnInit {
 
 
   startTest() {
+    if(this.tests.length > 0) {
+      return;
+    }
     this.loadingTest = true;
     if (!this.selectedExam || !this.selectedSubject) {
       this.loadingTest = false;

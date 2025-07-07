@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.DTO;
@@ -9,6 +10,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
     public class RegisterDto { public string Email { get; set; } public string Password { get; set; } public string FullName { get; set; } public string PhoneNumber { get; set; } }
     public class LoginDto { public string Email { get; set; } public string Password { get; set; } }
 
+
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -17,16 +19,19 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly JwtTokenService _jwtTokenService;
+        private readonly ITestService _testService;
 
         public UsersController(
             UserManager<User> userManager, JwtTokenService jwtTokenService,
             IUserService userService,
+            ITestService testService,
             SignInManager<User> signInManager)
         {
             _userService = userService;
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
             _signInManager = signInManager;
+            _testService = testService;
         }
 
         // GET: api/users/{id}
@@ -35,7 +40,17 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         {
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null) return NotFound();
-             return Ok(ApiResponse<User>.Success(user));
+            return Ok(ApiResponse<User>.Success(user));
+        }
+
+        [HttpGet("active-tests")]
+        public async Task<ActionResult<ApiResponse<User>>> GetUserActiveTests(CancellationToken ct)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var result = await _testService.GetUserActiveTestsAsync(userId, ct);
+
+            var apiResponse = ApiResponse<IReadOnlyList<TestDetailsDto>>.Success(result, "Test questions retrieved successfully", StatusCodes.Status200OK);
+            return Ok(apiResponse);
         }
 
         // POST: api/users/register
