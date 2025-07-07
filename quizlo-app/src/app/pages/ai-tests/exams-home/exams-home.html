@@ -58,7 +58,7 @@
                             <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
                             Loading your Test. Please wait...
                         </button>
-                        <button *ngIf="!loadingTest" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-danger btn-wave">Start Your Test Now</button>
+                        <button *ngIf="!loadingTest" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-success btn-wave">Start Your Test Now</button>
                     </div>
                 </div>
             </div>
@@ -67,13 +67,21 @@
 </div>
 <!--End::row-1 -->
 
+
+<div *ngIf="tests && tests.length == 0" class="header text-center">
+  <h5 style="text-align: center;">Loading Already Active Tests...</h5>
+  <app-test-skeleton-loader 
+      [displayFooter]="false"  [displayProgress]="true" [totalQuestions]="0">
+    </app-test-skeleton-loader>
+</div>
+
 <div *ngIf="tests && tests.length > 0" class="row">
     <div class="row justify-content-center">
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-body">
                     <div class="d-flex align-items-center flex-wrap gap-2">
-                        <h5 class="fw-medium mb-0 flex-grow-1">Find Your <span class="fw-normal fs-18"> Tests History</span> </h5>                      
+                        <h5 class="fw-medium mb-0 flex-grow-1">Your <span class="fw-normal fs-18">Already Active Tests</span> </h5>                      
                     </div>
                 </div>
             </div>

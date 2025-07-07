@@ -15,10 +15,11 @@ import { SpkDropdownsComponent } from '../../../@spk/reusable-ui-elements/spk-dr
 import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
 import { AuthService } from '../../../services/identity/auth.service';
+import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
 
 @Component({
   selector: 'app-exams-home',
-  imports: [SharedModule, NgApexchartsModule, NgSelectModule, SpkNgSelectComponent, SpkDropdownsComponent, CommonModule, RouterModule],
+  imports: [SharedModule, NgApexchartsModule, NgSelectModule, SpkNgSelectComponent, SpkDropdownsComponent, CommonModule, RouterModule, TestSkeletonLoader],
   templateUrl: './exams-home.html',
   styleUrl: './exams-home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -66,10 +67,7 @@ export class ExamsHome implements OnInit {
       this.selectedExam = { label: exam.label, name: exam.name, value: exam.value, code: exam.code };
       this.subjects = userpreference.examSubjects ?? [];
     }
-
-    setTimeout(() => {
       this.loadTests();
-    }, 1000);
 
     this.cdr.markForCheck();
   }
@@ -115,7 +113,7 @@ export class ExamsHome implements OnInit {
         this.error = err.message || 'Server error';
       },
       complete: () => {
-        this.loadingTest = false;
+        
       }
     });
   }
