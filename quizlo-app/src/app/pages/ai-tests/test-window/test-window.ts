@@ -8,6 +8,8 @@ import { TestService } from '../services/test-service';
 import { QuestionModel } from '../model/questions.model';
 import { GetTimeSpan } from '../../../utils/helpers/timespan.helper';
 import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
+import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
+import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys';
 
 type RawAnswers = Record<string, string | string[]>;
 type AnswerSignalType = { [key: string]: string | string[] };
@@ -60,12 +62,17 @@ export class TestWindow implements OnInit, OnDestroy {
     { key: 'building' as const, name: 'Building Animation' }
   ];
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router,
+  constructor(private cdr: ChangeDetectorRef, 
+    private localStorage: LocalStorageService, private router: Router,
     private testService: TestService, private route: ActivatedRoute,
   ) {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.testId = idParam !== null ? +idParam : NaN;
     if (this.testId) {
+      const activeTestId = this.localStorage.getItem(LocalStorageKeys.UserTests)?.activeTestId;
+      if(activeTestId && activeTestId !== this.testId) {
+        this.localStorage.removeItem(LocalStorageKeys.UserTests);
+      }
       this.loadTest();
       this.loadTestQuestions();
     }
@@ -75,9 +82,6 @@ export class TestWindow implements OnInit, OnDestroy {
   private timerInterval: any;
 
   ngOnInit(): void {
-    setTimeout(() => {
-
-    }, 5000);
 
   }
 
@@ -86,7 +90,7 @@ export class TestWindow implements OnInit, OnDestroy {
     this.testService.getTestQuestions(this.testId).subscribe({
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
-          this.questions = resp.data as QuestionModel[];
+          this.questions = resp.data.questions as QuestionModel[];
           this.testData.questions = this.questions;
           this.isLoadingQuestions = false;
           this.startTimer();
@@ -209,7 +213,7 @@ export class TestWindow implements OnInit, OnDestroy {
   }
 
   private loadSavedAnswers(): void {
-    const saved = localStorage.getItem('bitsat_answers');
+    const saved = this.localStorage.getItem(LocalStorageKeys.UserTests)?.activeAnswers;
     if (saved) {
       try {
         const parsedAnswers = JSON.parse(saved);
@@ -229,7 +233,8 @@ export class TestWindow implements OnInit, OnDestroy {
   // Save answers to localStorage
   private saveAnswers(): void {
     try {
-      localStorage.setItem('bitsat_answers', JSON.stringify(this.answers()));
+      // localStorage.setItem('bitsat_answers', JSON.stringify(this.answers()));
+      this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers()});
     } catch (error) {
       console.error('Error saving answers:', error);
     }
@@ -326,14 +331,14 @@ export class TestWindow implements OnInit, OnDestroy {
     };
     console.log('payload:', payload);
 
-    // Clear saved answers
-    localStorage.removeItem('bitsat_answers');
+
 
     this.testService.submitTestAnswers(this.testId, payload).subscribe(
       (response: any) => {
         // Mark test as submitted
         this.isTestSubmitted.set(true);
         this.processSubmission(payload);
+        this.localStorage.removeItem(LocalStorageKeys.UserTests);
         this.router.navigate(['/test/test-result', this.testId]);
         console.log('Test submitted successfully:', response);
       },

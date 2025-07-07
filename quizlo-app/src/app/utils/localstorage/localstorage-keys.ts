@@ -2,6 +2,7 @@
 export enum LocalStorageKeys {
     UserPreferences = 'userPreferences',
     AppSettings = 'appSettings',
-    AuthToken = 'authToken'
+    AuthToken = 'authToken',
+    UserTests = 'userTests'
   }
   

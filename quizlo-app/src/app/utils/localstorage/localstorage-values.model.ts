@@ -16,4 +16,9 @@ export interface LocalStorageValues {
     timezone: string;
   };
   [LocalStorageKeys.AuthToken]: string;
+
+  [LocalStorageKeys.UserTests]: {
+    activeTestId: number;
+    activeAnswers?: any;
+  };
 }

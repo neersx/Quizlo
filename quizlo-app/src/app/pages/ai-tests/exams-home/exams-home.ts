@@ -200,7 +200,6 @@ export class ExamsHome implements OnInit {
         next: (resp: any) => {
           if (resp.isSuccess && resp.data) {
             this.testDetails = resp.data as TestDetailsModel;
-            console.log('Test Details:', this.testDetails);
             this.router.navigate(['/test/live-test/' + this.testDetails.id]);
           } else {
             this.error = resp.message ?? 'Could not start test';
@@ -221,7 +220,6 @@ export class ExamsHome implements OnInit {
   handleExamChange(value: any | any[]) {
     this.isSubjectsLoading = true;
     this.selectedExam = value;
- console.log(this.selectedExam, 'selected exam');
     if (this.selectedExam) {
       this.examService.getSubjectsByExamId(+this.selectedExam.value)
         .subscribe({
@@ -244,7 +242,6 @@ export class ExamsHome implements OnInit {
 
   handleSubjectChange(value: any | any[]) {
     this.selectedSubject = value;
-    console.log(this.selectedSubject, 'selected subject');
   }
 
   handleDifficultyChange(event: any) {
