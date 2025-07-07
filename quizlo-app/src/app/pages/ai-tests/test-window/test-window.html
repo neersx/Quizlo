@@ -1,5 +1,4 @@
-<!-- bitsat-questionnaire.component.html -->
-<div *ngIf="testData" class="questionnaire-container">
+<div class="questionnaire-container">
   <!-- Timer -->
   <div class="timer" [class.warning]="timeRemaining() < 300">
     ⏰ {{ formattedTime() }}
@@ -8,7 +7,7 @@
   <!-- Main Container -->
   <div class="container">
     <!-- Header -->
-    <div class="header">
+    <div *ngIf="!isLoadingTest" class="header">
       <h1>{{ testData.title }}</h1>
       <p>{{ testData.examName }}</p>
 
@@ -62,8 +61,15 @@
       </div>
     </div>
 
+    <div *ngIf="isLoadingTest" class="header text-center">
+      <h4 style="text-align: center;">Loading Test Details...</h4>
+      <app-test-skeleton-loader 
+          [variant]="currentVariant" [displayFooter]="false"  [displayProgress]="true" [totalQuestions]="0">
+        </app-test-skeleton-loader>
+    </div>
+
     <!-- Test Content -->
-    <div class="test-content" *ngIf="!isTestSubmitted()">
+    <div class="test-content" *ngIf="!isTestSubmitted() && !isLoadingQuestions">
       <!-- Question Navigation -->
       <div class="question-navigation">
         <button *ngFor="let question of testData?.questions; let i = index" class="nav-btn"
@@ -146,6 +152,17 @@
 
       </div>
     </div>
+
+    <div *ngIf="isLoadingQuestions"  class="loader-container">
+      <h5 style="text-align: center;">Ai is generating your questions...</h5>
+      <app-test-skeleton-loader 
+        [variant]="currentVariant"
+        [displayHeader]="false"
+        [displayFooter]="true"
+        [totalQuestions]="testData.totalQuestions > 0 ? testData.totalQuestions : 20">
+      </app-test-skeleton-loader>
+</div>
+
   </div>
 
   <!-- Test Completed -->
@@ -159,3 +176,5 @@
     </div>
   </div>
 </div>
+
+

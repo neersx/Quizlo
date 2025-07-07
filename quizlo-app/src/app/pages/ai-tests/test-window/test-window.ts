@@ -7,13 +7,14 @@ import { AnswerPayload, SubmitTestRequest } from '../model/answer.model';
 import { TestService } from '../services/test-service';
 import { QuestionModel } from '../model/questions.model';
 import { GetTimeSpan } from '../../../utils/helpers/timespan.helper';
+import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
 
 type RawAnswers = Record<string, string | string[]>;
 type AnswerSignalType = { [key: string]: string | string[] };
 
 @Component({
   selector: 'app-test-window',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TestSkeletonLoader],
   templateUrl: './test-window.html',
   providers: [TestService],
   styleUrl: './test-window.scss',
@@ -40,13 +41,24 @@ export class TestWindow implements OnInit, OnDestroy {
   };
   result: any;
   questions: QuestionModel[] = [];
-  isLoadingQuestions = false;
+  isLoadingTest = true;
+  isLoadingQuestions = true;
   testDetails: TestDetailsModel | undefined;
   // Reactive signals for state management
   answers = signal<{ [key: string]: string | string[] }>({});
   timeRemaining = signal<number>(70 * 60); // 70 minutes in seconds
   isTestSubmitted = signal<boolean>(false);
   currentQuestionIndex = signal<number>(0);
+  questionIndexes: number[] = [];
+
+  currentVariant: 'default' | 'wave' | 'pulse' | 'building' = 'default';
+  
+  variants = [
+    { key: 'default' as const, name: 'Progressive' },
+    { key: 'wave' as const, name: 'Wave Effect' },
+    { key: 'pulse' as const, name: 'Pulse Effect' },
+    { key: 'building' as const, name: 'Building Animation' }
+  ];
 
   constructor(private cdr: ChangeDetectorRef, private router: Router,
     private testService: TestService,    private route: ActivatedRoute,
@@ -76,7 +88,7 @@ export class TestWindow implements OnInit, OnDestroy {
         if (resp.isSuccess && resp.data) {
           this.questions = resp.data as QuestionModel[];
           this.testData.questions = this.questions;
-          this.isLoadingQuestions = false;
+          // this.isLoadingQuestions = false;
           this.startTimer();
           this.loadSavedAnswers();
           this.startAutoSave();
@@ -94,10 +106,16 @@ export class TestWindow implements OnInit, OnDestroy {
   }
 
   loadTest() {
+    this.isLoadingTest = true;
     this.testService.getTest(this.testId).subscribe({
       next: (resp: any) => {
+        setTimeout(() => {
+          this.isLoadingTest = false;
+        }, 3000);
+     
         if (resp.isSuccess && resp.data) {
           this.testDetails = resp.data as TestDetailsModel;
+          this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
           console.log('Test Details:', this.testDetails);
           this.cdr.detectChanges();
         } else {
@@ -108,6 +126,10 @@ export class TestWindow implements OnInit, OnDestroy {
         console.error('Failed to load test details:', err);
       }
     });
+  }
+
+  private makeRange(count: number): number[] {
+    return Array.from({ length: count }, (_, i) => i);
   }
 
   windowBlurHandler = () => {

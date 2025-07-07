@@ -1,0 +1,94 @@
+<div class="questionnaire-container">
+    <!-- Header Skeleton -->
+    <div *ngIf="displayHeader" class="header-skeleton">
+        <div class="skeleton-line title-line"></div>
+        <div class="skeleton-line subtitle-line"></div>
+        <div *ngIf="displayProgress" class="progress-skeleton">
+            <div class="progress-bar" [style.width.%]="progressBarWidth"></div>
+        </div>
+    </div>
+
+    <!-- Loading Stats -->
+    <div *ngIf="displayFooter" class="loading-stats">
+        <div class="stat-item">
+            <span class="stat-label">Loading Questions...</span>
+            <span class="stat-value">{{ currentQuestionIndex + 1 }}/{{ totalQuestions }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Progress</span>
+            <span class="stat-value">{{ Math.round(progressWidth) }}%</span>
+        </div>
+    </div>
+
+    <!-- Variation 1: Default Progressive Skeleton -->
+    <div *ngIf="totalQuestions > 0 && variant === 'default'" class="questions-skeleton mt-3">
+        <div *ngFor="let question of skeletonQuestions; let i = index" class="question-card"
+            [class.animated]="i <= currentQuestionIndex" [style.animation-delay.ms]="i * 200">
+            <div class="question-header">
+                <div class="question-number">{{ i + 1 }}</div>
+                <div class="skeleton-line question-line"></div>
+            </div>
+            <div class="options-container">
+                <div *ngFor="let option of question.options; let j = index" class="option-skeleton"
+                    [style.animation-delay.ms]="(i * 200) + (j * 100)">
+                    <div class="option-radio"></div>
+                    <div class="skeleton-line option-line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variation 2: Wave Effect Skeleton -->
+    <div *ngIf="variant === 'wave'" class="questions-skeleton wave-variant">
+        <div *ngFor="let question of skeletonQuestions; let i = index" class="question-card wave-card">
+            <div class="question-header">
+                <div class="question-number wave-shimmer">{{ i + 1 }}</div>
+                <div class="skeleton-line question-line wave-shimmer"></div>
+            </div>
+            <div class="options-container">
+                <div *ngFor="let option of question.options; let j = index" class="option-skeleton wave-shimmer"
+                    [style.animation-delay.ms]="j * 150">
+                    <div class="option-radio wave-shimmer"></div>
+                    <div class="skeleton-line option-line wave-shimmer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variation 3: Pulse Effect Skeleton -->
+    <div *ngIf="variant === 'pulse'" class="questions-skeleton pulse-variant">
+        <div *ngFor="let question of skeletonQuestions; let i = index" class="question-card pulse-card"
+            [style.animation-delay.ms]="i * 300">
+            <div class="question-header">
+                <div class="question-number pulse-effect">{{ i + 1 }}</div>
+                <div class="skeleton-line question-line pulse-effect"></div>
+            </div>
+            <div class="options-container">
+                <div *ngFor="let option of question.options; let j = index" class="option-skeleton pulse-effect">
+                    <div class="option-radio pulse-effect"></div>
+                    <div class="skeleton-line option-line pulse-effect"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variation 4: Building Animation Skeleton -->
+    <div *ngIf="variant === 'building'" class="questions-skeleton building-variant">
+        <div *ngFor="let question of skeletonQuestions; let i = index" class="question-card building-card"
+            [class.built]="i <= currentQuestionIndex">
+            <div class="question-header">
+                <div class="question-number">{{ i + 1 }}</div>
+                <div class="skeleton-line question-line"></div>
+            </div>
+            <div class="options-container">
+                <div *ngFor="let option of question.options; let j = index" class="option-skeleton building-option"
+                    [class.built]="i <= currentQuestionIndex" [style.animation-delay.ms]="j * 100">
+                    <div class="option-radio"></div>
+                    <div class="skeleton-line option-line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
