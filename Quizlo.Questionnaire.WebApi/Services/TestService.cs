@@ -17,7 +17,7 @@ public interface ITestService
     Task<TestDetailsDto> CreateTestAsync(CreateTestRequest request, int userId, CancellationToken ct = default);
     Task<TestDetailsDto> CreateInitialTestAsync(CreateTestRequest req, int userId, CancellationToken ct = default);
     Task<IReadOnlyList<QuestionDto>> GetTestQuestionsAsync(CreateTestRequest req, CancellationToken ct = default);
-    Task<IReadOnlyList<QuestionDto>> GetQuestionsByTestIdAsync(int testId, CancellationToken ct = default);
+    Task<TestDetailsDto> GetQuestionsByTestIdAsync(int testId, CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default);
     Task<TestDetailsDto?> GetTestInfoAsync(int id, CancellationToken ct = default);
 
@@ -93,7 +93,7 @@ public class TestService : ITestService
         }
     }
 
-    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsByTestIdAsync(int testId, CancellationToken ct = default)
+    public async Task<TestDetailsDto> GetQuestionsByTestIdAsync(int testId, CancellationToken ct = default)
     {
         if (testId == 0)
             throw new ArgumentNullException(nameof(testId));
@@ -104,15 +104,78 @@ public class TestService : ITestService
             throw new ArgumentNullException(nameof(test));
 
         if (test.Questions.Count > 0)
-        {
-            var testQuestions = await GetTestAsync(testId, ct);
-            return testQuestions.Questions!;
-        }
+            return await GetTestAsync(testId, ct);
         else
         {
             var env = await GetAIGeneratedQuestions(test, ct);
-            return env.Questions!;
+            if (env.Questions.Count > 0)
+            {
+                test.Questions = env.Questions;
+                test.TotalQuestions = env.Questions.Count;
+                test.TotalMarks = env.Questions.Count * 3;
+                test.Duration = TimeSpan.FromMinutes(env.Questions.Count * 2);
+                return await UpdateTestDetailsAsync(test, ct);
+            }
+            throw new ArgumentNullException(nameof(test.Questions));
         }
+    }
+
+    private async Task<TestDetailsDto> UpdateTestDetailsAsync(TestDetailsDto testDetails, CancellationToken ct = default)
+    {
+        for (var attempt = 1; attempt <= MaxRetries; attempt++)
+        {
+            await using var tx = await _db.Database.BeginTransactionAsync(ct);
+
+            var test = await _db.Tests.Include(t => t.TestQuestions).ThenInclude(tq => tq.Question)
+                                .FirstOrDefaultAsync(t => t.Id == testDetails.Id, ct)
+                                ?? throw new KeyNotFoundException($"Test {testDetails.Id} not found.");
+
+            #region --------- AddQuestions to the database ------------
+
+            var questions = testDetails.Questions.Select(q => new Question
+            {
+                QuestionText = q.QuestionText,
+                Options = q.Options,
+                OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
+                CorrectOptionIds = q.CorrectOptionIds,
+                Explanation = q.Explanation,
+                Marks = q.Marks,
+                Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
+                Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true),
+            }).ToList();
+
+            _db.Questions.AddRange(questions);
+            await _db.SaveChangesAsync(ct);
+
+            var links = questions.Select((q, i) => new TestQuestion
+            {
+                TestId = test.Id,
+                QuestionId = q.Id,
+                Order = testDetails.Questions[i].QuestionNo
+            });
+
+            _db.TestQuestions.AddRange(links);
+            await _db.SaveChangesAsync(ct);
+
+            #endregion
+
+            test.Status = TestStatus.Started;
+            test.TotalQuestions = testDetails.TotalQuestions;
+            test.TotalMarks = testDetails.TotalMarks;
+            test.Duration = testDetails.Duration;
+
+            await _db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+
+            var questionsDto = _mapper.Map<List<QuestionDto>>(questions);
+            var testDto = _mapper.Map<TestDetailsDto>(test);
+            testDto.Questions = questionsDto;
+
+            return testDto;
+            
+        }
+
+        return testDetails;
     }
 
     public async Task<TestDetailsDto> CreateTestAsync(
@@ -225,7 +288,7 @@ public class TestService : ITestService
             Subject = req.Subject ?? "All",
             Language = req.Language ?? "English",
             CreatedAt = DateTime.UtcNow,
-            TotalQuestions = req.TotalQuestions ?? 20,
+            TotalQuestions = req.TotalQuestions,
             CreatedByUserId = userId,
             Status = TestStatus.NotStarted,
             TotalMarks = req.TotalQuestions * 3
@@ -429,7 +492,7 @@ public class TestService : ITestService
                 test.MarksScored = correct;
                 test.DurationCompltedIn = req.DurationCompletedIn;
                 test.SubmissionTime = req.SubmissionTime;
-                
+
                 var percentage = total == 0 ? 0 : Math.Round(correct * 100.0 / total, 2);
                 test.Status = percentage > 70 ? TestStatus.Passed : TestStatus.Failed;
 

@@ -13,7 +13,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public DateTime CreatedAt { get; set; }
         public int ExamId { get; set; }
         public int TotalQuestions { get; set; }
-        public double? TotalMarks { get; init; }
+        public double? TotalMarks { get; set; }
         public double? MarksScored { get; init; }
         public string ExamName { get; set; } = default!;
         public string ExamCode { get; set; }

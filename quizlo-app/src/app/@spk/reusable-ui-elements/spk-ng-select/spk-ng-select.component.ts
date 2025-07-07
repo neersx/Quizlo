@@ -3,9 +3,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-interface Option {
+export interface OptionModel {
   label: string; // Adjust according to your option structure
   value: any;    // Use the appropriate type based on your data
+  code?: string;
 }
 @Component({
   selector: 'spk-ng-select',
@@ -16,7 +17,7 @@ interface Option {
 })
 export class SpkNgSelectComponent {
   @Input() options: any = []; // Options for the select
-  @Input() defaultValue: any;   // Default value for the select
+  @Input() defaultValue: OptionModel = { label: 'Select your value', value: '-1' };   // Default value for the select
   @Input() id: string='';       // Additional classes
   @Input() mainClass: string='';       // Additional classes
   @Input() maxSelectedItems!: number;       // Additional classes
@@ -29,7 +30,7 @@ export class SpkNgSelectComponent {
   @Input() hideSelected: boolean = true; // Enable searching
   @Input() placeholder: string = ''      // Placeholder text
   @Input() additionalProperties: { [key: string]: any } = {};
-  @Output() change: EventEmitter<Option | Option[]> = new EventEmitter(); // Emit value change
+  @Output() change: EventEmitter<OptionModel | OptionModel[]> = new EventEmitter(); // Emit value change
   @Input() extraProps: any = {};
   @Input() message: string = '';
   @Input() messageType: 'success' | 'error' | 'warning' | 'info' | 'default' = 'default';
@@ -46,6 +47,10 @@ onSelectionChange(selected: any): void {
   ngAfterViewInit() {
     this.applyAdditionalProperties();
     this.cdr.detectChanges();
+  }
+
+  compareByValue(a: any, b: any): boolean {
+    return a?.value === b?.value;
   }
 
   ngOnChanges(changes: any) {

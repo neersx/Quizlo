@@ -131,8 +131,8 @@
                                 <div class="row mt-4 align-items-end justify-content-between">
                                     <div class="col-xl-6">
                                         <div class="d-flex gap-1 mb-2 mb-xl-0">
-                                            <button (click)="takeNewTest()" class="btn btn-primary mb-0 btn-wave flex-fill me-1 waves-effect waves-light">Take New Test</button>
-                                            <!-- <button class="btn btn-secondary-light mb-0 btn-wave flex-fill waves-effect waves-light">Buy Now</button> -->
+                                            <button *ngIf="testResult?.status === 'passed'" (click)="takeNewTest()" class="btn btn-primary mb-0 btn-wave flex-fill me-1 waves-effect waves-light">Take New Test</button>
+                                            <button *ngIf="testResult?.status != 'passed'" (click)="takeTestAgain()" class="btn btn-success mb-0 btn-wave flex-fill waves-effect waves-light">Take Test Again</button>
                                         </div>
                                     </div>
                                     <!-- <div class="col-xl-3">

@@ -54,6 +54,7 @@ builder.Services.AddAuthorization();
 
 // Register all Profiles in this assembly
 builder.Services.AddAutoMapper(typeof(TestProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(QuestionsProfile).Assembly);
 
 
 // 5. Register your services

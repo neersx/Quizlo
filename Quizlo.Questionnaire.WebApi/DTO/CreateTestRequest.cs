@@ -8,7 +8,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         string ExamName,
         string ExamCode,
         int NumberOfQuestions,
-        string? Title,
+        string Title,
         string? Subject,
         string? Language = "English",
         DifficultyLevel Difficulty = DifficultyLevel.Mix,

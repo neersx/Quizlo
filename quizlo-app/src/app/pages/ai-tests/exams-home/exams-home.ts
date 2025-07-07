@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from '../../../shared/sharedmodule';
-import { SpkNgSelectComponent } from '../../../@spk/reusable-ui-elements/spk-ng-select/spk-ng-select.component';
+import { OptionModel, SpkNgSelectComponent } from '../../../@spk/reusable-ui-elements/spk-ng-select/spk-ng-select.component';
 import { Exam, TestDetailsDto } from '../model/questions.model';
 import { ExamService } from '../services/exam-service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -23,10 +23,10 @@ import { TestDetailsModel } from '../model/tests.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExamsHome implements OnInit {
-  selectedLanguage = 'English';
+  selectedLanguage : OptionModel = { label: 'English', value: 'English' };
   isSubjectsLoading = false;
   selectedDifficulty = { label: 'Mix', value: 'Mix' };
-  selectedSubject = '';
+  selectedSubject : OptionModel = { label: 'All', value: 'All' };
   selectedExam: any | null = null;
   exams: Exam[] = [];
   subjects: Dropdown[] = [];
@@ -52,9 +52,9 @@ export class ExamsHome implements OnInit {
   }
 
   initializeDefaultValues() {
-    this.selectedLanguage = 'English';
+    this.selectedLanguage = { label: 'English', value: 'English' };
     this.selectedDifficulty = { label: 'Mix', value: 'Mix' };
-    this.selectedSubject = 'All';
+    this.selectedSubject = { label: 'All', value: 'All' };
     const userpreference: any = this.localStorageService.getItem(LocalStorageKeys.UserPreferences);
 
     if (userpreference && userpreference.defaultExam) {
@@ -183,8 +183,8 @@ export class ExamsHome implements OnInit {
 
     const payload = {
       examId : this.selectedExam.value,     // adjust as needed
-      subject : this.selectedSubject,       // or your dynamic subject
-      language : this.selectedLanguage,
+      subject : this.selectedSubject.label,       // or your dynamic subject
+      language : this.selectedLanguage.label,
       examCode : this.selectedExam.code,
       examName : this.selectedExam.name,
       difficulty: 1,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
@@ -214,13 +214,14 @@ export class ExamsHome implements OnInit {
 
   handleLanguageChange(value: any | any[]) {
     console.log(value);
-    this.selectedLanguage = value.label;
+    this.selectedLanguage = value;
+    console.log(this.selectedLanguage, 'selected language');
   }
 
   handleExamChange(value: any | any[]) {
     this.isSubjectsLoading = true;
     this.selectedExam = value;
-
+ console.log(this.selectedExam, 'selected exam');
     if (this.selectedExam) {
       this.examService.getSubjectsByExamId(+this.selectedExam.value)
         .subscribe({
@@ -242,7 +243,8 @@ export class ExamsHome implements OnInit {
   }
 
   handleSubjectChange(value: any | any[]) {
-    this.selectedSubject = value.value;
+    this.selectedSubject = value;
+    console.log(this.selectedSubject, 'selected subject');
   }
 
   handleDifficultyChange(event: any) {

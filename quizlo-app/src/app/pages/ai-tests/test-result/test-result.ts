@@ -80,6 +80,10 @@ takeNewTest() {
   this.router.navigate(['/test/select-exam']);
 }
 
+takeTestAgain() {
+  this.router.navigate(['/test/test-window/' + this.testResult?.id]);
+}
+
 private formatDuration(dur: string): string {
   const [h, m, s] = dur.split(':').map(v => parseInt(v, 10));
   const hrs = h.toString().padStart(2, '0');

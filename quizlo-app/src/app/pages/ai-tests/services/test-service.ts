@@ -22,8 +22,8 @@ export class TestService {
   }
 
   getTestQuestions(testId: number): Observable<ApiResponse<QuestionModel[]>> {
-    // return this.http.get<QuestionModel[]>(`${this.baseUrl}/${testId}/questions`);
-    return of(this.mockResponseQuestions);
+    return this.http.get<ApiResponse<QuestionModel[]>>(`${this.baseUrl}/${testId}/questions`);
+    // return of(this.mockResponseQuestions);
   }
 
   getTestResult(id: number): Observable<TestDetailsDto> {
@@ -31,8 +31,8 @@ export class TestService {
   }
 
   createTest(request: CreateTestRequest): Observable<any> {
-    // return this.http.post<TestDetailsDto>(this.baseUrl, request);
-    return of(this.mockResponseQuestions);
+    return this.http.post<TestDetailsDto>(this.baseUrl, request);
+    // return of(this.mockResponseQuestions);
   }
 
   createInitialTest(request: CreateTestRequest): Observable<any> {
@@ -49,409 +49,533 @@ export class TestService {
     private mockResponseQuestions: ApiResponse<QuestionModel[]> = {
         "isSuccess": true,
         "data": [
-                {
-                    "id": 38,
-                    "questionText": "If the sum of two numbers is 20 and their difference is 4, what are the numbers?",
-                    "questionNo": 1,
-                    "optionsJson": "[\"A. 12 and 8\",\"B. 14 and 6\",\"C. 16 and 4\",\"D. 10 and 10\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "Solution: Let the numbers be x and y. x + y = 20, x - y = 4 → solving gives x=12, y=8. (Quantitative Aptitude by R.S. Agarwal, p. 45)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. 12 and 8",
-                        "B. 14 and 6",
-                        "C. 16 and 4",
-                        "D. 10 and 10"
-                    ]
-                },
-                {
-                    "id": 39,
-                    "questionText": "Choose the correctly spelled word:",
-                    "questionNo": 2,
-                    "optionsJson": "[\"A. Accomodate\",\"B. Accommodate\",\"C. Acommodate\",\"D. Accomadate\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "Correct spelling is 'Accommodate'. (NCERT English Grammar, p. 78)",
-                    "correctOptionIds": "B,C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": true,
-                    "marks": 1,
-                    "options": [
-                        "A. Accomodate",
-                        "B. Accommodate",
-                        "C. Acommodate",
-                        "D. Accomadate"
-                    ]
-                },
-                {
-                    "id": 40,
-                    "questionText": "In a certain code, if 'TABLE' is written as 'XEGIh', what is the code for 'CHAIR'?",
-                    "questionNo": 3,
-                    "optionsJson": "[\"A. EGKSU\",\"B. EIKU\",\"C. EIKV\",\"D. EIKU\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "Pattern involves shifting positions; 'CHAIR' follows similar code logic. (Reasoning Coding-Decoding, CAT Previous Year Papers)",
-                    "correctOptionIds": "D",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. EGKSU",
-                        "B. EIKU",
-                        "C. EIKV",
-                        "D. EIKU"
-                    ]
-                },
-                {
-                    "id": 41,
-                    "questionText": "Which is the largest planet in the Solar System?",
-                    "questionNo": 4,
-                    "optionsJson": "[\"A. Earth\",\"B. Jupiter\",\"C. Saturn\",\"D. Mars\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "Jupiter is the largest planet in our Solar System. (NCERT Science textbook, p. 210)",
-                    "correctOptionIds": "B",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. Earth",
-                        "B. Jupiter",
-                        "C. Saturn",
-                        "D. Mars"
-                    ]
-                },
-                {
-                    "id": 42,
-                    "questionText": "A train travels at 60 km/h. How far will it travel in 45 minutes?",
-                    "questionNo": 5,
-                    "optionsJson": "[\"A. 45 km\",\"B. 50 km\",\"C. 55 km\",\"D. 60 km\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "Distance = speed × time; 60 km/h × 0.75 hr = 45 km. (NCERT Math, p. 89)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. 45 km",
-                        "B. 50 km",
-                        "C. 55 km",
-                        "D. 60 km"
-                    ]
-                },
-                {
-                    "id": 43,
-                    "questionText": "Select the antonym of 'Generous':",
-                    "questionNo": 6,
-                    "optionsJson": "[\"A. Stingy\",\"B. Kind\",\"C. Noble\",\"D. Friendly\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "'Stingy' is the antonym of 'Generous'. (NCERT English Vocabulary, p. 56)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. Stingy",
-                        "B. Kind",
-                        "C. Noble",
-                        "D. Friendly"
-                    ]
-                },
-                {
-                    "id": 44,
-                    "questionText": "If all roses are flowers and some flowers fade quickly, which of the following is true?",
-                    "questionNo": 7,
-                    "optionsJson": "[\"A. Some roses fade quickly\",\"B. All flowers that fade quickly are roses\",\"C. Some flowers that fade quickly are roses\",\"D. No roses fade quickly\"]",
-                    "type": 0,
-                    "difficulty": "Hard",
-                    "explanation": "Some flowers fade quickly and roses are flowers, so some roses may fade quickly. (Verbal Reasoning, Topper book)",
-                    "correctOptionIds": "C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 3,
-                    "options": [
-                        "A. Some roses fade quickly",
-                        "B. All flowers that fade quickly are roses",
-                        "C. Some flowers that fade quickly are roses",
-                        "D. No roses fade quickly"
-                    ]
-                },
-                {
-                    "id": 45,
-                    "questionText": "Who is known as the 'Father of the Nation' in India?",
-                    "questionNo": 8,
-                    "optionsJson": "[\"A. Jawaharlal Nehru\",\"B. Mahatma Gandhi\",\"C. Subhas Chandra Bose\",\"D. B.R. Ambedkar\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "Mahatma Gandhi is called the 'Father of the Nation' for leading independence movements. (NCERT History, p. 78)",
-                    "correctOptionIds": "B",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. Jawaharlal Nehru",
-                        "B. Mahatma Gandhi",
-                        "C. Subhas Chandra Bose",
-                        "D. B.R. Ambedkar"
-                    ]
-                },
-                {
-                    "id": 46,
-                    "questionText": "What is the smallest prime number?",
-                    "questionNo": 9,
-                    "optionsJson": "[\"A. 0\",\"B. 1\",\"C. 2\",\"D. 3\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "2 is the smallest prime number, divisible only by 1 and itself. (Mathematics NCERT prime numbers, p. 20)",
-                    "correctOptionIds": "C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. 0",
-                        "B. 1",
-                        "C. 2",
-                        "D. 3"
-                    ]
-                },
-                {
-                    "id": 47,
-                    "questionText": "Fill in the blank: She ____ beautifully in the dance competition.",
-                    "questionNo": 10,
-                    "optionsJson": "[\"A. performed\",\"B. perform\",\"C. performing\",\"D. performs\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "Correct tense usage is 'performed' in past tense. (NCERT English Grammar, p. 102)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. performed",
-                        "B. perform",
-                        "C. performing",
-                        "D. performs"
-                    ]
-                },
-                {
-                    "id": 48,
-                    "questionText": "Find the next number in the sequence: 2, 4, 8, 16, ____?",
-                    "questionNo": 11,
-                    "optionsJson": "[\"A. 18\",\"B. 24\",\"C. 32\",\"D. 64\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "Sequence doubles each time: 2,4,8,16, next is 32. (Number Series, practice books)",
-                    "correctOptionIds": "C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. 18",
-                        "B. 24",
-                        "C. 32",
-                        "D. 64"
-                    ]
-                },
-                {
-                    "id": 49,
-                    "questionText": "Which currency is used in Japan?",
-                    "questionNo": 12,
-                    "optionsJson": "[\"A. Yen\",\"B. Peso\",\"C. Won\",\"D. Rupee\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "Japan's currency is Yen. (NCERT Economics, p. 52)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. Yen",
-                        "B. Peso",
-                        "C. Won",
-                        "D. Rupee"
-                    ]
-                },
-                {
-                    "id": 50,
-                    "questionText": "If a pen costs 15 rupees and a notebook costs 45 rupees, what is the cost of 3 pens and 2 notebooks?",
-                    "questionNo": 13,
-                    "optionsJson": "[\"A. 105\",\"B. 120\",\"C. 135\",\"D. 150\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "Total = 3×15 + 2×45 = 45 + 90 = 135. (Mathematics, practice problems)",
-                    "correctOptionIds": "C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. 105",
-                        "B. 120",
-                        "C. 135",
-                        "D. 150"
-                    ]
-                },
-                {
-                    "id": 51,
-                    "questionText": "Choose the correct antonym of 'Happy':",
-                    "questionNo": 14,
-                    "optionsJson": "[\"A. Sad\",\"B. Joyful\",\"C. Excited\",\"D. Glad\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "'Sad' is the antonym of 'Happy'. (NCERT English Vocabulary, p. 60)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. Sad",
-                        "B. Joyful",
-                        "C. Excited",
-                        "D. Glad"
-                    ]
-                },
-                {
-                    "id": 52,
-                    "questionText": "All bananas are fruits. Some fruits are cherries. Which of the following is true?",
-                    "questionNo": 15,
-                    "optionsJson": "[\"A. Some cherries are bananas\",\"B. All cherries are fruits\",\"C. Some fruits are cherries\",\"D. All bananas are cherries\"]",
-                    "type": 0,
-                    "difficulty": "Hard",
-                    "explanation": "Some fruits being cherries and all bananas being fruits means some cherries could be bananas, but at least some are cherries. (Logical reasoning basics)",
-                    "correctOptionIds": "C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 3,
-                    "options": [
-                        "A. Some cherries are bananas",
-                        "B. All cherries are fruits",
-                        "C. Some fruits are cherries",
-                        "D. All bananas are cherries"
-                    ]
-                },
-                {
-                    "id": 53,
-                    "questionText": "Which city is known as the 'Pink City'?",
-                    "questionNo": 16,
-                    "optionsJson": "[\"A. Jaipur\",\"B. Udaipur\",\"C. Ahmedabad\",\"D. Varanasi\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "Jaipur is called the 'Pink City' for its pink-painted buildings. (Rajasthan Tourism Guide)",
-                    "correctOptionIds": "A",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. Jaipur",
-                        "B. Udaipur",
-                        "C. Ahmedabad",
-                        "D. Varanasi"
-                    ]
-                },
-                {
-                    "id": 54,
-                    "questionText": "A shopkeeper sells an article at a profit of 20%. If the cost price is 200 rupees, what is the selling price?",
-                    "questionNo": 17,
-                    "optionsJson": "[\"A. 220\",\"B. 240\",\"C. 250\",\"D. 260\"]",
-                    "type": 0,
-                    "difficulty": "Medium",
-                    "explanation": "Selling Price = Cost Price + 20% profit = 200 + 40 = 240 (but check options; correct is 240), correction: it's 200 + 20% of 200 = 200+40=240, so correct answer is B. 240.",
-                    "correctOptionIds": "D",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 2,
-                    "options": [
-                        "A. 220",
-                        "B. 240",
-                        "C. 250",
-                        "D. 260"
-                    ]
-                },
-                {
-                    "id": 55,
-                    "questionText": "Identify the grammatical error in the sentence: 'He don’t knows the answer.'",
-                    "questionNo": 18,
-                    "optionsJson": "[\"A. He\",\"B. don\\u2019t\",\"C. knows\",\"D. the answer\"]",
-                    "type": 0,
-                    "difficulty": "Hard",
-                    "explanation": "'Don’t' should be 'doesn’t' for third person singular. (NCERT English Grammar, p. 105)",
-                    "correctOptionIds": "B",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 3,
-                    "options": [
-                        "A. He",
-                        "B. don’t",
-                        "C. knows",
-                        "D. the answer"
-                    ]
-                },
-                {
-                    "id": 56,
-                    "questionText": "If in a coding system, ‘APPLE’ is written as ‘ELPPA’, how is ‘ORANGE’ written?",
-                    "questionNo": 19,
-                    "optionsJson": "[\"A. EGNARO\",\"B. EGNARO\",\"C. EROANG\",\"D. EGNARO\"]",
-                    "type": 0,
-                    "difficulty": "Hard",
-                    "explanation": "Pattern is reversing the word; ‘ORANGE’ reversed is ‘EGNARO’. (Coding-Decoding methods, reasoning books)",
-                    "correctOptionIds": "B",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 3,
-                    "options": [
-                        "A. EGNARO",
-                        "B. EGNARO",
-                        "C. EROANG",
-                        "D. EGNARO"
-                    ]
-                },
-                {
-                    "id": 57,
-                    "questionText": "Which organ is responsible for pumping blood in the human body?",
-                    "questionNo": 20,
-                    "optionsJson": "[\"A. Brain\",\"B. Kidney\",\"C. Heart\",\"D. Lungs\"]",
-                    "type": 0,
-                    "difficulty": "Easy",
-                    "explanation": "The heart pumps blood throughout the body. (NCERT Science, p. 102)",
-                    "correctOptionIds": "C",
-                    "selectedOptionIds": null,
-                    "isCorrect": false,
-                    "isMultipleSelect": false,
-                    "marks": 1,
-                    "options": [
-                        "A. Brain",
-                        "B. Kidney",
-                        "C. Heart",
-                        "D. Lungs"
-                    ]
-                }
-            ],
-
-        "message": "Test created successfully",
-        "statusCode": 201
+            {
+                "id": 0,
+                "questionText": "Which of the following is primarily responsible for providing shear strength in concrete?",
+                "questionNo": 1,
+                "optionsJson": "[\"A. Cement matrix\",\"B. Aggregates\",\"C. Reinforcing steel\",\"D. Water-cement ratio\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Reinforcing steel provides the tensile and shear strength in reinforced concrete. It resists shear stresses effectively. (PC Sreenivasan, Reinforced Concrete Design)",
+                "correctOptionIds": "C",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Cement matrix",
+                    "B. Aggregates",
+                    "C. Reinforcing steel",
+                    "D. Water-cement ratio"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "In thermodynamics, the Carnot cycle operates between two reservoirs at 300K and 600K. What is the maximum efficiency of this cycle?",
+                "questionNo": 2,
+                "optionsJson": "[\"A. 50%\",\"B. 66.7%\",\"C. 33.3%\",\"D. 80%\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Carnot efficiency = 1 - T_c/T_h = 1 - 300/600 = 0.5 or 50%. So, the correct is 50%, but given options, B (66.7%) is incorrect; actual correct answer is A. 50%. Adjusting based on options: answer is A.",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. 50%",
+                    "B. 66.7%",
+                    "C. 33.3%",
+                    "D. 80%"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which structure is most suitable for absorbing seismic energy in earthquake-resistant design?",
+                "questionNo": 3,
+                "optionsJson": "[\"A. Rigid frame\",\"B. Damped structure\",\"C. Shear wall\",\"D. Base isolator\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Base isolators absorb seismic energy, reducing transfer to the structure. They are effective in earthquake-resistant design. (Earthquake Engineering, Pandey & Bhargava)",
+                "correctOptionIds": "D",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Rigid frame",
+                    "B. Damped structure",
+                    "C. Shear wall",
+                    "D. Base isolator"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "What is the primary purpose of a Fourier Transform in signal processing?",
+                "questionNo": 4,
+                "optionsJson": "[\"A. To filter noise\",\"B. To convert time domain signals to frequency domain\",\"C. To compress data\",\"D. To amplify signals\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "Fourier Transform converts signals from the time domain to the frequency domain, facilitating analysis of frequency components. (Signals and Systems, Oppenheim & Willsky)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. To filter noise",
+                    "B. To convert time domain signals to frequency domain",
+                    "C. To compress data",
+                    "D. To amplify signals"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which of the following materials is most suitable for high-temperature applications?",
+                "questionNo": 5,
+                "optionsJson": "[\"A. Steel\",\"B. Ceramic\",\"C. Aluminum\",\"D. Plastic\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "Ceramics are excellent for high-temperature environments due to their thermal stability and resistance to melting. (Materials Science, Callister)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. Steel",
+                    "B. Ceramic",
+                    "C. Aluminum",
+                    "D. Plastic"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Select the correct statements about the second law of thermodynamics.",
+                "questionNo": 6,
+                "optionsJson": "[\"A. Entropy of an isolated system always decreases\",\"B. Entropy of the universe tends to a maximum\",\"C. It states energy can be completely converted into work\",\"D. It applies only at equilibrium\"]",
+                "type": 0,
+                "difficulty": "Hard",
+                "explanation": "The second law states that the entropy of the universe increases and tends to a maximum; energy conversions are not 100% efficient. (Thermodynamics, Zemansky)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 3,
+                "minusMarks": null,
+                "options": [
+                    "A. Entropy of an isolated system always decreases",
+                    "B. Entropy of the universe tends to a maximum",
+                    "C. It states energy can be completely converted into work",
+                    "D. It applies only at equilibrium"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Identify the type of boundary condition where displacement is fixed at the edges in a finite element model.",
+                "questionNo": 7,
+                "optionsJson": "[\"A. Free boundary\",\"B. Fixed boundary\",\"C. Symmetric boundary\",\"D. Roller boundary\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "A fixed boundary condition constrains displacement, preventing movement at the boundary. (Finite Element Method, G. R. Liu)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Free boundary",
+                    "B. Fixed boundary",
+                    "C. Symmetric boundary",
+                    "D. Roller boundary"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "What is the method used to analyze the stability of a structure subjected to buckling?",
+                "questionNo": 8,
+                "optionsJson": "[\"A. Eigenvalue analysis\",\"B. Finite difference method\",\"C. Modal analysis\",\"D. Stress-strain curve\"]",
+                "type": 0,
+                "difficulty": "Hard",
+                "explanation": "Eigenvalue analysis is used to determine buckling load factors for structures under compression. (Structural Stability, Timoshenko)",
+                "correctOptionIds": "A",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 3,
+                "minusMarks": null,
+                "options": [
+                    "A. Eigenvalue analysis",
+                    "B. Finite difference method",
+                    "C. Modal analysis",
+                    "D. Stress-strain curve"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "In control systems, what is the significance of the root locus method?",
+                "questionNo": 9,
+                "optionsJson": "[\"A. To find system steady-state error\",\"B. To analyze system stability as system parameters vary\",\"C. To determine transient response\",\"D. To design controllers\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Root locus plots show how system poles move with parameter variation, indicating stability changes. (Control Systems Engineering, Ogata)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. To find system steady-state error",
+                    "B. To analyze system stability as system parameters vary",
+                    "C. To determine transient response",
+                    "D. To design controllers"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which principle is used in the working of a heat pipe?",
+                "questionNo": 10,
+                "optionsJson": "[\"A. Conduction\",\"B. Convection\",\"C. Evaporative and condensative cycle\",\"D. Radiation\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Heat pipes operate based on phase change (evaporation and condensation) with capillary action to transfer heat efficiently. (Heat Transfer, Incropera & DeWitt)",
+                "correctOptionIds": "C",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Conduction",
+                    "B. Convection",
+                    "C. Evaporative and condensative cycle",
+                    "D. Radiation"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "What is the purpose of the Chebyshev polynomials in numerical methods?",
+                "questionNo": 11,
+                "optionsJson": "[\"A. To approximate functions with minimal error\",\"B. To solve differential equations analytically\",\"C. To optimize material properties\",\"D. To analyze signals in the time domain\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "Chebyshev polynomials are used in polynomial approximation to minimize maximum error. (Numerical Analysis, Lay & Lay)",
+                "correctOptionIds": "A",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. To approximate functions with minimal error",
+                    "B. To solve differential equations analytically",
+                    "C. To optimize material properties",
+                    "D. To analyze signals in the time domain"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which is NOT a characteristic of an ideal gas?",
+                "questionNo": 12,
+                "optionsJson": "[\"A. No intermolecular forces\",\"B. Obeys Boyle\\u0027s law at constant temperature\",\"C. Compressed to a solid\",\"D. Follows the ideal gas law PV=nRT\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "An ideal gas cannot be compressed into a solid; it describes gases only. (Thermodynamics, Sonntag)",
+                "correctOptionIds": "C",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. No intermolecular forces",
+                    "B. Obeys Boyle's law at constant temperature",
+                    "C. Compressed to a solid",
+                    "D. Follows the ideal gas law PV=nRT"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "In signal processing, what does a low-pass filter do?",
+                "questionNo": 13,
+                "optionsJson": "[\"A. Passes high-frequency signals\",\"B. Passes low-frequency signals\",\"C. Blocks all signals\",\"D. Passes all frequencies equally\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "A low-pass filter allows signals with frequencies below a cutoff point, filtering out higher frequencies. (Signal Processing, Proakis & Manolakis)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. Passes high-frequency signals",
+                    "B. Passes low-frequency signals",
+                    "C. Blocks all signals",
+                    "D. Passes all frequencies equally"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which method is most commonly used to solve large systems of linear equations?",
+                "questionNo": 14,
+                "optionsJson": "[\"A. Gauss elimination\",\"B. Jacobi iterative method\",\"C. LU decomposition\",\"D. All of the above\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "All listed methods are used; LU decomposition is efficient, and iterative methods like Jacobi are used for large systems. (Numerical Linear Algebra, Stewart)",
+                "correctOptionIds": "D",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Gauss elimination",
+                    "B. Jacobi iterative method",
+                    "C. LU decomposition",
+                    "D. All of the above"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Identify the primary function of a diode in electronic circuits.",
+                "questionNo": 15,
+                "optionsJson": "[\"A. Amplify signals\",\"B. Rectify alternating current\",\"C. Store charge\",\"D. Generate oscillations\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "Diodes allow current in one direction, enabling rectification of AC signals. (Electronics, Floyd)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. Amplify signals",
+                    "B. Rectify alternating current",
+                    "C. Store charge",
+                    "D. Generate oscillations"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "In Fluid Mechanics, what is the term for the force exerted by a fluid on a surface?",
+                "questionNo": 16,
+                "optionsJson": "[\"A. Shear stress\",\"B. Pressure\",\"C. Viscosity\",\"D. Bernoulli\\u0027s force\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Pressure is the normal force exerted per unit area by a fluid on a surface. (Fluid Mechanics, Munson)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Shear stress",
+                    "B. Pressure",
+                    "C. Viscosity",
+                    "D. Bernoulli's force"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which element is most abundant in the Earth's crust?",
+                "questionNo": 17,
+                "optionsJson": "[\"A. Silicon\",\"B. Oxygen\",\"C. Aluminum\",\"D. Iron\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "Oxygen is the most abundant element in the Earth's crust, mainly as silicates and oxides. (Geology, Press & Siever)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. Silicon",
+                    "B. Oxygen",
+                    "C. Aluminum",
+                    "D. Iron"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "The term 'modulus of elasticity' refers to which property?",
+                "questionNo": 18,
+                "optionsJson": "[\"A. Tensile strength\",\"B. Compressive strength\",\"C. Stress/strain ratio in elastic range\",\"D. Ductility\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Modulus of elasticity measures the ratio of stress to strain in the elastic region of a material. (Mechanics of Materials, Gere & Goodno)",
+                "correctOptionIds": "C",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Tensile strength",
+                    "B. Compressive strength",
+                    "C. Stress/strain ratio in elastic range",
+                    "D. Ductility"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "In digital electronics, what is the logic output of an AND gate when both inputs are LOW?",
+                "questionNo": 19,
+                "optionsJson": "[\"A. HIGH\",\"B. LOW\",\"C. Depends on the circuit\",\"D. Alternates between HIGH and LOW\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "An AND gate outputs HIGH only if all inputs are HIGH; otherwise, LOW. (Digital Logic Design, M. Morris Mano)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. HIGH",
+                    "B. LOW",
+                    "C. Depends on the circuit",
+                    "D. Alternates between HIGH and LOW"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which principle explains the lift generated on an airplane wing?",
+                "questionNo": 20,
+                "optionsJson": "[\"A. Bernoulli\\u0027s principle\",\"B. Newton\\u0027s third law\",\"C. Archimedes\\u0027 principle\",\"D. Pascal\\u0027s law\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Bernoulli's principle explains lift as a result of velocity increase and pressure decrease above the wing. (Fluid Mechanics, Munson)",
+                "correctOptionIds": "A",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Bernoulli's principle",
+                    "B. Newton's third law",
+                    "C. Archimedes' principle",
+                    "D. Pascal's law"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "What type of material is primarily used in the fabrication of semiconductor devices?",
+                "questionNo": 21,
+                "optionsJson": "[\"A. Copper\",\"B. Silicon\",\"C. Aluminum\",\"D. Gold\"]",
+                "type": 0,
+                "difficulty": "Easy",
+                "explanation": "Silicon is the primary material used due to its semiconducting properties. (Semiconductor Devices, Neamen)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 1,
+                "minusMarks": null,
+                "options": [
+                    "A. Copper",
+                    "B. Silicon",
+                    "C. Aluminum",
+                    "D. Gold"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which of the following accurately describes the concept of 'damping' in dynamic systems?",
+                "questionNo": 22,
+                "optionsJson": "[\"A. Energy addition\",\"B. Energy dissipation\",\"C. Energy transfer\",\"D. Energy storage\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Damping refers to energy dissipation in oscillatory systems, reducing amplitude over time. (Vibration Analysis, Inman)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Energy addition",
+                    "B. Energy dissipation",
+                    "C. Energy transfer",
+                    "D. Energy storage"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "In machine design, what does the factor of safety represent?",
+                "questionNo": 23,
+                "optionsJson": "[\"A. Maximum load capacity\",\"B. Actual load divided by allowable load\",\"C. Ratio of yield strength to working stress\",\"D. Overdesign margin\"]",
+                "type": 0,
+                "difficulty": "Hard",
+                "explanation": "Factor of safety = Yield strength / Working stress, providing a margin against failure. (Machine Design, Shigley)",
+                "correctOptionIds": "C",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 3,
+                "minusMarks": null,
+                "options": [
+                    "A. Maximum load capacity",
+                    "B. Actual load divided by allowable load",
+                    "C. Ratio of yield strength to working stress",
+                    "D. Overdesign margin"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "Which phenomenon is characterized by the rapid increase in temperature due to frictional heating?",
+                "questionNo": 24,
+                "optionsJson": "[\"A. Combustion\",\"B. Welding\",\"C. Thermal runaway\",\"D. Chatter\"]",
+                "type": 0,
+                "difficulty": "Hard",
+                "explanation": "Welding involves localized rapid heating due to friction or electric current. (Manufacturing Processes, Kalpakjian & Schmid)",
+                "correctOptionIds": "B",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 3,
+                "minusMarks": null,
+                "options": [
+                    "A. Combustion",
+                    "B. Welding",
+                    "C. Thermal runaway",
+                    "D. Chatter"
+                ]
+            },
+            {
+                "id": 0,
+                "questionText": "What is the main advantage of using composite materials?",
+                "questionNo": 25,
+                "optionsJson": "[\"A. Reduced weight and increased strength\",\"B. Lower cost\",\"C. Easier manufacturing\",\"D. Higher thermal conductivity\"]",
+                "type": 0,
+                "difficulty": "Medium",
+                "explanation": "Composites combine properties to achieve reduced weight and high strength—ideal for aerospace and automotive uses. (Materials Engineering, Callister)",
+                "correctOptionIds": "A",
+                "selectedOptionIds": null,
+                "isCorrect": false,
+                "isMultipleSelect": false,
+                "marks": 2,
+                "minusMarks": null,
+                "options": [
+                    "A. Reduced weight and increased strength",
+                    "B. Lower cost",
+                    "C. Easier manufacturing",
+                    "D. Higher thermal conductivity"
+                ]
+            }
+        ],
+        "message": "Test questions retrieved successfully",
+        "statusCode": 200
     };
 }

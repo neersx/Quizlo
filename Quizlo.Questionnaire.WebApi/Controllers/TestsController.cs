@@ -79,11 +79,11 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         }
 
         [HttpGet("{testId:int}/questions")]
-        [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<QuestionDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTestQuestionsByTestId(int testId, CancellationToken ct)
         {
             var dto = await _svc.GetQuestionsByTestIdAsync(testId, ct);
-            var apiResponse = ApiResponse<IReadOnlyList<QuestionDto>>.Success(dto,"Test questions retrieved successfully", StatusCodes.Status200OK);
+            var apiResponse = ApiResponse<TestDetailsDto>.Success(dto,"Test questions retrieved successfully", StatusCodes.Status200OK);
 
             return Ok(apiResponse);
         }

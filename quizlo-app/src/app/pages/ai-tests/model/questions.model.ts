@@ -27,6 +27,7 @@ export interface Exam {
     isMultipleSelect?: boolean;
     isCorrect?: boolean;
     marks?: number;
+    minusMarks?: number | null;
     answeredAt?: string;
     options?: string[];
   }
