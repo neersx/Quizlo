@@ -1,7 +1,7 @@
 
 // src/app/auth/login.component.ts
 import { Component, OnInit, OnDestroy, Inject, Renderer2, PLATFORM_ID, EventEmitter, Output } from '@angular/core';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -9,15 +9,18 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/identity/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../../shared/sharedmodule';
+import { FormSubmitLoader } from '../../../shared/common/loaders/form-submit-loader/form-submit-loader';
 
 @Component({
   selector: 'app-login-modal',
   imports: [
+    CommonModule,
     RouterModule,
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    FormSubmitLoader,
     HttpClientModule,
   ],
   providers: [
@@ -33,6 +36,7 @@ export class LoginModal implements OnInit, OnDestroy {
   toggleClass = 'off-line';
   active = 'Angular';
   disabled = '';
+  submitted = false;
   @Output() onLoginSuccess = new EventEmitter<boolean>();
 
   constructor(
@@ -55,12 +59,6 @@ export class LoginModal implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Protect route if already logged in
-    if (isPlatformBrowser(this.platformId) && this.authService.currentUser) {
-      this.router.navigate(['/']);
-      return;
-    }
-
     // Build the form
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -69,7 +67,7 @@ export class LoginModal implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    this.loginForm.reset();
   }
 
   get f() {
@@ -86,9 +84,11 @@ export class LoginModal implements OnInit, OnDestroy {
       return;
     }
 
+    this.submitted = true;
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-       this.onLoginSuccess.emit(res);
+        this.submitted = false;
+        this.onLoginSuccess.emit(res);
       },
       error: err => {
         const msg = err.error?.message || 'Login failed. Please try again.';

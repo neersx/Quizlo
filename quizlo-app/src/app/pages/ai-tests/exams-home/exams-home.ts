@@ -195,7 +195,7 @@ export class ExamsHome implements OnInit {
       }
       this.loadingTest = false;
       this.cdr.markForCheck();
-    }, 2000);
+    }, 1000);
 
     this.error = '';
 
@@ -206,6 +206,9 @@ export class ExamsHome implements OnInit {
   
     modalRef.closed.subscribe((result: any) => {
       console.log('Closed with:', result);
+      if(result.isSuccess){
+        this.startTest();
+      }
     });
   
     // fires only when .dismiss(...) is called, or ESC/backdrop
@@ -215,7 +218,8 @@ export class ExamsHome implements OnInit {
   }
 
   modalOptions: NgbModalOptions = {
-    centered: true
+    centered: true,
+    
   };
 
   isUserLoggedIn(): boolean {

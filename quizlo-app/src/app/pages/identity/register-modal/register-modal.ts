@@ -95,7 +95,7 @@ export class RegisterModal implements OnInit, OnDestroy {
 
   onLoginSuccess(value: any) {
     this.displayLogin = false;
-    this.activeModal.close({ registered: true, data: value });
+    this.activeModal.close({ isSuccess: true, data: value});
     this.cdr.detectChanges();
   }
 
@@ -122,7 +122,7 @@ export class RegisterModal implements OnInit, OnDestroy {
       error: err => {
         this.submitted = false;
         const msg = err.error?.message || 'Login failed. Please try again.';
-        this.activeModal.close({ registered: true, data: {isSuccess: false, message: msg} });
+        this.activeModal.close({ isSuccess: false, data: {message: msg} });
         this.cdr.detectChanges();
       }
     });
@@ -134,12 +134,13 @@ export class RegisterModal implements OnInit, OnDestroy {
       next: (res: any) => {
         console.log('Login successful, currentUser:', this.authService.currentUser);
         this.submitted = false;
-        this.activeModal.close({ registered: true, data: res });
+        this.activeModal.close({ isSuccess: true, data: res });
         this.cdr.detectChanges();
       },
       error: err => {
         this.submitted = false;
         const msg = err.error?.message || 'Login failed. Please try again.';
+        this.activeModal.close({ isSuccess: false, data: {message: msg} });
         this.cdr.detectChanges();
       }
     });

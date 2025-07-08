@@ -9,9 +9,16 @@
             <p class="text-danger">
                 {{_error.message}} </p>
             }
+
             <p class="h5 mb-2 text-center">Sign In</p>
             <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome back to Admin Portal !</p>
-            <div class="row gy-3">
+            <div *ngIf="submitted">
+                <app-form-submit-loader
+                    [isOverlay]="true"
+                    [submessage]="'Please wait while we login you in and create your Test.'">
+                </app-form-submit-loader>
+            </div>
+            <div *ngIf="!submitted" class="row gy-3">
                 <div class="col-xl-12">
                     <label for="signin-username" class="form-label text-default">Mobile Number<sup
                             class="fs-12 text-danger">*</sup></label>
