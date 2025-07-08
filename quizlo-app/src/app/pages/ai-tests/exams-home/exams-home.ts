@@ -201,6 +201,23 @@ export class ExamsHome implements OnInit {
 
   }
 
+  OpenRegisterModal() {
+    const modalRef = this.modalService.open(RegisterModal, this.modalOptions);
+  
+    modalRef.closed.subscribe((result: any) => {
+      console.log('Closed with:', result);
+    });
+  
+    // fires only when .dismiss(...) is called, or ESC/backdrop
+    modalRef.dismissed.subscribe((reason: any) => {
+      console.log('Dismissed with:', reason);
+    });
+  }
+
+  modalOptions: NgbModalOptions = {
+    centered: true
+  };
+
   isUserLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId)) {
       const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
@@ -247,13 +264,6 @@ export class ExamsHome implements OnInit {
     });
   }
 
-  OpenRegisterModal() {
-    this.modalService.open(RegisterModal, this.modalOptions);
-  }
-
-  modalOptions: NgbModalOptions = {
-    centered: true
-  };
 
   handleLanguageChange(value: any | any[]) {
     console.log(value);

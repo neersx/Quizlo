@@ -57,7 +57,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register([FromBody] RegisterDto dto)
         {
-            var user = await _userService.CreateUserAsync(dto.Email, dto.Password, dto.FullName.Split(' ')[0], dto.FullName.Split(' ')[1], dto.PhoneNumber);
+            var user = await _userService.CreateUserAsync(dto.Email, dto.Password, dto.FullName.Split(' ')[0], dto.FullName.Split(' ')[1] ?? "", dto.PhoneNumber);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 

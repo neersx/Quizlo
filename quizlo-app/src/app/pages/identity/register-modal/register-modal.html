@@ -1,8 +1,9 @@
 
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+<form *ngIf="!displayLogin" [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
     <div class="card custom-card my-4">
         <div class="card-body p-5">
-            <!-- ...logo, header, etc... -->
+            <p class="h5 mb-2 text-center">Sign Up</p>
+            <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome to Quizlo Ai Live Test Portal </p>
             <div class="row gy-3">
                 <!-- Full Name -->
                 <div class="col-xl-12">
@@ -65,10 +66,13 @@
             </div>
             <div class="text-center">
                 <p class="text-muted mt-3 mb-0">Already have an account?
-                    <a routerLink="/authentication/sign-in/basic"
-                        class="text-primary fw-medium">Sign In</a>
+                    <a (click)="login()" class="text-primary fw-medium">Sign In</a>
                 </p>
             </div>
         </div>
     </div>
 </form>
+
+<div *ngIf="displayLogin">
+    <app-login-modal (onLoginSuccess)="onLoginSuccess($event)"></app-login-modal>
+</div>

@@ -1,1 +1,46 @@
-<p>login-modal works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="card custom-card my-4">
+        <div class="card-body p-5">
+            @if(errorMessage.length > 0){
+            <p class="text-danger">
+                {{errorMessage}}</p>
+            }
+            @if(_error.message.length > 0){
+            <p class="text-danger">
+                {{_error.message}} </p>
+            }
+            <p class="h5 mb-2 text-center">Sign In</p>
+            <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome back to Admin Portal !</p>
+            <div class="row gy-3">
+                <div class="col-xl-12">
+                    <label for="signin-username" class="form-label text-default">Mobile Number<sup
+                            class="fs-12 text-danger">*</sup></label>
+                    <input type="text" class="form-control" id="signin-username" placeholder="Email Address"
+                        autocomplete formControlName="email" required>
+                </div>
+                <div class="col-xl-12 mb-2">
+                    <label for="signin-password" class="form-label text-default d-block">Password<sup
+                            class="fs-12 text-danger">*</sup><a href="javascript:void(0);"
+                            class="float-end fw-normal text-primary">Forget password ?</a></label>
+                    <div class="position-relative">
+                        <input type="password" class="form-control create-password-input" id="signin-password"
+                            autocomplete placeholder="password" [type]="showPassword ? 'text' : 'password'" autocomplete
+                            placeholder="Password" formControlName="password" required>
+                        <a href="javascript:void(0);" class="show-password-button text-muted" (click)="togglePassword()"
+                            id="button-addon2"><i class="ri-eye-{{toggleClass}} align-middle"></i></a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="d-grid mt-4">
+                <button [disabled]="!loginForm.valid || authService.showLoader" autofocus
+                    [class.loader--text]="authService.showLoader" class="btn btn-primary{{disabled}}">Sign In</button>
+            </div>
+            <!-- <div class="text-center">
+                <p class="text-muted mt-3 mb-0">Don't have an account?
+                    <a (click)="register()" class="text-primary fw-medium">Register & Continue >> </a>
+                </p>
+            </div> -->
+        </div>
+    </div>
+</form>

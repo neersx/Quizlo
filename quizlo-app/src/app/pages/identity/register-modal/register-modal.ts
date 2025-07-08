@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SharedModule } from '../../../shared/sharedmodule';
 import { AuthService } from '../../../services/identity/auth.service';
 import { RegisterDto } from '../models/register.model';
 import { FormSubmitLoader } from '../../../shared/common/loaders/form-submit-loader/form-submit-loader';
+import { LoginModal } from '../login-modal/login-modal';
 
 @Component({
   selector: 'app-register-modal',
@@ -19,20 +20,24 @@ import { FormSubmitLoader } from '../../../shared/common/loaders/form-submit-loa
     ReactiveFormsModule,
     SharedModule,
     FormSubmitLoader,
+    LoginModal,
     HttpClientModule],
   providers: [
     { provide: ToastrService, useClass: ToastrService },
     AuthService
   ],
   templateUrl: './register-modal.html',
-  styleUrl: './register-modal.scss'
+  styleUrl: './register-modal.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterModal implements OnInit, OnDestroy {
+  displayLogin = false;
   registerForm!: FormGroup;
   showPassword = false;
   submitted = false;
   disabled = true;
   showPassword1 = false;
+
   toggleClass: string | undefined;
 
   showSubmissionLoader = false;
@@ -48,6 +53,8 @@ export class RegisterModal implements OnInit, OnDestroy {
     public readonly authService: AuthService,
     private toastr: ToastrService,
     private fb: FormBuilder,
+    public activeModal: NgbActiveModal,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
@@ -76,6 +83,22 @@ export class RegisterModal implements OnInit, OnDestroy {
     }
   }
 
+  login() {
+    this.displayLogin = true;
+    this.cdr.detectChanges();
+  }
+
+  register() {
+    this.displayLogin = false;
+    this.cdr.detectChanges();
+  }
+
+  onLoginSuccess(value: any) {
+    this.displayLogin = false;
+    this.activeModal.close({ registered: true, data: value });
+    this.cdr.detectChanges();
+  }
+
   onSubmit(): void {
     this.submitted = true;
     if (this.registerForm.invalid) {
@@ -91,14 +114,16 @@ export class RegisterModal implements OnInit, OnDestroy {
     };
 
     this.authService.register(dto).subscribe({
-      next: () => {
-        this.toastr.success('Login successful', 'Welcome');
-        console.log('Register successful, currentUser:');
-
+      next: (res: any) => {
+      
+        console.log('Register successful, currentUser:', res);
+        this.loginUser();
       },
       error: err => {
+        this.submitted = false;
         const msg = err.error?.message || 'Login failed. Please try again.';
-        this.toastr.error(msg, 'Login Error');
+        this.activeModal.close({ registered: true, data: {isSuccess: false, message: msg} });
+        this.cdr.detectChanges();
       }
     });
   }
@@ -106,19 +131,23 @@ export class RegisterModal implements OnInit, OnDestroy {
   loginUser() {
     const loginForm = {email: this.registerForm.value.email, password: this.registerForm.value.password};
     this.authService.login(loginForm).subscribe({
-      next: () => {
-        this.toastr.success('Login successful', 'Welcome');
+      next: (res: any) => {
         console.log('Login successful, currentUser:', this.authService.currentUser);
+        this.submitted = false;
+        this.activeModal.close({ registered: true, data: res });
+        this.cdr.detectChanges();
       },
       error: err => {
+        this.submitted = false;
         const msg = err.error?.message || 'Login failed. Please try again.';
-        this.toastr.error(msg, 'Login Error');
+        this.cdr.detectChanges();
       }
     });
   }
 
   ngOnDestroy(): void {
     document.body.classList.remove('bg-white');
+    this.cdr.detach();
   }
 
 }
