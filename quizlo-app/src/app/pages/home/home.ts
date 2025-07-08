@@ -424,155 +424,87 @@ export class HomeComponent {
   sanitizeIcon(svg: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
+
   aboutCards = [
     {
-      icon: 'bx bx-layer',
+      icon: 'bx bx-brain',
       iconColor: 'bg-primary-transparent',
-      title: 'Easy to Customize',
-      content:
-        'Magna dolore elitr ut et labore stet dolor tempor at ipsum, amet quis nostrum exercitationem.',
+      title: 'AI-Driven Questions',
+      content: 'Get real-time, AI-generated questions tailored to your exam needs, ensuring up-to-date preparation.'
     },
     {
-      icon: 'bx bx-package',
-      iconColor: 'bg-secondary-transparent text-secondary',
-      title: 'Simplified Code',
-      content:
-        'At vero eos et accusamus et iusto odio dignissimos ducimus qui quidem rerum facilis reprehenderi.',
+      icon: 'bx bx-window-open',
+      iconColor: 'bg-success-transparent',
+      title: 'Easy-to-Use Exam Portal',
+      content: 'Our intuitive exam interface allows seamless navigation and effortless answering, simulating real exam conditions.'
     },
     {
-      icon: 'bx bx-analyse',
-      iconColor: 'bg-info-transparent text-info',
-      title: 'Multiple Demos',
-      content:
-        'Blanditiis praesentium voluptatum deleniti atque corrupti quos dolores rerum hic tenetur.',
+      icon: 'bx bx-history',
+      iconColor: 'bg-info-transparent',
+      title: 'Personalized Progress Tracking',
+      content: 'View detailed test histories and take retests to monitor improvements and strengthen weak areas.'
     },
+    {
+      icon: 'bx bx-slider-alt',
+      iconColor: 'bg-warning-transparent',
+      title: 'Customizable Test Difficulty',
+      content: 'Choose your preferred difficulty level and subjects, allowing focused, targeted exam preparation.'
+    },
+    {
+      icon: 'bx bx-group',
+      iconColor: 'bg-secondary-transparent',
+      title: 'Group Challenges & Rankings',
+      content: 'Invite friends, form groups, and compete to measure your performance against peers in a motivating environment.'
+    },
+    {
+      icon: 'bx bx-calendar-check',
+      iconColor: 'bg-danger-transparent',
+      title: 'Test Scheduling & Reminders',
+      content: 'Conveniently schedule your tests and receive timely reminders through email and WhatsApp notifications.'
+    }
   ];
-  basicAccordions = [
-    {
-      title: 'Where can I subscribe to your newsletter?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingOne',
-      collapseId: 'collapseOne',
-      collapsed: false,
-    },
-    {
-      title: 'Where can in edit my address?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingTwo',
-      collapseId: 'collapseTwo',
-      collapsed: true,
-    },
-    {
-      title: 'What are your opening hours?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingThree',
-      collapseId: 'collapseThree',
-      collapsed: true,
-    },
-    {
-      title: 'Do I have the right to return an item?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFour',
-      collapseId: 'collapseFour',
-      collapsed: true,
-    },
-    {
-      title: 'General Terms & Conditions (GTC)',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFive',
-      collapseId: 'collapseFive',
-      collapsed: true,
-    },
-    {
-      title: 'Do I need to create an account to make an order?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingSix',
-      collapseId: 'collapseSix',
-      collapsed: true,
-    },
-  ];
-  basicAccordions1 = [
-    {
-      title: 'General Terms & Conditions (GTC)',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingOne',
-      collapseId: 'collapseOne',
-      collapsed: true,
-    },
-    {
-      title: 'Do I need to create an account to make an order?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingTwo',
-      collapseId: 'collapseTwo',
-      collapsed: true,
-    },
-    {
-      title: 'Where can I subscribe to your newsletter?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingThree',
-      collapseId: 'collapseThree',
-      collapsed: true,
-    },
-    {
-      title: 'Where can in edit my address?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFour',
-      collapseId: 'collapseFour',
-      collapsed: true,
-    },
-    {
-      title: 'What are your opening hours?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingFive',
-      collapseId: 'collapseFive',
-      collapsed: true,
-    },
-    {
-      title: 'Do I have the right to return an item?',
-      body: "<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.",
-      headingId: 'headingSix',
-      collapseId: 'collapseSix',
-      collapsed: false,
-    },
-  ];
+  
+
  servicecards = [
   {
-    image: '../../assets/images/exams/jee.jpg',
+    image: '../../assets/images/exams/neet.jpg',
     title: 'NEET UG',
     description: 'AI-generated full-length NEET mocks with real-exam timing, section-wise breakdown, and instant score reports.',
   },
+
   {
-    image: '../../assets/images/exams/main.jpg',
-    title: 'JEE Main',
-    description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
+    image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/7.png',
+    title: 'SSC CGL',
+    description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
   },
   {
-    image: '../../assets/images/exams/jee.jpg',
-    title: 'JEE Advanced',
-    description: 'Replicate the toughest JEE Advanced interface with AI-crafted questions and topic mastery insights.',
+    image: '../../assets/images/exams/ibps-po.jpg',
+    title: 'IBPS PO',
+    description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
   },
+
   {
     image: '../../assets/images/exams/upsc.jpg',
     title: 'UPSC Civil Services',
     description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
   },
   {
-    image: '../../assets/images/exams/ssc.jpg',
-    title: 'SSC CGL',
-    description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
+    image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/6.png',
+    title: 'JEE Main',
+    description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
   },
   {
-    image: '../../assets/images/exams/ibps.jpg',
-    title: 'IBPS PO',
-    description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
+    image: '../../assets/images/exams/ctat.jpg',
+    title: 'CTAT',
+    description: 'Our tests are crafted preciously for Central govt. Teacher Aptitude Test (CTAT) mock exams.',
   },
   {
-    image: 'https://source.unsplash.com/200x200/?rbi',
+    image: '../../assets/images/exams/rbi.jpg',
     title: 'RBI Grade B',
     description: 'Fully automated RBI Grade B practice tests, seamless UI, and AI-backed topic-wise analytics.',
   },
   {
-    image: 'https://source.unsplash.com/200x200/?gate-exam',
+    image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/2.png',
     title: 'GATE',
     description: 'AI-powered GATE mock exams with strict time limits, sectional scoring and instant performance dashboards.',
   },

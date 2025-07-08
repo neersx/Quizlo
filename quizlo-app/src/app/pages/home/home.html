@@ -341,7 +341,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-lg-4" *ngFor="let card of aboutCards">
+                    <div class="col-lg-4 mt-2" *ngFor="let card of aboutCards">
                         <spk-landing-about [icon]="card.icon" [iconColor]="card.iconColor" [title]="card.title"
                             [content]="card.content"></spk-landing-about>
                     </div>
@@ -358,7 +358,7 @@
                     <hr class="center-diamond">
                     <div class="heading-title">Comprehensive AI-Driven Services</div>
                     <div class="heading-description">
-                        Everything you need to practice, analyze, and perfect your skills for MBBS, NEET, IIT-JEE, SSC,
+                        Everything you need to practice, analyze, and perfect your skills for NEET, IBPS, MBBS, CTAT, IIT-JEE, SSC,
                         UPSC, and more.
                     </div>
                 </div>
@@ -1116,14 +1116,14 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                             <a routerLink="/dashboards/sales" class="d-inline-block mb-2"><img
-                                    src="./assets/images/brand-logos/desktop-white.png" width="100px" alt="img"></a>
+                                    src="./assets/images/brand-logos/desktop-white.png" width="150px" alt="Quizlo Ai logo"></a>
                             <p class="mb-4 op-8 fs-15">
                                 Quizlo Ai is a leading online platform that provides AI-generated mock tests. Contact us
                                 on below detail.
                             </p>
                             <ul class="list-unstyled mb-0">
                                 <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link"><i
-                                            class="fe fe-laptop me-2 d-inline-block fs-16"></i>quizloai.com</a></li>
+                                            class="fe fe-globe me-2 d-inline-block fs-16"></i>quizloai.com</a></li>
                                 <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link"><i
                                             class="fe fe-mail me-2 d-inline-block fs-16"></i>quizloai&#64;gmail.com</a>
                                 </li>
@@ -1150,57 +1150,44 @@
                         <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                             <h5 class="text-fixed-white">Page Links</h5>
                             <ul class="list-unstyled footer-icon mb-0">
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">About
+                                <li class="list-item mb-2"><a href="/#about" class="footer-link">About
                                         company</a></li>
 
-                                <li class="list-item mb-2"><a routerLink="/pages/blog/blog" class="footer-link">News
+                                <li class="list-item mb-2"><a routerLink="/blogs" class="footer-link">News
                                         &amp; Blog</a></li>
                                 <li class="list-item mb-2"><a href="javascript:void(0);"
                                         class="footer-link">Testimonials</a></li>
-                                <li class="list-item mb-2"><a routerLink="/pages/faqs" class="footer-link">FAQ's</a>
+                                <li class="list-item mb-2"><a routerLink="/faqs" class="footer-link">FAQ's</a>
                                 </li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Account
+                                <li class="list-item mb-2"><a href="user-profile" class="footer-link">Account
                                         Settings</a></li>
-                                <li class="list-item"><a routerLink="/pages/pricing" class="footer-link">Price &amp;
+                                <li class="list-item"><a routerLink="/home/#pricing" class="footer-link">Price &amp;
                                         Plan</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                            <h5 class="text-fixed-white">Services</h5>
+                            <h5 class="text-fixed-white">Features</h5>
                             <ul class="list-unstyled footer-icon mb-0">
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Business
-                                        Services</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Financial
-                                        Planning</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);"
-                                        class="footer-link">Marketing</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);"
-                                        class="footer-link">Analytical</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Business
-                                        Audits</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Digital
-                                        Marketing</a></li>
-                                <li class="list-item"><a href="javascript:void(0);" class="footer-link">24/7 Support</a>
-                                </li>
+                                <li class="list-item mb-2"><a href="home/#about" class="footer-link">Ai Generated Tests</a></li>
+                                <li class="list-item mb-2"><a href="home/#about" class="footer-link">Easy to Use Portal</a></li>
+                                <li class="list-item mb-2"><a href="home/#about" class="footer-link">Personalized Report</a></li>
+                                <li class="list-item mb-2"><a href="home/#about" class="footer-link">Test Scheduling</a></li>
+                                <li class="list-item mb-2"><a href="home/#about" class="footer-link">Group Challanges</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
                             <h5 class="text-fixed-white">Support</h5>
                             <ul class="list-unstyled footer-icon mb-0">
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Support
+                                <li class="list-item mb-2"><a href="home/#contact" class="footer-link">Support
                                         Contact </a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Report
+                                <li class="list-item mb-2"><a href="/report-abuse" class="footer-link">Report
                                         Abuse</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);"
-                                        class="footer-link">Affiliate</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);"
+                                <li class="list-item mb-2"><a href="/cancellation-and-refund-policy"
                                         class="footer-link">Cancellation &amp; Refund Policy</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Our
+                                <li class="list-item mb-2"><a href="/terms-and-conditions" class="footer-link">Our
                                         Terms</a></li>
-                                <li class="list-item mb-2"><a href="javascript:void(0);" class="footer-link">Privacy
+                                <li class="list-item mb-2"><a href="/privacy-policy" class="footer-link">Privacy
                                         Policy</a></li>
-                                <li class="list-item"><a href="javascript:void(0);" class="footer-link">Payment
-                                        Options</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1265,22 +1252,22 @@
                             <div class="fs-14">
                                 Copyright ©
                                 <span id="year">2025</span>
-                                <a routerLink="/dashboards/sales" class="text-primary"> Zeno. </a>
+                                <a routerLink="/home" class="text-primary"> Quizlo Ai </a>
                                 Designed with
                                 <span class="bi bi-heart-fill text-danger"></span>
                                 by
-                                <a href="https://spruko.com/" class="text-primary" target="_blank">Spruko</a>
+                                <a href="https://eliteinnovates.com" class="text-primary" target="_blank">Elite Innovates </a>
                                 All Rights Reserved
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <ul
                                 class="list-unstyled d-flex mb-0 justify-content-center justify-content-xl-end mt-3 mt-xl-0 ms-auto flex-wrap legal-footer-section">
-                                <li class="list-item"><a href="javascript:void(0);"
+                                <li class="list-item"><a href="/terms-and-conditions"
                                         class="fs-14 fw-normal pe-3 text-fixed-white">Terms of Service</a></li>
-                                <li class="list-item"><a href="javascript:void(0);"
+                                <li class="list-item"><a href="/privacy-policy"
                                         class="fs-14 fw-normal px-3 text-fixed-white">Privacy Policy</a></li>
-                                <li class="list-item"><a href="javascript:void(0);"
+                                <li class="list-item"><a href="/report-abuse"
                                         class="fs-14 fw-normal px-3 text-fixed-white">Legal</a></li>
                             </ul>
                         </div>
