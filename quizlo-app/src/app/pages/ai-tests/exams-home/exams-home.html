@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="col-xxl-3 col-12">
-                                <spk-ng-select [options]="languages" [selectClass]="''" [clearable]="true"
+                                <spk-ng-select [options]="languages" [selectClass]="''" [clearable]="true" [defaultValue]="selectedLanguage"
                                     [multi]="true" [searchable]="true" [placeholder]="'Select Language'"
                                     [additionalProperties]="{}" (change)="handleLanguageChange($event)">
                                 </spk-ng-select>
@@ -50,7 +50,7 @@
                                     </button>
                                 </div>
                                 <div *ngIf="!isSubjectsLoading && subjects.length > 0">
-                                    <spk-ng-select [options]="subjects" [selectClass]="''" [clearable]="true"
+                                    <spk-ng-select [options]="subjects" [selectClass]="''" [clearable]="true" 
                                         [multi]="false" [searchable]="true" [placeholder]="'Choose Subject Name'"
                                         [additionalProperties]="{}" (change)="handleSubjectChange($event)">
                                     </spk-ng-select>
@@ -65,7 +65,7 @@
                             <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
                             Loading your Test. Please wait...
                         </button>
-                        <button *ngIf="!loadingTest && ( !tests || tests.length == 0)" [disabled]="selectedExam == null"  (click)="startTest()" class="btn btn-success btn-wave">Start Your Test Now</button>
+                        <button *ngIf="!loadingTest && ( !tests || tests.length == 0)" [disabled]="selectedSubject?.value == null"  (click)="startTest()" class="btn btn-success btn-wave">Start Your Test Now</button>
                         <button *ngIf="!loadingTest  && tests && tests.length > 0" class="btn btn-warning btn-wave">Finish Below Active Tests First</button>
                     </div>
                 </div>

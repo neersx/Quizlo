@@ -32,7 +32,7 @@ export class ExamsHome implements OnInit {
   selectedLanguage: OptionModel = { label: 'English', value: 'English' };
   isSubjectsLoading = false;
   selectedDifficulty = { label: 'Mix', value: 'Mix' };
-  selectedSubject: OptionModel = { label: 'All', value: 'All' };
+  selectedSubject?: OptionModel = { label: 'Select your Subject', value: null };
   selectedExam: any | null = null;
   exams: Exam[] = [];
   subjects: Dropdown[] = [];
@@ -65,7 +65,6 @@ export class ExamsHome implements OnInit {
   initializeDefaultValues() {
     this.selectedLanguage = { label: 'English', value: 'English' };
     this.selectedDifficulty = { label: 'Mix', value: 'Mix' };
-    this.selectedSubject = { label: 'All', value: 'All' };
     const userpreference: any = this.localStorageService.getItem(LocalStorageKeys.UserPreferences);
 
     if (userpreference && userpreference.defaultExam) {
@@ -240,7 +239,7 @@ export class ExamsHome implements OnInit {
 
     const payload = {
       examId: this.selectedExam.value,     // adjust as needed
-      subject: this.selectedSubject.label,       // or your dynamic subject
+      subject: this.selectedSubject?.label,       // or your dynamic subject
       language: this.selectedLanguage.label,
       examCode: this.selectedExam.code,
       examName: this.selectedExam.name,

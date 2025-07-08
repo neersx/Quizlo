@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, Renderer2, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { After } from 'v8';
 
 export interface OptionModel {
   label: string; // Adjust according to your option structure
@@ -15,9 +16,9 @@ export interface OptionModel {
   styleUrl: './spk-ng-select.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SpkNgSelectComponent {
+export class SpkNgSelectComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() options: any = []; // Options for the select
-  @Input() defaultValue: OptionModel = { label: 'Select your value', value: '-1' };   // Default value for the select
+  @Input() defaultValue: OptionModel | undefined;   // Default value for the select
   @Input() id: string='';       // Additional classes
   @Input() mainClass: string='';       // Additional classes
   @Input() maxSelectedItems!: number;       // Additional classes
@@ -42,7 +43,14 @@ image: any;
 onSelectionChange(selected: any): void {
   this.selectedChange.emit(selected);
 }
-  constructor(private renderer: Renderer2, private el: ElementRef, private cdr: ChangeDetectorRef) {}
+  constructor(private renderer: Renderer2, private el: ElementRef, private cdr: ChangeDetectorRef) {
+   
+  }
+
+  ngOnInit(): void {
+    this.defaultValue = this.defaultValue || { label: this.placeholder, value: null };
+    this.cdr.detectChanges();
+  }
 
   ngAfterViewInit() {
     this.applyAdditionalProperties();
