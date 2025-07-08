@@ -1,0 +1,15 @@
+<div class="form-skeleton" [attr.data-theme]="theme">
+  <div *ngFor="let field of fields; let i = index" class="field-group">
+    <div class="label-skeleton skeleton-item"></div>
+    <div 
+      class="input-skeleton skeleton-item"
+      [ngClass]="getInputClass(field.type)"
+    ></div>
+    <div *ngIf="field.showError" class="error-skeleton skeleton-item"></div>
+  </div>
+  
+  <div *ngIf="showButtons" class="button-group">
+    <div class="button-skeleton skeleton-item primary"></div>
+    <div class="button-skeleton skeleton-item secondary"></div>
+  </div>
+</div>

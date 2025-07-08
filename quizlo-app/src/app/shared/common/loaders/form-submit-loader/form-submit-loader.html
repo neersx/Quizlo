@@ -1,0 +1,52 @@
+<div class="form-submission-loader" [class.overlay]="isOverlay" [attr.data-theme]="'light'">
+  <div class="loader-container">
+    <!-- Spinner -->
+    <div class="spinner-container">
+      <div class="spinner" [ngClass]="spinnerType"></div>
+    </div>
+
+    <!-- Message -->
+    <div class="message-container">
+      <div class="loading-message">{{ message }}</div>
+      <div *ngIf="submessage" class="loading-submessage">{{ submessage }}</div>
+    </div>
+
+    <!-- Progress bar (optional) -->
+    <div *ngIf="showProgress" class="progress-container">
+      <div class="progress-bar">
+        <div 
+          class="progress-fill" 
+          [style.width.%]="progress"
+          [class.indeterminate]="progress === null"
+        ></div>
+      </div>
+      <div *ngIf="progress !== null" class="progress-text">{{ progress }}%</div>
+    </div>
+
+    <!-- Steps indicator (optional) -->
+    <div *ngIf="steps && steps.length > 0" class="steps-container">
+      <div class="steps-list">
+        <div 
+          *ngFor="let step of steps; let i = index" 
+          class="step-item"
+          [class.active]="i === currentStep"
+          [class.completed]="i < currentStep"
+        >
+          <div class="step-icon">
+            <div *ngIf="i < currentStep" class="check-icon">✓</div>
+            <div *ngIf="i === currentStep" class="loading-dot"></div>
+            <div *ngIf="i > currentStep" class="pending-dot"></div>
+          </div>
+          <div class="step-text">{{ step }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cancel button (optional) -->
+    <div *ngIf="showCancel" class="cancel-container">
+      <button class="cancel-button" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

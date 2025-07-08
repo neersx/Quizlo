@@ -16,7 +16,14 @@
                                 <input type="text" class="form-control" value="0.0453" placeholder="Enter Amount">
                             </div> -->
                             <div class="col-xxl-6 col-12">
-                                <div *ngIf="exams">
+                              <div *ngIf="loading" class="demo-content">
+                                <app-grid-loader 
+                                  [columns]="gridColumns"
+                                  [rowCount]="0"
+                                  [showPagination]="false">
+                                </app-grid-loader>
+                              </div>
+                                <div *ngIf="!loading && exams">
                                     <spk-ng-select [options]="exams" [selectClass]="''" [clearable]="true"
                                         [multi]="false" [searchable]="true" [defaultValue]="selectedExam" [placeholder]="'Select Your Exam'"
                                         [additionalProperties]="{}" [message]="'Exam is mandatory to start the test'"
@@ -67,6 +74,55 @@
     </div>
 </div>
 <!--End::row-1 -->
+
+<ng-template #registerModal let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title" id="exampleModalLabel">
+      New Message to &#64;getbootstrap
+    </h6>
+    <a
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    ></a>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="recipient-name" class="col-form-label"
+          >Recipient:</label
+        >
+        <input
+          value="&#64;getbootstrap"
+          type="text"
+          class="form-control"
+          id="recipient-name"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label"
+          >Message:</label
+        >
+        <textarea class="form-control" id="message-text"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a
+      type="button"
+      class="btn btn-secondary"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Save click')"
+    >
+      Close
+    </a>
+    <button type="button" class="btn btn-primary">
+      Send message
+    </button>
+  </div>
+</ng-template>
 
 
 <div *ngIf="tests && tests.length == 0" class="header text-center">

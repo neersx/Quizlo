@@ -3,7 +3,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from '../../../shared/sharedmodule';
 import { OptionModel, SpkNgSelectComponent } from '../../../@spk/reusable-ui-elements/spk-ng-select/spk-ng-select.component';
-import { Exam, TestDetailsDto } from '../model/questions.model';
+import { Exam } from '../model/questions.model';
 import { ExamService } from '../services/exam-service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DropdownService } from '../../../services/dropdown.service';
@@ -16,32 +16,38 @@ import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
 import { AuthService } from '../../../services/identity/auth.service';
 import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
+import { RegisterModal } from '../../identity/register-modal/register-modal';
+import { NgbModal, NgbModalOptions, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
 
 @Component({
   selector: 'app-exams-home',
-  imports: [SharedModule, NgApexchartsModule, NgSelectModule, SpkNgSelectComponent, SpkDropdownsComponent, CommonModule, RouterModule, TestSkeletonLoader],
+  imports: [SharedModule, NgApexchartsModule, NgbModule, NgSelectModule, SpkNgSelectComponent, SpkDropdownsComponent,
+    CommonModule, RouterModule, TestSkeletonLoader, RegisterModal, GridLoader],
   templateUrl: './exams-home.html',
   styleUrl: './exams-home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExamsHome implements OnInit {
-  selectedLanguage : OptionModel = { label: 'English', value: 'English' };
+  selectedLanguage: OptionModel = { label: 'English', value: 'English' };
   isSubjectsLoading = false;
   selectedDifficulty = { label: 'Mix', value: 'Mix' };
-  selectedSubject : OptionModel = { label: 'All', value: 'All' };
+  selectedSubject: OptionModel = { label: 'All', value: 'All' };
   selectedExam: any | null = null;
   exams: Exam[] = [];
   subjects: Dropdown[] = [];
   languages: any[] = [];
   loading = false;
   loadingTest = false;
-  testDetails : TestDetailsModel | undefined;
+  testDetails: TestDetailsModel | undefined;
   tests: any[] = [];
   activeTests: any[] = [];
   error = '';
 
   constructor(private cdr: ChangeDetectorRef,
-    private examService: ExamService, private router: Router,
+    private modalService: NgbModal,
+    private examService: ExamService,
+    private router: Router,
     private testService: TestService,
     private userService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -52,7 +58,7 @@ export class ExamsHome implements OnInit {
     this.fetchLanguageDropdown();
     this.fetchExams();
     this.initializeDefaultValues();
-   
+
     this.cdr.detectChanges();
   }
 
@@ -67,7 +73,7 @@ export class ExamsHome implements OnInit {
       this.selectedExam = { label: exam.label, name: exam.name, value: exam.value, code: exam.code };
       this.subjects = userpreference.examSubjects ?? [];
     }
-      this.loadTests();
+    // this.loadTests();
 
     this.cdr.markForCheck();
   }
@@ -77,6 +83,13 @@ export class ExamsHome implements OnInit {
     { label: 'Medium', value: 1 },
     { label: 'Hard', value: 2 },
     { label: 'Mix', value: 3 }
+  ];
+
+  gridColumns = [
+
+    { type: 'text' as const, width: 55 },
+    { type: 'text' as const, width: 25 },
+
   ];
 
   getActiveTests() {
@@ -113,7 +126,7 @@ export class ExamsHome implements OnInit {
         this.error = err.message || 'Server error';
       },
       complete: () => {
-        
+
       }
     });
   }
@@ -147,6 +160,7 @@ export class ExamsHome implements OnInit {
             value: exam.id!,
             code: exam.code
           }));
+          this.loading = false;
           this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load exams';
@@ -163,7 +177,7 @@ export class ExamsHome implements OnInit {
 
 
   startTest() {
-    if(this.tests.length > 0) {
+    if (this.tests.length > 0) {
       return;
     }
     this.loadingTest = true;
@@ -177,9 +191,7 @@ export class ExamsHome implements OnInit {
         const payload = this.getPayload();
         this.loadTest(payload);
       } else {
-        this.router.navigate(['/auth/login'], {
-          queryParams: { returnUrl: this.router.url }
-        });
+        this.OpenRegisterModal();
       }
       this.loadingTest = false;
       this.cdr.markForCheck();
@@ -206,11 +218,11 @@ export class ExamsHome implements OnInit {
     const title = `${this.selectedExam.code}${formatted.replace(/\//g, '-')} Mock Test`;
 
     const payload = {
-      examId : this.selectedExam.value,     // adjust as needed
-      subject : this.selectedSubject.label,       // or your dynamic subject
-      language : this.selectedLanguage.label,
-      examCode : this.selectedExam.code,
-      examName : this.selectedExam.name,
+      examId: this.selectedExam.value,     // adjust as needed
+      subject: this.selectedSubject.label,       // or your dynamic subject
+      language: this.selectedLanguage.label,
+      examCode: this.selectedExam.code,
+      examName: this.selectedExam.name,
       difficulty: 1,              // use your enum: 0 = Easy, 1 = Medium, 2 = Hard 3 = Mix  etc.
       title,      // or build from exam name
       duration: '00:00:00'        // e.g. HH:MM:SS
@@ -219,21 +231,29 @@ export class ExamsHome implements OnInit {
     return payload;
   }
 
-    loadTest(payload: any) {
-      this.testService.createInitialTest(payload).subscribe({
-        next: (resp: any) => {
-          if (resp.isSuccess && resp.data) {
-            this.testDetails = resp.data as TestDetailsModel;
-            this.router.navigate(['/test/live-test/' + this.testDetails.id]);
-          } else {
-            this.error = resp.message ?? 'Could not start test';
-          }
-        },
-        error: err => {
-          this.error = err.message || 'Server error';
+  loadTest(payload: any) {
+    this.testService.createInitialTest(payload).subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess && resp.data) {
+          this.testDetails = resp.data as TestDetailsModel;
+          this.router.navigate(['/test/live-test/' + this.testDetails.id]);
+        } else {
+          this.error = resp.message ?? 'Could not start test';
         }
-      });
-    }
+      },
+      error: err => {
+        this.error = err.message || 'Server error';
+      }
+    });
+  }
+
+  OpenRegisterModal() {
+    this.modalService.open(RegisterModal, this.modalOptions);
+  }
+
+  modalOptions: NgbModalOptions = {
+    centered: true
+  };
 
   handleLanguageChange(value: any | any[]) {
     console.log(value);
@@ -272,8 +292,8 @@ export class ExamsHome implements OnInit {
     this.selectedDifficulty = event; // or event.value if single-select
   }
 
-   // fallback handler
-   onIconError(event: Event) {
+  // fallback handler
+  onIconError(event: Event) {
     const img = event.target as HTMLImageElement;
     img.src = '../assets/images/exams/icons/exam.png';
     this.cdr.markForCheck();

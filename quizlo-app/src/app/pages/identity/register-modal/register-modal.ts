@@ -1,57 +1,60 @@
-import { Component, DOCUMENT, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { SharedModule } from '../../../shared/sharedmodule';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { SharedModule } from '../../../shared/sharedmodule';
 import { AuthService } from '../../../services/identity/auth.service';
-import { CommonModule } from '@angular/common';
 import { RegisterDto } from '../models/register.model';
+import { FormSubmitLoader } from '../../../shared/common/loaders/form-submit-loader/form-submit-loader';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-register-modal',
   imports: [RouterModule,
     CommonModule,
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    FormSubmitLoader,
     HttpClientModule],
   providers: [
     { provide: ToastrService, useClass: ToastrService },
     AuthService
   ],
-  templateUrl: './register.html',
-  styleUrl: './register.scss'
+  templateUrl: './register-modal.html',
+  styleUrl: './register-modal.scss'
 })
-export class Register implements OnInit, OnDestroy {
+export class RegisterModal implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   showPassword = false;
   submitted = false;
   disabled = true;
   showPassword1 = false;
-  toggleClass = "off-line";
-  toggleClass1 = "off-line";
+  toggleClass: string | undefined;
+
+  showSubmissionLoader = false;
+  submissionMessage = 'Submitting form...';
+  submissionSubmessage = 'Please wait while we process your request';
+  submissionSpinnerType: 'default' | 'dots' | 'pulse' = 'default';
+  submissionShowProgress = false;
+  submissionProgress: number | null = null;
+  submissionSteps: string[] = [];
+  submissionCurrentStep = 0;
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private renderer: Renderer2,
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
     public readonly authService: AuthService,
-    private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private fb: FormBuilder,
   ) { }
 
-  
   ngOnInit() {
     this.registerForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
     });
   }
 
@@ -64,24 +67,12 @@ export class Register implements OnInit, OnDestroy {
       ? null : { mismatch: true };
   }
 
-  ngOnDestroy(): void {
-    document.body.classList.remove('bg-white');
-  }
-
   createpassword() {
     this.showPassword = !this.showPassword;
     if (this.toggleClass === "off-line") {
       this.toggleClass = "line";
     } else {
       this.toggleClass = "off-line";
-    }
-  }
-  createpassword1() {
-    this.showPassword1 = !this.showPassword1;
-    if (this.toggleClass1 === "off-line") {
-      this.toggleClass1 = "line";
-    } else {
-      this.toggleClass1 = "off-line";
     }
   }
 
@@ -102,15 +93,32 @@ export class Register implements OnInit, OnDestroy {
     this.authService.register(dto).subscribe({
       next: () => {
         this.toastr.success('Login successful', 'Welcome');
-        console.log('Login successful, currentUser:', this.authService.currentUser);
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/test'; // or any default
-        this.router.navigateByUrl(returnUrl);
+        console.log('Register successful, currentUser:');
+
       },
       error: err => {
         const msg = err.error?.message || 'Login failed. Please try again.';
         this.toastr.error(msg, 'Login Error');
       }
     });
+  }
+
+  loginUser() {
+    const loginForm = {email: this.registerForm.value.email, password: this.registerForm.value.password};
+    this.authService.login(loginForm).subscribe({
+      next: () => {
+        this.toastr.success('Login successful', 'Welcome');
+        console.log('Login successful, currentUser:', this.authService.currentUser);
+      },
+      error: err => {
+        const msg = err.error?.message || 'Login failed. Please try again.';
+        this.toastr.error(msg, 'Login Error');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('bg-white');
   }
 
 }

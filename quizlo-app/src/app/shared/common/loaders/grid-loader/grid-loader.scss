@@ -1,0 +1,180 @@
+.grid-skeleton {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+/* Dark theme grid container */
+.grid-skeleton[data-theme="dark"] {
+  background: #1a1a1a;
+  border-color: #333;
+}
+
+.grid-header {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px;
+}
+
+.grid-skeleton[data-theme="dark"] .grid-header {
+  background: #2a2a2a;
+  border-bottom-color: #333;
+}
+
+.header-cell {
+  height: 20px;
+  margin-right: 12px;
+  border-radius: 4px;
+}
+
+.grid-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.grid-row {
+  display: flex;
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.grid-row.alternate {
+  background: #fafafa;
+}
+
+.grid-skeleton[data-theme="dark"] .grid-row {
+  border-bottom-color: #333;
+}
+
+.grid-skeleton[data-theme="dark"] .grid-row.alternate {
+  background: #222;
+}
+
+.body-cell {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
+/* Light theme skeleton items */
+.skeleton-item {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Dark theme skeleton items */
+.grid-skeleton[data-theme="dark"] .skeleton-item {
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+}
+
+.cell-content {
+  border-radius: 4px;
+}
+
+.cell-content.text {
+  height: 16px;
+  width: 80%;
+}
+
+.cell-content.number {
+  height: 16px;
+  width: 60px;
+}
+
+.cell-content.date {
+  height: 16px;
+  width: 90px;
+}
+
+.cell-content.status {
+  height: 20px;
+  width: 70px;
+  border-radius: 10px;
+}
+
+.cell-content.action {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+}
+
+.cell-content.avatar {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
+
+.pagination-skeleton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.grid-skeleton[data-theme="dark"] .pagination-skeleton {
+  background: #2a2a2a;
+  border-top-color: #333;
+}
+
+.pagination-info {
+  height: 16px;
+  width: 150px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-button {
+  height: 32px;
+  width: 32px;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Auto dark mode support (fallback) */
+@media (prefers-color-scheme: dark) {
+  .grid-skeleton:not([data-theme]) {
+    background: #1a1a1a;
+    border-color: #333;
+  }
+
+  .grid-skeleton:not([data-theme]) .grid-header {
+    background: #2a2a2a;
+    border-bottom-color: #333;
+  }
+
+  .grid-skeleton:not([data-theme]) .grid-row.alternate {
+    background: #222;
+  }
+
+  .grid-skeleton:not([data-theme]) .grid-row {
+    border-bottom-color: #333;
+  }
+
+  .grid-skeleton:not([data-theme]) .pagination-skeleton {
+    background: #2a2a2a;
+    border-top-color: #333;
+  }
+
+  .grid-skeleton:not([data-theme]) .skeleton-item {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+  }
+}

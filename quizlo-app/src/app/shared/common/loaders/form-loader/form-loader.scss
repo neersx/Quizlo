@@ -1,0 +1,105 @@
+.form-skeleton {
+  padding: 20px;
+  max-width: 500px;
+}
+
+.field-group {
+  margin-bottom: 20px;
+}
+
+/* Light theme (default) */
+.skeleton-item {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Dark theme */
+.form-skeleton[data-theme="dark"] .skeleton-item {
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+}
+
+.label-skeleton {
+  height: 16px;
+  width: 120px;
+  margin-bottom: 8px;
+}
+
+.input-skeleton {
+  height: 40px;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.input-skeleton.textarea {
+  height: 80px;
+}
+
+.input-skeleton.select {
+  position: relative;
+}
+
+.input-skeleton.select::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #ccc;
+}
+
+.form-skeleton[data-theme="dark"] .input-skeleton.select::after {
+  border-top-color: #666;
+}
+
+.error-skeleton {
+  height: 14px;
+  width: 200px;
+  margin-top: 4px;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.button-skeleton {
+  height: 40px;
+  border-radius: 6px;
+}
+
+.button-skeleton.primary {
+  width: 100px;
+}
+
+.button-skeleton.secondary {
+  width: 80px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Auto dark mode support (fallback) */
+@media (prefers-color-scheme: dark) {
+  .form-skeleton:not([data-theme]) .skeleton-item {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+  }
+  
+  .form-skeleton:not([data-theme]) .input-skeleton.select::after {
+    border-top-color: #666;
+  }
+}

@@ -1,0 +1,74 @@
+
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="card custom-card my-4">
+        <div class="card-body p-5">
+            <!-- ...logo, header, etc... -->
+            <div class="row gy-3">
+                <!-- Full Name -->
+                <div class="col-xl-12">
+                    <label for="signup-firstname" class="form-label text-default">Full Name</label>
+                    <input type="text" class="form-control" id="signup-firstname"
+                        placeholder="full name" formControlName="fullName">
+                    <div *ngIf="submitted && f['fullName'].errors" class="text-danger fs-12 mt-1">
+                        <div *ngIf="f['fullName'].errors?.['required']">Full name is required.</div>
+                        <div *ngIf="f['fullName'].errors?.['minlength']">Full name must be at least
+                            2 characters.</div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-xl-12">
+                    <label for="signup-email" class="form-label text-default">Email Address</label>
+                    <input type="email" class="form-control" id="signup-email"
+                        placeholder="@emailaddress" formControlName="email">
+                    <div *ngIf="submitted && f['email'].errors" class="text-danger fs-12 mt-1">
+                        <div *ngIf="f['email'].errors?.['required']">Email is required.</div>
+                        <div *ngIf="f['email'].errors?.['email']">Enter a valid email address.</div>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="col-xl-12">
+                    <label for="signup-password" class="form-label text-default">
+                        Password<sup class="fs-12 text-danger">*</sup>
+                    </label>
+                    <div class="position-relative">
+                        <input class="form-control create-password-input" id="signup-password"
+                            placeholder="password" [type]="showPassword ? 'text' : 'password'"
+                            formControlName="password" autocomplete="off">
+                        <a href="javascript:void(0);" class="show-password-button text-muted"
+                            (click)="createpassword()" id="button-addon2">
+                            <i class="ri-eye-{{toggleClass}} align-middle"></i>
+                        </a>
+                    </div>
+                    <div *ngIf="submitted && f['password'].errors" class="text-danger fs-12 mt-1">
+                        <div *ngIf="f['password'].errors?.['required']">Password is required.</div>
+                        <div *ngIf="f['password'].errors?.['minlength']">Password must be at least 6
+                            characters.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="submitted">
+                <app-form-submit-loader
+                    [isOverlay]="true"
+                    [theme]="'light'"
+                    [currentStep]="submissionCurrentStep">
+                </app-form-submit-loader>
+            </div>
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid"
+                    [class.loader--text]="authService.showLoader">
+                    Sign Up & Continue >>
+                </button>
+            </div>
+            <div class="text-center">
+                <p class="text-muted mt-3 mb-0">Already have an account?
+                    <a routerLink="/authentication/sign-in/basic"
+                        class="text-primary fw-medium">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</form>
