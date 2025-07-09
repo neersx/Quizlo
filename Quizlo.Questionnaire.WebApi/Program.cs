@@ -9,7 +9,6 @@ using Quizlo.Questionnaire.WebApi.Data.Seed;
 using Quizlo.Questionnaire.WebApi.MapProfiles;
 using Quizlo.Questionnaire.WebApi.Services;
 using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // 2. EF Core DbContext
-builder.Services.AddDbContext<QuizDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<QuizDbContext>(options => options.UseSqlServer(connectionString));
+// new Supabase (PostgreSQL) context
+builder.Services.AddDbContext<SupabaseDbContext>(opts =>
+    opts.UseNpgsql(builder.Configuration.GetConnectionString("Supabase")));
 
 // 3. Identity
 builder.Services.AddIdentity<User, Role>(options =>
@@ -66,6 +67,8 @@ builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddHttpClient();          // for webhook
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IDropdownService, DropdownService>();
+
+builder.Services.AddScoped<IBlogService, BlogService>();
 
 
 // 6. Controllers, Swagger, CORS
