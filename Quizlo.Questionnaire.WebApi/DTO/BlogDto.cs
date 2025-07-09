@@ -23,6 +23,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string Avatar { get; set; }
         public string Link { get; set; }
         public string Summary { get; set; }
+         public string Tags { get; set; }
         public bool IsFeatured { get; set; } = false;
     }
 
@@ -74,7 +75,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
             // collapse whitespace
             str = Regex.Replace(str, @"\s+", " ").Trim();
             // limit length
-            str = str.Substring(0, str.Length <= 45 ? str.Length : 45).Trim();
+            str = str.Substring(0, str.Length <= 75 ? str.Length : 75).Trim();
             // replace spaces with hyphens
             str = Regex.Replace(str, @"\s", "-");
             return str;

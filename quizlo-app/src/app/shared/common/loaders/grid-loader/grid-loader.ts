@@ -11,9 +11,10 @@ import { BrowserModule } from '@angular/platform-browser';
 export class GridLoader {
   @Input() theme: 'light' | 'dark' | 'auto' = 'light';
   @Input() columns: Array<{
-    type: 'text' | 'number' | 'date' | 'status' | 'action' | 'avatar';
+    type: 'text' | 'number' | 'date' | 'status' | 'action' | 'avatar' | 'image';
     width: number;
   }> = [
+    { type: 'image', width: 100 },
     { type: 'avatar', width: 10 },
     { type: 'text', width: 30 },
     { type: 'text', width: 25 },

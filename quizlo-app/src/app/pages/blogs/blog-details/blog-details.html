@@ -1,19 +1,26 @@
 <app-page-header firstTitle="Pages" title="Blog Details" title1="Blog" activeTitle="Blog Details" ></app-page-header>
+
    <!-- Start::row-1 -->
    <div class="row">
     <div class="col-xl-9">
         <div class="row">
             <div class="col-xl-12">
-               
+                <app-grid-loader *ngIf="loading" [rowCount]="1" >
+                </app-grid-loader>
                 
-                <div class="card custom-card">
+                <div *ngIf="!loading"  class="card custom-card">
                     <a href="javascript:void(0);" class="p-3">
-                        <img src="https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp" class="card-img rounded-3 blog-details-img" alt="Top Mistakes in Mock Tests">
+                        <img [src]="blog?.image" class="card-img rounded-3 blog-details-img" alt="Top Mistakes in Mock Tests">
                     </a>
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <p class="h5 fw-semibold mb-0">Top Mistakes Students Make in Mock Tests — and How to Fix Them</p>
-                            <span class="badge bg-warning">Mock Tests</span>
+                            <p class="h5 fw-semibold mb-0">{{blog?.title}}</p>
+                          
+                            <div class="btn-list">
+                                <button class="btn btn-sm btn-info-light btn-wave"><i class="ri-thumb-up-line"></i> Like</button>
+                                <button class="btn btn-sm btn-secondary-light btn-wave"><i class="ri-share-line"></i> Share</button>
+                                <button class="btn btn-sm btn-info-light btn-wave"><i class="ri-message-square-line"></i> Comment</button>
+                            </div>
                         </div>
                         <div class="d-sm-flex align-items-center mb-3">
                             <div class="d-flex align-items-center flex-fill">
@@ -21,62 +28,18 @@
                                     <img src="/assets/images/faces/12.jpg" alt="Quizlo Ai">
                                 </span>
                                 <div>
-                                    <p class="mb-0 fw-medium">Quizlo Ai</p>
-                                    <div class="fs-12 text-muted fw-normal"><i class="ri-calendar-fill me-2 align-middle lh-1 text-warning"></i>02 Jul 2025 - 11:00</div>
+                                    <p class="mb-0 fw-medium">{{blog?.author}}</p>
+                                    <div class="fs-12 text-muted fw-normal"><i class="ri-calendar-fill me-2 align-middle lh-1 text-warning"></i>{{blog?.date}}</div>
                                 </div>
                             </div>
                             <div class="btn-list mt-sm-0 mt-2">
-                                <button class="btn btn-sm btn-info-light btn-wave"><i class="ri-thumb-up-line"></i> Like</button>
-                                <button class="btn btn-sm btn-secondary-light btn-wave"><i class="ri-share-line"></i> Share</button>
-                                <button class="btn btn-sm btn-info-light btn-wave"><i class="ri-message-square-line"></i> Comment</button>
+                                @for (tag of blog.tags.split(','); track $index) {
+                                    <span class="badge bg-warning badge-dot" [ngClass]="{'bg-success': $index /2 === 0}">{{tag}} </span> &nbsp;
+                                }
                             </div>
                         </div>
-                        <p class="mb-4">
-                            Mock tests are an essential tool for exam preparation, yet many students fail to use them effectively. Understanding the most common mistakes in mock tests and knowing how to fix them can dramatically improve your exam readiness.
-                        </p>
-                
-                        <p class="h5 fw-semibold mb-0">Time Mismanagement</p>
-                        <p class="mb-4">
-                            One of the top mistakes is poor time management. Students often spend too much time on one question, leaving little for others.
-                        </p>
-                        <ul>
-                            <li>Practice solving easier questions first to build confidence.</li>
-                            <li>Use a timer during practice to simulate real conditions.</li>
-                            <li>Learn to quickly skip difficult questions and return later.</li>
-                        </ul>
-                        <p class="mb-4">Building a proper time strategy helps maximize your total score (https://www.toppr.com/guides/time-management-for-exams/).</p>
-                
-                        <p class="h5 fw-semibold mb-0">Skipping Revision</p>
-                        <p class="mb-4">
-                            Another big mistake is not reviewing mock test answers. Students ignore revision, losing the chance to fix gaps.
-                        </p>
-                        <ul>
-                            <li>After every mock test, spend time analyzing mistakes.</li>
-                            <li>Revise concepts behind incorrect answers.</li>
-                            <li>Maintain a weak-topics notebook to revisit before exams.</li>
-                        </ul>
-                        <p class="mb-4">Revision is as important as taking the test itself (https://www.studytips.com/revision-benefits/).</p>
-                
-                        <p class="h5 fw-semibold mb-0">Overconfidence</p>
-                        <p class="mb-4">
-                            Many students get overconfident after scoring well in a few mocks, reducing their focus on preparation.
-                        </p>
-                        <ul>
-                            <li>Stay consistent with your practice routine.</li>
-                            <li>Keep attempting mocks till your weakest areas improve.</li>
-                            <li>Remember: real exam pressure is different than practice conditions.</li>
-                        </ul>
-                        <p class="mb-4">Avoid complacency to perform at your peak during actual exams (https://www.examstrategy.com/overconfidence-dangers/).</p>
-                
-                        <blockquote class="blockquote custom-blockquote warning mb-4 text-center">
-                            <h6 class="lh-base">“Mastering mock tests is about balancing confidence, strategy, and revision — Quizlo Ai makes it easier.”</h6>
-                            <footer class="blockquote-footer mt-3 text-warning mb-0">Quizlo Ai Team</footer>
-                            <span class="quote-icon"><i class="ri-double-quotes-l"></i></span>
-                        </blockquote>
-                
-                        <p class="mb-0">
-                            Fixing these mistakes can transform your mock tests from a routine practice to a powerful exam-readiness tool. Use Quizlo Ai's smart mock testing features to build the ultimate preparation strategy.
-                        </p>
+
+                        <div class="mt-4" [innerHTML]="blog?.description"></div>
                     </div>
                 </div>
                 

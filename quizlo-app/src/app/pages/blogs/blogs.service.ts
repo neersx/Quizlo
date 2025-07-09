@@ -30,13 +30,14 @@ export interface BlogModel {
     description: string;
     image: string;
     author: string;
-    summary?: string;
+    summary: string;
     date: string;
     heartColor: string;
     pageStyleClass: string;
     imageClass: string;
     textColor: string;
     avatar: string;
+    tags: string;
     link: string;
     isFeatured: boolean;
   }
@@ -62,6 +63,10 @@ export class BlogService {
    */
   getBlogById(id: number): Observable<BlogModel> {
     return this.http.get<BlogModel>(`${this.baseUrl}/${id}`);
+  }
+
+  getBlogByName(name: string): Observable<BlogModel> {
+    return this.http.get<BlogModel>(`${this.baseUrl}/details/${name}`);
   }
 
   /**

@@ -109,6 +109,12 @@
   border-radius: 50%;
 }
 
+.cell-content.image {
+  height: 320px;
+  width: 432px;
+  border-radius: 10%;
+}
+
 .pagination-skeleton {
   display: flex;
   justify-content: space-between;

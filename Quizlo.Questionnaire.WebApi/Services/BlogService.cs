@@ -7,6 +7,7 @@ public interface IBlogService
 {
     Task<IEnumerable<BlogDto>> GetAllAsync();
     Task<BlogDto> GetByIdAsync(long id);
+    Task<BlogDto> GetByLinkAsync(string link);
     Task<Blog> UpdateAsync(long id, Blog updated);
 }
 
@@ -26,6 +27,14 @@ public class BlogService : IBlogService
             .ProjectTo<BlogDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
+
+    public async Task<BlogDto> GetByLinkAsync(string link)
+    {
+        var entity = await _db.QuizloBlogs.FirstOrDefaultAsync(b => b.SharedLink == link);
+        if (entity == null) return null;
+        return _mapper.Map<BlogDto>(entity);
+    }
+
     public async Task<BlogDto> GetByIdAsync(long id)
     {
         var entity = await _db.QuizloBlogs.FindAsync(id);

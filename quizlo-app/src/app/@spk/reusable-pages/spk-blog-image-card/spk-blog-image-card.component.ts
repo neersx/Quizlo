@@ -14,7 +14,7 @@ export class SpkBlogImageCardComponent {
   @Input() title: string = '';
   @Input() imageClass: string = '';
   @Input() pageStyleClass: string = '';
-  @Input() description: string = '';
+  @Input() description?: string = '';
   @Input() TextColor: string = '';
   @Input() author: string = '';
   @Input() authorImageUrl: string = '';

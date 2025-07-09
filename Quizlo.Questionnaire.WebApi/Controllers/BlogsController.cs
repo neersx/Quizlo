@@ -7,22 +7,30 @@ public class BlogsController : ControllerBase
     private readonly IBlogService _svc;
     public BlogsController(IBlogService svc) => _svc = svc;
 
- // GET /api/blogs
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var dtos = await _svc.GetAllAsync();
-            return Ok(dtos);
-        }
+    // GET /api/blogs
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var dtos = await _svc.GetAllAsync();
+        return Ok(dtos);
+    }
 
-        // GET /api/blogs/{id}
-        [HttpGet("{id:long}")]
-        public async Task<IActionResult> Get(long id)
-        {
-            var dto = await _svc.GetByIdAsync(id);
-            if (dto == null) return NotFound();
-            return Ok(dto);
-        }
+    // GET /api/blogs/{id}
+    [HttpGet("{id:long}")]
+    public async Task<IActionResult> Get(long id)
+    {
+        var dto = await _svc.GetByIdAsync(id);
+        if (dto == null) return NotFound();
+        return Ok(dto);
+    }
+
+    [HttpGet("details/{name}")]
+    public async Task<IActionResult> GetBlogDetails(string name)
+    {
+        var dto = await _svc.GetByLinkAsync(name);
+        if (dto == null) return NotFound();
+        return Ok(dto);
+    }
 
     // PUT /api/blogs/123
     [HttpPut("{id:long}")]
