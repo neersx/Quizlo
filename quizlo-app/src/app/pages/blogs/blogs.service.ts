@@ -5,23 +5,41 @@ import { environment } from '../../../environments/environment';
 
 
 /**
- * Represents a blog entry fetched from the API.
+ * Represents a BlogModel entry fetched from the API.
  */
-export interface Blog {
+export interface BlogEntity {
   id: number;
   createdAt: string;           // ISO timestamp
   htmlContent: string;
-  reviews: any;                // JSON structure
+  reviews?: any;                // JSON structure
   type: string;
   title: string;
   tags: string;
-  sharedLink: string;
+  sharedLink?: string;
   summary: string;
   author: string;
   status: string;
-  imageUrl: string;
-  socialMediaLinks: any;       // JSON structure
+  imageUrl?: string;
+  socialMediaLinks?: any;       // JSON structure
 }
+
+export interface BlogModel {
+    id: string;
+    title: string;
+    urlName: string;
+    description: string;
+    image: string;
+    author: string;
+    summary?: string;
+    date: string;
+    heartColor: string;
+    pageStyleClass: string;
+    imageClass: string;
+    textColor: string;
+    avatar: string;
+    link: string;
+    isFeatured: boolean;
+  }
 
 @Injectable({
   providedIn: 'root'
@@ -34,23 +52,23 @@ export class BlogService {
   /**
    * Fetches the list of all blogs.
    */
-  getBlogs(): Observable<Blog[]> {
-    return this.http.get<Blog[]>(this.baseUrl);
+  getBlogs(): Observable<BlogModel[]> {
+    return this.http.get<BlogModel[]>(this.baseUrl);
   }
 
   /**
-   * Fetches details of a single blog by its ID.
-   * @param id The ID of the blog to retrieve.
+   * Fetches details of a single BlogModel by its ID.
+   * @param id The ID of the BlogModel to retrieve.
    */
-  getBlogById(id: number): Observable<Blog> {
-    return this.http.get<Blog>(`${this.baseUrl}/${id}`);
+  getBlogById(id: number): Observable<BlogModel> {
+    return this.http.get<BlogModel>(`${this.baseUrl}/${id}`);
   }
 
   /**
-   * Updates an existing blog entry.
-   * @param blog The blog object with updated fields (must include `id`).
+   * Updates an existing BlogModel entry.
+   * @param BlogModel The BlogModel object with updated fields (must include `id`).
    */
-  updateBlog(blog: Blog): Observable<Blog> {
-    return this.http.put<Blog>(`${this.baseUrl}/${blog.id}`, blog);
+  updateBlog(BlogModel: BlogModel): Observable<BlogModel> {
+    return this.http.put<BlogModel>(`${this.baseUrl}/${BlogModel.id}`, BlogModel);
   }
 }

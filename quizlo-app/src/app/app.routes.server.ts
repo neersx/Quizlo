@@ -13,7 +13,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'test/select-exam', renderMode: RenderMode.Client },
   { path: 'test/test-window/:id', renderMode: RenderMode.Client },
   { path: 'blogs', renderMode: RenderMode.Client },
-  { path: 'blogs/blog-details', renderMode: RenderMode.Client },
+  { path: 'blogs/blog-details/:name', renderMode: RenderMode.Client },
 
   { path: 'user-profile', renderMode: RenderMode.Client },
   // { path: 'user-profile/edit:id', renderMode: RenderMode.Client },

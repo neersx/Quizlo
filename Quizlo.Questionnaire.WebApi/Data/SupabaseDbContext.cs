@@ -25,6 +25,7 @@ public class SupabaseDbContext : DbContext
             e.Property(x => x.Author).HasColumnName("author");
             e.Property(x => x.Status).HasColumnName("status");
             e.Property(x => x.ImageUrl).HasColumnName("imageUrl");
+            e.Property(x => x.IsFeatured).HasColumnName("isFeatured");
             e.Property(x => x.SocialMediaLinks).HasColumnName("socialMediaLinks");
         });
     }

@@ -6,29 +6,24 @@
         <div class="row">
             <div class="col-xxl-5">
                 <div class="row">
+                @for (blog of featuredBlogs; track $index) {
                     <div class="col-xl-12">
                         <div class="card custom-card overflow-hidden">
                             <div class="card-body p-0">
-                                <img src="https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp" class="d-block w-100"
-                                alt="...">
+                                <img [src]="blog.image" class="d-block w-100"  [alt]="blog.title">
                                 <div class="p-3">
-                                    <h5 class="fw-semibold lh-base"><a routerLink="/blogs/blog-details">Top Mistakes
-                                            Students Make in Mock Tests — and How to Fix Them</a></h5>
-                                    <p class="mb-3">Mock tests are an essential tool for exam preparation, yet many
-                                        students fail to use them effectively.
-                                        Understanding the most common mistakes in mock tests
-                                        and knowing how to fix them can dramatically improve your exam readiness.<a
-                                            href="javascript:void(0);"
-                                            class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read
+                                    <h5 class="fw-semibold lh-base"><a [routerLink]="'blog-details/'+blog.link">{{blog.title}}</a></h5>
+                                    <p class="mb-3">{{blog.description}}
+                                        <a  [routerLink]="blog.link" class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read
                                             More</a></p>
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                                         <div class="d-flex align-items-center flex-wrap gap-1">
                                             <div class="avatar avatar-md avatar-rounded me-2">
-                                                <img src="./assets/images/faces/1.jpg" alt="">
+                                                <img [src]="blog.avatar" alt="">
                                             </div>
                                             <div>
-                                                <p class="mb-0 fw-medium">Sushant Gupta</p>
-                                                <p class="text-muted fs-12 mb-0">25, Mar 2024 - 14:20</p>
+                                                <p class="mb-0 fw-medium">{{blog.author}}</p>
+                                                <p class="text-muted fs-12 mb-0">   {{blog.date}}</p>
                                             </div>
                                         </div>
                                         <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
@@ -39,45 +34,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-12">
-                        <div class="card custom-card overflow-hidden">
-                            <div class="card-body p-0">
-                                <img src="./assets/images/media/blog/mock-tests-benefits.jpg" class="d-block w-100"
-                                    alt="...">
-                                <div class="p-3">
-                                    <h5 class="fw-semibold"><a routerLink="/blogs/blog-details">Benefits of Taking Timed
-                                            Mock Tests Before Competitive Exams</a></h5>
-                                    <p class="mb-3">A realistic image showing a focused student taking an online timed
-                                        mock test on a laptop or tablet,
-                                        with a visible countdown timer on screen, and notes or a book beside them.
-                                    </p>
-                                    <p class="mb-3">The background should have a calm, study-focused vibe, highlighting
-                                        competitive exams like NEET, UPSC, or SSC.<a href="javascript:void(0);"
-                                            class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read
-                                            More</a></p>
-                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center flex-wrap gap-1">
-                                            <div class="avatar avatar-md avatar-rounded me-2">
-                                                <img src="./assets/images/faces/12.jpg" alt="">
-                                            </div>
-                                            <div>
-                                                <p class="mb-0 fw-medium">Michael Smith</p>
-                                                <p class="text-muted fs-12 mb-0">24, Mar 2024 - 12:45</p>
-                                            </div>
-                                        </div>
-                                        <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
-                                            <i class="ri-heart-line text-danger"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                }
                 </div>
             </div>
             <div class="col-xxl-7">
-                <div class="row">
-                    @for (post of blogPosts1; track $index) {
+                <div *ngIf="blogsList && blogsList.length > 0" class="row">
+                    @for (post of blogsList; track $index) {
                     <div class="col-xl-6">
                         <spk-blog-image-card [imageUrl]="post.image" [imageClass]="post.imageClass" [title]="post.title"
                             [pageStyleClass]="post.pageStyleClass" [description]="post.description"

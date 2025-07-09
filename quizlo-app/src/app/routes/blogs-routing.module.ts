@@ -11,7 +11,7 @@ export const admin: Routes = [
         import('../pages/blogs/blogs-list/blogs-list').then((m) => m.BlogsList),
     },
     {
-        path: 'blog-details',
+        path: 'blog-details/:name',
         loadComponent: () =>
           import('../pages/blogs/blog-details/blog-details').then((m) => m.BlogDetails),
       },

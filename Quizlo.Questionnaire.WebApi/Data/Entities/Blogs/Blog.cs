@@ -15,5 +15,6 @@ public class Blog
     public string?   Author              { get; set; }
     public string   Status              { get; set; }
     public string?   ImageUrl            { get; set; }
-    public JsonDocument? SocialMediaLinks{ get; set; }
+    public bool IsFeatured { get; set; } = false;
+    public JsonDocument? SocialMediaLinks { get; set; }
 }
