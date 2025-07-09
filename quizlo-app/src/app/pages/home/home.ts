@@ -68,14 +68,7 @@ export class HomeComponent {
     return [window.innerWidth];
   }
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-
-  onToggle() {}
-  activeMenuItem = signal<string>('home');
-
-  setActiveMenuItem(menuItem: string): void {
-    this.activeMenuItem.set(menuItem);
-  }
-  
+ 
   thumbsSwiper: any;
   constructor(
     public renderer: Renderer2,
@@ -584,106 +577,57 @@ export class HomeComponent {
   },
 ];
 
-  teamMembers = [
-    {
-      name: 'Hadley Kylin',
-      role: 'Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/1.jpg',
-      backgroundColor: 'teal',
-      badgeColor: 'primary',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-    {
-      name: 'Owen Foster',
-      role: 'Board Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/8.jpg',
-      backgroundColor: 'teal',
-      badgeColor: 'success',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-    {
-      name: 'Stephen Roy',
-      role: 'Creative Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/11.jpg',
-      backgroundColor: 'success',
-      badgeColor: 'info',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-    {
-      name: 'Jasmine Della',
-      role: 'Board Director',
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.",
-      image: './assets/images/faces/4.jpg',
-      backgroundColor: 'orange',
-      badgeColor: 'secondary',
-      teamClass: 'mt-4',
-      bodyClass: 'p-4',
-      class1: 'mb-4',
-    },
-  ];
-  reviews = [
-    {
-      name: 'Jenny Kingston',
-      email: 'jennykingston345@gmail.com',
-      avatar: './assets/images/faces/1.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '16 days ago',
-    },
-    {
-      name: 'Alex Carey',
-      email: 'alexcarey21@gmail.com',
-      avatar: './assets/images/faces/5.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '1 month ago',
-    },
-    {
-      name: 'Brenda Hans',
-      email: 'brendahans@gmail.com',
-      avatar: './assets/images/faces/3.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '12 days ago',
-    },
-    {
-      name: 'Json Taylor',
-      email: 'jsontaylor@gmail.com',
-      avatar: './assets/images/faces/9.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 4.5,
-      daysAgo: '9 days ago',
-    },
-    {
-      name: 'Amanda Nanes',
-      email: 'amandananes212@gmail.com',
-      avatar: './assets/images/faces/8.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '6 days ago',
-    },
-    {
-      name: 'Lucas Tope',
-      email: 'lucastope1999@gmail.com',
-      avatar: './assets/images/faces/10.jpg',
-      review: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      rating: 5,
-      daysAgo: '10 days ago',
-    },
-  ];
+reviews = [
+  {
+    name: 'Priya Sharma',
+    email: 'priyasharma123@gmail.com',
+    avatar: './assets/images/faces/1.jpg',
+    review: 'I just finished my NEET mock test on Quizlo Ai and it was super smooth! The questions felt real and the timer feature gave exam-like pressure. Loved it!',
+    rating: 5,
+    daysAgo: '3 days ago',
+  },
+  {
+    name: 'Rahul Verma',
+    email: 'rahulvme95@gmail.com',
+    avatar: './assets/images/faces/5.jpg',
+    review: 'This is the first time I actually enjoyed giving an online test. The UI is clean, and it was easy to switch between questions. Great experience!',
+    rating: 5,
+    daysAgo: '6 days ago',
+  },
+  {
+    name: 'Sneha Patil',
+    email: 'snehapatil87@gmail.com',
+    avatar: './assets/images/faces/3.jpg',
+    review: 'I liked that I could choose the difficulty and subject before starting the test. It really helped me revise in a focused way.',
+    rating: 4.5,
+    daysAgo: '1 week ago',
+  },
+  {
+    name: 'Arjun Nair',
+    email: 'arjun.nair21@gmail.com',
+    avatar: './assets/images/faces/9.jpg',
+    review: 'The questions felt like real UPSC level. Also loved the performance analysis at the end. Felt like a real exam simulation!',
+    rating: 5,
+    daysAgo: '2 weeks ago',
+  },
+  {
+    name: 'Megha Rajput',
+    email: 'megharajput05@gmail.com',
+    avatar: './assets/images/faces/8.jpg',
+    review: 'Tried Quizlo Ai for SSC prep. Amazing interface and the timer keeps you alert. Also loved the way results are shared!',
+    rating: 4.5,
+    daysAgo: '5 days ago',
+  },
+  {
+    name: 'Karan Yadav',
+    email: 'karan.yadav88@gmail.com',
+    avatar: './assets/images/faces/10.jpg',
+    review: 'After taking the mock test here, I felt more confident. The option to share test scores with friends is a cool feature!',
+    rating: 5,
+    daysAgo: '4 days ago',
+  },
+];
+
 
   eventTriggered: boolean = false;
   screenWidth!: number;
