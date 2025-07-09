@@ -1,0 +1,63 @@
+/* Component SCSS Styles */
+.main-menu {
+    .side-menu__item {
+      transition: all 0.3s ease;
+      position: relative;
+      
+      &.active {
+        color: white;
+        font-weight: 600;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 2;
+          height: 50%;
+          width: 3px;
+          background-color: #ffc107;
+        }
+      }
+      
+      &--highlighted {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
+        border-radius: 6px;
+        animation: pulse-glow 2s ease-in-out infinite;
+        
+        &:hover {
+          background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(238, 90, 36, 0.4);
+        }
+        
+        .highlight-icon {
+          font-size: 0.8em;
+          margin: 0 4px;
+          animation: twinkle 1.5s ease-in-out infinite;
+        }
+      }
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 16px rgba(238, 90, 36, 0.6);
+    }
+  }
+  
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }

@@ -21,9 +21,16 @@
                                 <span class="ms-2 text-fixed-white fs-12 op-8"><i
                                         class="ri-play-circle-line fs-13 me-1"></i>10k Students Taking
                                     Tests everyday</span>
-                                <div class="d-flex align-items-center gap-2 mt-3">
-                                    <button class="btn btn-warning btn-wave" (click)="takeTest()">Take Test
-                                        Now</button>
+                                <div class="d-flex align-items-center gap-2 mt-3">                               
+                                        <button *ngIf="!loading" (click)="takeTest()" class="btn btn-info label-btn rounded-pill">
+                                            <i class="ri-play-line label-btn-icon me-2 rounded-pill"></i>
+                                            Take Test Now
+                                        </button>
+                                        <button *ngIf="loading"  class="btn btn-light label-btn rounded-pill" type="button" disabled>
+                                            <i class="ri-play-line label-btn-icon me-2 rounded-pill"></i>
+                                            <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
+                                            Loading exams...
+                                        </button>
                                 </div>
                             </div>
                         </div>

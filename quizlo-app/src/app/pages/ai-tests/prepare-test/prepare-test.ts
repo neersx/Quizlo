@@ -64,7 +64,11 @@ export class PrepareTest implements OnInit {
     });
   }
   takeTest() {
-    this.router.navigate(['/test/select-exam']);
+    this.loading = true;
+    setTimeout(() => {
+      this.router.navigate(['/test/select-exam']);
+      this.loading = false;
+    }, 1000);
   }
 
   categories = [

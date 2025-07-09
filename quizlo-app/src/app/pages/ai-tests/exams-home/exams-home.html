@@ -15,7 +15,7 @@
                             <!-- <div class="col-xxl-3 col-12">
                                 <input type="text" class="form-control" value="0.0453" placeholder="Enter Amount">
                             </div> -->
-                            <div class="col-xxl-6 col-12">
+                            <div class="col-xxl-6 col-md-6 col-12">
                               <div *ngIf="loading" class="demo-content">
                                 <app-grid-loader 
                                   [columns]="gridColumns"
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xxl-3 col-12">
+                            <div class="col-xxl-3 col-md-3">
                                 <spk-ng-select [options]="languages" [selectClass]="''" [clearable]="true" [defaultValue]="selectedLanguage"
                                     [multi]="true" [searchable]="true" [placeholder]="'Select Language'"
                                     [additionalProperties]="{}" (change)="handleLanguageChange($event)">
@@ -41,7 +41,7 @@
 
                             </div>
 
-                            <div class="col-xxl-3 col-12">
+                            <div class="col-xxl-3 col-md-3">
                                 <div *ngIf="isSubjectsLoading" class="text-left">
                                     <button class="btn btn-success-light" type="button" disabled>
                                         <span class="spinner-border spinner-border-sm align-middle" role="status"
@@ -75,7 +75,7 @@
 </div>
 <!--End::row-1 -->
 
-<ng-template #registerModal let-modal>
+<!-- <ng-template #registerModal let-modal>
   <div class="modal-header">
     <h6 class="modal-title" id="exampleModalLabel">
       New Message to &#64;getbootstrap
@@ -122,15 +122,15 @@
       Send message
     </button>
   </div>
-</ng-template>
+</ng-template> -->
 
-
+<!-- 
 <div *ngIf="tests && tests.length == 0" class="header text-center">
   <h5 style="text-align: center;">Loading Already Active Tests...</h5>
   <app-test-skeleton-loader 
       [displayFooter]="false"  [displayProgress]="true" [totalQuestions]="0">
     </app-test-skeleton-loader>
-</div>
+</div> -->
 
 <div *ngIf="tests && tests.length > 0" class="row">
     <div class="row justify-content-center">

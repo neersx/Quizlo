@@ -213,6 +213,7 @@ export class ExamsHome implements OnInit {
     // fires only when .dismiss(...) is called, or ESC/backdrop
     modalRef.dismissed.subscribe((reason: any) => {
       console.log('Dismissed with:', reason);
+      this.loadingTest = false;
     });
   }
 
@@ -269,9 +270,7 @@ export class ExamsHome implements OnInit {
 
 
   handleLanguageChange(value: any | any[]) {
-    console.log(value);
     this.selectedLanguage = value;
-    console.log(this.selectedLanguage, 'selected language');
   }
 
   handleExamChange(value: any | any[]) {

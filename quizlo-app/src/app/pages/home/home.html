@@ -201,13 +201,14 @@
                         <!-- Start::slide -->
                         <li class="slide">
                             <a class="side-menu__item" value="home" (click)="scroll(home)">
-                                <span class="side-menu__label">Home</span>
+                                <span class="side-menu__label active">Home</span>
                             </a>
                         </li>
                         <!-- End::slide -->
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a class="side-menu__item" value="about" (click)="scroll(about)">
+                            <a class="side-menu__item" value="about"   
+                            (click)="scroll(about)">
                                 <span class="side-menu__label">About</span>
                             </a>
                         </li>
@@ -215,7 +216,8 @@
 
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a (click)="scroll(pricing)" value="pricing" class="side-menu__item">
+                            <a (click)="scroll(pricing)" value="pricing"  
+                             class="side-menu__item">
                                 <span class="side-menu__label">Pricing</span>
                             </a>
                         </li>
@@ -223,8 +225,13 @@
 
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a href="/test/select-exam" class="side-menu__item">
-                                <span class="side-menu__label">Take Test</span>
+                            <a href="/test/select-exam" class="side-menu__item side-menu__item--highlighted" 
+                            class="side-menu__item">
+                            <span class="side-menu__label">
+                                <i class="fas fa-star highlight-icon"></i>
+                                Take Test
+                                <i class="fas fa-star highlight-icon"></i>
+                              </span>
                             </a>
                         </li>
                         <!-- End::slide -->
@@ -239,14 +246,16 @@
 
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a (click)="scroll(testimonials)" value="testimonials" class="side-menu__item">
+                            <a (click)="scroll(testimonials)" 
+                             value="testimonials" class="side-menu__item">
                                 <span class="side-menu__label">Testimonials</span>
                             </a>
                         </li>
                         <!-- End::slide -->
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a (click)="scroll(contact)" value="contact" class="side-menu__item">
+                            <a (click)="scroll(contact)"  
+                            value="contact" class="side-menu__item">
                                 <span class="side-menu__label">Contact Us</span>
                             </a>
                         </li>
@@ -305,9 +314,14 @@
                                 </p>
                             </div>
                             <div class="btn-list">
-                                <a routerLink="/test/select-exam" class="btn btn-lg btn-success mb-2 mb-sm-0">
+                                <button *ngIf="!loading" (click)="takeTest()" class="btn btn-lg btn-success mb-2 mb-sm-0">
                                     <i class="fe fe-play me-2"></i>Start Test Today
-                                </a>
+                                </button>
+                                <button *ngIf="loading"  class="btn btn-lg btn-success-light" type="button" disabled>
+                                    <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
+                                    Loading Exams...
+                                </button>
+                               
                                 <a href="/home#contact"
                                     class="btn btn-lg mb-2 mb-sm-0 bg-transparent border-white-1 text-fixed-white">
                                     <i class="fe fe-mail me-2"></i>Contact Us
@@ -317,7 +331,7 @@
                         <div class="col-lg-5 mt-4 mt-lg-0 text-end">
                             <div class="add-content bg-transparent shadow-none p-0">
                                 <div class="add-content1">
-                                    <img src="./assets/images/mock_test.jpg" alt="Students preparing for exams"
+                                    <img src="./assets/images/mock_test.png" alt="Students preparing for exams"
                                         class="img-fluid">
                                 </div>
                             </div>

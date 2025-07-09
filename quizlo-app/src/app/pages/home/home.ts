@@ -8,13 +8,14 @@ import {
   ViewChild,
   PLATFORM_ID,
   inject,
+  signal,
 } from '@angular/core';
 import {
   CommonModule,
   ViewportScroller,
   isPlatformBrowser,
 } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgxColorsModule } from 'ngx-colors';
 import {
   NgbOffcanvas,
@@ -51,7 +52,6 @@ import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-la
     NgxColorsModule,
     NgbAccordionModule,
     CarouselModule,
-
     SpkLandingServicesCardComponent,
   ],
   providers: [NgbOffcanvas],
@@ -62,6 +62,7 @@ import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-la
 export class HomeComponent {
   isYearly: boolean = false;
   localdata: any = localStorage;
+  loading: boolean = false;
   
   get WindowPreSize(): number[] {
     return [window.innerWidth];
@@ -69,9 +70,16 @@ export class HomeComponent {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   onToggle() {}
+  activeMenuItem = signal<string>('home');
+
+  setActiveMenuItem(menuItem: string): void {
+    this.activeMenuItem.set(menuItem);
+  }
+  
   thumbsSwiper: any;
   constructor(
     public renderer: Renderer2,
+    private router: Router,
     private el: ElementRef,
     private elementRef: ElementRef,
     private sanitizer: DomSanitizer,
@@ -279,6 +287,13 @@ export class HomeComponent {
     }
   }
 
+  takeTest() {
+    this.loading = true;
+    setTimeout(() => {
+      this.router.navigate(['/test/select-exam']);
+      this.loading = false;
+    }, 1000);
+  }
 
   //  Directions
   DirectionsChange(type: string) {
