@@ -1,0 +1,1274 @@
+{
+  "name": "Quizlo Blog Writer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        500
+      ],
+      "id": "6a7413c2-3874-45d7-8193-40ea09aaf080",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Ev4QI5NSzmZZtX51F8ZdVyj-s2Ey967vHbxASXywD6g",
+          "mode": "list",
+          "cachedResultName": "Cluster Template",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ev4QI5NSzmZZtX51F8ZdVyj-s2Ey967vHbxASXywD6g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ev4QI5NSzmZZtX51F8ZdVyj-s2Ey967vHbxASXywD6g/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Completed",
+              "lookupValue": "No"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        880
+      ],
+      "id": "f87ba385-f125-4abb-8d86-fefee0a75591",
+      "name": "Grab New Cluster",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BP40ld8hcZbMZ0uF",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are part of a team that creates world class content writer for best blog posts. \n\nFor each new blog post project, you are provided with a list of keywords and search intent. \n\n- Keywords: The keywords are to what the blog post is meant to rank for. They are scattered throughout the blog and define the topic of the blog post. \n\n- Search intent: The search intent recognises the intent of the user when searching up the keyword which defines be the theme of the blog post, so they click on our blog to satisfy their search. \n\n- Primary keyword: Out of the keywords, there is one keyword known as the primary keyword. The primary keyword will go in the title and first few sentences. It is important that the topic of the blog post is related to the primary keyword so that you can place it into the title and introduction naturally. \n\nGiven a list of keywords and search intent, your job is to understand the goal of th e blog post, identify the thought process behind the flow of the blog post and come up with a preliminary plan for the post. \n\nYour output must: \n\n- Recognise the discussion points of the blog post.\n\n- Be in dot point format.\n\nYou must ensure that the plan created satisfies the search intent and revolves directly around the given keywords. \n\nWhen making the plan keep in mind that all keywords must be used in the final blog post. \n\nThe final goal of the project is to create a high quality, high value, highly relevant blog post that will satisfy the users search intent and give them everything they need to know about the topic. \n\nA new project just came across your desk with below keywords and search intent:\n\nKeywords: \n{{ $json.keywords }}\n\nSearch intent: \n{{ $json.intent }}\n\nPrimary keyword: \n{{ $json.title }}\n\nCreate the preliminary plan."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        540,
+        500
+      ],
+      "id": "2f219608-0ded-457b-8762-758741ce796c",
+      "name": "Preliminary Plan",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "23b8e8c4-9191-415a-9661-1b60d413528a",
+              "name": "research",
+              "value": "={{ $json.choices[0].message.content.replaceAll(\"[1]\", \" - source: \" +$json.citations[0]).replaceAll(\"[2]\",\" source:\" +$json.citations[1]).replaceAll(\"[3]\",\" - source: \" +$json.citations[2]).replaceAll(\"[4]\",\" - source: \"+$json.citations[3]).replaceAll(\"[5]\",\" - source: \"+$json.citations[4]).replaceAll(\"[6]\",\" - source: \"+$json.citations[5]).replaceAll(\"[7]\",\" - source: \"+$json.citations[6]).replaceAll(\"[8]\",\" - source: \"+$json.citations[7]).replaceAll(\"[9]\",\" - source: \"+$json.citations[8]).replaceAll(\"[10]\",\" - source: \"+$json.citations[9]) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1080,
+        500
+      ],
+      "id": "1ae1b4a4-4978-4780-9264-afd73f89f611",
+      "name": "Fix Links"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "o1-preview",
+          "mode": "list",
+          "cachedResultName": "O1-PREVIEW"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are part of a team that creates world class blog posts. \n\nFor each new blog post project, you are provided with a list of keywords, a primary keyword, search intent, research findings and a preliminary blog post plan. Here's a definition of each of the inputs: \n\n- Keywords: These are the keywords which the blog post is meant to rank for on SEO. They should be scattered throughout the blog post intelligently to help with SEO. \n\n- Search intent: The search intent recognises the intent of the user when searching up the keyword. Our goal is to optimise the blog post to be highly relevant and valuable to the user, as such the search intent should be satisfied within the blog post. \n\n- Research findings: This is research found from very reputable resources in relation to the blog post. You must intelligently use this research to make your blog post more reputable. \n\n- Preliminary plan: Very basic plan set out by your colleague to kick off the blog post. \n\n- Primary keyword: Out of the keywords, there is one keyword known as the primary keyword. The primary keyword is the keyword which has the highest SEO importance and as such must go in the title and first few sentences of the blog post. It is important that the blog post is highly relevant to the primary keyword, so that it could be placed naturally into the title and introduction sections. \n\n\nGiven the said info, you must create a detailed plan for the blog post. \n \nYour output must: \n\n- Include a plan for the blog post.\n\n- Be in dot point format. \n\n- In each part of the blog post, you must mention which keywords should be placed. \n\nHere are the other things you must consider: \n\n- All keywords must be placed inside the blog post. For each section, mention which keywords to include. The keyword placement must feel natural and must make sense. \n\n- You must include all research points in the blog post. When including the research points, make sure to also include their source URL so that the copywriter can use them as hyperlinks. \n\n- You must ensure that the plan created satisfies the search intent and revolves directly around the given keywords. \n\n- Your plan must be very detailed. \n\n- Add related Quote to support the title and keywords\n\n- Keep in mind the copywriter that will use your plan to write the blog post is not an expert in the topic of the blog post. So you should give them all the detail required so they can just turn it into nicely formatted paragraphs. So your plan should include all technical detail regarding each point to be in the blog post. For example instead of saying \"define X\", you must have \"define X as ...\". \n\n- The plan you create must have a flow that makes sense. \n\n- You must ensure the bog post will be highly detailed and satisfy the most important concepts regarding the topic. \n\nA new project has just came across your desk with below details:\n\nKeywords: \n{{ $('Code').item.json.keywords }}\n\nSearch intent: \n{{ $('Code').item.json.intent }}\n\nPreliminary plan: \n{{ $('Preliminary Plan').item.json.message.content }}\n\nResearch findings: \n{{ $json.research }}\n\nPrimary keyword: \n{{ $('Code').item.json.primary_keyword }}\n\nCreate the detailed plan. \n\nYour output must only be the plan and nothing else. \n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1260,
+        340
+      ],
+      "id": "0ff54745-6dad-4d12-a117-ae13dd508bd6",
+      "name": "Create plan",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are part of a team that creates world class blog posts. \n\nYou are the teams best copywriter and are responsible for writing out the actual blog post. \n\nFor each new blog post project you are provided with a detailed plan and research findings. \n\nYour job is to create the blog post by closely following the detailed plan. \n\nThe blog post you create must: \n\n- Follow the plan bit by bit. \n\n- Use \\\nm,paragraphs. \n\n- Use bullet points and subheadings with keywords where appropriate.  \n\n- Not have any fluff. The content of the blog must be value dense and direct. \n\n- Be very detailed. \n\n- Include the keywords mentioned in each section within that section. \n\n- Use the research as advised by the plan. Make sure to include the link associated with each point you extract from the research at the end of that section in the form of a URL.  \n\n- Place the primary keyword in the blog title, H2 header and early in the introduction. \n\n- Place one keyword for each section in the heading of that section. \n\n-  When possible pepper synonyms of the keywords throughout each section. \n\n- When possible use Latent Semantic Indexing (LSI) keywords and related terms to enhance context (e.g., “robotic process automation” for RPA). \n\n- Be at minimum 2000 to 2500 words long. \n\n- Be suitable for a year 5 reading level. \n\nMake sure to create the entire blog post draft in your first output. Don't stop or cut it short. \n\nHere are the details of your next blog post project: \n\nDetailed Plan: \n{{ $json.message.content }}\n\nDetailed Research: \n{{ $('Fix Links').item.json.research }}\n\n\nWrite the blog post. Try to make it more human language."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1560,
+        340
+      ],
+      "id": "4d4b1b32-76cf-45d6-b557-59b110da9aef",
+      "name": "Write Blog",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "previous-posts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        580
+      ],
+      "id": "f0a11ebe-ad2f-41fd-81e3-46451fd11f7d",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1mI5GkHjXloCJIGtae7A7FH7uB8InGH9JMgeDxDHLrtg",
+          "mode": "list",
+          "cachedResultName": "Completed_Keywords",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mI5GkHjXloCJIGtae7A7FH7uB8InGH9JMgeDxDHLrtg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mI5GkHjXloCJIGtae7A7FH7uB8InGH9JMgeDxDHLrtg/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1640,
+        820
+      ],
+      "id": "f8d87dc1-1efc-4b09-b69b-2581ef135c77",
+      "name": "Previous Posts",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BP40ld8hcZbMZ0uF",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "o1-mini-2024-09-12",
+          "mode": "list",
+          "cachedResultName": "O1-MINI-2024-09-12"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are part of a team that creates world class blog posts. \n\nYou are in charge of internal linking between blog posts. \n\nFor each new blog post that comes across your desk, your job is to look through previously posted blogs and make atleast 5 internal links. \n\nTo choose the best internal linking opportunities you must: \n\n- Read the previous blog post summaries and look through their keywords. If there is a match where the previous blog post is highly relevant, then this is an internal linking opportunity. \n\n- Do not link if it is not highly relevant. Only make a link if it makes sense and adds value for the reader. \n\nOnce you've found the best linking opportunities, you must update the blog post with the internal links. To do this you must: \n\n- Add the link of the previous blog post at the relevant section of the new blog post. Drop the URL at the place which makes most sense. Later we will hyperlink the URL to the word in the blog post which it is placed next to. So your placing is very important. \n\nMake sure to not delete any existing URLs or change anything about the blog post provided to you. You must only add new internal linking URLs and output the revised blog post. \n\nYour output must be the blog post given to you plus the new urls. Don't remove any info. \n\nDon't return the previous blog posts. Only return the current blog post with the internal links added.\n\nCurrent blog Post: \n{{ $('Write Blog').last().json.message.content }}\n\nPrevious Blog Posts: \n{{ $json['previous-posts'].toJsonString().split() }}\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2160,
+        400
+      ],
+      "id": "12a5afd1-cb72-41f0-8ee8-deea8450e070",
+      "name": "Add internal links",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Create a slug for the following blog post: \n{{ $('Add internal links').item.json.message.content }}\n\nA slug in a blog post is the part of the URL that comes after the domain name and identifies a specific page. It is typically a short, descriptive phrase that summarizes the content of the post, making it easier for users and search engines to understand what the page is about. For example, in the URL www.example.com/intelligent-agents, the slug is intelligent-agents. A good slug is concise, contains relevant keywords, and avoids unnecessary words to improve readability and SEO. \n\nThe slug must be 4 or 5 words max and must include the primary keyword of the blog post which is {{ $('Draft_Blogs').item[0].json.title }}.\n\nYour output must be the slug and nothing else so that I can copy and paste your output and put it at the end of my blog post URL to post it right away. "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2920,
+        560
+      ],
+      "id": "c742cac6-d734-487b-be82-34fcae2c41ff",
+      "name": "Slug",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-2024-11-20",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-2024-11-20"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Extract the blog post title from the following blog post: \n{{ $('Add internal links').item.json.message.content }}\n\n\n\nThe blog post title must include the primary keyword {{ $('Code').item.json.primary_keyword }} and must inform the users right away of what they can expect from reading the blog post. \n\n- Don't put the output in \"\". The output should just text with no markdown or formatting. \n\nYour output must only be the blog post title and nothing else. \n\nKeep the title trending and catchy pickup lines to grab viewers attention"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3300,
+        560
+      ],
+      "id": "b661acab-dbb1-416d-a5a5-1e47dc855c27",
+      "name": "Title",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-2024-11-20",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-2024-11-20"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Create a good meta description for the following blog post: \n\n{{ $('Add internal links').item.json.message.content }}\n\nA good meta description for a blog post that is SEO-optimized should:\n- Be Concise: Stick to 150-160 characters to ensure the full description displays in search results. \n- Include Keywords: Incorporate primary keywords naturally to improve visibility and relevance to search queries.\n\nPrimary keyword = {{ $('Grab New Cluster').last().json['Primary Keyword'] }}\n\nMore keywords to include if possible = [{{ $('Grab New Cluster').last().json.Keywords }}]\n\n- Provide Value: Clearly describe what the reader will learn or gain by clicking the link. \n\n- Be Engaging: Use persuasive language, such as action verbs or a question, to encourage clicks. \n\n- Align with Content: Ensure the description accurately reflects the blog post to meet user expectations and reduce bounce rates. \n\nYour output must only be the meta description and nothing else. \n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3860,
+        980
+      ],
+      "id": "5de5fbc3-639d-4d4c-84de-08810be140db",
+      "name": "Meta description"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "o1-preview",
+          "mode": "list",
+          "cachedResultName": "O1-PREVIEW"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=DO NOT OUTPUT ANYTHING OTHER THAN THE CODE. I want you to follow the layout of the template as a guide to generate the html code for a blog post. Here are the rules to follow:\n\nWhole content will follow bootstrap css styling by default to support responsiveness. The blog post html content should be wrapped inside a div element like this <div class=\"mt-5\">blog content</div>. \nInside a <div> element follow the below css styles and classes for different type of html elements:\n\n1. Title - <p class=\"h5 fw-semibold mb-0\">Time Mismanagement</p>\n2. Estimated reading time - <p class=\"h7 fw-semibold mb-0\">Time Mismanagement</p>\n3. Key takeaways - bootstrap list, \n4. Quote for the blog - Quotes will come in tag <blockquote class=\"blockquote custom-blockquote warning mb-4 text-center\"><h6 class=\"lh-base\">“Mastering mock tests is about balancing confidence, strategy, and revision — Quizlo Ai makes it easier.”</h6><footer class=\"blockquote-footer mt-3 text-warning mb-0\">Author Name</footer><span class=\"quote-icon\"><i class=\"ri-double-quotes-l\"></i></span>\n</blockquote>,\n5. body, \n6. Tags - Tags will follow the span with random badge colors\n                  <span class=\"badge bg-warning badge-dot bg-success\">common mistakes </span>\n                  <span class=\"badge bg-success badge-dot bg-success\">exam </span>\n                  <span class=\"badge badge-primary badge-pill\">Castle</span>\n\n\nMake it engaging by using italics, dot points, quotes, bold, spaces, and sometimes new lines. Never use emojis.\nThe blog post will have some URLs referenced next to certain keyphrases to show where the info came from. You must hyperlink the keyphrase with the provided URL so that the reader can click on the referenced URL. It is critical you get this right.\n\n\nDo not output any extra text or mention code tags like HTML''' around the output; just output the HTML code.\nBlog post: \n\n{{ $json.message.content }}\n\nHere's an example of a well formatted htmlContent output:\n\n<div class=\"mt-4\"><p class=\"mb-4\"> Mock tests are an essential tool for exam preparation, yet many students fail to use them effectively. Understanding the most common mistakes in mock tests and knowing how to fix them can dramatically improve your exam readiness. </p>\n\n<p class=\"h5 fw-semibold mb-0\">Time Mismanagement</p>\n\n<p class=\"mb-4\"> One of the top mistakes is poor time management. Students often spend too much time on one question, leaving little for others. </p>\n\n<ul><li>Practice solving easier questions first to build confidence.</li><li>Use a timer during practice to simulate real conditions.</li><li>Learn to quickly skip difficult questions and return later.</li></ul>\n\n<p class=\"mb-4\">Avoid complacency to perform at your peak during actual exams <a is=\"\" href=\"https://www.examstrategy.com/overconfidence-dangers\"> Overconfidence is dangerous</a></p>\n\n<blockquote class=\"blockquote custom-blockquote warning mb-4 text-center\"><h6 class=\"lh-base\">“Mastering mock tests is about balancing confidence, strategy, and revision — Quizlo Ai makes it easier.”</h6><footer class=\"blockquote-footer mt-3 text-warning mb-0\">Quizlo Ai Team</footer><span class=\"quote-icon\"><i class=\"ri-double-quotes-l\"></i></span>\n</blockquote>\n\n<p class=\"mb-0\"> Fixing these mistakes can transform your mock tests from a routine practice to a powerful exam-readiness tool. Use Quizlo Ai's smart mock testing features to build the ultimate preparation strategy. </p>\n</div>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2500,
+        400
+      ],
+      "id": "7f6e4ba2-8ebe-4de1-adcd-1d9da614ef89",
+      "name": "HTML version",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdRAwQPrcUsIrboL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search?engine=google_images",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $('Title').item.json.message.content }}"
+            },
+            {
+              "name": "gl",
+              "value": "in"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3740,
+        560
+      ],
+      "id": "e52dacbc-c9ad-4290-90b6-330525206183",
+      "name": "Image Covers",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "iOmgaKknSzxrCuxF",
+          "name": "Query Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f0541df-05ab-4e3d-a5d8-3904579fc8a9",
+              "name": "image-url",
+              "value": "={{ $json.images_results[1].original }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3920,
+        560
+      ],
+      "id": "52dc4232-2133-4fff-8eca-f5cea9a2f30c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ev4QI5NSzmZZtX51F8ZdVyj-s2Ey967vHbxASXywD6g",
+          "mode": "list",
+          "cachedResultName": "Cluster Template",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ev4QI5NSzmZZtX51F8ZdVyj-s2Ey967vHbxASXywD6g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ev4QI5NSzmZZtX51F8ZdVyj-s2Ey967vHbxASXywD6g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Primary Keyword": "={{ $('Grab New Cluster').last().json['Primary Keyword'] }}",
+            "Completed": "Yes"
+          },
+          "matchingColumns": [
+            "Primary Keyword"
+          ],
+          "schema": [
+            {
+              "id": "Cluster",
+              "displayName": "Cluster",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Intent",
+              "displayName": "Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Keywords",
+              "displayName": "Keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Primary Keyword",
+              "displayName": "Primary Keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Completed",
+              "displayName": "Completed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Categories",
+              "displayName": "Categories",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "BlogType",
+              "displayName": "BlogType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        4700,
+        560
+      ],
+      "id": "92c09133-b675-44ce-82d5-42c1d7a27d78",
+      "name": "Check as completed on Sheets"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mI5GkHjXloCJIGtae7A7FH7uB8InGH9JMgeDxDHLrtg",
+          "mode": "list",
+          "cachedResultName": "Completed Keywords",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mI5GkHjXloCJIGtae7A7FH7uB8InGH9JMgeDxDHLrtg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mI5GkHjXloCJIGtae7A7FH7uB8InGH9JMgeDxDHLrtg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Blog Title": "={{ $('Title').item.json.message.content }}",
+            "Keywords": "={{ $('Grab New Cluster').item.json.Keywords }}",
+            "Summary": "={{ $('Meta description').item.json.message.content }}",
+            "URL": "=https://dreamwedds.com/blogs/details?title={{ $('Slug').item.json.message.content }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Blog Title",
+              "displayName": "Blog Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Keywords",
+              "displayName": "Keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        4900,
+        560
+      ],
+      "id": "3e5c50ce-e031-4ca8-96db-d026e938c44d",
+      "name": "Google Sheets"
+    },
+    {
+      "parameters": {
+        "content": "## Schedule a trigger\n \n",
+        "height": 240,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "75f5795f-9558-42aa-b4a4-599cd05eaaed",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## New Draft Post to be created\n",
+        "height": 240,
+        "width": 420
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        20,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "c8e20ed8-590d-40eb-92f9-ef9589320eee",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Preliminary Post Plan \n \n",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        520,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "8b2ba673-d53b-4025-a04d-1c0c8b83933a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Research\n \n \n",
+        "height": 240,
+        "width": 180
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        860,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "a15d3231-a58f-45fd-8e56-ea5d9fdfc384",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Post Plan \n \n",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1240,
+        260
+      ],
+      "typeVersion": 1,
+      "id": "38b91137-fe5b-4ffb-8f9e-7c343036c1a2",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Writing Blog\n \n \n",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1540,
+        260
+      ],
+      "typeVersion": 1,
+      "id": "bfaa75e0-38db-4187-98e4-7073c2a1b233",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"sonar-pro\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Act as a professional storyteller and relation advisor who is capable of finding detailed explanation  about a blog topic through brainstorming and reputable public sources.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.message.content.split(/\\n+/).join(' ').replaceAll('\"', ' ') }}\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        500
+      ],
+      "id": "a6e47da9-33a6-44c9-afcc-a515f1f107cf",
+      "name": "Research",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dsn7J61Yrl042szR",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Internal Links\n \n \n",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2140,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "86e57645-5811-46ca-9662-55f5b3d637d2",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## HTML\n\n \n \n",
+        "height": 240,
+        "width": 340
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2440,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "1047c10e-e9ec-44d6-a297-d0e6a8403a08",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Slug\n\n\n \n \n",
+        "height": 240,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2880,
+        500
+      ],
+      "typeVersion": 1,
+      "id": "c7c4355e-55ba-4f8f-b9ef-640f4eb96769",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Meta Description\n\n\n \n \n",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3840,
+        900
+      ],
+      "typeVersion": 1,
+      "id": "6d3eaf82-43d0-40c6-b6df-486be2027908",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Get Image\n\n\n\n \n \n",
+        "height": 240,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3680,
+        500
+      ],
+      "typeVersion": 1,
+      "id": "7eb90133-51ae-4a71-8620-19a2fcc41e69",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## Login and Submit Post",
+        "height": 240,
+        "width": 420,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4140,
+        500
+      ],
+      "typeVersion": 1,
+      "id": "702d68be-d149-4170-8525-618704590887",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## Completion\n\n\n\n\n\n \n \n",
+        "height": 240,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4620,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "f2c2adf4-8975-4df4-a2d7-029ccd9aa65f",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "# QUIZLO AI Blog Post Creator",
+        "height": 100,
+        "width": 500,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -340,
+        40
+      ],
+      "typeVersion": 1,
+      "id": "70a72e92-f978-43c8-b027-cb7b445b8829",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dreamwedds.com/api/blogs",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-GB,en;q=0.9"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.data.token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"title\":\"{{ $('Title').item.json.message.content }}\",\n\"sharedLink\":\"{{ $('Slug').item.json.message.content }}\",\n\"imageUrl\":\"{{ $('Image Covers').item.json.images_results[0].original }}\",\n\"author\":\"Quizlo Ai\",\n\"quote\":null,\n\"summary\":\"{{ $('Code').item.json.intent }}\",\n\"htmlContent\":{{ JSON.stringify($('HTML version').item.json.message.content.replaceAll(/\\n/g,\" \")) }},\n\"tags\":\"{{ $('Code').item.json.hashtags }}\",\n\"categories\":\"News & Policy Updates\",\n\"status\":\"Published\",\n\"isFeatured\": true,\n\"type\": \"News\"\n}\n\n",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4420,
+        560
+      ],
+      "id": "4b40a2b7-177c-4ee1-b8b3-7514b742b364",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://quizloai.com/api/Users/login",
+        "sendHeaders": true,
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "quizlo@gmail.com"
+            },
+            {
+              "name": "password",
+              "value": "Admin@123"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4200,
+        560
+      ],
+      "id": "4aed7af2-b776-4e46-9771-23220ef5103a",
+      "name": "Get Token"
+    },
+    {
+      "parameters": {
+        "url": "https://quizloai.com/api/blogs/by-status/Published",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-GB,en;q=0.9"
+            },
+            {
+              "name": "Sec-Fetch-Dest",
+              "value": "empty"
+            },
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "cors"
+            },
+            {
+              "name": "Sec-Fetch-Site",
+              "value": "same-origin"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        580
+      ],
+      "id": "c28a1b90-0329-43a0-8bb3-178fd46ebba1",
+      "name": "Published Posts"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the top array from your JSON\n//return $('Draft_Blogs').first().json;\n\nreturn   {\n    \"title\": \"Delhi Govt to Equip 19k Classrooms with Smart Boards: A Major Digital Leap\",\n    \"intent\": \"Inform readers about Delhi’s smart classroom initiative and its alignment with NEP goals.\",\n    \"keywords\": [\"smart boards\", \"digital education\", \"NEP 2020\", \"Delhi education policy\"],\n    \"primary_keyword\": \"smart classroom initiative Delhi\",\n    \"hashtags\": [\"#SmartClassrooms\", \"#NEP2020\", \"#DigitalLearning\"]\n  }"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        500
+      ],
+      "id": "1ceefd27-26f6-4da3-a0d6-a9da51f8062f",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "url": "https://quizloai.com/api/blogs/by-status/Draft",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1000
+            }
+          },
+          "allowUnauthorizedCerts": false,
+          "response": {}
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        100,
+        500
+      ],
+      "id": "8a676103-c498-44da-8483-af014c82e50b",
+      "name": "Draft_Blogs",
+      "retryOnFail": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Draft_Blogs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grab New Cluster": {
+      "main": [
+        []
+      ]
+    },
+    "Preliminary Plan": {
+      "main": [
+        [
+          {
+            "node": "Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fix Links": {
+      "main": [
+        [
+          {
+            "node": "Create plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create plan": {
+      "main": [
+        [
+          {
+            "node": "Write Blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Blog": {
+      "main": [
+        [
+          {
+            "node": "Published Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Previous Posts": {
+      "main": [
+        []
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Add internal links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add internal links": {
+      "main": [
+        [
+          {
+            "node": "HTML version",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slug": {
+      "main": [
+        [
+          {
+            "node": "Title",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Title": {
+      "main": [
+        [
+          {
+            "node": "Image Covers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML version": {
+      "main": [
+        [
+          {
+            "node": "Slug",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meta description": {
+      "main": [
+        []
+      ]
+    },
+    "Image Covers": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check as completed on Sheets": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research": {
+      "main": [
+        [
+          {
+            "node": "Fix Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Check as completed on Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Token": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Published Posts": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Preliminary Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft_Blogs": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0174354c-f542-4822-a8f9-1ed21dec5b84",
+  "meta": {
+    "instanceId": "aacb6bb31cf2d1a301898c7b9c87269738b08764118a446bab7b281a3471b0af"
+  },
+  "id": "42bVzijhGErrllqg",
+  "tags": [
+    {
+      "createdAt": "2025-07-04T16:22:32.563Z",
+      "updatedAt": "2025-07-04T16:22:32.563Z",
+      "id": "xXk5iW0mp3yN4hNA",
+      "name": "marketing-automation"
+    }
+  ]
+}
