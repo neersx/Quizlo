@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Quizlo.Questionnaire.WebApi.DTO;
+using static Postgrest.Constants;
 
 public interface IBlogService
 {
@@ -15,18 +16,27 @@ public interface IBlogService
 public class BlogService : IBlogService
 {
     private readonly SupabaseDbContext _db;
+    private readonly Supabase.Client _client;
     private readonly IMapper _mapper;
-    public BlogService(SupabaseDbContext db, IMapper mapper)
+    public BlogService(SupabaseDbContext db, IMapper mapper, Supabase.Client client)
     {
         _db = db;
+        _client = client;
         _mapper = mapper;
     }
     public async Task<IEnumerable<BlogDto>> GetAllAsync()
     {
-        return await _db.QuizloBlogs.Where(b => b.Status == "Published")
-            .OrderByDescending(b => b.CreatedAt)
-            .ProjectTo<BlogDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        // Fix for CS1501: Specify the generic type for the 'From' method.  
+        var response = await _client
+           .From<Blog>()              // target the Blog table
+           .Select("*")
+           .Where(b => b.Status == "Published")              // WHERE status = 'Published' :contentReference[oaicite:1]{index=1}
+           .Order(b => b.CreatedAt, Ordering.Descending)     // ORDER BY createdAt DESC :contentReference[oaicite:2]{index=2}
+           .Get();
+
+        return response.Models
+                       .Select(b => _mapper.Map<BlogDto>(b))
+                       .ToList();
     }
 
     public async Task<IEnumerable<BlogDto>> GetAllAsync(string status)

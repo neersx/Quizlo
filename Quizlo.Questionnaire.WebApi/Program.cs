@@ -22,6 +22,18 @@ builder.Services.AddDbContext<QuizDbContext>(options => options.UseSqlServer(con
 builder.Services.AddDbContext<SupabaseDbContext>(opts =>
     opts.UseNpgsql(builder.Configuration.GetConnectionString("Supabase")));
 
+
+builder.Services.AddScoped<Supabase.Client>(sp =>
+   new Supabase.Client(
+       builder.Configuration["Supabase:Url"],
+       builder.Configuration["Supabase:Key"],
+       new Supabase.SupabaseOptions
+       {
+           AutoRefreshToken = true,
+           AutoConnectRealtime = true
+       }
+   ));
+
 // 3. Identity
 builder.Services.AddIdentity<User, Role>(options =>
 {

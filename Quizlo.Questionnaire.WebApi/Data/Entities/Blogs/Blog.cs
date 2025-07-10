@@ -1,20 +1,49 @@
-
+using Postgrest.Attributes;
+using Postgrest.Models;
 using System.Text.Json;
 
-public class Blog
+[Table("quizlo_blogs")]
+public class Blog : BaseModel
 {
-    public long     Id                  { get; set; }
-    public DateTime CreatedAt           { get; set; }
-    public string   HtmlContent         { get; set; }
-    public JsonDocument? Reviews         { get; set; }
-    public string   Type                { get; set; }
-    public string   Title               { get; set; }
-    public string   Tags                { get; set; }
-    public string?   SharedLink          { get; set; }
-    public string   Summary             { get; set; }
-    public string?   Author              { get; set; }
-    public string   Status              { get; set; }
-    public string?   ImageUrl            { get; set; }
+    [PrimaryKey("id")]
+    public long Id { get; set; }
+
+    [Column("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [Column("htmlContent")]
+    public string HtmlContent { get; set; }
+
+    [Column("reviews")]
+    public JsonDocument? Reviews { get; set; }
+
+    [Column("type")]
+    public string Type { get; set; }
+
+    [Column("title")]
+    public string Title { get; set; }
+
+    [Column("tags")]
+    public string Tags { get; set; }
+
+    [Column("sharedLink")]
+    public string? SharedLink { get; set; }
+
+    [Column("summary")]
+    public string Summary { get; set; }
+
+    [Column("author")]
+    public string? Author { get; set; }
+
+    [Column("status")]
+    public string Status { get; set; }
+
+    [Column("imageUrl")]
+    public string? ImageUrl { get; set; }
+
+    [Column("isFeatured")]
     public bool IsFeatured { get; set; } = false;
+
+    [Column("socialMediaLinks")]
     public JsonDocument? SocialMediaLinks { get; set; }
 }
