@@ -15,6 +15,7 @@ namespace Quizlo.Questionnaire.WebApi.Data
 
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Test> Tests { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Subject> Subjects { get; set; }
 

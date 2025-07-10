@@ -1,15 +1,46 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using AutoMapper;
 
 namespace Quizlo.Questionnaire.WebApi.DTO
 {
-    /// <summary>
-    /// Data Transfer Object for exposing blog details to the client.
-    /// </summary>
+
+    public class BlogCreateDto
+    {
+        [Required]
+        public string HtmlContent { get; set; }
+
+        [Required, StringLength(20)]
+        public string Type { get; set; }
+
+        [Required, StringLength(250)]
+        public string Title { get; set; }
+
+        [StringLength(250)]
+        public string? Tags { get; set; }
+
+        [StringLength(270)]
+        public string? SharedLink { get; set; }
+
+        [StringLength(520)]
+        public string? Summary { get; set; }
+
+        [StringLength(50)]
+        public string? Author { get; set; }
+
+        [Required, StringLength(20)]
+        public string Status { get; set; }
+
+        [StringLength(500)]
+        public string? ImageUrl { get; set; }
+
+        public bool IsFeatured { get; set; }
+    }
+
     public class BlogDto
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string UrlName { get; set; }
         public string Description { get; set; }
@@ -23,7 +54,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string Avatar { get; set; }
         public string Link { get; set; }
         public string Summary { get; set; }
-         public string Tags { get; set; }
+        public string Tags { get; set; }
         public bool IsFeatured { get; set; } = false;
     }
 

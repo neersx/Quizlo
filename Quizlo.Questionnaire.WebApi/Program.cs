@@ -18,10 +18,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // 2. EF Core DbContext
 builder.Services.AddDbContext<QuizDbContext>(options => options.UseSqlServer(connectionString));
-// new Supabase (PostgreSQL) context
-builder.Services.AddDbContext<SupabaseDbContext>(opts =>
-    opts.UseNpgsql(builder.Configuration.GetConnectionString("Supabase")));
-
 
 builder.Services.AddScoped<Supabase.Client>(sp =>
    new Supabase.Client(
@@ -69,6 +65,7 @@ builder.Services.AddAuthorization();
 // Register all Profiles in this assembly
 builder.Services.AddAutoMapper(typeof(TestProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(QuestionsProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(BlogProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(BlogMappingProfile).Assembly);
 
 

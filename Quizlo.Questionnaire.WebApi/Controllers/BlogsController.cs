@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Quizlo.Questionnaire.WebApi.DTO;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -24,7 +25,7 @@ public class BlogsController : ControllerBase
 
     // GET /api/blogs/{id}
     [HttpGet("{id:long}")]
-    public async Task<IActionResult> Get(long id)
+    public async Task<IActionResult> GetBlogById(long id)
     {
         var dto = await _svc.GetByIdAsync(id);
         if (dto == null) return NotFound();
@@ -37,6 +38,16 @@ public class BlogsController : ControllerBase
         var dto = await _svc.GetByLinkAsync(name);
         if (dto == null) return NotFound();
         return Ok(dto);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Blog>> CreateBlog([FromBody] BlogCreateDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var created = await _svc.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetBlogById), new { id = created.Id }, created);
     }
 
     // PUT /api/blogs/123
