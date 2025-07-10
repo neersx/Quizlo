@@ -6,6 +6,7 @@ using Quizlo.Questionnaire.WebApi.DTO;
 public interface IBlogService
 {
     Task<IEnumerable<BlogDto>> GetAllAsync();
+    Task<IEnumerable<BlogDto>> GetAllAsync(string status);
     Task<BlogDto> GetByIdAsync(long id);
     Task<BlogDto> GetByLinkAsync(string link);
     Task<Blog> UpdateAsync(long id, Blog updated);
@@ -22,7 +23,15 @@ public class BlogService : IBlogService
     }
     public async Task<IEnumerable<BlogDto>> GetAllAsync()
     {
-        return await _db.QuizloBlogs
+        return await _db.QuizloBlogs.Where(b => b.Status == "Published")
+            .OrderByDescending(b => b.CreatedAt)
+            .ProjectTo<BlogDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<BlogDto>> GetAllAsync(string status)
+    {
+        return await _db.QuizloBlogs.Where(b => b.Status == status)
             .OrderByDescending(b => b.CreatedAt)
             .ProjectTo<BlogDto>(_mapper.ConfigurationProvider)
             .ToListAsync();

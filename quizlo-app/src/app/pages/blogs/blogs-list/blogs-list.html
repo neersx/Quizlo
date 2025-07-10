@@ -42,7 +42,7 @@
                     @for (post of blogsList; track $index) {
                     <div class="col-xl-6">
                         <spk-blog-image-card [imageUrl]="post.image" [imageClass]="post.imageClass" [title]="post.title"
-                            [pageStyleClass]="post.pageStyleClass" [description]="post.summary"
+                            [pageStyleClass]="post.pageStyleClass" [description]="post.summary" [link]="post.link"
                             [author]="post.author" [TextColor]="post.textColor" [authorImageUrl]="post.avatar"
                             [date]="post.date" [heartColor]="post.heartColor"></spk-blog-image-card>
                     </div>

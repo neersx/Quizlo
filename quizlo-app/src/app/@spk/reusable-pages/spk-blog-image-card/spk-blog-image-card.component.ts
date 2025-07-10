@@ -23,5 +23,6 @@ export class SpkBlogImageCardComponent {
   @Input() heartColor: string = '';  // Color for the heart icon, can be 'text-danger' or 'text-muted'
   @Input() badge: string = ''; // Optional offer or discount badge
   @Input() badgeColor: string = ''; 
+  @Input() link: string = ''; 
 
 }

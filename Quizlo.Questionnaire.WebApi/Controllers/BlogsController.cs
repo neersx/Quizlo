@@ -15,6 +15,13 @@ public class BlogsController : ControllerBase
         return Ok(dtos);
     }
 
+    [HttpGet("by-status/{status}")]
+    public async Task<IActionResult> Get(string status)
+    {
+        var dtos = await _svc.GetAllAsync();
+        return Ok(dtos);
+    }
+
     // GET /api/blogs/{id}
     [HttpGet("{id:long}")]
     public async Task<IActionResult> Get(long id)

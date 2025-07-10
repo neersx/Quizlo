@@ -166,7 +166,7 @@
                         <div class="card-title">
                             Recent Posts
                         </div>
-                        <a href="javascript:void(0);" class="fs-12 text-muted"> View All<i class="ti ti-arrow-narrow-right ms-1"></i> </a>
+                        <a [routerLink]="'/blogs'" class="fs-12 text-muted"> View All<i class="ti ti-arrow-narrow-right ms-1"></i> </a>
                     </div>
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush">
@@ -177,7 +177,7 @@
                                   <img [src]="blog.image" class="img-fluid" [alt]="blog.title">
                                 </span>
                                 <div class="flex-fill">
-                                  <a href="javascript:void(0);" class="fs-14 mb-0" [ngClass]="blog.color">{{ blog.category }}</a>
+                                  <a [routerLink]="'/blog-details/' + blog.link" class="fs-14 mb-0" [ngClass]="blog.color">{{ blog.category }}</a>
                                   <p class="mb-1 popular-blog-content text-truncate fw-medium">{{ blog.title }}</p>
                                   <span class="text-muted fs-12">{{ blog.date }}</span>
                                 </div>

@@ -1,10 +1,10 @@
 
   <div class="card custom-card overflow-hidden">
-    <a [routerLink]="['/pages/blog/blogdetails']" class="{{pageStyleClass}}">
+    <a [routerLink]="['/blog-details']" class="{{pageStyleClass}}">
       <img [src]="imageUrl" class="card-img-top {{imageClass}}" alt="...">
     </a>
     <div class="card-body">
-      <a [routerLink]="['/blogs/blog-details']" class="h5 fw-semibold mb-2 d-block lh-base">{{ title }}</a>
+      <a [routerLink]="['/blogs/blog-details/'+link]" class="h5 fw-semibold mb-2 d-block lh-base">{{ title }}</a>
       <p class="mb-3">{{ description }}
         <a href="javascript:void(0);" class="fw-medium text-{{TextColor}} ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read More ?</a>
       </p>
