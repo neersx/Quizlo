@@ -19,17 +19,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // 2. EF Core DbContext
 builder.Services.AddDbContext<QuizDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<Supabase.Client>(sp =>
-   new Supabase.Client(
-       builder.Configuration["Supabase:Url"],
-       builder.Configuration["Supabase:Key"],
-       new Supabase.SupabaseOptions
-       {
-           AutoRefreshToken = true,
-           AutoConnectRealtime = true
-       }
-   ));
-
 // 3. Identity
 builder.Services.AddIdentity<User, Role>(options =>
 {
