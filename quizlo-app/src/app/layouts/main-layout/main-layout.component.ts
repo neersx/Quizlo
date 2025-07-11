@@ -65,13 +65,13 @@ import { AuthService } from '../../services/identity/auth.service';
 export class MainQuizLayoutComponent implements OnInit {
   isYearly: boolean = false;
   user: any;
-  
+
   get WindowPreSize(): number[] {
     return [window.innerWidth];
   }
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  onToggle() {}
+  onToggle() { }
   thumbsSwiper: any;
   constructor(
     public renderer: Renderer2,
@@ -87,8 +87,6 @@ export class MainQuizLayoutComponent implements OnInit {
 
     if (this.isBrowser) {
       // Safe to use `document` here
-      const title = document.title;
-      console.log(title);
       document.body.classList.add('landing-body');
       const htmlElement =
         this.elementRef.nativeElement.ownerDocument.documentElement;
@@ -100,7 +98,7 @@ export class MainQuizLayoutComponent implements OnInit {
     }
 
     this.getCurrentUser();
-   
+
     // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
     // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
     // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
@@ -113,7 +111,7 @@ export class MainQuizLayoutComponent implements OnInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
   @ViewChild('swiperContainer1') swiperContainer1!: ElementRef;
 
- 
+
   private offcanvasService = inject(NgbOffcanvas);
   openSwitcher(content: any) {
     this.offcanvasService.open(content, { position: 'end' });
@@ -131,14 +129,9 @@ export class MainQuizLayoutComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
       this.user = currentUser;
-      // if (!currentUser) {
-      //   const returnUrl = this.router.url;
-      //   this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
-      //   return;
-      // }
     }
   }
-    
+
 
   setThumbsSwiper(swiper: any) {
     this.thumbsSwiper = swiper;
@@ -223,13 +216,13 @@ export class MainQuizLayoutComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-     if(this.isBrowser) 
-    this.scrolled = window.scrollY > 10;
+    if (this.isBrowser)
+      this.scrolled = window.scrollY > 10;
     const sections = this.el.nativeElement.querySelectorAll('.side-menu__item');
     const scrollPos =
       this.isBrowser ? window.scrollY ||
-      this.elementRef.nativeElement.ownerDocument.documentElement.scrollTop ||
-      document.body.scrollTop: "10";
+        this.elementRef.nativeElement.ownerDocument.documentElement.scrollTop ||
+        document.body.scrollTop : "10";
     sections.forEach((el: any, i: string | number) => {
       const currLink = sections[i];
       const val: any = currLink.getAttribute('value');
@@ -254,9 +247,9 @@ export class MainQuizLayoutComponent implements OnInit {
     });
     let number =
       this.isBrowser ? window.pageYOffset ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
-      0: 0;
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0 : 0;
     if (number > 100) {
       this.show = true;
     } else {
@@ -306,12 +299,12 @@ export class MainQuizLayoutComponent implements OnInit {
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'data-header-styles', type1);
-    if(this.isBrowser) {
-    localStorage.setItem('zenoHeader', type1);
-    this.renderer.setAttribute(htmlElement, 'data-menu-styles', type1);
-    localStorage.setItem('zenoMenu', type1);
-    this.renderer.setAttribute(htmlElement, 'data-theme-mode', type1);
-    localStorage.setItem('zenodarktheme', type1);
+    if (this.isBrowser) {
+      localStorage.setItem('zenoHeader', type1);
+      this.renderer.setAttribute(htmlElement, 'data-menu-styles', type1);
+      localStorage.setItem('zenoMenu', type1);
+      this.renderer.setAttribute(htmlElement, 'data-theme-mode', type1);
+      localStorage.setItem('zenodarktheme', type1);
     }
   }
 
@@ -321,7 +314,7 @@ export class MainQuizLayoutComponent implements OnInit {
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'dir', type);
-    if(this.isBrowser) localStorage.setItem('dir', type);
+    if (this.isBrowser) localStorage.setItem('dir', type);
   }
 
   //Theme Primary
@@ -330,8 +323,10 @@ export class MainQuizLayoutComponent implements OnInit {
       '--primary-rgb',
       type
     );
-     if(this.isBrowser) {localStorage.setItem('zeno-primary-mode', type);
-    localStorage.removeItem('zenolight-primary-color');}
+    if (this.isBrowser) {
+      localStorage.setItem('zeno-primary-mode', type);
+      localStorage.removeItem('zenolight-primary-color');
+    }
   }
 
   //reset switcher
@@ -462,10 +457,10 @@ export class MainQuizLayoutComponent implements OnInit {
   }
 
 
-logout() {
-  this.authService.logout();
-  this.user = null;
-}
+  logout() {
+    this.authService.logout();
+    this.user = null;
+  }
 
 
   eventTriggered: boolean = false;
@@ -473,8 +468,8 @@ logout() {
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.menuResizeFn();
-    if(this.isBrowser) 
-    this.screenWidth = window.innerWidth;
+    if (this.isBrowser)
+      this.screenWidth = window.innerWidth;
 
     // Check if the event hasn't been triggered and the screen width is less than or equal to your breakpoint
     if (!this.eventTriggered && this.screenWidth <= 992) {
@@ -487,11 +482,11 @@ logout() {
     }
   }
 
-  
+
   menuResizeFn(): void {
     if (this.isBrowser) {
       this.WindowPreSize.push(window.innerWidth);
-      }
+    }
 
     if (this.WindowPreSize.length > 2) {
       this.WindowPreSize.shift();

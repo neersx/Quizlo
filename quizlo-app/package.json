@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:quizlo-app": "node dist/quizlo-app/server/server.mjs",
+    "serve:ssr": "node dist/quizlo-app/server/server.mjs",
     "sass": "sass ./public/assets/scss:./public/assets/css/",
     "sass-min": "sass ./public/assets/scss:./public/assets/css/ --style compressed"
   },

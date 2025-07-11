@@ -1,0 +1,22 @@
+# sudo nano /etc/systemd/system/quizlo-app.service
+
+[Unit]
+Description=Quizlo Angular 20 SSR Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/quizlo
+ExecStart=/usr/bin/node /var/www/quizlo/server/server.mjs
+Restart=always
+Environment=NODE_ENV=production
+SyslogIdentifier=quizlo-app
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+
+
