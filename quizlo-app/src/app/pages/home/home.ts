@@ -78,22 +78,26 @@ export class HomeComponent {
     private sanitizer: DomSanitizer,
     private viewScroller: ViewportScroller
   ) {
-    document.body.classList.add('landing-body');
-    const htmlElement =
-      this.elementRef.nativeElement.ownerDocument.documentElement;
-    this.renderer.setAttribute(htmlElement, 'data-toggled', 'close');
-    this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'horizontal');
-    this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
-    this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
-    this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
-    // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
-    // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
-    // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
-    // this.renderer.removeAttribute(htmlElement, 'loader');
-    // this.renderer.removeAttribute(htmlElement, 'data-width');
-    // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
-    // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
-    // this.renderer.removeAttribute(htmlElement, 'light-rgb');
+    if (this.isBrowser) {
+      // Safe to use `document` here
+      document.body.classList.add('landing-body');
+      const htmlElement =
+        this.elementRef.nativeElement.ownerDocument.documentElement;
+      this.renderer.setAttribute(htmlElement, 'data-toggled', 'close');
+      this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'horizontal');
+      this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
+      this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
+      this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
+      // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
+      // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
+      // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
+      // this.renderer.removeAttribute(htmlElement, 'loader');
+      // this.renderer.removeAttribute(htmlElement, 'data-width');
+      // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
+      // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
+      // this.renderer.removeAttribute(htmlElement, 'light-rgb');
+    }
+
   }
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
   @ViewChild('swiperContainer1') swiperContainer1!: ElementRef;

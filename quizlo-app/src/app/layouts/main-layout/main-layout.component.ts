@@ -64,7 +64,6 @@ import { AuthService } from '../../services/identity/auth.service';
 })
 export class MainQuizLayoutComponent implements OnInit {
   isYearly: boolean = false;
-  localdata: any = localStorage;
   user: any;
   
   get WindowPreSize(): number[] {
@@ -84,15 +83,24 @@ export class MainQuizLayoutComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router, private activatedRoute: ActivatedRoute
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+
+    if (this.isBrowser) {
+      // Safe to use `document` here
+      const title = document.title;
+      console.log(title);
+      document.body.classList.add('landing-body');
+      const htmlElement =
+        this.elementRef.nativeElement.ownerDocument.documentElement;
+      this.renderer.setAttribute(htmlElement, 'data-toggled', 'close');
+      this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'horizontal');
+      this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
+      this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
+      this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
+    }
+
     this.getCurrentUser();
-    document.body.classList.add('landing-body');
-    const htmlElement =
-      this.elementRef.nativeElement.ownerDocument.documentElement;
-    this.renderer.setAttribute(htmlElement, 'data-toggled', 'close');
-    this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'horizontal');
-    this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
-    this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
-    this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
+   
     // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
     // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
     // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
@@ -286,10 +294,13 @@ export class MainQuizLayoutComponent implements OnInit {
     if (this.isBrowser) this.localStorageBackUp();
   }
   ngOnDestroy(): void {
-    document.body.classList.remove('landing-body');
-    const htmlElement =
-      this.elementRef.nativeElement.ownerDocument.documentElement;
-    this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'vertical');
+    if (this.isBrowser) {
+      document.body.classList.remove('landing-body');
+      const htmlElement =
+        this.elementRef.nativeElement.ownerDocument.documentElement;
+      this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'vertical');
+    }
+
   }
   themeChange(type: string, type1: string) {
     const htmlElement =
