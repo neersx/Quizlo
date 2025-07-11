@@ -23,5 +23,6 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string ExamCode { get; set; }
         public string ImageUrl { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;
+        public QuestionDto[]? Answers { get; set; }
     }
 }

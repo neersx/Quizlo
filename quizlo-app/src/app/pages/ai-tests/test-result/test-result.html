@@ -1,16 +1,14 @@
-<app-page-header firstTitle="Apps" title="Test Result" title1="Test" activeTitle="Your Test Result" ></app-page-header>
+<app-page-header firstTitle="Apps" title="Test Result" title1="Test" activeTitle="Your Test Result"></app-page-header>
 
-  <!-- Start::row-1 -->
-  <div class="card custom-card overflow-hidden">
+<!-- Start::row-1 -->
+<div class="card custom-card overflow-hidden">
     <div class="card-body">
 
-
-    <div *ngIf="isLoading" class="header text-center">
-        <h4 style="text-align: center;">Loading Test Result...</h4>
-        <app-test-skeleton-loader 
-            [displayFooter]="false"  [displayProgress]="true" [totalQuestions]="0">
-          </app-test-skeleton-loader>
-    </div>
+        <div *ngIf="isLoading" class="header text-center">
+            <h4 style="text-align: center;">Loading Test Result...</h4>
+            <app-test-skeleton-loader [displayFooter]="false" [displayProgress]="true" [totalQuestions]="0">
+            </app-test-skeleton-loader>
+        </div>
 
         <div *ngIf="testResult && !isLoading" class="row">
             <div class="col-xxl-4 col-xl-12">
@@ -23,17 +21,19 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center text-center bg-light p-3 rounded-1 order-content">
+                                    <div
+                                        class="d-flex justify-content-between align-items-center text-center bg-light p-3 rounded-1 order-content">
                                         <div>
                                             <p class="mb-1">Total Marks</p>
                                             <h4 class="text-primary mb-0">{{testResult?.marksScored ?? 0}}</h4>
                                         </div>
                                         <div class="text-end">
                                             <p class="mb-1">Overall margin</p>
-                                            <h5 class="text-success mb-0" [ngClass]="{'text-danger': percentage < 60}">{{100 - (percentage ?? 0)}}%</h5>
+                                            <h5 class="text-success mb-0" [ngClass]="{'text-danger': percentage < 60}">
+                                                {{100 - (percentage ?? 0)}}%</h5>
                                         </div>
                                     </div>
-                                    <div  id="total-orders">
+                                    <div id="total-orders">
                                         <spk-apexcharts [chartOptions]="chartOptions1"></spk-apexcharts>
                                     </div>
                                 </div>
@@ -50,7 +50,9 @@
                                 <div class="d-flex gap-2 align-items-center justify-content-between mb-3">
                                     <div>
                                         <p class="fs-18 fw-medium mb-0">{{testResult?.examName ?? ''}}</p>
-                                        <span class="mb-0 fw-medium fs-15">{{testResult?.title ?? ''}} <i class="ri-checkbox-circle-fill text-primary" data-bs-toggle="tooltip" ngbTooltip="Verified"></i></span> 
+                                        <span class="mb-0 fw-medium fs-15">{{testResult?.title ?? ''}} <i
+                                                class="ri-checkbox-circle-fill text-primary" data-bs-toggle="tooltip"
+                                                ngbTooltip="Verified"></i></span>
                                     </div>
                                     <!-- <p class="fs-18 text-end ms-auto mb-0">
                                         <i class="ri-heart-3-fill text-danger align-middle"></i>
@@ -66,31 +68,41 @@
                                 <div class="row justify-content-center">
                                     <div class="col-xxl-12">
                                         <div class="ecommerce-assurance">
-                                            <div class="d-flex justify-content-between gap-2 align-items-center flex-wrap">
+                                            <div
+                                                class="d-flex justify-content-between gap-2 align-items-center flex-wrap">
                                                 <div>
                                                     <p class="fs-14 fw-medium mb-2">Test Status :</p>
-                                                    <div class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
-                                                        <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt="">
+                                                    <div
+                                                        class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
+                                                        <img src="./assets/images/crypto-currencies/regular/Ethereum.svg"
+                                                            alt="">
                                                     </div>
-                                                    <h4 class="mb-2 d-inline-block text-success" [ngClass]="testResult?.status === 'passed' ? 'text-success' : 'text-danger'">  {{testResult?.status}}</h4>
-                                                    <p class="text-muted mb-0 fs-12"> Test for Exam <span class="text-primary fw-medium"> {{testResult?.examName ?? ''}}</span></p>
+                                                    <h4 class="mb-2 d-inline-block text-success"
+                                                        [ngClass]="testResult?.status === 'passed' ? 'text-success' : 'text-danger'">
+                                                        {{testResult?.status}}</h4>
+                                                    <p class="text-muted mb-0 fs-12"> Test for Exam <span
+                                                            class="text-primary fw-medium"> {{testResult?.examName ??
+                                                            ''}}</span></p>
                                                 </div>
                                                 <div>
                                                     <p class="fs-14 fw-medium mb-2">Subject:</p>
                                                     <div class="d-flex gap-1 align-items-center">
-                                                        <div class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
-                                                            <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt="">
+                                                        <div
+                                                            class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
+                                                            <img src="./assets/images/crypto-currencies/regular/Ethereum.svg"
+                                                                alt="">
                                                         </div>
                                                         <h6 class="mb-0"> {{testResult?.subject ?? 'General'}}</h6>
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <p class="fs-14 fw-medium mb-2">Test Completed in :</p>
-                                                    <p class="nft-details-auction-time bg-light px-3 py-1 text-default rounded-pill mb-0 shadow-sm">
-                                                      <i class="ri-time-line"></i>
-                                                      {{ durationFormatted }}
+                                                    <p
+                                                        class="nft-details-auction-time bg-light px-3 py-1 text-default rounded-pill mb-0 shadow-sm">
+                                                        <i class="ri-time-line"></i>
+                                                        {{ durationFormatted }}
                                                     </p>
-                                                  </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -99,14 +111,16 @@
                                     <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
                                         <p class="mb-2 fs-15 fw-medium">Language:</p>
                                         <div class="d-flex align-items-center fw-medium">
-                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img src="./assets/images/nft-images/2.jpg" alt=""></span>
+                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img
+                                                    src="./assets/images/nft-images/2.jpg" alt=""></span>
                                             {{testResult?.language ?? ''}}
                                         </div>
                                     </div>
                                     <div class="col-xxl-2 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
                                         <p class="mb-2 fs-15 fw-medium">Difficulty:</p>
                                         <div class="d-flex align-items-center fw-medium">
-                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img src="./assets/images/faces/9.jpg" alt=""></span>
+                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img
+                                                    src="./assets/images/faces/9.jpg" alt=""></span>
                                             {{testResult?.difficulty ?? 'Medium'}}
                                         </div>
                                     </div>
@@ -114,16 +128,19 @@
                                         <p class="mb-2 fs-15 fw-medium">Test Created :</p>
                                         <span class="d-block fw-medium">
                                             {{ testResult?.createdAt | date:'dd, MMM yyyy - hh:mma' }}
-                                          </span>
+                                        </span>
                                     </div>
                                     <div class="col-xxl-4 col-xl-12">
                                         <p class="mb-2 fs-15 fw-medium">Total marks achieved:
                                         </p>
                                         <p class="mb-0">
                                             <span class="h3">
-                                                <span class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
-                                                    <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt=""></span>{{ testResult?.marksScored ?? 0 }} / {{ testResult?.totalMarks }}</span>
-                                                <span class="mb-0 text-muted fs-12">
+                                                <span
+                                                    class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
+                                                    <img src="./assets/images/crypto-currencies/regular/Ethereum.svg"
+                                                        alt=""></span>{{ testResult?.marksScored ?? 0 }} / {{
+                                                testResult?.totalMarks }}</span>
+                                            <span class="mb-0 text-muted fs-12">
                                             </span>
                                         </p>
                                     </div>
@@ -131,8 +148,12 @@
                                 <div class="row mt-4 align-items-end justify-content-between">
                                     <div class="col-xl-6">
                                         <div class="d-flex gap-1 mb-2 mb-xl-0">
-                                            <button *ngIf="testResult?.status === 'passed'" (click)="takeNewTest()" class="btn btn-primary mb-0 btn-wave flex-fill me-1 waves-effect waves-light">Take New Test</button>
-                                            <button *ngIf="testResult?.status != 'passed'" (click)="takeTestAgain()" class="btn btn-success mb-0 btn-wave flex-fill waves-effect waves-light">Take Test Again</button>
+                                            <button *ngIf="testResult?.status === 'passed'" (click)="takeNewTest()"
+                                                class="btn btn-primary mb-0 btn-wave flex-fill me-1 waves-effect waves-light">Take
+                                                New Test</button>
+                                            <button *ngIf="testResult?.status != 'passed'" (click)="takeTestAgain()"
+                                                class="btn btn-success mb-0 btn-wave flex-fill waves-effect waves-light">Take
+                                                Test Again</button>
                                         </div>
                                     </div>
                                     <!-- <div class="col-xl-3">
@@ -157,3 +178,49 @@
     </div>
 </div>
 <!--End::row-1 -->
+
+<div class="card custom-card">
+    <div class="card-header">
+        <div class="card-title">
+            Answer Details and Explanations
+        </div>
+    </div>
+    <div *ngIf="isLoading" class="header text-center">
+        <h4 style="text-align: center;">Loading Answers...</h4>
+        <app-test-skeleton-loader [displayFooter]="false" [displayProgress]="true" [totalQuestions]="0">
+        </app-test-skeleton-loader>
+    </div>
+    <div *ngIf="testResult && testResult.answers && !isLoading" class="card-body p-0 candidate-edu-timeline">
+        @for (ans of testResult.answers; track $index) {
+        <div class="p-3 border-bottom">
+            <div class="row">
+
+                <div class="col-xxl-10 col-xl-10 col-lg-8 col-md-9 col-7">
+                    <h5 class="fw-medium fs-17 d-flex align-items-center gap-2"><span
+                            class="avatar avatar-rounded bg-danger avatar-sm" [ngClass]="{'bg-success': ans.isCorrect}">
+                            <i class=" fs-13">{{ans.questionNo}}</i></span> Correct Answer : {{ans.correctOptionIds}}
+                    </h5>
+
+                </div>
+                <div class="col-xxl-2 col-xl-2 col-lg-4 col-md-3 col-5 mt-2">
+                    <a href="javascript:void(0);"
+                        class="ms-auto px-2 py-1 rounded-pill fs-12 bg-secondary-transparent" 
+                        [ngClass]="{'bg-success-transparent': ans.difficulty == 'Easy', 'bg-warning-transparent': ans.difficulty == 'Medium', 'bg-danger-transparent': ans.difficulty == 'Hard'}"><i
+                            class="ri-chat-1-line me-1"></i> {{ans.difficulty}}</a>
+                </div>
+            </div>
+
+
+            <div class="ms-4 ps-3">
+                <p class="h6 fw-medium fs-14">Explaination</p>
+                <p class="op-9">{{ans.explanation}}</p>
+            </div>
+
+        </div>
+        }
+        <div class="p-3 border-bottom">
+            <p>&nbsp;</p>
+        </div>
+
+    </div>
+</div>

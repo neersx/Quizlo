@@ -453,30 +453,23 @@ public class TestService : ITestService
                         }).FirstOrDefaultAsync(ct);
     }
 
-    public async Task<TestResultDto?> GetTestResultAsync(int id, CancellationToken ct = default)
-    {
-        return await _db.Tests.AsNoTracking().Include(t => t.Exam)
-                .Where(t => t.Id == id)
-                .Select(t => new TestResultDto
-                {
-                    Id = t.Id,
-                    Title = t.Title,
-                    Duration = (TimeSpan)t.Duration,
-                    CreatedAt = t.CreatedAt,
-                    ExamId = t.ExamId,
-                    ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
-                    Subject = t.Subject,
-                    Language = t.Language,
-                    Status = t.Status,
-                    MarksScored = t.MarksScored,
-                    TotalQuestions = (int)t.TotalQuestions,
-                    TotalMarks = t.TotalMarks,
-                    ExamName = t.Exam.Name,
-                    ExamCode = t.Exam.Code
-                })
-                .FirstOrDefaultAsync(ct);
-    }
+public async Task<TestResultDto?> GetTestResultAsync(int id, CancellationToken ct = default)
+{
+    var test = await _db.Tests
+        .AsNoTracking()
+        .Include(t => t.Exam)
+        .Include(t => t.TestQuestions)
+            .ThenInclude(tq => tq.Question)
+        .FirstOrDefaultAsync(t => t.Id == id, ct);
 
+    if (test == null)
+        return null;
+
+    var resultDto = _mapper.Map<TestResultDto>(test);
+    // resultDto.DurationCompltedIn = test.DurationCompletedIn;
+
+    return resultDto;
+}
 
     public async Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest req, CancellationToken ct = default)
     {
