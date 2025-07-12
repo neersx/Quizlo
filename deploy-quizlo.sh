@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#chmod +x ~/deploy-quizlo.sh
-#bash ~/deploy-quizlo.sh
+#chmod +x /var/www/quizlo/code/Quizlo/deploy-quizlo.sh
+#bash /var/www/quizlo/code/Quizlo/deploy-quizlo.sh
 
 #!/bin/bash
 
@@ -49,7 +49,7 @@ dotnet publish -c Release -o "$DEPLOY_DIR/api"
 # ---- BUILD ANGULAR SSR ----
 echo "🧱 Installing Angular dependencies..."
 cd "$CLIENT_DIR"
-npm install
+npm install --force
 
 echo "🏗️ Building Angular SSR (browser + server)..."
 npm run build:ssr
