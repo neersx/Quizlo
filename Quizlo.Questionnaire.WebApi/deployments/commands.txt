@@ -1,4 +1,5 @@
 sudo nano /etc/systemd/system/quizlo-api.service
+sudo nano /etc/systemd/system/quizlo-app.service
 sudo systemctl daemon-reload
 sudo systemctl enable quizlo-api.service
 sudo systemctl stop quizlo-api.service
@@ -6,6 +7,8 @@ sudo systemctl start quizlo-api.service
 sudo systemctl status quizlo-api.service
 
 ####
+
+NGINX - sudo nano /etc/nginx/conf.d/quizloai.com.conf
 
 # 1) Test your Nginx config
 sudo nginx -t
