@@ -156,7 +156,7 @@
       </div>
     </div>
 
-    <div *ngIf="isLoadingQuestions && testData.totalQuestions > 0"  class="loader-container">
+    <div *ngIf="isLoadingQuestions"  class="loader-container">
       <h5 style="text-align: center;">Ai is generating your questions...</h5>
       <app-test-skeleton-loader 
         [displayHeader]="false"
