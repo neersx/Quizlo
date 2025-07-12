@@ -5,10 +5,11 @@ import { SpkBlogImageCardComponent } from '../../../@spk/reusable-pages/spk-blog
 import { SharedModule } from '../../../shared/sharedmodule';
 import { BlogModel, BlogService } from '../blogs.service';
 import { CommonModule } from '@angular/common';
+import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
 
 @Component({
   selector: 'app-blogs-list',
-  imports: [CommonModule, SharedModule,RouterModule,CarouselModule,SpkBlogImageCardComponent], 
+  imports: [CommonModule, SharedModule,RouterModule,CarouselModule,SpkBlogImageCardComponent, GridLoader], 
   templateUrl: './blogs-list.html',
   styleUrl: './blogs-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -45,7 +46,14 @@ export class BlogsList implements OnInit {
   };
 
   activeSlides!: SlidesOutputData;
-
+  loading: boolean = false;
+  columns : any = [
+    { type: 'image', width: 40 },
+    { type: 'image', width: 20 },
+    { type: 'image', width: 20 },
+    { type: 'action', width: 15 },
+    { type: 'date', width: 30 }
+  ];
   constructor( private cdr: ChangeDetectorRef, private service: BlogService) {}
 
   ngOnInit(): void {
@@ -55,10 +63,11 @@ export class BlogsList implements OnInit {
   }
 
   getBlogs() {
+    this.loading = true;
     return this.service.getBlogs().subscribe((data) => {
       this.blogsList = data.filter((blog) => !blog.isFeatured);
       this.featuredBlogs = data.filter((blog) => blog.isFeatured);
-      console.log(this.featuredBlogs);
+      this.loading = false;
       this.cdr.detectChanges();
     })
   }

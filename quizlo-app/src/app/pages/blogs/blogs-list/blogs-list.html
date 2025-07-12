@@ -2,6 +2,8 @@
 
 <!-- Start:: row-1 -->
 <div class="row">
+    <app-grid-loader *ngIf="loading" [rowCount]="2" [columns]="columns" >
+    </app-grid-loader>
     <div class="col-xxl-9">
         <div class="row">
             <div class="col-xxl-5">
@@ -53,7 +55,7 @@
 
         </div>
     </div>
-    <div class="col-xxl-3">
+    <div *ngIf="!loading" class="col-xxl-3">
         <div class="row">
             <div class="col-xl-12">
                 <div class="card custom-card overflow-hidden">
