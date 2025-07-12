@@ -52,7 +52,7 @@ cd "$CLIENT_DIR"
 npm install --force
 
 echo "🏗️ Building Angular SSR (browser + server)..."
-npm run build:ssr
+ng build --configuration production     
 
 # ---- COPY ANGULAR BUILD ----
 echo "🚚 Copying Angular build to deployment folders..."
