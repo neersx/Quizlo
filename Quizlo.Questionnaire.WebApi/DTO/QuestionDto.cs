@@ -19,7 +19,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string CorrectOptionIds { get; set; }
 
         public string? SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
-        public bool IsCorrect { get; set; } = false;
+        public bool? IsCorrect { get; set; }
         [NotMapped]
         public bool IsMultipleSelect { get; set; }
         public double? Marks { get; init; }

@@ -111,16 +111,14 @@
                                     <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
                                         <p class="mb-2 fs-15 fw-medium">Language:</p>
                                         <div class="d-flex align-items-center fw-medium">
-                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img
-                                                    src="./assets/images/nft-images/2.jpg" alt=""></span>
+                                           
                                             {{testResult?.language ?? ''}}
                                         </div>
                                     </div>
                                     <div class="col-xxl-2 col-xl-6 col-lg-6 col-md-6 col-sm-12 mt-xxl-0 mt-3">
                                         <p class="mb-2 fs-15 fw-medium">Difficulty:</p>
                                         <div class="d-flex align-items-center fw-medium">
-                                            <span class="avatar avatar-sm avatar-rounded lh-1 me-1"><img
-                                                    src="./assets/images/faces/9.jpg" alt=""></span>
+                                           
                                             {{testResult?.difficulty ?? 'Medium'}}
                                         </div>
                                     </div>
@@ -196,8 +194,9 @@
             <div class="row">
 
                 <div class="col-xxl-10 col-xl-10 col-lg-8 col-md-9 col-7">
+                   
                     <h5 class="fw-medium fs-17 d-flex align-items-center gap-2"><span
-                            class="avatar avatar-rounded bg-danger avatar-sm" [ngClass]="{'bg-success': ans.isCorrect}">
+                            class="avatar avatar-rounded  avatar-sm" [ngClass]="{'bg-success': ans.isCorrect, 'bg-danger': ans.isCorrect === false, 'bg-warning': ans.isCorrect === null}">
                             <i class=" fs-13">{{ans.questionNo}}</i></span> Correct Answer : {{ans.correctOptionIds}}
                     </h5>
 

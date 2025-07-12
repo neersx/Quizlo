@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, effect, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,17 +6,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerPayload, SubmitTestRequest } from '../model/answer.model';
 import { TestService } from '../services/test-service';
 import { QuestionModel } from '../model/questions.model';
-import { GetTimeSpan } from '../../../utils/helpers/timespan.helper';
+import { getSecondsFromTimeSpan, GetTimeSpan } from '../../../utils/helpers/timespan.helper';
 import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
 import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
 import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys';
+import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
 
 type RawAnswers = Record<string, string | string[]>;
 type AnswerSignalType = { [key: string]: string | string[] };
 
 @Component({
   selector: 'app-test-window',
-  imports: [CommonModule, FormsModule, TestSkeletonLoader],
+  imports: [CommonModule, FormsModule, TestSkeletonLoader, GridLoader],
   templateUrl: './test-window.html',
   providers: [TestService],
   styleUrl: './test-window.scss',
@@ -45,6 +46,7 @@ export class TestWindow implements OnInit, OnDestroy {
   questions: QuestionModel[] = [];
   isLoadingTest = true;
   isLoadingQuestions = true;
+  submittingTest = false;
   testDetails: TestDetailsModel | undefined;
   // Reactive signals for state management
   answers = signal<{ [key: string]: string | string[] }>({});
@@ -75,6 +77,9 @@ export class TestWindow implements OnInit, OnDestroy {
       }
       this.loadTest();
       this.loadTestQuestions();
+      effect(() => {
+        console.log('⏳ Time Remaining C:', this.timeRemaining(), 'seconds');
+      });
     }
   }
 
@@ -82,7 +87,6 @@ export class TestWindow implements OnInit, OnDestroy {
   private timerInterval: any;
 
   ngOnInit(): void {
-
   }
 
   loadTestQuestions() {
@@ -313,6 +317,7 @@ export class TestWindow implements OnInit, OnDestroy {
   }
 
   submitTest(isAutoSubmit: boolean = false): void {
+    this.submittingTest = true;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
@@ -326,20 +331,17 @@ export class TestWindow implements OnInit, OnDestroy {
       rawAnswers: this.answers(),
       submissionTime: new Date().toISOString(),
       isAutoSubmit: isAutoSubmit,
-      durationCompletedIn: GetTimeSpan((70 * 60) - this.timeRemaining())
+      durationCompletedIn: GetTimeSpan(getSecondsFromTimeSpan(this.testDetails?.duration) - this.timeRemaining())
     };
-    console.log('payload:', payload);
-
-
 
     this.testService.submitTestAnswers(this.testId, payload).subscribe(
       (response: any) => {
-        // Mark test as submitted
         this.isTestSubmitted.set(true);
+        this.submittingTest = false;
         this.processSubmission(payload);
         this.localStorage.removeItem(LocalStorageKeys.UserTests);
+        this.resetTest();
         this.router.navigate(['/test/test-result', this.testId]);
-        console.log('Test submitted successfully:', response);
       },
       (error: any) => {
         console.error('Error submitting test:', error);
@@ -395,7 +397,7 @@ export class TestWindow implements OnInit, OnDestroy {
 
   resetTest(): void {
     this.answers.set({});
-    this.timeRemaining.set(70 * 60);
+    this.timeRemaining.set(40 * 60);
     this.isTestSubmitted.set(false);
     this.currentQuestionIndex.set(0);
     localStorage.removeItem('bitsat_answers');

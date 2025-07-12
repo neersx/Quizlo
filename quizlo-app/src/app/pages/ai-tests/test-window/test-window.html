@@ -137,6 +137,9 @@
         </div>
       </div>
 
+      <app-grid-loader *ngIf="submittingTest" [rowCount]="1">
+      </app-grid-loader>
+
       <!-- Submit Section -->
       <div class="row submit-container">
         <div class="submit-card">
@@ -153,10 +156,9 @@
       </div>
     </div>
 
-    <div *ngIf="isLoadingQuestions"  class="loader-container">
+    <div *ngIf="isLoadingQuestions && testData.totalQuestions > 0"  class="loader-container">
       <h5 style="text-align: center;">Ai is generating your questions...</h5>
       <app-test-skeleton-loader 
-        [variant]="currentVariant"
         [displayHeader]="false"
         [displayFooter]="true"
         [totalQuestions]="testData.totalQuestions > 0 ? testData.totalQuestions : 20">
