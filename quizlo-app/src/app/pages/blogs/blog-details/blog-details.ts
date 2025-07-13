@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule, isPlatformServer } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, TransferState } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { GalleryModule } from '@ks89/angular-modal-gallery';
 import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
@@ -10,7 +10,6 @@ import { LightboxModule, Lightbox } from 'ng-gallery/lightbox';
 import { BlogModel, BlogService } from '../blogs.service';
 import { FormLoader } from '../../../shared/common/loaders/form-loader/form-loader';
 import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
-
 const data = [
   {
     srcUrl: './assets/images/media/media-48.jpg',
@@ -50,6 +49,8 @@ const data = [
   },
 ];
 
+const BLOG_KEY = makeStateKey<any>('blog');
+
 @Component({
   selector: 'app-blog-details',
   imports: [SharedModule, RouterModule, GalleryModule, LightboxModule, OverlayscrollbarsModule, SpkGalleryComponent, CommonModule, GridLoader ],
@@ -71,8 +72,11 @@ export class BlogDetails implements OnInit, OnDestroy {
     { type: 'textarea' as const }
   ];
 
-  constructor(public gallery: Gallery, public lightbox: Lightbox,
+  constructor(public gallery: Gallery, 
+    public lightbox: Lightbox,
+    private state: TransferState,
     private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private service: BlogService, private route: ActivatedRoute) {
 
     this.route.params.subscribe((params) => {
@@ -81,26 +85,22 @@ export class BlogDetails implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    /** Basic Gallery Example */
 
-    // Creat gallery items
-    this.items = this.imageData.map(
-      (item) => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl })
-    );
+    if (this.state.hasKey(BLOG_KEY)) {
+      this.blog = this.state.get(BLOG_KEY, null as any);
+    } else {
+      this.loading = true;   
+       const blogName : string | null = this.route.snapshot.paramMap.get('name');
+      this.service.getBlogByName(blogName).subscribe((data) => {
+        this.blog = data;
+        this.loading = false;
+        if (isPlatformServer(this.platformId)) {
+          this.state.set(BLOG_KEY, data);
+        }
+        this.cdr.detectChanges();
+      });
+    }
 
-    /** Lightbox Example */
-
-    // Get a lightbox gallery ref
-    const lightboxRef = this.gallery.ref('lightbox');
-
-    // Add custom gallery config to the lightbox (optional)
-    lightboxRef.setConfig({
-      imageSize: ImageSize.Cover,
-      thumbPosition: ThumbnailsPosition.Top,
-    });
-
-    // Load items into the lightbox gallery ref
-    lightboxRef.load(this.items);
   }
 
   getBlogDetails(urlName: string) {
