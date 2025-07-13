@@ -1,13 +1,4 @@
-<!-- Start Switcher -->
-<ng-template #content let-offcanvas>
-    <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Switcher</h5>
-        <button type="button" (click)="offcanvas.dismiss('Cross click')" class="btn-close" data-bs-dismiss="offcanvas"
-            aria-label="Close"></button>
-    </div>
-    
-</ng-template>
-<!-- End Switcher -->
+
 
 <div class="landing-page-wrapper">
 
@@ -54,7 +45,7 @@
             <!-- Start::header-content-right -->
             <div class="header-content-right">
                 <!-- Start::header-element -->
-                <li class="header-element dropdown" ngbDropdown>
+                <li *ngIf="user" class="header-element dropdown" ngbDropdown>
                     <!-- Start::header-link|dropdown-toggle -->
                     <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle"
                         id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -67,7 +58,7 @@
                         </div>
                     </a>
                     <!-- End::header-link|dropdown-toggle -->
-                    <ul ngbDropdownMenu
+                    <ul  ngbDropdownMenu
                         class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end"
                         aria-labelledby="mainHeaderProfile">
                         <li>
@@ -168,11 +159,11 @@
                             <a routerLink="/auth/login" class="btn btn-wave btn-success">
                                 Sign Up
                             </a>
-                            <button (click)="openSwitcher(content)"
+                            <!-- <button (click)="openSwitcher(content)"
                                 class="btn btn-wave btn-icon btn-primary switcher-icon d-flex align-items-center justify-content-center"
                                 data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                                 <i class="ri-settings-3-line"></i>
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                 </nav>

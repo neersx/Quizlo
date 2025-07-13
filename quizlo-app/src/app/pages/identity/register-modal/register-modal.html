@@ -73,5 +73,5 @@
 </form>
 
 <div *ngIf="displayLogin">
-    <app-login-modal (onLoginSuccess)="onLoginSuccess($event)"></app-login-modal>
+    <app-login-modal (onLoginSuccess)="onLoginSuccess($event)" (onLoginFailed)="onLoginFailed($event)"></app-login-modal>
 </div>

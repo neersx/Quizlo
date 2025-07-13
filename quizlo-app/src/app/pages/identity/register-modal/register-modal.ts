@@ -99,6 +99,12 @@ export class RegisterModal implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  onLoginFailed(value: any) {
+    this.displayLogin = false;
+    this.activeModal.close({ isSuccess: false, data: value});
+    this.cdr.detectChanges();
+  }
+
   onSubmit(): void {
     this.submitted = true;
     if (this.registerForm.invalid) {

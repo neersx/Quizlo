@@ -38,6 +38,7 @@ export class LoginModal implements OnInit, OnDestroy {
   disabled = '';
   submitted = false;
   @Output() onLoginSuccess = new EventEmitter<boolean>();
+  @Output() onLoginFailed = new EventEmitter<boolean>();
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -93,6 +94,8 @@ export class LoginModal implements OnInit, OnDestroy {
       error: err => {
         const msg = err.error?.message || 'Login failed. Please try again.';
         this.toastr.error(msg, 'Login Error');
+        this._error = { name: "UnAuthorized User", message: "Incorrect email or password. Try gain!" }
+        this.onLoginFailed.emit(msg);
       }
     });
   }

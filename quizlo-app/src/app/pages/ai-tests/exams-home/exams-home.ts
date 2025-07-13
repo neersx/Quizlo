@@ -204,9 +204,10 @@ export class ExamsHome implements OnInit {
     const modalRef = this.modalService.open(RegisterModal, this.modalOptions);
   
     modalRef.closed.subscribe((result: any) => {
-      console.log('Closed with:', result);
       if(result.isSuccess){
         this.startTest();
+      } else {
+        console.log('Closed with error:', result);
       }
     });
   
