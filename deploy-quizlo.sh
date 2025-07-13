@@ -30,7 +30,7 @@ cd "$REPO_DIR"
 git reset --hard
 git fetch origin
 git checkout release
-git rebase/origin release
+git rebase origin/release
 
 # ---- BACKUP CURRENT DEPLOYMENT ----
 echo "🗂️ Creating backup at: $BACKUP_DIR"
