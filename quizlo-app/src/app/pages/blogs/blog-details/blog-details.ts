@@ -10,44 +10,8 @@ import { LightboxModule, Lightbox } from 'ng-gallery/lightbox';
 import { BlogModel, BlogService } from '../blogs.service';
 import { FormLoader } from '../../../shared/common/loaders/form-loader/form-loader';
 import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
-const data = [
-  {
-    srcUrl: './assets/images/media/media-48.jpg',
-    previewUrl: './assets/images/media/media-48.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-49.jpg',
-    previewUrl: './assets/images/media/media-49.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-50.jpg',
-    previewUrl: './assets/images/media/media-50.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-51.jpg',
-    previewUrl: './assets/images/media/media-51.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-52.jpg',
-    previewUrl: './assets/images/media/media-52.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-53.jpg',
-    previewUrl: './assets/images/media/media-53.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-54.jpg',
-    previewUrl: './assets/images/media/media-54.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-55.jpg',
-    previewUrl: './assets/images/media/media-55.jpg',
-  },
-  {
-    srcUrl: './assets/images/media/media-56.jpg',
-    previewUrl: './assets/images/media/media-56.jpg',
-  },
-];
+import { Meta, Title } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 
 const BLOG_KEY = makeStateKey<any>('blog');
 
@@ -59,7 +23,6 @@ const BLOG_KEY = makeStateKey<any>('blog');
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlogDetails implements OnInit, OnDestroy {
-  imageData = data;
   blog: BlogModel = {} as BlogModel;
   items!: GalleryItem[];
   loading: boolean = false;
@@ -74,18 +37,15 @@ export class BlogDetails implements OnInit, OnDestroy {
 
   constructor(public gallery: Gallery, 
     public lightbox: Lightbox,
+    private titleService: Title,
+    private metaService: Meta,
     private state: TransferState,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
     private service: BlogService, private route: ActivatedRoute) {
-
-    this.route.params.subscribe((params) => {
-      this.getBlogDetails(params['name']);
-    });
   }
 
   ngOnInit() {
-
     if (this.state.hasKey(BLOG_KEY)) {
       this.blog = this.state.get(BLOG_KEY, null as any);
     } else {
@@ -93,6 +53,7 @@ export class BlogDetails implements OnInit, OnDestroy {
        const blogName : string | null = this.route.snapshot.paramMap.get('name');
       this.service.getBlogByName(blogName).subscribe((data) => {
         this.blog = data;
+        this.setMetaTags(this.blog);
         this.loading = false;
         if (isPlatformServer(this.platformId)) {
           this.state.set(BLOG_KEY, data);
@@ -100,17 +61,8 @@ export class BlogDetails implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       });
     }
-
   }
 
-  getBlogDetails(urlName: string) {
-    this.loading = true;
-    this.service.getBlogByName(urlName).subscribe((data) => {
-      this.blog = data;
-      this.loading = false;
-      this.cdr.detectChanges();
-    });
-  }
 
   blogs = [
     {
@@ -178,6 +130,25 @@ export class BlogDetails implements OnInit, OnDestroy {
       color: 'text-danger'
     }
   ];
+
+  private setMetaTags(blog: BlogModel): void {
+    this.titleService.setTitle(blog.title);
+    
+    this.metaService.updateTag({ name: 'description', content: blog.summary });
+    this.metaService.updateTag({ name: 'keywords', content: blog.tags });
+
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: blog.title });
+    this.metaService.updateTag({ property: 'og:description', content: blog.summary });
+    this.metaService.updateTag({ property: 'og:image', content: blog.image.includes('http')? blog.image : `${environment.baseUrl}/${blog.image}` });
+    this.metaService.updateTag({ property: 'og:url', content: `https://quizloai.com/blogs/blog-details/${blog.link}` });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: blog.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: blog.summary });
+    this.metaService.updateTag({ name: 'twitter:image', content: blog.image.includes('http')? blog.image : `${environment.baseUrl}/${blog.image}` });
+  }
 
   categories = [
     { icon: 'ri-brush-fill', label: 'Desiging', count: 13, iconBgColor: 'bg-primary', bgColor: 'bg-primary-transparent', textColor: 'text-fixed-white' },
