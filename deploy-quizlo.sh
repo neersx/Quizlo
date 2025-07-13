@@ -27,9 +27,10 @@ sudo systemctl stop quizlo-app
 # ---- GIT SYNC ----
 echo "🔁 Switching to release branch and pulling latest..."
 cd "$REPO_DIR"
+git reset --hard
 git fetch origin
 git checkout release
-git pull origin release
+git rebase/origin release
 
 # ---- BACKUP CURRENT DEPLOYMENT ----
 echo "🗂️ Creating backup at: $BACKUP_DIR"

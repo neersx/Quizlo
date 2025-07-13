@@ -65,7 +65,8 @@ export class BlogService {
     return this.http.get<BlogModel>(`${this.baseUrl}/${id}`);
   }
 
-  getBlogByName(name: string): Observable<BlogModel> {
+  getBlogByName(name: string|null): Observable<BlogModel> {
+
     return this.http.get<BlogModel>(`${this.baseUrl}/details/${name}`);
   }
 
