@@ -36,69 +36,70 @@
             }
           },
           "configurations": {
-            "fileReplacements": [
-              {
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
-              }],
-              "production": {
-                "budgets": [
-                  {
-                    "type": "initial",
-                    "maximumWarning": "800kB",
-                    "maximumError": "10MB"
-                  },
-                  {
-                    "type": "anyComponentStyle",
-                    "maximumWarning": "8kB",
-                    "maximumError": "15kB"
-                  }
-                ],
-                "outputHashing": "all"
-              },
-              "development": {
-                "optimization": false,
-                "extractLicenses": false,
-                "sourceMap": true
-              }
-            },
-            "defaultConfiguration": "production"
-          },
-          "serve": {
-            "builder": "@angular/build:dev-server",
-            "configurations": {
-              "production": {
-                "buildTarget": "quizlo-app:build:production"
-              },
-              "development": {
-                "buildTarget": "quizlo-app:build:development"
-              }
-            },
-            "defaultConfiguration": "development"
-          },
-          "extract-i18n": {
-            "builder": "@angular/build:extract-i18n"
-          },
-          "test": {
-            "builder": "@angular/build:karma",
-            "options": {
-              "tsConfig": "tsconfig.spec.json",
-              "inlineStyleLanguage": "scss",
-              "assets": [
+            "production": {
+              "fileReplacements": [
                 {
-                  "glob": "**/*",
-                  "input": "public"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "styles": [
-                "src/styles.scss"
-              ]
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "800kB",
+                  "maximumError": "10MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "8kB",
+                  "maximumError": "15kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "quizlo-app:build:production"
+            },
+            "development": {
+              "buildTarget": "quizlo-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.scss"
+            ]
           }
         }
       }
-    },
-    "cli": {
-      "analytics": "7e971b99-e6a9-4cc4-8c73-f7c8eb7e4695"
     }
+  },
+  "cli": {
+    "analytics": "7e971b99-e6a9-4cc4-8c73-f7c8eb7e4695"
   }
+}
