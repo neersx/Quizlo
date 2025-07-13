@@ -86,8 +86,8 @@ const data = [
     FormsModule,
     NgbNavModule,
     AsyncPipe,
-    AsyncPipe,SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkProfileReusableCardComponent,SpkNgSelectComponent,SpkGalleryComponent,
-    GalleryModule,LightboxModule, OverlayscrollbarsModule,SpkNgSelectComponent,FormsModule,ReactiveFormsModule, EditProfile],
+    AsyncPipe,SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkGalleryComponent,
+    GalleryModule,LightboxModule,FormsModule,ReactiveFormsModule, EditProfile],
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

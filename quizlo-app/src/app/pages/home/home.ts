@@ -35,6 +35,7 @@ import { SpkLandingFeaturesComponent } from '../../@spk/reusable-pages/spk-landi
 import { SpkLandingServicesCardComponent } from '../../@spk/reusable-pages/spk-landing-services-card/spk-landing-services-card.component';
 import { SpkLandingTeamCardComponent } from '../../@spk/reusable-pages/spk-landing-team-card/spk-landing-team-card.component';
 import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-landing-testimonial/spk-landing-testimonial.component';
+import { PlatformService } from '../../utils/platform.service';
 
 @Component({
   selector: 'app-home',
@@ -61,14 +62,13 @@ import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-la
 })
 export class HomeComponent {
   isYearly: boolean = false;
-  localdata: any = localStorage;
   loading: boolean = false;
-  
+
   get WindowPreSize(): number[] {
     return [window.innerWidth];
   }
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
- 
+
   thumbsSwiper: any;
   constructor(
     public renderer: Renderer2,
@@ -76,9 +76,12 @@ export class HomeComponent {
     private el: ElementRef,
     private elementRef: ElementRef,
     private sanitizer: DomSanitizer,
-    private viewScroller: ViewportScroller
+    private viewScroller: ViewportScroller,
+    private platform: PlatformService
   ) {
-    if (this.isBrowser) {
+    const doc = this.platform.getDocument();
+    if (doc) {
+      console.log(doc.title);
       // Safe to use `document` here
       document.body.classList.add('landing-body');
       const htmlElement =
@@ -102,7 +105,7 @@ export class HomeComponent {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
   @ViewChild('swiperContainer1') swiperContainer1!: ElementRef;
 
- 
+
   private offcanvasService = inject(NgbOffcanvas);
   openSwitcher(content: any) {
     this.offcanvasService.open(content, { position: 'end' });
@@ -195,13 +198,13 @@ export class HomeComponent {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-     if(this.isBrowser) 
-    this.scrolled = window.scrollY > 10;
+    if (this.isBrowser)
+      this.scrolled = window.scrollY > 10;
     const sections = this.el.nativeElement.querySelectorAll('.side-menu__item');
     const scrollPos =
       this.isBrowser ? window.scrollY ||
-      this.elementRef.nativeElement.ownerDocument.documentElement.scrollTop ||
-      document.body.scrollTop: "10";
+        this.elementRef.nativeElement.ownerDocument.documentElement.scrollTop ||
+        document.body.scrollTop : "10";
     sections.forEach((el: any, i: string | number) => {
       const currLink = sections[i];
       const val: any = currLink.getAttribute('value');
@@ -226,9 +229,9 @@ export class HomeComponent {
     });
     let number =
       this.isBrowser ? window.pageYOffset ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
-      0: 0;
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0 : 0;
     if (number > 100) {
       this.show = true;
     } else {
@@ -266,7 +269,7 @@ export class HomeComponent {
     if (this.isBrowser) this.localStorageBackUp();
   }
   ngOnDestroy(): void {
-    document.body.classList.remove('landing-body');
+    this.platform.getDocument()?.body.classList.remove('landing-body');
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'data-nav-layout', 'vertical');
@@ -275,12 +278,12 @@ export class HomeComponent {
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'data-header-styles', type1);
-    if(this.isBrowser) {
-    localStorage.setItem('zenoHeader', type1);
-    this.renderer.setAttribute(htmlElement, 'data-menu-styles', type1);
-    localStorage.setItem('zenoMenu', type1);
-    this.renderer.setAttribute(htmlElement, 'data-theme-mode', type1);
-    localStorage.setItem('zenodarktheme', type1);
+    if (this.isBrowser) {
+      localStorage.setItem('zenoHeader', type1);
+      this.renderer.setAttribute(htmlElement, 'data-menu-styles', type1);
+      localStorage.setItem('zenoMenu', type1);
+      this.renderer.setAttribute(htmlElement, 'data-theme-mode', type1);
+      localStorage.setItem('zenodarktheme', type1);
     }
   }
 
@@ -297,7 +300,7 @@ export class HomeComponent {
     const htmlElement =
       this.elementRef.nativeElement.ownerDocument.documentElement;
     this.renderer.setAttribute(htmlElement, 'dir', type);
-    if(this.isBrowser) localStorage.setItem('dir', type);
+    if (this.isBrowser) localStorage.setItem('dir', type);
   }
 
   //Theme Primary
@@ -306,8 +309,10 @@ export class HomeComponent {
       '--primary-rgb',
       type
     );
-     if(this.isBrowser) {localStorage.setItem('zeno-primary-mode', type);
-    localStorage.removeItem('zenolight-primary-color');}
+    if (this.isBrowser) {
+      localStorage.setItem('zeno-primary-mode', type);
+      localStorage.removeItem('zenolight-primary-color');
+    }
   }
 
   //reset switcher
@@ -475,162 +480,162 @@ export class HomeComponent {
       content: 'Conveniently schedule your tests and receive timely reminders through email and WhatsApp notifications.'
     }
   ];
-  
 
- servicecards = [
-  {
-    image: '../../assets/images/exams/neet.jpg',
-    title: 'NEET UG',
-    description: 'AI-generated full-length NEET mocks with real-exam timing, section-wise breakdown, and instant score reports.',
-  },
 
-  {
-    image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/7.png',
-    title: 'SSC CGL',
-    description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
-  },
-  {
-    image: '../../assets/images/exams/ibps-po.jpg',
-    title: 'IBPS PO',
-    description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
-  },
+  servicecards = [
+    {
+      image: '../../assets/images/exams/neet.jpg',
+      title: 'NEET UG',
+      description: 'AI-generated full-length NEET mocks with real-exam timing, section-wise breakdown, and instant score reports.',
+    },
 
-  {
-    image: '../../assets/images/exams/upsc.jpg',
-    title: 'UPSC Civil Services',
-    description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
-  },
-  {
-    image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/6.png',
-    title: 'JEE Main',
-    description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
-  },
-  {
-    image: '../../assets/images/exams/ctat.jpg',
-    title: 'CTAT',
-    description: 'Our tests are crafted preciously for Central govt. Teacher Aptitude Test (CTAT) mock exams.',
-  },
-  {
-    image: '../../assets/images/exams/rbi.jpg',
-    title: 'RBI Grade B',
-    description: 'Fully automated RBI Grade B practice tests, seamless UI, and AI-backed topic-wise analytics.',
-  },
-  {
-    image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/2.png',
-    title: 'GATE',
-    description: 'AI-powered GATE mock exams with strict time limits, sectional scoring and instant performance dashboards.',
-  },
-];
+    {
+      image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/7.png',
+      title: 'SSC CGL',
+      description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
+    },
+    {
+      image: '../../assets/images/exams/ibps-po.jpg',
+      title: 'IBPS PO',
+      description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
+    },
 
- featuresCard = [
-  {
-    iconClass: 'bi bi-brightness-alt-high',
-    title: 'AI-Generated Question Bank',
-    description: 'Endless, exam-accurate questions created on-the-fly by our AI engine.',
-    textColorClass: 'text-primary',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-speedometer2',
-    title: 'Real-Exam Interface',
-    description: 'Full-screen timed tests that replicate the look & feel of the official exams.',
-    textColorClass: 'text-secondary',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-bar-chart-line',
-    title: 'Instant Performance Analytics',
-    description: 'Detailed topic-wise reports and percentile ranking delivered immediately.',
-    textColorClass: 'text-info',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-sliders',
-    title: 'Adaptive Difficulty',
-    description: 'Questions dynamically adjust in real-time based on your mastery level.',
-    textColorClass: 'text-warning',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-clock-history',
-    title: 'Custom Test Scheduling',
-    description: 'Create recurring mock-test schedules with calendar reminders and streak tracking.',
-    textColorClass: 'text-danger',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-book-half',
-    title: 'Detailed Solutions & Explanations',
-    description: 'Step-by-step answer breakdowns with references to key concepts.',
-    textColorClass: 'text-success',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-phone',
-    title: 'Mobile-Responsive & Offline Mode',
-    description: 'Practice anytime, anywhere—offline downloads let you prep without internet.',
-    textColorClass: 'text-pink',
-    cardClass: 'bg-image add-class',
-  },
-  {
-    iconClass: 'bi bi-people',
-    title: 'Peer-Comparison & Leaderboards',
-    description: 'See how you stack up against fellow aspirants in real-time leaderboards.',
-    textColorClass: 'text-purple',
-    cardClass: 'bg-image add-class',
-  },
-];
+    {
+      image: '../../assets/images/exams/upsc.jpg',
+      title: 'UPSC Civil Services',
+      description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
+    },
+    {
+      image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/6.png',
+      title: 'JEE Main',
+      description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
+    },
+    {
+      image: '../../assets/images/exams/ctat.jpg',
+      title: 'CTAT',
+      description: 'Our tests are crafted preciously for Central govt. Teacher Aptitude Test (CTAT) mock exams.',
+    },
+    {
+      image: '../../assets/images/exams/rbi.jpg',
+      title: 'RBI Grade B',
+      description: 'Fully automated RBI Grade B practice tests, seamless UI, and AI-backed topic-wise analytics.',
+    },
+    {
+      image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/2.png',
+      title: 'GATE',
+      description: 'AI-powered GATE mock exams with strict time limits, sectional scoring and instant performance dashboards.',
+    },
+  ];
 
-reviews = [
-  {
-    name: 'Priya Sharma',
-    email: 'priyasharma123@gmail.com',
-    avatar: './assets/images/faces/1.jpg',
-    review: 'I just finished my NEET mock test on Quizlo Ai and it was super smooth! The questions felt real and the timer feature gave exam-like pressure. Loved it!',
-    rating: 5,
-    daysAgo: '3 days ago',
-  },
-  {
-    name: 'Rahul Verma',
-    email: 'rahulvme95@gmail.com',
-    avatar: './assets/images/faces/5.jpg',
-    review: 'This is the first time I actually enjoyed giving an online test. The UI is clean, and it was easy to switch between questions. Great experience!',
-    rating: 5,
-    daysAgo: '6 days ago',
-  },
-  {
-    name: 'Sneha Patil',
-    email: 'snehapatil87@gmail.com',
-    avatar: './assets/images/faces/3.jpg',
-    review: 'I liked that I could choose the difficulty and subject before starting the test. It really helped me revise in a focused way.',
-    rating: 4.5,
-    daysAgo: '1 week ago',
-  },
-  {
-    name: 'Arjun Nair',
-    email: 'arjun.nair21@gmail.com',
-    avatar: './assets/images/faces/9.jpg',
-    review: 'The questions felt like real UPSC level. Also loved the performance analysis at the end. Felt like a real exam simulation!',
-    rating: 5,
-    daysAgo: '2 weeks ago',
-  },
-  {
-    name: 'Megha Rajput',
-    email: 'megharajput05@gmail.com',
-    avatar: './assets/images/faces/8.jpg',
-    review: 'Tried Quizlo Ai for SSC prep. Amazing interface and the timer keeps you alert. Also loved the way results are shared!',
-    rating: 4.5,
-    daysAgo: '5 days ago',
-  },
-  {
-    name: 'Karan Yadav',
-    email: 'karan.yadav88@gmail.com',
-    avatar: './assets/images/faces/10.jpg',
-    review: 'After taking the mock test here, I felt more confident. The option to share test scores with friends is a cool feature!',
-    rating: 5,
-    daysAgo: '4 days ago',
-  },
-];
+  featuresCard = [
+    {
+      iconClass: 'bi bi-brightness-alt-high',
+      title: 'AI-Generated Question Bank',
+      description: 'Endless, exam-accurate questions created on-the-fly by our AI engine.',
+      textColorClass: 'text-primary',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-speedometer2',
+      title: 'Real-Exam Interface',
+      description: 'Full-screen timed tests that replicate the look & feel of the official exams.',
+      textColorClass: 'text-secondary',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-bar-chart-line',
+      title: 'Instant Performance Analytics',
+      description: 'Detailed topic-wise reports and percentile ranking delivered immediately.',
+      textColorClass: 'text-info',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-sliders',
+      title: 'Adaptive Difficulty',
+      description: 'Questions dynamically adjust in real-time based on your mastery level.',
+      textColorClass: 'text-warning',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-clock-history',
+      title: 'Custom Test Scheduling',
+      description: 'Create recurring mock-test schedules with calendar reminders and streak tracking.',
+      textColorClass: 'text-danger',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-book-half',
+      title: 'Detailed Solutions & Explanations',
+      description: 'Step-by-step answer breakdowns with references to key concepts.',
+      textColorClass: 'text-success',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-phone',
+      title: 'Mobile-Responsive & Offline Mode',
+      description: 'Practice anytime, anywhere—offline downloads let you prep without internet.',
+      textColorClass: 'text-pink',
+      cardClass: 'bg-image add-class',
+    },
+    {
+      iconClass: 'bi bi-people',
+      title: 'Peer-Comparison & Leaderboards',
+      description: 'See how you stack up against fellow aspirants in real-time leaderboards.',
+      textColorClass: 'text-purple',
+      cardClass: 'bg-image add-class',
+    },
+  ];
+
+  reviews = [
+    {
+      name: 'Priya Sharma',
+      email: 'priyasharma123@gmail.com',
+      avatar: './assets/images/faces/1.jpg',
+      review: 'I just finished my NEET mock test on Quizlo Ai and it was super smooth! The questions felt real and the timer feature gave exam-like pressure. Loved it!',
+      rating: 5,
+      daysAgo: '3 days ago',
+    },
+    {
+      name: 'Rahul Verma',
+      email: 'rahulvme95@gmail.com',
+      avatar: './assets/images/faces/5.jpg',
+      review: 'This is the first time I actually enjoyed giving an online test. The UI is clean, and it was easy to switch between questions. Great experience!',
+      rating: 5,
+      daysAgo: '6 days ago',
+    },
+    {
+      name: 'Sneha Patil',
+      email: 'snehapatil87@gmail.com',
+      avatar: './assets/images/faces/3.jpg',
+      review: 'I liked that I could choose the difficulty and subject before starting the test. It really helped me revise in a focused way.',
+      rating: 4.5,
+      daysAgo: '1 week ago',
+    },
+    {
+      name: 'Arjun Nair',
+      email: 'arjun.nair21@gmail.com',
+      avatar: './assets/images/faces/9.jpg',
+      review: 'The questions felt like real UPSC level. Also loved the performance analysis at the end. Felt like a real exam simulation!',
+      rating: 5,
+      daysAgo: '2 weeks ago',
+    },
+    {
+      name: 'Megha Rajput',
+      email: 'megharajput05@gmail.com',
+      avatar: './assets/images/faces/8.jpg',
+      review: 'Tried Quizlo Ai for SSC prep. Amazing interface and the timer keeps you alert. Also loved the way results are shared!',
+      rating: 4.5,
+      daysAgo: '5 days ago',
+    },
+    {
+      name: 'Karan Yadav',
+      email: 'karan.yadav88@gmail.com',
+      avatar: './assets/images/faces/10.jpg',
+      review: 'After taking the mock test here, I felt more confident. The option to share test scores with friends is a cool feature!',
+      rating: 5,
+      daysAgo: '4 days ago',
+    },
+  ];
 
 
   eventTriggered: boolean = false;
@@ -638,8 +643,8 @@ reviews = [
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.menuResizeFn();
-    if(this.isBrowser) 
-    this.screenWidth = window.innerWidth;
+    if (this.isBrowser)
+      this.screenWidth = window.innerWidth;
 
     // Check if the event hasn't been triggered and the screen width is less than or equal to your breakpoint
     if (!this.eventTriggered && this.screenWidth <= 992) {
@@ -652,11 +657,11 @@ reviews = [
     }
   }
 
-  
+
   menuResizeFn(): void {
     if (this.isBrowser) {
       this.WindowPreSize.push(window.innerWidth);
-      }
+    }
 
     if (this.WindowPreSize.length > 2) {
       this.WindowPreSize.shift();
