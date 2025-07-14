@@ -6,7 +6,7 @@ using Quizlo.Questionnaire.WebApi.DTO;
 
 public interface IBlogService
 {
-    Task<IEnumerable<BlogDto>> GetAllAsync();
+    Task<IEnumerable<BlogListDto>> GetAllAsync();
     Task<IEnumerable<BlogDto>> GetAllAsync(string status);
     Task<BlogDto> GetByIdAsync(long id);
     Task<BlogDto> GetByLinkAsync(string link);
@@ -24,11 +24,11 @@ public class BlogService : IBlogService
         _db = db;
         _mapper = mapper;
     }
-    public async Task<IEnumerable<BlogDto>> GetAllAsync()
+    public async Task<IEnumerable<BlogListDto>> GetAllAsync()
     {
         return await _db.Blogs.Where(b => b.Status == "Published")
-            .OrderByDescending(b => b.CreatedAt)
-            .ProjectTo<BlogDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<BlogListDto>(_mapper.ConfigurationProvider)
+            .OrderByDescending(b => b.Id)
             .ToListAsync();
     }
 
@@ -54,7 +54,7 @@ public class BlogService : IBlogService
         return _mapper.Map<BlogDto>(entity);
     }
 
-      public async Task<Blog> CreateAsync(BlogCreateDto dto)
+    public async Task<Blog> CreateAsync(BlogCreateDto dto)
     {
         var blog = _mapper.Map<Blog>(dto);
         _db.Set<Blog>().Add(blog);

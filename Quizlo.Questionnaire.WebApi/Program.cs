@@ -7,6 +7,7 @@ using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Data.Seed;
 using Quizlo.Questionnaire.WebApi.DTO;
+using Quizlo.Questionnaire.WebApi.Helpers;
 using Quizlo.Questionnaire.WebApi.MapProfiles;
 using Quizlo.Questionnaire.WebApi.Services;
 using System.Text;
@@ -56,6 +57,8 @@ builder.Services.AddAutoMapper(typeof(TestProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(QuestionsProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(BlogProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(BlogMappingProfile).Assembly);
+builder.Services.AddTransient<PrependBaseUrlResolver>();
+builder.Services.AddAutoMapper(typeof(BlogListMappingProfile).Assembly);
 
 
 // 5. Register your services
