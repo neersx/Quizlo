@@ -4,7 +4,6 @@ import {
   ElementRef,
   HostListener,
   Renderer2,
-  TemplateRef,
   ViewChild,
   PLATFORM_ID,
   inject,
@@ -34,9 +33,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SpkLandingAboutComponent } from '../../@spk/reusable-pages/spk-landing-about/spk-landing-about.component';
 import { SpkLandingFeaturesComponent } from '../../@spk/reusable-pages/spk-landing-features/spk-landing-features.component';
 import { SpkLandingServicesCardComponent } from '../../@spk/reusable-pages/spk-landing-services-card/spk-landing-services-card.component';
-import { SpkLandingTeamCardComponent } from '../../@spk/reusable-pages/spk-landing-team-card/spk-landing-team-card.component';
 import { SpkLandingTestimonialComponent } from '../../@spk/reusable-pages/spk-landing-testimonial/spk-landing-testimonial.component';
 import { AuthService } from '../../services/identity/auth.service';
+import { GridLoader } from '../../shared/common/loaders/grid-loader/grid-loader';
 
 
 @Component({
@@ -48,13 +47,12 @@ import { AuthService } from '../../services/identity/auth.service';
     FormsModule,
     NgbModule,
     SpkLandingTestimonialComponent,
-    // SpkLandingTeamCardComponent,
     SpkLandingAboutComponent,
     SpkLandingFeaturesComponent,
     NgxColorsModule,
     NgbAccordionModule,
     CarouselModule,
-
+    GridLoader,
     SpkLandingServicesCardComponent,
   ],
   providers: [NgbOffcanvas],
@@ -65,6 +63,16 @@ import { AuthService } from '../../services/identity/auth.service';
 export class MainQuizLayoutComponent implements OnInit {
   isYearly: boolean = false;
   user: any;
+  loading: boolean = true;
+  columns : any = [
+    { type: 'image', width: 30},
+    { type: 'avatar', width: 10 },
+    { type: 'text', width: 30 },
+    { type: 'text', width: 25 },
+    { type: 'date', width: 20 },
+    { type: 'status', width: 10 },
+    { type: 'action', width: 5 }
+  ];
 
   get WindowPreSize(): number[] {
     return [window.innerWidth];
@@ -95,10 +103,6 @@ export class MainQuizLayoutComponent implements OnInit {
       this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
       this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
       this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
-    }
-
-    this.getCurrentUser();
-
     // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
     // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
     // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
@@ -107,6 +111,11 @@ export class MainQuizLayoutComponent implements OnInit {
     // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
     // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
     // this.renderer.removeAttribute(htmlElement, 'light-rgb');
+    }
+
+    this.getCurrentUser();
+
+
   }
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
   @ViewChild('swiperContainer1') swiperContainer1!: ElementRef;
@@ -129,6 +138,7 @@ export class MainQuizLayoutComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
       this.user = currentUser;
+      this.loading = false;
     }
   }
 
