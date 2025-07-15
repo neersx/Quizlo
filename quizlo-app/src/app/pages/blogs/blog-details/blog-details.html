@@ -178,7 +178,7 @@
                                   <img [src]="blog.image" class="img-fluid" [alt]="blog.title">
                                 </span>
                                 <div class="flex-fill">
-                                  <a [routerLink]="'/blog-details/' + blog.link" class="fs-14 mb-0" [ngClass]="blog.color">{{ blog.category }}</a>
+                                  <a [href]="blog.link" class="fs-14 mb-0" [ngClass]="blog.color">{{ blog.category }}</a>
                                   <p class="mb-1 popular-blog-content text-truncate fw-medium">{{ blog.title }}</p>
                                   <span class="text-muted fs-12">{{ blog.date }}</span>
                                 </div>

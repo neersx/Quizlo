@@ -73,15 +73,6 @@ export class BlogsList implements OnInit {
     })
   }
 
-  slidesStore: any[] = [
-    {
-      src: 'https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp',
-    },
-    {
-      src: 'https://nationaltestprep.org/wp-content/uploads/2024/01/A_digital_illustration_of_a_student_standing_confide_00f0570a-9c78-47d7-a07a-81e20c3e2232-1080x614.webp',
-    },
-  ];
-
   getPassedData(data: SlidesOutputData) {
     this.activeSlides = data;
     this.cdr.detectChanges();

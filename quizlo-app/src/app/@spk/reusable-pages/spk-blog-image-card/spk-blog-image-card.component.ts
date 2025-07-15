@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TruncateWordsPipe } from '../../../utils/pipes/truncate-words.pipe';
 
@@ -8,9 +8,10 @@ import { TruncateWordsPipe } from '../../../utils/pipes/truncate-words.pipe';
   standalone: true,
   imports: [RouterModule,CommonModule, TruncateWordsPipe],
   templateUrl: './spk-blog-image-card.component.html',
-  styleUrl: './spk-blog-image-card.component.scss'
+  styleUrl: './spk-blog-image-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SpkBlogImageCardComponent {
+export class SpkBlogImageCardComponent implements OnInit {
   @Input() imageUrl: string = '';
   @Input() title: string = '';
   @Input() imageClass: string = '';
@@ -25,5 +26,11 @@ export class SpkBlogImageCardComponent {
   @Input() badge: string = ''; // Optional offer or discount badge
   @Input() badgeColor: string = ''; 
   @Input() link: string = ''; 
+
+  constructor( private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.cdr.detectChanges();
+  }
 
 }
