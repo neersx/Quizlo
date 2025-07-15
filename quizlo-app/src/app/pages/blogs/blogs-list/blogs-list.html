@@ -4,12 +4,12 @@
 <div class="row">
     <app-grid-loader *ngIf="loading" [rowCount]="2" [columns]="columns">
     </app-grid-loader>
-    <div class="col-xxl-9">
+    <div class="col-xl-9">
         <div class="row">
-            <div class="col-xxl-5">
+            <div class="col-xl-5">
                 <div class="row">
                     @for (blog of featuredBlogs; track $index) {
-                    <div class="col-xl-12">
+                    <div class="col-xl-12 col-lg-6 col-md-6">
                         <div class="card custom-card overflow-hidden">
                             <div class="card-body p-0">
                                 <a [href]="blog.link"
@@ -46,10 +46,10 @@
                     }
                 </div>
             </div>
-            <div class="col-xxl-7">
+            <div class="col-xl-7">
                 <div *ngIf="blogsList && blogsList.length > 0" class="row">
                     @for (post of blogsList; track $index) {
-                    <div class="col-xl-6">
+                    <div class="col-xl-6 col-lg-6 col-md-6">
                         <spk-blog-image-card [imageUrl]="post.image" [imageClass]="post.imageClass" [title]="post.title"
                             [pageStyleClass]="post.pageStyleClass" [description]="post.summary" [link]="post.link"
                             [author]="post.author" [TextColor]="post.textColor" [authorImageUrl]="post.avatar"
@@ -62,7 +62,7 @@
 
         </div>
     </div>
-    <div *ngIf="!loading" class="col-xxl-3">
+    <div *ngIf="!loading" class="col-xl-3">
         <div class="row">
             <div class="col-xl-12">
                 <div class="card custom-card overflow-hidden">
