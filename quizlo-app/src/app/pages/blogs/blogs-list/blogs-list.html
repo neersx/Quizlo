@@ -14,9 +14,9 @@
                             <div class="card-body p-0">
                                 <img [src]="blog.image" class="d-block w-100"  [alt]="blog.title">
                                 <div class="p-3">
-                                    <h5 class="fw-semibold lh-base"><a [routerLink]="'blog-details/'+blog.link">{{blog.title}}</a></h5>
+                                    <h5 class="fw-semibold lh-base"><a [routerLink]="blog.link">{{blog.title}}</a></h5>
                                     <p class="mb-3">{{blog.summary}}
-                                        <a  [routerLink]="'blog-details/'+blog.link" class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read
+                                        <a  [routerLink]="blog.link" class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read
                                             More</a></p>
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                                         <div class="d-flex align-items-center flex-wrap gap-1">
