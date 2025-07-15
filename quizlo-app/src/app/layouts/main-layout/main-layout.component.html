@@ -3,7 +3,7 @@
 <div class="landing-page-wrapper">
 
     <!-- app-header -->
-    <header *ngIf="!loading" class="app-header">
+    <header  class="app-header">
 
         <!-- Start::main-header-container -->
         <div class="main-header-container container-fluid">
@@ -87,10 +87,9 @@
 
     </header>
     <!-- /app-header -->
-    <app-grid-loader *ngIf="loading" [rowCount]="2" [columns]="columns" >
-    </app-grid-loader>
+
     <!-- Start::app-sidebar -->
-    <aside *ngIf="!loading" [ngClass]="{ 'data-toggled': isDataToggled }" class="app-sidebar sticky" id="sidebar"
+    <aside [ngClass]="{ 'data-toggled': isDataToggled }" class="app-sidebar sticky" id="sidebar"
         [ngClass]="{ 'sticky-pin': scrolled }" style="margin-bottom: -64px">
         <div class="container-xl">
             <!-- Start::main-sidebar -->
@@ -177,7 +176,7 @@
     <!-- End::app-sidebar -->
 
     <!-- Start::app-sidebar -->
-    <aside *ngIf="!loading"  [ngClass]="{ 'data-toggled': isDataToggled }" class="app-sidebar sticky" id="sidebar"
+    <aside  [ngClass]="{ 'data-toggled': isDataToggled }" class="app-sidebar sticky" id="sidebar"
         [ngClass]="{ 'sticky-pin': scrolled }" style="margin-bottom: -64px">
         <div class="container-xl">
             <!-- Start::main-sidebar -->

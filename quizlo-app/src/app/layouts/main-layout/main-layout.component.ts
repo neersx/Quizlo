@@ -63,7 +63,6 @@ import { GridLoader } from '../../shared/common/loaders/grid-loader/grid-loader'
 export class MainQuizLayoutComponent implements OnInit {
   isYearly: boolean = false;
   user: any;
-  loading: boolean = true;
   columns : any = [
     { type: 'avatar', width: 10 },
     { type: 'text', width: 30 },
@@ -137,7 +136,7 @@ export class MainQuizLayoutComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
       this.user = currentUser;
-      this.loading = false;
+
     }
   }
 
