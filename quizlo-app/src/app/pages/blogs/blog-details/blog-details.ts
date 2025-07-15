@@ -63,6 +63,10 @@ export class BlogDetails implements OnInit, OnDestroy {
     }
   }
 
+  openCommentModal(blog: any) {
+    
+  }
+
 
   blogs = [
     {

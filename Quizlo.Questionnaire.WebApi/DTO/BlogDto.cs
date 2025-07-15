@@ -90,10 +90,10 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                                ? null
                                : (src.ImageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                                    ? src.ImageUrl
-                                   : $"http://localhost:4200/{src.ImageUrl}")))
+                                   : $"https://quizloai.com/{src.ImageUrl}")))
 
               .ForMember(dest => dest.Link,
-                       opt => opt.MapFrom(src => $"http://localhost:4200/blogs/blog-details/{src.SharedLink}"));
+                       opt => opt.MapFrom(src => $"https://quizloai.com/blogs/blog-details/{src.SharedLink}"));
         }
     }
 
@@ -137,7 +137,12 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                 .ForMember(dest => dest.Summary,
                            opt => opt.MapFrom(src => src.Summary))
                 .ForMember(dest => dest.Image,
-                           opt => opt.MapFrom(src => src.ImageUrl))
+                       opt => opt.MapFrom(src =>
+                           string.IsNullOrWhiteSpace(src.ImageUrl)
+                               ? null
+                               : (src.ImageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                                   ? src.ImageUrl
+                                   : $"https://quizloai.com/{src.ImageUrl}")))           
                 .ForMember(dest => dest.Author,
                            opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Date,
@@ -153,9 +158,9 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                 .ForMember(dest => dest.IsFeatured,
                             opt => opt.MapFrom(src => src.IsFeatured))
                 .ForMember(dest => dest.Avatar,
-                           opt => opt.MapFrom(_ => "./assets/images/faces/5.jpg"))
+                           opt => opt.MapFrom(_ => "/assets/images/faces/5.jpg"))
                 .ForMember(dest => dest.Link,
-                           opt => opt.MapFrom(src => src.SharedLink));
+                       opt => opt.MapFrom(src => $"https://quizloai.com/blogs/blog-details/{src.SharedLink}"));
         }
 
         private static string GenerateSlug(string phrase)

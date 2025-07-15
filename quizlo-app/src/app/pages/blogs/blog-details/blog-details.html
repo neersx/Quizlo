@@ -16,10 +16,11 @@
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <p class="h5 fw-semibold mb-0">{{blog?.title}}</p>
                           
-                            <div class="btn-list">
-                                <button class="btn btn-sm btn-info-light btn-wave"><i class="ri-thumb-up-line"></i> Like</button>
-                                <button class="btn btn-sm btn-secondary-light btn-wave"><i class="ri-share-line"></i> Share</button>
-                                <button class="btn btn-sm btn-info-light btn-wave"><i class="ri-message-square-line"></i> Comment</button>
+                            <div *ngIf="blog" class="btn-list">
+                                <a type="button" target="_blank" [href]="'https://www.facebook.com/sharer/sharer.php?u='+blog.link" class="btn btn-icon btn-facebook btn-wave ng-star-inserted"><i class="ri-facebook-line"></i></a>
+                                <a type="button" target="_blank" [href]="'https://twitter.com/intent/tweet?text='+blog.title + ' - ' + blog.link" class="btn btn-icon btn-twitter btn-wave ng-star-inserted"><i class="ri-twitter-x-line"></i></a>
+                                <a type="button" target="_blank" [href]="'whatsapp://send?text='+blog.title + ' - ' + blog.link" class="btn btn-icon btn-success btn-wave ng-star-inserted"><i class="ri-whatsapp-line"></i></a>
+                                <!-- <button (click)="openCommentModal(blog)" type="button" class="btn btn-md btn-info-light btn-wave"><i class="ri-message-square-line"></i> Comment</button> -->
                             </div>
                         </div>
                         <div class="d-sm-flex align-items-center mb-3">
@@ -219,59 +220,14 @@
                             Popular Tags
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div *ngIf="blog" class="card-body">
                         <div class="blog-popular-tags">
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#artist</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#musician</span>
-                            </a>    
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#monology</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#promting</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#critisium</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#mentor</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#adventure</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#capturing</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#navigator</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#mountain</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#popsinger</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#lyrists</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#musicnotes</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#multiplecovers</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#facesact</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#language</span>
-                            </a>
-                            <a href="javascript:void(0);">
-                                <span class="badge bg-light text-muted">#fluency</span>
-                            </a>
+                            @for (tag of blog.tags.split(','); track $index) {
+                                <a href="javascript:void(0);">
+                                    <span class="badge bg-light text-muted">{{tag}}</span>
+                                </a>
+                            }
+                            
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,8 @@
                     <div class="col-xl-12">
                         <div class="card custom-card overflow-hidden">
                             <div class="card-body p-0">
-                                <img [src]="blog.image" class="d-block w-100"  [alt]="blog.title">
+                                <a  [routerLink]="blog.link" class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">
+                                <img [src]="blog.image" class="d-block w-100"  [alt]="blog.title"></a>
                                 <div class="p-3">
                                     <h5 class="fw-semibold lh-base"><a [routerLink]="blog.link">{{blog.title}}</a></h5>
                                     <p class="mb-3">{{blog.summary}}
