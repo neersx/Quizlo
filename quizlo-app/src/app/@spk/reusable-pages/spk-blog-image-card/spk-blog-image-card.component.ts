@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TruncateWordsPipe } from '../../../utils/pipes/truncate-words.pipe';
 
 @Component({
   selector: 'spk-blog-image-card',
   standalone: true,
-  imports: [RouterModule,CommonModule],
+  imports: [RouterModule,CommonModule, TruncateWordsPipe],
   templateUrl: './spk-blog-image-card.component.html',
   styleUrl: './spk-blog-image-card.component.scss'
 })

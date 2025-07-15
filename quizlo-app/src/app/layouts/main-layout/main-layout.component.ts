@@ -65,7 +65,6 @@ export class MainQuizLayoutComponent implements OnInit {
   user: any;
   loading: boolean = true;
   columns : any = [
-    { type: 'image', width: 30},
     { type: 'avatar', width: 10 },
     { type: 'text', width: 30 },
     { type: 'text', width: 25 },

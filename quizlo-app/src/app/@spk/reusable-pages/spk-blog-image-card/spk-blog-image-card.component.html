@@ -1,29 +1,31 @@
+<div class="card custom-card overflow-hidden">
+  <a [routerLink]="['/blog-details']" class="{{pageStyleClass}}">
+    <img [src]="imageUrl" class="card-img-top {{imageClass}}" alt="...">
+  </a>
+  <div class="card-body">
+    <a [routerLink]="['/blogs/blog-details/'+link]" class="h5 fw-semibold mb-2 d-block lh-base">{{ title }}</a>
+    <p *ngIf="description" class="mb-3">{{ description| truncateWords:15 }}
+      <a href="javascript:void(0);"
+        class="fw-medium text-{{TextColor}} ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read More
+        ?</a>
+    </p>
+    <div class="d-flex flex-wrap align-items-center justify-content-between">
+      <div class="d-flex align-items-center flex-wrap gap-1">
+        <div class="hstack gap-1">
+          <a type="button" target="_blank" [href]="'https://www.facebook.com/sharer/sharer.php?u='+link"
+            class="btn btn-icon btn-sm btn-facebook btn-wave ng-star-inserted"><i class="ri-facebook-line"></i></a>
+          <a type="button" target="_blank" [href]="'https://twitter.com/intent/tweet?text='+title + ' - ' + link"
+            class="btn btn-icon btn-sm btn-twitter btn-wave ng-star-inserted"><i class="ri-twitter-x-line"></i></a>
+          <a type="button" target="_blank" [href]="'whatsapp://send?text='+title + ' - ' + link"
+            class="btn btn-icon btn-sm btn-success btn-wave ng-star-inserted"><i class="ri-whatsapp-line"></i></a>
+        </div>
 
-  <div class="card custom-card overflow-hidden">
-    <a [routerLink]="['/blog-details']" class="{{pageStyleClass}}">
-      <img [src]="imageUrl" class="card-img-top {{imageClass}}" alt="...">
-    </a>
-    <div class="card-body">
-      <a [routerLink]="['/blogs/blog-details/'+link]" class="h5 fw-semibold mb-2 d-block lh-base">{{ title }}</a>
-      <p class="mb-3">{{ description }}
-        <a href="javascript:void(0);" class="fw-medium text-{{TextColor}} ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">Read More ?</a>
-      </p>
-      <div class="d-flex flex-wrap align-items-center justify-content-between">
-        <div class="d-flex align-items-center flex-wrap gap-1">
-          <div class="avatar avatar-md avatar-rounded me-2">
-            <img [src]="authorImageUrl" alt="">
-          </div>
-          <div>
-            <p class="mb-0 fw-medium">{{ author }}</p>
-            <span class="text-muted fs-12 mb-0">{{ date }}</span>
-          </div>
-        </div>
-        <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
-          <i [class]="heartColor"></i>
-        </div>
       </div>
-      <!-- Optional Badge -->
-      
+      <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
+        <i [class]="heartColor"></i>
+      </div>
     </div>
-  </div>
+    <!-- Optional Badge -->
 
+  </div>
+</div>

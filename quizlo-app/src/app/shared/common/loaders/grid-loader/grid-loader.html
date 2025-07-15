@@ -1,41 +1,28 @@
-<div class="grid-skeleton" [attr.data-theme]="theme">
-  <!-- Header -->
-  <div class="grid-header">
-    <div 
-      *ngFor="let column of columns" 
-      class="header-cell skeleton-item"
-      [style.width.%]="column.width"
-    ></div>
-  </div>
+<div class="container">
+  <div class="grid-skeleton" [attr.data-theme]="theme">
+    <!-- Header -->
+    <div class="grid-header">
+      <div *ngFor="let column of columns" class="header-cell skeleton-item" [style.width.%]="column.width"></div>
+    </div>
 
-  <!-- Rows -->
-  <div class="grid-body">
-    <div 
-      *ngFor="let row of rows; let i = index" 
-      class="grid-row"
-      [class.alternate]="i % 2 === 1"
-    >
-      <div 
-        *ngFor="let column of columns" 
-        class="body-cell"
-        [style.width.%]="column.width"
-      >
-        <div 
-          class="cell-content skeleton-item"
-          [ngClass]="getCellClass(column.type)"
-        ></div>
+    <!-- Rows -->
+    <div class="grid-body">
+      <div *ngFor="let row of rows; let i = index" class="grid-row" [class.alternate]="i % 2 === 1">
+        <div *ngFor="let column of columns" class="body-cell" [style.width.%]="column.width">
+          <div class="cell-content skeleton-item" [ngClass]="getCellClass(column.type)"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Pagination -->
-  <div *ngIf="showPagination" class="pagination-skeleton">
-    <div class="pagination-info skeleton-item"></div>
-    <div class="pagination-controls">
-      <div class="pagination-button skeleton-item"></div>
-      <div class="pagination-button skeleton-item"></div>
-      <div class="pagination-button skeleton-item"></div>
-      <div class="pagination-button skeleton-item"></div>
+    <!-- Pagination -->
+    <div *ngIf="showPagination" class="pagination-skeleton">
+      <div class="pagination-info skeleton-item"></div>
+      <div class="pagination-controls">
+        <div class="pagination-button skeleton-item"></div>
+        <div class="pagination-button skeleton-item"></div>
+        <div class="pagination-button skeleton-item"></div>
+        <div class="pagination-button skeleton-item"></div>
+      </div>
     </div>
   </div>
 </div>

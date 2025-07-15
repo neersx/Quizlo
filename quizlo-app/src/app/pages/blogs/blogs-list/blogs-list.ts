@@ -6,10 +6,11 @@ import { SharedModule } from '../../../shared/sharedmodule';
 import { BlogModel, BlogService } from '../blogs.service';
 import { CommonModule } from '@angular/common';
 import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
+import { TruncateWordsPipe } from '../../../utils/pipes/truncate-words.pipe';
 
 @Component({
   selector: 'app-blogs-list',
-  imports: [CommonModule, SharedModule,RouterModule,CarouselModule,SpkBlogImageCardComponent, GridLoader], 
+  imports: [CommonModule, TruncateWordsPipe, SharedModule,RouterModule,CarouselModule,SpkBlogImageCardComponent, GridLoader], 
   templateUrl: './blogs-list.html',
   styleUrl: './blogs-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
