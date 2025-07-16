@@ -3,7 +3,7 @@
 <!-- Start::row-1 -->
 <div class="row">
     <div class="col-xl-12">
-        <div class="card custom-card currency-exchange-card">
+        <div class="card custom-card exam-card currency-exchange-card">
             <div class="card-body p-5 d-flex align-items-center justify-content-center z-1">
                 <div class="container">
                     <h3 class="text-fixed-white text-center">Let’s Get You Exam-Ready!</h3>
@@ -65,7 +65,9 @@
                             <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
                             Loading your Test. Please wait...
                         </button>
-                        <button *ngIf="!loadingTest && ( !tests || tests.length == 0)" [disabled]="selectedSubject?.value == null"  (click)="startTest()" class="btn btn-success btn-wave">Start Your Test Now</button>
+
+                        <button *ngIf="!loadingTest && ( !tests || tests.length == 0)" [disabled]="selectedSubject?.value == null" 
+                         (click)="startTest()" class="btn btn-orange-gradient btn-wave">Start Your Test Now</button>
                         <button *ngIf="!loadingTest  && tests && tests.length > 0" class="btn btn-warning btn-wave">Finish Below Active Tests First</button>
                     </div>
                 </div>

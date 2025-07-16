@@ -90,22 +90,19 @@ export class ExamsHome implements OnInit {
   ];
 
   gridColumns = [
-
     { type: 'text' as const, width: 55 },
     { type: 'text' as const, width: 25 },
-
   ];
 
     private setMetaTags(): void {
 
-      const title = 'Master Exams with Live AI Tests | Quizlo Ai';
-      const description = 'Master your exams with Quizlo Ai’s live AI-powered tests. Students & teachers love our instant scoring, adaptive questions & detailed reports.';
-      const keywords = 'live AI tests, exam mastery, Quizlo Ai platform, adaptive testing, performance reports';
+      const title = 'Prepare any Exam with Live Tests Free | Quizlo AI';
+      const description = 'Absolutely Free! AI-powered live practice tests for IIT-JEE, NEET, AIEE, SSC, UPSC, CAT, CTAT, and more. Students & teachers love our instant scoring, adaptive questions & detailed reports.';
+      const keywords = 'Free live AI tests, IIT-JEE, NEET, AIEE, SSC, UPSC, CAT, CTAT, etrance exams, online practice tests, exam mastery, Quizlo Ai platform, adaptive testing, performance reports';
       
       this.titleService.setTitle(title);   
       this.metaService.updateTag({ name: 'description', content: description });
-      this.metaService.updateTag({ name: 'keywords', content: keywords });
-  
+      this.metaService.updateTag({ name: 'keywords', content: keywords });  
   
       // Open Graph
       this.metaService.updateTag({ property: 'og:title', content: title });

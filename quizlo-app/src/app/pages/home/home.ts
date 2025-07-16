@@ -81,8 +81,6 @@ export class HomeComponent {
   ) {
     const doc = this.platform.getDocument();
     if (doc) {
-      console.log(doc.title);
-      // Safe to use `document` here
       document.body.classList.add('landing-body');
       const htmlElement =
         this.elementRef.nativeElement.ownerDocument.documentElement;
@@ -91,14 +89,14 @@ export class HomeComponent {
       this.renderer.setAttribute(htmlElement, 'data-nav-style', 'menu-click');
       this.renderer.setAttribute(htmlElement, 'data-menu-position', 'fixed');
       this.renderer.setAttribute(htmlElement, 'data-theme-mode', 'light');
-      // this.renderer.removeAttribute(htmlElement, 'data-header-styles');
-      // this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
-      // this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
-      // this.renderer.removeAttribute(htmlElement, 'loader');
-      // this.renderer.removeAttribute(htmlElement, 'data-width');
-      // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
-      // this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
-      // this.renderer.removeAttribute(htmlElement, 'light-rgb');
+      this.renderer.removeAttribute(htmlElement, 'data-header-styles');
+      this.renderer.removeAttribute(htmlElement, 'data-menu-styles');
+      this.renderer.removeAttribute(htmlElement, 'data-vertical-style');
+      this.renderer.removeAttribute(htmlElement, 'loader');
+      this.renderer.removeAttribute(htmlElement, 'data-width');
+      this.renderer.removeAttribute(htmlElement, 'body-bg-rgb');
+      this.renderer.removeAttribute(htmlElement, 'body-bg-rgb2');
+      this.renderer.removeAttribute(htmlElement, 'light-rgb');
     }
 
   }

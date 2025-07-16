@@ -1,0 +1,14 @@
+/* in your .css or .scss */
+.exam-card {
+    /* ensure the element has some height */
+    min-height: 200px;
+  
+    background-image:
+    /* first layer = a 50% white overlay: adjust the alpha (0.5) to taste */
+    linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)),
+    /* second layer = the real background image */
+    url('https://quizloai.com/assets/images/quizlo_bg.webp');
+    background-size: cover;       /* scale to cover */ /* center the image */
+    background-repeat: no-repeat; /* don’t tile */
+  }
+  
