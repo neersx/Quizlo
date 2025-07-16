@@ -19,6 +19,8 @@ import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader
 import { RegisterModal } from '../../identity/register-modal/register-modal';
 import { NgbModal, NgbModalOptions, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
+import { Title, Meta } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-exams-home',
@@ -48,6 +50,8 @@ export class ExamsHome implements OnInit {
     private modalService: NgbModal,
     private examService: ExamService,
     private router: Router,
+    private titleService: Title,
+    private metaService: Meta,
     private testService: TestService,
     private userService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -55,6 +59,7 @@ export class ExamsHome implements OnInit {
     private dropdownService: DropdownService) { }
 
   ngOnInit() {
+    this.setMetaTags();
     this.fetchLanguageDropdown();
     this.fetchExams();
     this.initializeDefaultValues();
@@ -90,6 +95,31 @@ export class ExamsHome implements OnInit {
     { type: 'text' as const, width: 25 },
 
   ];
+
+    private setMetaTags(): void {
+
+      const title = 'Master Exams with Live AI Tests | Quizlo Ai';
+      const description = 'Master your exams with Quizlo Ai’s live AI-powered tests. Students & teachers love our instant scoring, adaptive questions & detailed reports.';
+      const keywords = 'live AI tests, exam mastery, Quizlo Ai platform, adaptive testing, performance reports';
+      
+      this.titleService.setTitle(title);   
+      this.metaService.updateTag({ name: 'description', content: description });
+      this.metaService.updateTag({ name: 'keywords', content: keywords });
+  
+  
+      // Open Graph
+      this.metaService.updateTag({ property: 'og:title', content: title });
+      this.metaService.updateTag({ property: 'og:description', content: description });
+      this.metaService.updateTag({ property: 'og:image', content: 'https://quizloai.com/assets/images/exam-selection.jpg' });
+      this.metaService.updateTag({ property: 'og:url', content: `https://quizloai.com/test/select-exam` });
+  
+      // Twitter Card
+      this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+      this.metaService.updateTag({ name: 'twitter:title', content: title });
+      this.metaService.updateTag({ name: 'twitter:description', content: description});
+      this.metaService.updateTag({ name: 'twitter:image', content: 'https://quizloai.com/assets/images/exam-selection.jpg' });
+    }
+
 
   getActiveTests() {
     return this.userService.getUserActiveTests().subscribe({
