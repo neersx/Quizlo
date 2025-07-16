@@ -81,6 +81,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string Link { get; set; }
         public string Summary { get; set; }
         public string Tags { get; set; }
+        public string Type { get; set; }
         public bool IsFeatured { get; set; } = false;
     }
 
@@ -98,6 +99,8 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                            opt => opt.MapFrom(src => src.Summary))
                 .ForMember(dest => dest.Author,
                            opt => opt.MapFrom(src => src.Author))
+                .ForMember(dest => dest.Type,
+                           opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Date,
                            opt => opt.MapFrom(src => src.CreatedAt.ToString("dd, MMM yyyy - HH:mm")))
                 .ForMember(dest => dest.HeartColor,
@@ -111,7 +114,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                 .ForMember(dest => dest.IsFeatured,
                             opt => opt.MapFrom(src => src.IsFeatured))
                 .ForMember(dest => dest.Avatar,
-                           opt => opt.MapFrom(_ => "http://localhost:4200/assets/images/faces/5.jpg"))
+                           opt => opt.MapFrom(_ => "https://quizloai.com/assets/images/faces/5.jpg"))
                .ForMember(dest => dest.Image,
                        opt => opt.MapFrom(src =>
                            string.IsNullOrWhiteSpace(src.ImageUrl)
