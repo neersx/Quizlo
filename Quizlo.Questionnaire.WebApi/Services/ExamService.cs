@@ -2,12 +2,15 @@
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Services;
+using Quizlo.Questionnaire.WebApi.DTO;
+using AutoMapper;
 
 namespace Quizlo.Questionnaire.WebApi.Services
 {
     public class ExamService : IExamService
     {
         private readonly QuizDbContext _context;
+        private readonly IMapper _mapper;
 
         public ExamService(QuizDbContext context)
             => _context = context;
@@ -29,18 +32,28 @@ namespace Quizlo.Questionnaire.WebApi.Services
             return result;
         }
 
-        public async Task<Exam> CreateExamAsync(Exam exam)
+        public async Task<ExamResponseDto> CreateExamAsync(CreateExamDto dto, int userId, CancellationToken ct = default)
         {
+            var exam = _mapper.Map<Exam>(dto);
+            exam.CreatedByUserId = userId;
+
             _context.Exams.Add(exam);
-            await _context.SaveChangesAsync();
-            return exam;
+            await _context.SaveChangesAsync(ct);
+
+            return _mapper.Map<ExamResponseDto>(exam);
         }
 
-        public async Task<Exam> UpdateExamAsync(Exam exam)
+        public async Task<ExamResponseDto> UpdateExamAsync(UpdateExamDto dto, CancellationToken ct = default)
         {
+            var exam = await _context.Exams.FindAsync(new object[] { dto.Id }, ct);
+            if (exam == null)
+                throw new KeyNotFoundException($"Exam with Id {dto.Id} not found.");
+
+            _mapper.Map(dto, exam);
             _context.Exams.Update(exam);
-            await _context.SaveChangesAsync();
-            return exam;
+            await _context.SaveChangesAsync(ct);
+
+            return _mapper.Map<ExamResponseDto>(exam);
         }
 
         public async Task<bool> DeleteExamAsync(int examId)
@@ -51,6 +64,6 @@ namespace Quizlo.Questionnaire.WebApi.Services
             await _context.SaveChangesAsync();
             return true;
         }
-        
+
     }
 }

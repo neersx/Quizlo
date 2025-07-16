@@ -19,7 +19,7 @@ public class BlogsController : ControllerBase
     [HttpGet("by-status/{status}")]
     public async Task<IActionResult> Get(string status)
     {
-        var dtos = await _svc.GetAllAsync();
+        var dtos = await _svc.GetAllAsync(status);
         return Ok(dtos);
     }
 

@@ -1,4 +1,5 @@
 ﻿using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.DTO;
 
 namespace Quizlo.Questionnaire.WebApi.Services
 {
@@ -6,8 +7,8 @@ namespace Quizlo.Questionnaire.WebApi.Services
     {
         Task<Exam> GetExamAsync(int examId);
         Task<IEnumerable<Exam>> GetExamsAsync(int pageNumber, int pageSize, string search = null);
-        Task<Exam> CreateExamAsync(Exam exam);
-        Task<Exam> UpdateExamAsync(Exam exam);
+        Task<ExamResponseDto> CreateExamAsync(CreateExamDto dto, int userId, CancellationToken ct = default);
+        Task<ExamResponseDto> UpdateExamAsync(UpdateExamDto dto, CancellationToken ct = default);
         Task<bool> DeleteExamAsync(int examId);
     }
 }

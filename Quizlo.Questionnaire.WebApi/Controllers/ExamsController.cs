@@ -1,4 +1,6 @@
 ﻿// Controllers/ExamsController.cs
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.DTO;
@@ -29,32 +31,36 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         // GET: api/exams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<Exam>>> GetExam(int id)
+        public async Task<ActionResult<ApiResponse<Exam>>> GetById(int id)
         {
             var exam = await _examService.GetExamAsync(id);
             if (exam == null) return NotFound();
             return Ok(ApiResponse<Exam>.Success(exam)); //return Ok(exam);
         }
 
-        // POST: api/exams
         [HttpPost]
-        public async Task<ActionResult<Exam>> CreateExam([FromBody] Exam exam)
+        [Authorize]
+        public async Task<IActionResult> Post([FromBody] CreateExamDto dto)
         {
-            var created = await _examService.CreateExamAsync(exam);
-            return CreatedAtAction(nameof(GetExam), new { id = created.Id }, created);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var result = await _examService.CreateExamAsync(dto, userId);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
-        // PUT: api/exams/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<Exam>>> UpdateExam(int id, [FromBody] Exam exam)
+        [Authorize]
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateExamDto dto)
         {
-            if (id != exam.Id) return BadRequest();
-            var updated = await _examService.UpdateExamAsync(exam);
-            return Ok(ApiResponse<Exam>.Success(updated)); //return Ok(updated);
+            if (id != dto.Id)
+                return BadRequest("Mismatched exam id");
+
+            var result = await _examService.UpdateExamAsync(dto);
+            return Ok(result);
         }
 
         // DELETE: api/exams/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteExam(int id)
         {
             var success = await _examService.DeleteExamAsync(id);
