@@ -8,6 +8,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
 
     public class BlogCreateDto
     {
+        public int Id { get; set; }
         [Required]
         public string HtmlContent { get; set; }
 
@@ -37,6 +38,33 @@ namespace Quizlo.Questionnaire.WebApi.DTO
 
         public bool IsFeatured { get; set; }
     }
+
+    public class CreateDraftBlogDto
+    {
+        [Required, StringLength(250)]
+        public string Title { get; set; }
+
+        [Required, StringLength(270)]
+        public string Slug { get; set; }
+
+        public List<string> Keywords { get; set; } = new();
+
+        public List<string> Hashtags { get; set; } = new();
+
+        [StringLength(520)]
+        public string Summary { get; set; }
+
+        // we’ll store this in CreatedAt
+        [Required]
+        public DateTime PublishedDate { get; set; }
+
+        // maps to Blog.HtmlContent (required)
+        [Required]
+        public string HtmlContent { get; set; }
+    
+        public string Type { get; set; }
+}
+
 
     public class BlogListDto
     {

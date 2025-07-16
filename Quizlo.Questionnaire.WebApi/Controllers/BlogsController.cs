@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.DTO;
 
@@ -41,6 +42,7 @@ public class BlogsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Blog>> CreateBlog([FromBody] BlogCreateDto dto)
     {
         if (!ModelState.IsValid)
@@ -50,9 +52,26 @@ public class BlogsController : ControllerBase
         return CreatedAtAction(nameof(GetBlogById), new { id = created.Id }, created);
     }
 
+    [HttpPost("draft")]
+    [Authorize]
+    public async Task<IActionResult> CreateDraft([FromBody] CreateDraftBlogDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        // assume you pull the user ID from your auth context
+        int userId = int.Parse(User.FindFirst("sub").Value);
+
+        var blog = await _svc.CreateDraftAsync(dto, userId);
+
+        // return 201 with location header
+        return CreatedAtAction(nameof(GetBlogById), new { id = blog.Id }, blog);
+    }
+
     // PUT /api/blogs/123
     [HttpPut("{id:long}")]
-    public async Task<IActionResult> Put(long id, [FromBody] Blog updated)
+    [Authorize]
+    public async Task<IActionResult> UpdateBlog(long id, [FromBody] BlogCreateDto updated)
     {
         if (id != updated.Id)
             return BadRequest("ID in URL must match ID in payload");
