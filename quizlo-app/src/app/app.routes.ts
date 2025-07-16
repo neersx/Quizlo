@@ -11,8 +11,7 @@ import { Faqs } from './pages/documents/faqs/faqs';
 import { ReportAbuse } from './pages/documents/report-abuse/report-abuse';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home',  component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'privacy-policy',  component: PrivacyPolicy },
   { path: 'terms-and-conditions',  component: TermsAndConditions },
   { path: 'cancellation-and-refund-policy',  component: CancellationAndRefundPolicy },
@@ -22,4 +21,5 @@ export const routes: Routes = [
   { path: '', component: AuthenticationLayoutComponent, children: authen },
   { path: '', component: MainQuizLayoutComponent, children: content },
 
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
