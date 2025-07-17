@@ -13,7 +13,8 @@ public interface IBlogService
     Task<Blog> UpdateAsync(int id, BlogCreateDto updated);
 
     Task<Blog> CreateDraftAsync(CreateDraftBlogDto dto, int createdByUserId);
-
+    Task<IReadOnlyList<Blog>> CreateDraftsAsync(IEnumerable<CreateDraftBlogDto> dtos, int createdByUserId, CancellationToken ct = default);
+    Task<IReadOnlyList<Blog>> UpsertDraftsAsync(IEnumerable<DraftBlogUpsertDto> dtos, int userId, CancellationToken ct = default);
     Task<Blog> CreateAsync(BlogCreateDto dto);
 }
 
@@ -71,6 +72,7 @@ public class BlogService : IBlogService
 
     }
 
+
     public async Task<Blog> CreateDraftAsync(CreateDraftBlogDto dto, int createdByUserId)
     {
         var blog = new Blog
@@ -90,6 +92,128 @@ public class BlogService : IBlogService
         await _db.SaveChangesAsync();
         return blog;
     }
+
+    public async Task<IReadOnlyList<Blog>> CreateDraftsAsync(IEnumerable<CreateDraftBlogDto> dtos, int createdByUserId, CancellationToken ct = default)
+    {
+        if (dtos is null) throw new ArgumentNullException(nameof(dtos));
+
+        var blogs = new List<Blog>();
+
+        foreach (var dto in dtos)
+        {
+            ValidateCreateDto(dto); // optional: throw if invalid
+            var blog = MapToNewBlog(dto, createdByUserId);
+            blogs.Add(blog);
+        }
+
+        await _db.Blogs.AddRangeAsync(blogs, ct);
+        await _db.SaveChangesAsync(ct);
+
+        return blogs;
+    }
+
+    private static Blog MapToNewBlog(CreateDraftBlogDto dto, int createdByUserId)
+    {
+        return new Blog
+        {
+            Title = dto.Title,
+            SharedLink = dto.Slug, // assuming slug stored in SharedLink
+            Tags = (dto.Keywords != null && dto.Keywords.Count > 0)
+                            ? string.Join(',', dto.Keywords)
+                            : null,
+            Summary = dto.Summary,
+            HtmlContent = dto.HtmlContent,
+            CreatedAt = dto.PublishedDate, // confirm: is this actually published? or draft created?
+            CreatedBy = createdByUserId,
+            Status = "Draft",
+            Type = dto.Type
+        };
+    }
+
+    private static void ValidateCreateDto(CreateDraftBlogDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Title))
+            throw new ArgumentException("Title is required.", nameof(dto));
+        if (string.IsNullOrWhiteSpace(dto.Slug))
+            throw new ArgumentException("Slug is required.", nameof(dto));
+        // Add slug format checks, length checks, etc.
+    }
+
+
+    public async Task<IReadOnlyList<Blog>> UpsertDraftsAsync(IEnumerable<DraftBlogUpsertDto> dtos, int userId, CancellationToken ct = default)
+    {
+        if (dtos is null) throw new ArgumentNullException(nameof(dtos));
+
+        var now = DateTime.UtcNow; // fallback if needed
+        var toCreate = new List<Blog>();
+        var toUpdate = new List<Blog>();
+
+        // Preload existing blogs in one DB hit when there are Ids
+        var ids = dtos.Where(d => d.Id.HasValue).Select(d => d.Id!.Value).Distinct().ToList();
+        var existingById = new Dictionary<int, Blog>();
+        if (ids.Count > 0)
+        {
+            var existing = await _db.Blogs
+                .Where(b => ids.Contains(b.Id))
+                .ToListAsync(ct);
+            existingById = existing.ToDictionary(b => b.Id);
+        }
+
+        foreach (var dto in dtos)
+        {
+            if (dto.Id is null)
+            {
+                // New
+                ValidateCreateDto(dto);
+                var blog = MapToNewBlog(dto, userId);
+                toCreate.Add(blog);
+            }
+            else
+            {
+                // Update existing
+                if (!existingById.TryGetValue(dto.Id.Value, out var blog))
+                {
+                    // Strategy choice: skip, throw, or create? Here: throw
+                    throw new KeyNotFoundException($"Blog Id {dto.Id.Value} not found.");
+                }
+
+                // Apply updates
+                blog.Title = dto.Title;
+                blog.SharedLink = dto.Slug;
+                blog.Tags = (dto.Keywords != null && dto.Keywords.Count > 0)
+                                    ? string.Join(',', dto.Keywords) : null;
+                blog.Summary = dto.Summary;
+                blog.HtmlContent = dto.HtmlContent;
+                // If CreatedAt is truly creation timestamp, maybe don't overwrite.
+                // Consider separate PublishedAt or UpdatedAt:
+                // blog.PublishedAt = dto.PublishedDate; // if you have it
+                blog.UpdatedAt = now; // add column if not there yet
+                blog.Type = dto.Type;
+                blog.Status = "Draft"; // or preserve existing?
+                toUpdate.Add(blog);
+            }
+        }
+
+        if (toCreate.Count > 0)
+            await _db.Blogs.AddRangeAsync(toCreate, ct);
+
+        // For updates, tracked entities already in ChangeTracker are enough.
+        await _db.SaveChangesAsync(ct);
+
+        // Return all affected blogs in request order
+        var result = new List<Blog>();
+        foreach (var dto in dtos)
+        {
+            if (dto.Id is null)
+                result.Add(toCreate.First(b => b.Title == dto.Title && b.SharedLink == dto.Slug)); // naive; better to track mapping
+            else
+                result.Add(existingById[dto.Id.Value]);
+        }
+
+        return result;
+    }
+
+
 
     public async Task<Blog> UpdateAsync(int id, BlogCreateDto updated)
     {

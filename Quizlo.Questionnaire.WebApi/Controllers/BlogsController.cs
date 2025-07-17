@@ -68,6 +68,24 @@ public class BlogsController : ControllerBase
         return CreatedAtAction(nameof(GetBlogById), new { id = blog.Id }, blog);
     }
 
+    [HttpPost("drafts/bulk")]
+    public async Task<ActionResult<IReadOnlyList<BlogDto>>> CreateDrafts([FromBody] BulkCreateDraftBlogsRequest request)
+    {
+        int userId = int.Parse(User.FindFirst("sub").Value);
+        var blogs = await _svc.CreateDraftsAsync(request.Blogs, userId);
+        return Ok(blogs);
+    }
+
+    [HttpPost("drafts/upsert")]
+    public async Task<ActionResult<IReadOnlyList<BlogDto>>> UpsertDrafts(
+    [FromBody] List<DraftBlogUpsertDto> request)
+    {
+        int userId = int.Parse(User.FindFirst("sub").Value);
+        var blogs = await _svc.UpsertDraftsAsync(request, userId);
+        return Ok(blogs);
+    }
+
+
     // PUT /api/blogs/123
     [HttpPut("{id:long}")]
     [Authorize]

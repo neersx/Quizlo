@@ -40,6 +40,17 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public bool IsFeatured { get; set; }
     }
 
+    public class BulkCreateDraftBlogsRequest
+    {
+        public List<CreateDraftBlogDto> Blogs { get; set; } = new();
+    }
+
+    public class DraftBlogUpsertDto : CreateDraftBlogDto
+    {
+        public int? Id { get; set; } // null => create, non-null => update existing
+    }
+
+
     public class CreateDraftBlogDto
     {
         [Required, StringLength(250)]
