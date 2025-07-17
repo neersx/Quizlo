@@ -7,7 +7,7 @@ using Quizlo.Questionnaire.WebApi.DTO;
 public interface IBlogService
 {
     Task<IEnumerable<BlogListDto>> GetAllAsync();
-    Task<Dictionary<string, string>> GetAllTitlesAsync();
+    Task<IEnumerable<BlogTitlesDto>> GetAllTitlesAsync();
     Task<IEnumerable<BlogListDto>> GetAllAsync(string status);
     Task<BlogDto> GetByIdAsync(int id);
     Task<BlogDto> GetByLinkAsync(string link);
@@ -36,9 +36,13 @@ public class BlogService : IBlogService
             .ToListAsync();
     }
 
-    public async Task<Dictionary<string, string>> GetAllTitlesAsync()
+    public async Task<IEnumerable<BlogTitlesDto>> GetAllTitlesAsync()
     {
-        return await _db.Blogs.AsNoTracking().ToDictionaryAsync(b => b.SharedLink, b => b.Title);
+        return await _db.Blogs.AsNoTracking().Select(b => new BlogTitlesDto()
+        {
+            Slug = b.SharedLink,
+            Title = b.Title
+        }).ToListAsync();
     }
 
     public async Task<IEnumerable<BlogListDto>> GetAllAsync(string status)
