@@ -7,6 +7,7 @@ using Quizlo.Questionnaire.WebApi.DTO;
 public interface IBlogService
 {
     Task<IEnumerable<BlogListDto>> GetAllAsync();
+    Task<Dictionary<string, string>> GetAllTitlesAsync();
     Task<IEnumerable<BlogListDto>> GetAllAsync(string status);
     Task<BlogDto> GetByIdAsync(int id);
     Task<BlogDto> GetByLinkAsync(string link);
@@ -33,6 +34,11 @@ public class BlogService : IBlogService
             .OrderByDescending(b => b.UpdatedAt).ThenByDescending(b => b.CreatedAt)
             .ProjectTo<BlogListDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+    }
+
+    public async Task<Dictionary<string, string>> GetAllTitlesAsync()
+    {
+        return await _db.Blogs.AsNoTracking().ToDictionaryAsync(b => b.SharedLink, b => b.Title);
     }
 
     public async Task<IEnumerable<BlogListDto>> GetAllAsync(string status)
@@ -123,10 +129,12 @@ public class BlogService : IBlogService
                             : null,
             Summary = dto.Summary,
             HtmlContent = dto.HtmlContent,
-            CreatedAt = dto.PublishedDate, // confirm: is this actually published? or draft created?
+            CreatedAt = DateTime.UtcNow, // confirm: is this actually published? or draft created?
             CreatedBy = createdByUserId,
             Status = "Draft",
-            Type = dto.Type
+            Type = dto.Type,
+            Category = dto.Category
+
         };
     }
 

@@ -17,6 +17,13 @@ public class BlogsController : ControllerBase
         return Ok(dtos);
     }
 
+    [HttpGet("all-titles")]
+    public async Task<IActionResult> GetAllTitles()
+    {
+        var result = await _svc.GetAllTitlesAsync();
+        return Ok(result);
+    }
+
     [HttpGet("by-status/{status}")]
     public async Task<IActionResult> Get(string status)
     {
@@ -69,6 +76,7 @@ public class BlogsController : ControllerBase
     }
 
     [HttpPost("drafts/bulk")]
+    [Authorize]
     public async Task<ActionResult<IReadOnlyList<BlogDto>>> CreateDrafts([FromBody] BulkCreateDraftBlogsRequest request)
     {
         int userId = int.Parse(User.FindFirst("sub").Value);
@@ -77,6 +85,7 @@ public class BlogsController : ControllerBase
     }
 
     [HttpPost("drafts/upsert")]
+    [Authorize]
     public async Task<ActionResult<IReadOnlyList<BlogDto>>> UpsertDrafts(
     [FromBody] List<DraftBlogUpsertDto> request)
     {

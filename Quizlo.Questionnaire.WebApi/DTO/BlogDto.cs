@@ -70,11 +70,12 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         [Required]
         public DateTime PublishedDate { get; set; }
 
-        // maps to Blog.HtmlContent (required)
-        [Required]
-        public string HtmlContent { get; set; }
+         public string? Category { get; set; }
 
-        public string Type { get; set; }
+        // maps to Blog.HtmlContent (required)
+        public string HtmlContent { get; set; } = String.Empty;
+
+        public string Type { get; set; } = "General";
     }
 
 
