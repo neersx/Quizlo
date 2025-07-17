@@ -41,6 +41,9 @@ public class Blog
     [StringLength(50)]
     public string? Author { get; set; }
 
+    [StringLength(50)]
+    public string? Category { get; set; }
+
     [Required, StringLength(20)]
     public string Status { get; set; } = "Draft";
 

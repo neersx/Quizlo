@@ -58,10 +58,17 @@ public class BlogService : IBlogService
 
     public async Task<Blog> CreateAsync(BlogCreateDto dto)
     {
-        var blog = _mapper.Map<Blog>(dto);
-        _db.Set<Blog>().Add(blog);
-        await _db.SaveChangesAsync();
-        return blog;
+
+        var entity = await _db.Blogs.FirstOrDefaultAsync(b => b.SharedLink == dto.SharedLink);
+        if (entity == null)
+        {
+            var blog = _mapper.Map<Blog>(dto);
+            _db.Set<Blog>().Add(blog);
+            await _db.SaveChangesAsync();
+            return blog;
+        }
+        throw new Exception("Blog already exists with the same slug. Try to place update request if reuquired.");
+
     }
 
     public async Task<Blog> CreateDraftAsync(CreateDraftBlogDto dto, int createdByUserId)
@@ -94,13 +101,14 @@ public class BlogService : IBlogService
         blog.Type = updated.Type;
         blog.Title = updated.Title;
         blog.Tags = updated.Tags;
-        blog.IsFeatured = updated.IsFeatured;
-        blog.SharedLink = updated.SharedLink;
+        blog.IsFeatured = updated.IsFeatured || blog.IsFeatured;
+        blog.SharedLink = updated.SharedLink ?? blog.SharedLink;
         blog.Summary = updated.Summary;
         blog.Author = updated.Author;
         blog.Status = updated.Status;
         blog.ImageUrl = updated.ImageUrl;
         blog.UpdatedAt = DateTime.UtcNow;
+        blog.Category = updated.Category ?? blog.Category;
 
         await _db.SaveChangesAsync();
         return blog;

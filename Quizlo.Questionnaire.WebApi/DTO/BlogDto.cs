@@ -35,6 +35,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
 
         [StringLength(500)]
         public string? ImageUrl { get; set; }
+         public string? Category { get; set; }
 
         public bool IsFeatured { get; set; }
     }
