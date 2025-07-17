@@ -21,7 +21,7 @@ public class BlogsController : ControllerBase
     public async Task<IActionResult> GetAllTitles()
     {
         var result = await _svc.GetAllTitlesAsync();
-        return Ok(result);
+        return Ok(new {data = result});
     }
 
     [HttpGet("by-status/{status}")]
