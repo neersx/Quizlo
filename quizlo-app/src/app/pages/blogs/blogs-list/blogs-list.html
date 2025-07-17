@@ -12,12 +12,12 @@
                     <div class="col-xl-12 col-lg-6 col-md-6">
                         <div class="card custom-card overflow-hidden">
                             <div class="card-body p-0">
-                                
+
                                 <a [href]="blog.link"
-                                class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">
-                                <img [src]="blog.image" class="d-block w-100" [alt]="blog.title"></a>
+                                    class="fw-medium text-primary ms-2 align-middle fs-12 text-Augoration-underline d-inline-block">
+                                    <img [src]="blog.image" class="d-block w-100" [alt]="blog.title"></a>
                                 <div class="p-3">
-                                    
+
                                     <h5 class="fw-semibold lh-base"><a [href]="blog.link">{{blog.title}}</a></h5>
                                     <p class="mb-3">{{blog.summary | truncateWords:15}}
                                         <a [href]="blog.link"
@@ -25,18 +25,10 @@
                                             More</a>
                                     </p>
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center flex-wrap gap-1">
-                                            <a type="button" target="_blank" [href]="'https://www.facebook.com/sharer/sharer.php?u='+blog.link"
-                                                class="btn btn-icon btn-facebook btn-wave ng-star-inserted"><i
-                                                    class="ri-facebook-line"></i></a>
-                                            <a type="button" target="_blank" [href]="'https://twitter.com/intent/tweet?text='+blog.title + ' - ' + blog.link"
-                                                class="btn btn-icon btn-twitter btn-wave ng-star-inserted"><i
-                                                    class="ri-twitter-x-line"></i></a>
-                                            <a type="button" target="_blank" [href]="'whatsapp://send?text='+blog.title + ' - ' + blog.link"
-                                                class="btn btn-icon btn-success btn-wave ng-star-inserted"><i
-                                                    class="ri-whatsapp-line"></i></a>
-
-                                        </div>
+                                        <app-social-share [url]="blog.link" [title]="blog.title"
+                                            [text]="'Check out this post: ' + blog.title"
+                                            [hashtags]="['QuizloAi','Education']">
+                                        </app-social-share>
                                         <div class="avatar avatar-sm bg-danger-transparent avatar-rounded">
                                             <i class="ri-heart-line text-danger"></i>
                                         </div>

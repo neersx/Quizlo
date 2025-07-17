@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TruncateWordsPipe } from '../../../utils/pipes/truncate-words.pipe';
+import { SocialMediaShare } from '../../../shared/common/social-media-share/social-media-share';
 
 @Component({
   selector: 'spk-blog-image-card',
   standalone: true,
-  imports: [RouterModule,CommonModule, TruncateWordsPipe],
+  imports: [RouterModule,CommonModule, TruncateWordsPipe, SocialMediaShare],
   templateUrl: './spk-blog-image-card.component.html',
   styleUrl: './spk-blog-image-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

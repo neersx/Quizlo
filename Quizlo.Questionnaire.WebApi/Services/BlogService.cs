@@ -29,15 +29,15 @@ public class BlogService : IBlogService
     public async Task<IEnumerable<BlogListDto>> GetAllAsync()
     {
         return await _db.Blogs.Where(b => b.Status == "Published")
+            .OrderByDescending(b => b.UpdatedAt).ThenByDescending(b => b.CreatedAt)
             .ProjectTo<BlogListDto>(_mapper.ConfigurationProvider)
-            .OrderByDescending(b => b.Id)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<BlogListDto>> GetAllAsync(string status)
     {
         return await _db.Blogs.Where(b => b.Status == status)
-            .OrderByDescending(b => b.CreatedAt)
+            .OrderByDescending(b => b.UpdatedAt).ThenByDescending(b => b.CreatedAt)
             .ProjectTo<BlogListDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
