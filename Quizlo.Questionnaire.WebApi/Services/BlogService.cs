@@ -92,7 +92,7 @@ public class BlogService : IBlogService
             Tags = dto.Keywords.Any() ? string.Join(',', dto.Keywords) : null,
             Summary = dto.Summary,
             HtmlContent = dto.HtmlContent,
-            CreatedAt = dto.PublishedDate,
+            CreatedAt = DateTime.UtcNow,
             CreatedBy = createdByUserId,
             Status = "Draft",   // default, but shown here for clarity
             Type = dto.Type

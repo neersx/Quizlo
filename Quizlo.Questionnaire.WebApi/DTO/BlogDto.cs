@@ -66,9 +66,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         [StringLength(520)]
         public string Summary { get; set; }
 
-        // we’ll store this in CreatedAt
-        [Required]
-        public DateTime PublishedDate { get; set; }
+        public DateTime? PublishedDate { get; set; }
 
          public string? Category { get; set; }
 
