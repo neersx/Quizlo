@@ -26,7 +26,7 @@ public class BlogsController : ControllerBase
 
     // GET /api/blogs/{id}
     [HttpGet("{id:long}")]
-    public async Task<IActionResult> GetBlogById(long id)
+    public async Task<IActionResult> GetBlogById(int id)
     {
         var dto = await _svc.GetByIdAsync(id);
         if (dto == null) return NotFound();
@@ -71,7 +71,7 @@ public class BlogsController : ControllerBase
     // PUT /api/blogs/123
     [HttpPut("{id:long}")]
     [Authorize]
-    public async Task<IActionResult> UpdateBlog(long id, [FromBody] BlogCreateDto updated)
+    public async Task<IActionResult> UpdateBlog(int id, [FromBody] BlogCreateDto updated)
     {
         if (id != updated.Id)
             return BadRequest("ID in URL must match ID in payload");

@@ -35,7 +35,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
 
         [StringLength(500)]
         public string? ImageUrl { get; set; }
-         public string? Category { get; set; }
+        public string? Category { get; set; }
 
         public bool IsFeatured { get; set; }
     }
@@ -62,9 +62,9 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         // maps to Blog.HtmlContent (required)
         [Required]
         public string HtmlContent { get; set; }
-    
+
         public string Type { get; set; }
-}
+    }
 
 
     public class BlogListDto
@@ -174,7 +174,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                                ? null
                                : (src.ImageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                                    ? src.ImageUrl
-                                   : $"https://quizloai.com/{src.ImageUrl}")))           
+                                   : $"https://quizloai.com/{src.ImageUrl}")))
                 .ForMember(dest => dest.Author,
                            opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Date,

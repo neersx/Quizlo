@@ -8,9 +8,9 @@ public interface IBlogService
 {
     Task<IEnumerable<BlogListDto>> GetAllAsync();
     Task<IEnumerable<BlogListDto>> GetAllAsync(string status);
-    Task<BlogDto> GetByIdAsync(long id);
+    Task<BlogDto> GetByIdAsync(int id);
     Task<BlogDto> GetByLinkAsync(string link);
-    Task<Blog> UpdateAsync(long id, BlogCreateDto updated);
+    Task<Blog> UpdateAsync(int id, BlogCreateDto updated);
 
     Task<Blog> CreateDraftAsync(CreateDraftBlogDto dto, int createdByUserId);
 
@@ -49,7 +49,7 @@ public class BlogService : IBlogService
         return _mapper.Map<BlogDto>(entity);
     }
 
-    public async Task<BlogDto> GetByIdAsync(long id)
+    public async Task<BlogDto> GetByIdAsync(int id)
     {
         var entity = await _db.Blogs.FindAsync(id);
         if (entity == null) return null;
@@ -91,9 +91,9 @@ public class BlogService : IBlogService
         return blog;
     }
 
-    public async Task<Blog> UpdateAsync(long id, BlogCreateDto updated)
+    public async Task<Blog> UpdateAsync(int id, BlogCreateDto updated)
     {
-        var blog = await _db.Blogs.FindAsync(id);
+        var blog = await _db.Blogs.FirstAsync(b => b.Id == id);
         if (blog == null) return null;
 
         // copy updatable fields
