@@ -107,11 +107,14 @@ public class BlogService : IBlogService
     {
         if (dtos is null) throw new ArgumentNullException(nameof(dtos));
 
+        var existingBlogs = await GetAllTitlesAsync();
+        var existingSlugs = existingBlogs.Select(b => b.Slug).ToList();
+
         var blogs = new List<Blog>();
 
         foreach (var dto in dtos)
         {
-            ValidateCreateDto(dto); // optional: throw if invalid
+            ValidateCreateDto(dto, existingSlugs); // optional: throw if invalid
             var blog = MapToNewBlog(dto, createdByUserId);
             blogs.Add(blog);
         }
@@ -142,13 +145,23 @@ public class BlogService : IBlogService
         };
     }
 
-    private static void ValidateCreateDto(CreateDraftBlogDto dto)
+    private static void ValidateCreateDto(CreateDraftBlogDto dto, List<string> existingSlugs)
     {
         if (string.IsNullOrWhiteSpace(dto.Title))
             throw new ArgumentException("Title is required.", nameof(dto));
         if (string.IsNullOrWhiteSpace(dto.Slug))
             throw new ArgumentException("Slug is required.", nameof(dto));
+        else if (existingSlugs.Contains(dto.Slug))
+            throw new ArgumentException("Slug already exists.", nameof(dto.Slug));
         // Add slug format checks, length checks, etc.
+    }
+
+        private static void ValidateCreateDto(CreateDraftBlogDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Title))
+            throw new ArgumentException("Title is required.", nameof(dto));
+        if (string.IsNullOrWhiteSpace(dto.Slug))
+            throw new ArgumentException("Slug is required.", nameof(dto));
     }
 
 
