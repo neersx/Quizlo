@@ -79,7 +79,7 @@ public class BlogsController : ControllerBase
     [Authorize]
     public async Task<ActionResult<IReadOnlyList<BlogDto>>> CreateDrafts([FromBody] BulkCreateDraftBlogsRequest request)
     {
-        int userId = int.Parse(User.FindFirst("sub").Value);
+        int userId = 1;  //int.Parse(User.FindFirst("sub").Value);
         var blogs = await _svc.CreateDraftsAsync(request.Blogs, userId);
         return Ok(blogs);
     }

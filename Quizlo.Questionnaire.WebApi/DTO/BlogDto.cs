@@ -66,8 +66,6 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         [StringLength(520)]
         public string Summary { get; set; }
 
-        public DateTime? PublishedDate { get; set; }
-
          public string? Category { get; set; }
 
         // maps to Blog.HtmlContent (required)
