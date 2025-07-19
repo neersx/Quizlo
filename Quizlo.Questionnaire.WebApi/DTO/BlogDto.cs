@@ -82,22 +82,23 @@ namespace Quizlo.Questionnaire.WebApi.DTO
     }
 
     public class BlogListDto
-        {
-            public int Id { get; set; }
-            public string Title { get; set; }
-            public string Image { get; set; }
-            public string Author { get; set; }
-            public string Date { get; set; }
-            public string HeartColor { get; set; }
-            public string PageStyleClass { get; set; }
-            public string ImageClass { get; set; }
-            public string TextColor { get; set; }
-            public string Avatar { get; set; }
-            public string Link { get; set; }
-            public string Summary { get; set; }
-            public string Tags { get; set; }
-            public string Type { get; set; }
-            public bool IsFeatured { get; set; } = false;
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Image { get; set; }
+        public string Author { get; set; }
+        public string Date { get; set; }
+        public string HeartColor { get; set; }
+        public string PageStyleClass { get; set; }
+        public string ImageClass { get; set; }
+        public string TextColor { get; set; }
+        public string Avatar { get; set; }
+        public string Link { get; set; }
+        public string Summary { get; set; }
+        public string Tags { get; set; }
+        public string Type { get; set; }
+        public bool IsFeatured { get; set; } = false;
+        public bool IsPostedOnSocialMedia { get; set; } = false;
         }
 
     public class BlogListMappingProfile : Profile
@@ -116,6 +117,8 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                            opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Type,
                            opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.IsPostedOnSocialMedia,
+                           opt => opt.MapFrom(src => src.IsPostedOnSocialMedia))
                 .ForMember(dest => dest.Date,
                            opt => opt.MapFrom(src => src.CreatedAt.ToString("dd, MMM yyyy - HH:mm")))
                 .ForMember(dest => dest.HeartColor,
@@ -162,6 +165,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string Summary { get; set; }
         public string Tags { get; set; }
         public bool IsFeatured { get; set; } = false;
+        public bool IsPostedOnSocialMedia { get; set; } = false;
     }
 
     /// <summary>
@@ -182,6 +186,8 @@ namespace Quizlo.Questionnaire.WebApi.DTO
                            opt => opt.MapFrom(src => src.HtmlContent))
                 .ForMember(dest => dest.Summary,
                            opt => opt.MapFrom(src => src.Summary))
+                .ForMember(dest => dest.IsPostedOnSocialMedia,
+                           opt => opt.MapFrom(src => src.IsPostedOnSocialMedia))
                 .ForMember(dest => dest.Image,
                        opt => opt.MapFrom(src =>
                            string.IsNullOrWhiteSpace(src.ImageUrl)
