@@ -21,7 +21,7 @@ public class BlogsController : ControllerBase
     public async Task<IActionResult> GetAllTitles()
     {
         var result = await _svc.GetAllTitlesAsync();
-        return Ok(new {data = result});
+        return Ok(new { data = result });
     }
 
     [HttpGet("by-status/{status}")]
@@ -106,5 +106,12 @@ public class BlogsController : ControllerBase
         var blog = await _svc.UpdateAsync(id, updated);
         if (blog == null) return NotFound();
         return Ok(blog);
+    }
+    
+    [HttpGet("{id:int}/posted")]
+    public async Task<ActionResult> PostedOnSocialMedia(int id)
+    {
+        await _svc.PostedOnSocialMediaAsync(id);
+        return Ok();
     }
 }

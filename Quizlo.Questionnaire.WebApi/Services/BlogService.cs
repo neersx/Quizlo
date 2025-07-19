@@ -12,6 +12,7 @@ public interface IBlogService
     Task<BlogDto> GetByIdAsync(int id);
     Task<BlogDto> GetByLinkAsync(string link);
     Task<Blog> UpdateAsync(int id, BlogCreateDto updated);
+    Task PostedOnSocialMediaAsync(int id, CancellationToken ct = default);
 
     Task<Blog> CreateDraftAsync(CreateDraftBlogDto dto, int createdByUserId);
     Task<IReadOnlyList<Blog>> CreateDraftsAsync(IEnumerable<CreateDraftBlogDto> dtos, int createdByUserId, CancellationToken ct = default);
@@ -123,6 +124,13 @@ public class BlogService : IBlogService
         await _db.SaveChangesAsync(ct);
 
         return blogs;
+    }
+
+    public async Task PostedOnSocialMediaAsync(int id, CancellationToken ct = default)
+    {
+        var blog = _db.Blogs.Find(id);
+        blog.IsPostedOnSocialMedia = true;
+        _db.SaveChangesAsync(ct);
     }
 
     private static Blog MapToNewBlog(CreateDraftBlogDto dto, int createdByUserId)

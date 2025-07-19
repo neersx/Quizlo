@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -51,6 +49,7 @@ public class Blog
     public string? ImageUrl { get; set; }
 
     public bool IsFeatured { get; set; } = false;
+     public bool IsPostedOnSocialMedia { get; set; } = false;
 }
 
 public class BlogReview
