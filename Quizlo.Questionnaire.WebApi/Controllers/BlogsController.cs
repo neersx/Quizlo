@@ -112,6 +112,6 @@ public class BlogsController : ControllerBase
     public async Task<ActionResult> PostedOnSocialMedia(int id)
     {
         await _svc.PostedOnSocialMediaAsync(id);
-        return Ok();
+        return Ok(new { message = "Blog has been posted on social media", isSuccess = true });
     }
 }
