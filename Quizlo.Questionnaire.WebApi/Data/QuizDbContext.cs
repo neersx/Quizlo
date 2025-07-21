@@ -36,9 +36,9 @@ namespace Quizlo.Questionnaire.WebApi.Data
             builder.Entity<RoleClaim>(b => b.ToTable("RoleClaims"));
             builder.Entity<UserToken>(b => b.ToTable("UserTokens"));
 
-            builder.Entity<QuestionsHub>().HasOne(qh => qh.Exam).WithMany().HasForeignKey(qh => qh.ExamId);
-            builder.Entity<QuestionsHub>().HasOne(qh => qh.Subject).WithMany().HasForeignKey(qh => qh.SubjectId);
-            builder.Entity<QuestionsHub>().HasOne(qh => qh.Question).WithMany().HasForeignKey(qh => qh.QuestionId);
+            builder.Entity<QuestionsHub>().HasOne(qh => qh.Exam).WithMany().HasForeignKey(qh => qh.ExamId).OnDelete(DeleteBehavior.Restrict);   // Prevent multiple cascade paths
+            builder.Entity<QuestionsHub>().HasOne(qh => qh.Subject).WithMany().HasForeignKey(qh => qh.SubjectId).OnDelete(DeleteBehavior.Restrict);   // Prevent multiple cascade paths
+            builder.Entity<QuestionsHub>().HasOne(qh => qh.Question).WithMany().HasForeignKey(qh => qh.QuestionId).OnDelete(DeleteBehavior.Restrict);   // Prevent multiple cascade paths
         }
     }
 }
