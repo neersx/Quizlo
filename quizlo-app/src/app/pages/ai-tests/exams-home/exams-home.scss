@@ -7,7 +7,7 @@
     /* first layer = a 50% white overlay: adjust the alpha (0.5) to taste */
     linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)),
     /* second layer = the real background image */
-    url('https://quizloai.com/assets/images/quizlo_bg.webp');
+    url('https://res.cloudinary.com/quizloai/image/upload/v1753084816/quizlo_bg_vusgl1.webp');
     background-size: cover;       /* scale to cover */ /* center the image */
     background-repeat: no-repeat; /* don’t tile */
   }

@@ -107,14 +107,14 @@ export class ExamsHome implements OnInit {
       // Open Graph
       this.metaService.updateTag({ property: 'og:title', content: title });
       this.metaService.updateTag({ property: 'og:description', content: description });
-      this.metaService.updateTag({ property: 'og:image', content: 'https://quizloai.com/assets/images/exam-selection.jpg' });
+      this.metaService.updateTag({ property: 'og:image', content: 'https://res.cloudinary.com/quizloai/image/upload/v1753084790/exam-selection_hcdpgv.jpg' });
       this.metaService.updateTag({ property: 'og:url', content: `https://quizloai.com/test/select-exam` });
   
       // Twitter Card
       this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
       this.metaService.updateTag({ name: 'twitter:title', content: title });
       this.metaService.updateTag({ name: 'twitter:description', content: description});
-      this.metaService.updateTag({ name: 'twitter:image', content: 'https://quizloai.com/assets/images/exam-selection.jpg' });
+      this.metaService.updateTag({ name: 'twitter:image', content: 'https://res.cloudinary.com/quizloai/image/upload/v1753084790/exam-selection_hcdpgv.jpg' });
     }
 
 

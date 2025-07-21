@@ -482,44 +482,44 @@ export class HomeComponent {
 
   servicecards = [
     {
-      image: '../../assets/images/exams/neet.jpg',
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753084911/neet_ejbc2k.jpg',
       title: 'NEET UG',
       description: 'AI-generated full-length NEET mocks with real-exam timing, section-wise breakdown, and instant score reports.',
     },
+    {
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753085387/upsc_hsvsdb.jpg',
+      title: 'UPSC Civil Services',
+      description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
+    },
 
     {
-      image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/7.png',
-      title: 'SSC CGL',
-      description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
-    },
-    {
-      image: '../../assets/images/exams/ibps-po.jpg',
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753085370/ibps-po_e16kow.jpg',
       title: 'IBPS PO',
       description: 'Full-length IBPS PO online mocks with live timer, adaptive difficulty and instant percentile ranking.',
     },
 
     {
-      image: '../../assets/images/exams/upsc.jpg',
-      title: 'UPSC Civil Services',
-      description: 'Simulate Prelims and Mains exams with AI-driven question banks, timed sections, and answer-writing feedback.',
-    },
-    {
-      image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/6.png',
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753085394/iit-jee_mpoxe2.jpg',
       title: 'JEE Main',
       description: 'Practice JEE Main papers under timed conditions, adaptive difficulty, and detailed performance analytics.',
     },
     {
-      image: '../../assets/images/exams/ctat.jpg',
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753084925/ctat_lcq346.jpg',
       title: 'CTAT',
       description: 'Our tests are crafted preciously for Central govt. Teacher Aptitude Test (CTAT) mock exams.',
     },
     {
-      image: '../../assets/images/exams/rbi.jpg',
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753085387/upsc_hsvsdb.jpg',
+      title: 'SSC CGL',
+      description: 'End-to-end SSC CGL mock tests, real-exam pattern support, and in-depth sectional and overall performance reports.',
+    },
+    {
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753084917/rbi_i6hzmd.jpg',
       title: 'RBI Grade B',
       description: 'Fully automated RBI Grade B practice tests, seamless UI, and AI-backed topic-wise analytics.',
     },
     {
-      image: 'https://angular.spruko.com/zeno/preview/assets/images/media/landing/services/2.png',
+      image: 'https://res.cloudinary.com/quizloai/image/upload/v1753085376/jee_lvptse.jpg',
       title: 'GATE',
       description: 'AI-powered GATE mock exams with strict time limits, sectional scoring and instant performance dashboards.',
     },
