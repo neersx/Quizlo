@@ -59,12 +59,14 @@ builder.Services.AddAutoMapper(typeof(BlogProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(BlogMappingProfile).Assembly);
 builder.Services.AddTransient<PrependBaseUrlResolver>();
 builder.Services.AddAutoMapper(typeof(BlogListMappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(QuestionsHubProfile).Assembly);
 
 
 // 5. Register your services
 builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IQuestionsHubService, QuestionsHubService>();
 builder.Services.AddScoped<JwtTokenService>();
 
 builder.Services.AddHttpClient();          // for webhook

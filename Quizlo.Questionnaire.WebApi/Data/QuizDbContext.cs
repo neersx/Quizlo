@@ -21,6 +21,7 @@ namespace Quizlo.Questionnaire.WebApi.Data
 
         public DbSet<TestQuestion> TestQuestions { get; set; }
         public DbSet<OTPRecord> OTPRecords { get; set; }
+        public DbSet<QuestionsHub> QuestionsHubs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +35,10 @@ namespace Quizlo.Questionnaire.WebApi.Data
             builder.Entity<UserLogin>(b => b.ToTable("UserLogins"));
             builder.Entity<RoleClaim>(b => b.ToTable("RoleClaims"));
             builder.Entity<UserToken>(b => b.ToTable("UserTokens"));
+
+            builder.Entity<QuestionsHub>().HasOne(qh => qh.Exam).WithMany().HasForeignKey(qh => qh.ExamId);
+            builder.Entity<QuestionsHub>().HasOne(qh => qh.Subject).WithMany().HasForeignKey(qh => qh.SubjectId);
+            builder.Entity<QuestionsHub>().HasOne(qh => qh.Question).WithMany().HasForeignKey(qh => qh.QuestionId);
         }
     }
 }
