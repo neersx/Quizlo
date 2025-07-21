@@ -5,6 +5,7 @@ using Quizlo.Questionnaire.WebApi.DTO;
 using Quizlo.Questionnaire.WebApi.Services;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.Helpers;
 
 public class QuestionsHubService : IQuestionsHubService
 {
@@ -16,6 +17,226 @@ public class QuestionsHubService : IQuestionsHubService
         _context = context;
         _mapper = mapper;
     }
+
+    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(
+    int examId,
+    int subjectId,
+    int questionsCount = 0)
+    {
+        // Filter QuestionsHub for this Exam + Subject and collapse to DISTINCT Questions
+        // Using GroupBy to ensure distinct by QuestionId across providers (safer than Distinct on entity)
+        var distinctQuestionsQuery = _context.QuestionsHubs
+            .AsNoTracking()
+            .Where(qh => qh.ExamId == examId && qh.SubjectId == subjectId)
+            .GroupBy(qh => qh.QuestionId)
+            .Select(g => g.Select(x => x.Question).First());
+
+        // Materialize once so we can randomize & stratify in memory
+        var allQuestions = await distinctQuestionsQuery.ToListAsync();
+
+        if (allQuestions.Count == 0)
+            return Array.Empty<QuestionDto>();
+
+        // If questionsCount <= 0, just take *all* (shuffle below)
+        var takeCount = questionsCount <= 0 ? allQuestions.Count : Math.Min(questionsCount, allQuestions.Count);
+
+        // Bucket by difficulty
+        var byDifficulty = allQuestions
+            .GroupBy(q => q.Difficulty)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        // Build target counts per bucket
+        var allocations = AllocateByDifficulty(
+            DefaultDifficultyMix,
+            byDifficulty,
+            takeCount);
+
+        // RNG
+        var rng = new Random(); // You can inject a seeded RNG for testability
+
+        // Sample from each bucket
+        var picked = new List<Question>(takeCount);
+        foreach (var kvp in allocations)
+        {
+            var diff = kvp.Key;
+            var need = kvp.Value;
+            if (need <= 0) continue;
+            if (!byDifficulty.TryGetValue(diff, out var list) || list.Count == 0) continue;
+
+            // Shuffle & take
+            var sampled = list.OrderBy(_ => rng.Next()).Take(need);
+            picked.AddRange(sampled);
+        }
+
+        // If, due to empty buckets, we have fewer than needed, top up from remaining pool not yet picked
+        if (picked.Count < takeCount)
+        {
+            var pickedIds = picked.Select(q => q.Id).ToHashSet();
+            var leftovers = allQuestions.Where(q => !pickedIds.Contains(q.Id))
+                .OrderBy(_ => rng.Next())
+                .Take(takeCount - picked.Count);
+            picked.AddRange(leftovers);
+        }
+
+        // Final shuffle across all chosen questions
+        picked = picked.OrderBy(_ => rng.Next()).ToList();
+
+        // Map to DTOs + assign QuestionNo
+        var results = new List<QuestionDto>(picked.Count);
+        for (int i = 0; i < picked.Count; i++)
+        {
+            var q = picked[i];
+            results.Add(new QuestionDto
+            {
+                Id = q.Id,
+                QuestionText = q.QuestionText,
+                QuestionNo = i + 1,
+                OptionsJson = q.OptionsJson,
+                Type = q.Type,
+                Difficulty = q.Difficulty.ToString(),
+                Explanation = q.Explanation,
+                CorrectOptionIds = q.CorrectOptionIds,
+                SelectedOptionIds = q.SelectedOptionIds,
+                IsCorrect = q.IsCorrect,
+                IsMultipleSelect = q.Type == QuestionType.Multiple,
+                Marks = q.Marks,
+                MinusMarks = q.MinusMarks,
+                AnsweredAt = q.AnsweredAt
+            });
+        }
+
+        return results;
+    }
+
+    private static Dictionary<DifficultyLevel, int> AllocateByDifficulty(
+        IReadOnlyDictionary<DifficultyLevel, double> weightMap,
+        IDictionary<DifficultyLevel, List<Question>> available,
+        int totalNeeded)
+    {
+        // Normalize weights to only those in enum; remainder bucket collects unknown difficulties
+        var knownWeightsSum = weightMap.Values.Sum();
+        if (knownWeightsSum <= 0)
+            knownWeightsSum = 1; // defensive
+
+        // Initial target counts (rounded to nearest integer)
+        var targets = new Dictionary<DifficultyLevel, int>();
+        var running = 0;
+        foreach (var kv in weightMap)
+        {
+            var count = (int)Math.Round(totalNeeded * (kv.Value / knownWeightsSum), MidpointRounding.AwayFromZero);
+            targets[kv.Key] = count;
+            running += count;
+        }
+
+        // Adjust rounding drift
+        if (running != totalNeeded)
+        {
+            var diff = totalNeeded - running;
+            // Apply drift by giving/taking 1 at a time to the largest weight buckets first
+            var ordered = weightMap.OrderByDescending(kv => kv.Value).Select(kv => kv.Key).ToList();
+            var idx = 0;
+            while (diff != 0)
+            {
+                var key = ordered[idx % ordered.Count];
+                targets[key] += diff > 0 ? 1 : -1;
+                diff += diff > 0 ? -1 : 1;
+                idx++;
+            }
+        }
+
+        // Cap by availability; track shortfall
+        var shortfall = 0;
+        foreach (var key in targets.Keys.ToList())
+        {
+            var have = available.TryGetValue(key, out var list) ? list.Count : 0;
+            if (targets[key] > have)
+            {
+                shortfall += targets[key] - have;
+                targets[key] = have;
+            }
+        }
+
+        // Redistribute shortfall across buckets that still have excess supply (including unmapped difficulties)
+        if (shortfall > 0)
+        {
+            // Build a supply list of extra questions across *all* difficulties
+            // Extra = available - already allocated
+            var supply = new List<(DifficultyLevel diff, int extra)>();
+            foreach (var kv in available)
+            {
+                var have = kv.Value.Count;
+                var allocated = targets.TryGetValue(kv.Key, out var t) ? t : 0;
+                var extra = have - allocated;
+                if (extra > 0) supply.Add((kv.Key, extra));
+            }
+
+            var i = 0;
+            while (shortfall > 0 && supply.Count > 0)
+            {
+                var (diffKey, extra) = supply[i % supply.Count];
+                if (!targets.ContainsKey(diffKey))
+                    targets[diffKey] = 0;
+                targets[diffKey]++;
+                shortfall--;
+                extra--;
+                if (extra <= 0)
+                {
+                    supply.RemoveAt(i % supply.Count);
+                    if (supply.Count == 0) break;
+                }
+                else
+                {
+                    supply[i % supply.Count] = (diffKey, extra);
+                    i++;
+                }
+            }
+        }
+
+        // Final safety clamp
+        var totalFinal = targets.Values.Sum();
+        if (totalFinal > totalNeeded)
+        {
+            // Trim biggest buckets first
+            var over = totalFinal - totalNeeded;
+            foreach (var key in targets.OrderByDescending(kv => kv.Value).Select(kv => kv.Key).ToList())
+            {
+                if (over <= 0) break;
+                var reduce = Math.Min(over, targets[key]);
+                targets[key] -= reduce;
+                over -= reduce;
+            }
+        }
+
+        return targets;
+    }
+
+    public async Task<bool> IsQuestionCountSufficientAsync(int examId, int subjectId, int expectedCount)
+    {
+        if (expectedCount <= 0)
+            throw new ArgumentException("Expected count must be greater than zero.", nameof(expectedCount));
+
+        // Count distinct QuestionIds in QuestionsHub for given Exam + Subject
+        int actualCount = await _context.QuestionsHubs
+            .AsNoTracking()
+            .Where(qh => qh.ExamId == examId && qh.SubjectId == subjectId)
+            .Select(qh => qh.QuestionId)
+            .Distinct()
+            .CountAsync();
+
+        return actualCount >= expectedCount;
+    }
+
+
+
+
+    private static readonly IReadOnlyDictionary<DifficultyLevel, double> DefaultDifficultyMix =
+    new Dictionary<DifficultyLevel, double>
+    {
+        { DifficultyLevel.Easy,   0.40 },
+        { DifficultyLevel.Medium, 0.40 },
+        { DifficultyLevel.Hard,   0.20 },
+        // Any other enum values will be treated as spillover.
+    };
 
     public async Task<QuestionsHubDto> CreateAsync(QuestionsHubCreateDto dto)
     {
