@@ -210,7 +210,7 @@ public class QuestionsHubService : IQuestionsHubService
         return targets;
     }
 
-    public async Task<bool> IsQuestionCountSufficientAsync(int examId, int subjectId, int expectedCount)
+    public async Task<int> IsQuestionCountSufficientAsync(int examId, int subjectId, int expectedCount)
     {
         if (expectedCount <= 0)
             throw new ArgumentException("Expected count must be greater than zero.", nameof(expectedCount));
@@ -223,7 +223,7 @@ public class QuestionsHubService : IQuestionsHubService
             .Distinct()
             .CountAsync();
 
-        return actualCount >= expectedCount;
+        return actualCount;
     }
 
 

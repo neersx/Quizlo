@@ -18,8 +18,8 @@ public class QuestionsHubController : ControllerBase
     [HttpGet("{examId:int}/{subjectId:int}/check-count")]
     public async Task<IActionResult> CheckQuestionCount(int examId, int subjectId, [FromQuery] int expectedCount)
     {
-        bool isSufficient = await _service.IsQuestionCountSufficientAsync(examId, subjectId, expectedCount);
-        return Ok(new { IsSufficient = isSufficient });
+        int count = await _service.IsQuestionCountSufficientAsync(examId, subjectId, expectedCount);
+        return Ok(new { IsSufficient = count >= expectedCount, Count = count });
     }
 
     [HttpGet("{examId:int}/{subjectId:int}/draw")]
