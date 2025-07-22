@@ -27,7 +27,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public bool IsActive { get; set; } = false;
         public string? ImageUrl { get; set; }
 
-        public string? ExamGuidelines { get; set; }
+        public string? ExamGuidelines { get; set; } = "";
 
         [Required]
         public DateTime CreatedAt { get; set; }
@@ -35,5 +35,6 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public int CreatedByUserId { get; set; }
 
         public ICollection<Test> Tests { get; set; }
+         public ICollection<Subject> Subjects { get; set; }
     }
 }

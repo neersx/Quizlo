@@ -6,22 +6,34 @@ using Quizlo.Questionnaire.WebApi.Services;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.Helpers;
+using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using System.Text.Json;
 
 public class QuestionsHubService : IQuestionsHubService
 {
     private readonly QuizDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IHttpClientFactory _http;
+    private readonly ILogger<TestService> _log;
+    private readonly string _webhookUrl;
+    private const int MaxRetries = 3;
 
-    public QuestionsHubService(QuizDbContext context, IMapper mapper)
+
+    public QuestionsHubService(QuizDbContext db,
+                       IHttpClientFactory http,
+                       IConfiguration cfg,
+                       IMapper mapper,
+                       ILogger<TestService> log)
     {
-        _context = context;
+        _context = db;
+        _http = http;
         _mapper = mapper;
+        _log = log;
+        _webhookUrl = cfg["N8n:WebhookUrl"]!; // -> appsettings.json
     }
 
-    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(
-    int examId,
-    int subjectId,
-    int questionsCount = 0)
+    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int examId, int subjectId, int questionsCount = 0)
     {
         // Filter QuestionsHub for this Exam + Subject and collapse to DISTINCT Questions
         // Using GroupBy to ensure distinct by QuestionId across providers (safer than Distinct on entity)
@@ -226,7 +238,216 @@ public class QuestionsHubService : IQuestionsHubService
         return actualCount;
     }
 
+    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromAiAsync(int examId, int subjectId, int expectedCount = 30, string language = "English", CancellationToken ct = default)
+    {
 
+        var exam = await _context.Exams.Include(e => e.Subjects).FirstOrDefaultAsync(e => e.Id == examId);
+        if (exam == null)
+            throw new KeyNotFoundException($"Exam with Id {examId} not found.");
+
+        foreach (var sub in exam.Subjects)
+        {
+            var req = new QuestionsHubCreateDto
+            {
+                ExamId = examId,
+                SubjectId = sub.Id,
+                ExamName = exam.Name,
+                ExamCode = exam.Code,
+                Subject = sub.Title,
+                Language = language,
+            };
+
+            var env = await GetAIGeneratedQuestions(req, ct);
+            return env.Questions!;
+        }
+
+        throw new KeyNotFoundException($"Subjects with Exam Id {examId} not found.");
+
+    }
+
+    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int examId, int subjectId, int createdBy,
+     IEnumerable<QuestionDto> questions, string? topic = null, CancellationToken cancellationToken = default)
+    {
+        if (questions is null) throw new ArgumentNullException(nameof(questions));
+
+        // Validate Exam + Subject relationship
+        var subject = await _context.Subjects
+            .AsNoTracking()
+            .FirstOrDefaultAsync(s => s.Id == subjectId && s.ExamId == examId, cancellationToken);
+
+        if (subject is null)
+            throw new ArgumentException("Invalid examId/subjectId combination. Subject not linked to exam.");
+
+        var incoming = questions.ToList();
+        if (incoming.Count == 0)
+            throw new ArgumentException("No questions to insert.", nameof(questions));
+
+        using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            var utcNow = DateTime.UtcNow;
+            var hubs = new List<QuestionsHub>(incoming.Count);
+
+            foreach (var dto in incoming)
+            {
+                var question = new Question
+                {
+                    QuestionText = dto.QuestionText,
+                    OptionsJson = dto.OptionsJson,
+                    Type = dto.Type,
+                    Difficulty = ParseDifficulty(dto.Difficulty),
+                    Explanation = dto.Explanation,
+                    CorrectOptionIds = dto.CorrectOptionIds,
+                    SelectedOptionIds = dto.SelectedOptionIds,
+                    IsCorrect = dto.IsCorrect,
+                    Marks = dto.Marks,
+                    MinusMarks = dto.MinusMarks,
+                    AnsweredAt = dto.AnsweredAt
+                };
+
+                // Enforce Multiple type if DTO says it's multi-select
+                if (dto.IsMultipleSelect && question.Type != QuestionType.Multiple)
+                    question.Type = QuestionType.Multiple;
+
+                hubs.Add(new QuestionsHub
+                {
+                    ExamId = examId,
+                    SubjectId = subjectId,
+                    Question = question, // EF will insert Question then Hub automatically
+                    Topic = topic,
+                    CreatedAt = utcNow,
+                    CreatedBy = createdBy,
+                    IsActive = true,
+                    Difficulty = dto.Difficulty ?? question.Difficulty.ToString()
+                });
+            }
+
+            _context.QuestionsHubs.AddRange(hubs);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            subject.TotalQuestions = await _context.QuestionsHubs.Where(h => h.ExamId == examId && h.SubjectId == subjectId)
+                .Select(h => h.QuestionId).Distinct()
+                .CountAsync(cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            await tx.CommitAsync(cancellationToken);
+            // Reload just-created Hub rows
+            var result = await _context.QuestionsHubs
+                .AsNoTracking()
+                .Where(h => h.ExamId == examId && h.SubjectId == subjectId)
+                .Include(h => h.Exam)
+                .Include(h => h.Subject)
+                .Include(h => h.Question)
+                .ProjectTo<QuestionsHubDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            return result;
+        }
+        catch
+        {
+            await tx.RollbackAsync(cancellationToken);
+            throw;
+        }
+    }
+
+
+    // ----------------- Helper -----------------
+    private static DifficultyLevel ParseDifficulty(string? s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return DifficultyLevel.Medium;
+        return Enum.TryParse<DifficultyLevel>(s, true, out var parsed)
+            ? parsed
+            : DifficultyLevel.Medium;
+    }
+
+
+    private async Task<TestDetailsDto> AddQuestionsHubAsync(TestDetailsDto testDetails, CancellationToken ct = default)
+    {
+        for (var attempt = 1; attempt <= MaxRetries; attempt++)
+        {
+            await using var tx = await _context.Database.BeginTransactionAsync(ct);
+
+            var test = await _context.Tests.Include(t => t.TestQuestions).ThenInclude(tq => tq.Question)
+                                .FirstOrDefaultAsync(t => t.Id == testDetails.Id, ct)
+                                ?? throw new KeyNotFoundException($"Test {testDetails.Id} not found.");
+
+            #region --------- AddQuestions to the database ------------
+
+            var questions = testDetails.Questions.Select(q => new Question
+            {
+                QuestionText = q.QuestionText,
+                Options = q.Options,
+                OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
+                CorrectOptionIds = q.CorrectOptionIds,
+                Explanation = q.Explanation,
+                Marks = q.Marks,
+                Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
+                Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true),
+            }).ToList();
+
+            _context.Questions.AddRange(questions);
+            await _context.SaveChangesAsync(ct);
+
+            var links = questions.Select((q, i) => new TestQuestion
+            {
+                TestId = test.Id,
+                QuestionId = q.Id,
+                Order = testDetails.Questions[i].QuestionNo
+            });
+
+            _context.TestQuestions.AddRange(links);
+            await _context.SaveChangesAsync(ct);
+
+            #endregion
+
+
+            test.TotalQuestions = testDetails.TotalQuestions;
+            test.TotalMarks = testDetails.TotalMarks;
+            test.Duration = testDetails.Duration;
+
+            await _context.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+
+            var questionsDto = _mapper.Map<List<QuestionDto>>(questions);
+            var testDto = _mapper.Map<TestDetailsDto>(test);
+            testDto.Questions = questionsDto;
+
+            return testDto;
+
+        }
+
+        return testDetails;
+    }
+
+    private async Task<N8nResponseDto> GetAIGeneratedQuestions(QuestionsHubCreateDto req, CancellationToken ct)
+    {
+        var client = _http.CreateClient();
+        client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
+
+        var query = new Dictionary<string, string?>
+        {
+            ["examName"] = req.ExamName,
+            ["examCode"] = req.ExamCode,
+            ["numberOfQuestions"] = "30",
+            ["difficultyLevel"] = "Mix",
+            ["subject"] = req.Subject,
+            ["language"] = req.Language,
+            ["examId"] = req.ExamId.ToString(),
+        };
+
+        var webhookUrl = QueryHelpers.AddQueryString(_webhookUrl, query);
+        _log.LogInformation("Calling n8n webhook {Url}", webhookUrl);
+
+        using var resp = await client.GetAsync(webhookUrl, ct);
+        resp.EnsureSuccessStatusCode();
+
+        var raw = await resp.Content.ReadAsStringAsync(ct);
+
+        return System.Text.Json.JsonSerializer.Deserialize<N8nResponseDto>(raw,
+                      new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? throw new ApplicationException("Empty n8n response");
+    }
 
 
     private static readonly IReadOnlyDictionary<DifficultyLevel, double> DefaultDifficultyMix =

@@ -11,21 +11,8 @@
         public const string Telugu = "Telugu";
         public const string Marathi = "Marathi";
         public const string Tamil = "Tamil";
-        public const string Gujarati = "Gujarati";
-        public const string Urdu = "Urdu";
+        // public const string Gujarati = "Gujarati";
         public const string Kannada = "Kannada";
-        public const string Odia = "Odia";
-        public const string Malayalam = "Malayalam";
-        public const string Punjabi = "Punjabi";
-        public const string Assamese = "Assamese";
-        public const string Maithili = "Maithili";
-        public const string Santali = "Santali";
-        public const string Kashmiri = "Kashmiri";
-        public const string Konkani = "Konkani";
-        public const string Sindhi = "Sindhi";
-        public const string Dogri = "Dogri";
-        public const string Bodo = "Bodo";
-        public const string Manipuri = "Manipuri";
-        //public const string Nepali = "Nepali";
+
     }
 }

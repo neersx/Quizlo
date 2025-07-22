@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 
 namespace Quizlo.Questionnaire.WebApi.DTO
 {
@@ -17,6 +18,8 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string Difficulty   { get; set; } = default!;
         public string Explanation { get; set; }
         public string CorrectOptionIds { get; set; }
+         [MaxLength(70)]
+        public string Language { get; set; } = IndianLanguages.English;
 
         public string? SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
         public bool? IsCorrect { get; set; }

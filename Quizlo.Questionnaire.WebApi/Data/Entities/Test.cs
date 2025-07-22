@@ -34,7 +34,6 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
 
         [Required, ForeignKey(nameof(CreatedBy))]
         public int CreatedByUserId { get; set; }
-
         public User CreatedBy { get; set; }
         public double? TotalMarks { get; set; }
         public double? MarksScored { get; set; }
@@ -45,7 +44,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [MaxLength(1000)]
         public string? Notes { get; set; }
 
-        public string? Type { get; set; }
+        public string? Type { get; set; } // Group, Individual
+        public DateTime? TestStartDateTime { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;
         public ICollection<TestQuestion> TestQuestions { get; set; }
         //public ICollection<Attempt> Attempts { get; set; }
@@ -60,6 +60,12 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public int QuestionId { get; set; }
         public Question Question { get; set; }
         public int Order { get; set; }
+        [MaxLength(50)]
+        public string? SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
+        public bool? IsCorrect { get; set; }
+        public decimal? MinusMarks { get; set; }
+        public double? Marks { get; init; }
+        public DateTime? AnsweredAt { get; set; }
     }
 
 }

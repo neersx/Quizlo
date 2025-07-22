@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Quizlo.Questionnaire.WebApi.Helpers;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 
 namespace Quizlo.Questionnaire.WebApi.Data.Entities
 {
@@ -25,6 +26,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public bool? IsCorrect { get; set; }
         public decimal? MinusMarks { get; set; }
         public double? Marks { get; init; }
+        [MaxLength(70)]
+        public string Language { get; set; } = IndianLanguages.English;
 
         public DateTime? AnsweredAt { get; set; }
 
