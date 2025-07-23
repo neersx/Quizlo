@@ -9,7 +9,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
         Task<IEnumerable<QuestionsHubDto>> GetByExamAndSubjectAsync(int examId, int subjectId);
         Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int examId, int subjectId, int questionsCount = 0);
         Task<int> IsQuestionCountSufficientAsync(int examId, int subjectId, int expectedCount);
-        Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int examId, int subjectId, int createdBy, IEnumerable<QuestionDto> questions, string? topic = null, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int examId, int subjectId, int createdBy, string? topic = null, CancellationToken cancellationToken = default);
 
     }
 

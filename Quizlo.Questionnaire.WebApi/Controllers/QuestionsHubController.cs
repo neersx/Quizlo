@@ -4,7 +4,6 @@ using Quizlo.Questionnaire.WebApi.DTO;
 using Quizlo.Questionnaire.WebApi.Services;
 
 [Route("api/questions-hub")]
-[Authorize]
 [ApiController]
 public class QuestionsHubController : ControllerBase
 {
@@ -31,12 +30,10 @@ public class QuestionsHubController : ControllerBase
     }
 
     [HttpPost("{examId:int}/{subjectId:int}/insert")]
-    public async Task<IActionResult> InsertQuestionsAndHub(int examId, int subjectId, [FromQuery] string? topic,
-    [FromBody] List<QuestionDto> questions,
-    CancellationToken cancellationToken = default)
+    public async Task<IActionResult> InsertQuestionsAndHub(int examId, int subjectId, [FromQuery] string? topic, CancellationToken cancellationToken = default)
     {
-        int createdBy = int.Parse(User.FindFirst("sub").Value);
-        var result = await _service.InsertQuestionsAndHubAsync(examId, subjectId, createdBy, questions, topic,
+        int createdBy = 1;
+        var result = await _service.InsertQuestionsAndHubAsync(examId, subjectId, createdBy, topic,
             cancellationToken: cancellationToken);
 
         return Ok(result);

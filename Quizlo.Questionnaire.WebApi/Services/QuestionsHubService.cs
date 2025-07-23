@@ -30,7 +30,7 @@ public class QuestionsHubService : IQuestionsHubService
         _http = http;
         _mapper = mapper;
         _log = log;
-        _webhookUrl = cfg["N8n:WebhookUrl"]!; // -> appsettings.json
+        _webhookUrl = cfg["N8n:WebhookQuestionHubPostUrl"]!; // -> appsettings.json
     }
 
     public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int examId, int subjectId, int questionsCount = 0)
@@ -245,6 +245,23 @@ public class QuestionsHubService : IQuestionsHubService
         if (exam == null)
             throw new KeyNotFoundException($"Exam with Id {examId} not found.");
 
+        if (subjectId > 0)
+        {
+            var subject = exam.Subjects.FirstOrDefault(s => s.Id == subjectId);
+            var req = new QuestionsHubCreateDto
+            {
+                ExamId = examId,
+                SubjectId = subjectId,
+                ExamName = exam.Name,
+                ExamCode = exam.Code,
+                Subject = subject.Title,
+                Language = language,
+            };
+
+            var env = await GetAIGeneratedQuestions(req, ct);
+            return env.Questions!;
+        }
+
         foreach (var sub in exam.Subjects)
         {
             var req = new QuestionsHubCreateDto
@@ -265,10 +282,8 @@ public class QuestionsHubService : IQuestionsHubService
 
     }
 
-    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int examId, int subjectId, int createdBy,
-     IEnumerable<QuestionDto> questions, string? topic = null, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int examId, int subjectId, int createdBy, string? topic = null, CancellationToken cancellationToken = default)
     {
-        if (questions is null) throw new ArgumentNullException(nameof(questions));
 
         // Validate Exam + Subject relationship
         var subject = await _context.Subjects
@@ -278,17 +293,15 @@ public class QuestionsHubService : IQuestionsHubService
         if (subject is null)
             throw new ArgumentException("Invalid examId/subjectId combination. Subject not linked to exam.");
 
-        var incoming = questions.ToList();
-        if (incoming.Count == 0)
-            throw new ArgumentException("No questions to insert.", nameof(questions));
+       var questions = await GetQuestionsFromAiAsync(examId, subjectId, expectedCount: 30, "English",cancellationToken);
 
         using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
         try
         {
             var utcNow = DateTime.UtcNow;
-            var hubs = new List<QuestionsHub>(incoming.Count);
+            var hubs = new List<QuestionsHub>(questions.Count);
 
-            foreach (var dto in incoming)
+            foreach (var dto in questions)
             {
                 var question = new Question
                 {
