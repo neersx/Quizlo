@@ -30,7 +30,7 @@ public class QuestionsHubService : IQuestionsHubService
         _http = http;
         _mapper = mapper;
         _log = log;
-        _webhookUrl = cfg["N8n:WebhookQuestionHubPostUrl"]!; // -> appsettings.json
+        _webhookUrl = $"{cfg["N8n:WebhookBaseUrl"]!}/questions-hub"; // -> appsettings.json
     }
 
     public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int examId, int subjectId, int questionsCount = 0)
