@@ -78,7 +78,7 @@ export class TestWindow implements OnInit, OnDestroy {
       this.loadTest();
       this.loadTestQuestions();
       effect(() => {
-        console.log('⏳ Time Remaining C:', this.timeRemaining(), 'seconds');
+        //console.log('⏳ Time Remaining C:', this.timeRemaining(), 'seconds');
       });
     }
   }
@@ -95,6 +95,9 @@ export class TestWindow implements OnInit, OnDestroy {
       next: (resp: any) => {
         if (resp.isSuccess && resp.data) {
           this.questions = resp.data.questions as QuestionModel[];
+          this.questions.forEach((q: any) => {
+            q.isMultipleSelect = q.correctOptionIds?.length > 1;
+          })
           this.testData.questions = this.questions;
           this.isLoadingQuestions = false;
           this.startTimer();

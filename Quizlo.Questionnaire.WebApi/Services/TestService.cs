@@ -236,8 +236,7 @@ public class TestService : ITestService
         return testDetails;
     }
 
-    public async Task<TestDetailsDto> CreateTestAsync(
-            CreateTestRequest req, int userId, CancellationToken ct = default)
+    public async Task<TestDetailsDto> CreateTestAsync(CreateTestRequest req, int userId, CancellationToken ct = default)
     {
         //------------------------------------------------------------------
         // 1)   Get *all* data you need BEFORE you open a DB transaction

@@ -83,6 +83,7 @@
       <div class="question-container" *ngIf="currentQuestion as question">
         <div class="question-card">
           <div class="question-header">
+            {{question | json}}
             <span class="question-number">Question {{ question.questionNo }}</span>
             <span class="difficulty-badge" [ngClass]="getDifficultyClass(question.difficulty)">
               {{ question.difficulty }}
