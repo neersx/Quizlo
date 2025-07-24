@@ -28,13 +28,15 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 {
                     ExamId = exam.Id,
                     ExamName = exam.Name,
+                    ExamCode = exam.Code,
                     Subjects = exam.Subjects
                         .Where(subject => subject.TotalQuestions == 0)
                         .Select(subject => new SubjectDto
                         {
                             SubjectId = subject.Id,
                             Name = subject.Title,
-                            TotalQuestions = subject.TotalQuestions
+                            TotalQuestions = subject.TotalQuestions,
+                            QuestionsInExam = subject.QuestionsInExam
                         }).ToList()
                 }).ToListAsync(cancellationToken);
 
