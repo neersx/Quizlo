@@ -123,13 +123,13 @@ public class TestService : ITestService
 
         TestDetailsDto test = await GetTestAsync(testId, ct);
 
-        int subjectId = test.Exam.Subjects.FirstOrDefault(e => e.Title == test.Subject).Id;
+        int subjectId = (int)test.SubjectId;
 
         if (test == null)
             throw new ArgumentNullException(nameof(test));
 
         if (test.Questions.Count > 0)
-            return await GetTestAsync(testId, ct);
+            return test;
         else
         {
             var env = await GetAIGeneratedQuestions(test, subjectId, ct);
@@ -155,7 +155,7 @@ public class TestService : ITestService
                                 .FirstOrDefaultAsync(t => t.Id == testDetails.Id, ct)
                                 ?? throw new KeyNotFoundException($"Test {testDetails.Id} not found.");
 
-            #region --------- AddQuestions to the database ------------
+            #region --------- AddQuestions to the Questions Hub and TestQuestions ------------
 
             var hubs = new List<QuestionsHub>(testDetails.Questions.Count);
             var testQuestions = new List<TestQuestion>(testDetails.Questions.Count);
@@ -422,7 +422,7 @@ public class TestService : ITestService
                    ?? throw new ApplicationException("Empty n8n response");
     }
 
-    // Update the mapping of Difficulty property in the GetTestAsync method to convert DifficultyLevel to string.
+    // Update the mapping of Difficulty property in the  method to convert DifficultyLevel to string.
     public async Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default)
     {
         return await _db.Tests
@@ -438,6 +438,7 @@ public class TestService : ITestService
                             Duration = (TimeSpan)t.Duration,
                             CreatedAt = t.CreatedAt,
                             ExamId = t.ExamId,
+                            SubjectId = t.Exam.Subjects.FirstOrDefault(s => s.Title == t.Subject)!.Id,
                             Subject = t.Subject,
                             Language = t.Language,
                             ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
@@ -445,7 +446,6 @@ public class TestService : ITestService
                             MarksScored = t.MarksScored,
                             TotalMarks = t.TotalMarks,
                             ExamName = t.Exam.Name,
-                            Exam = t.Exam,
                             ExamCode = t.Exam.Code,
                             Questions = t.TestQuestions
                                          .OrderBy(tq => tq.Order)

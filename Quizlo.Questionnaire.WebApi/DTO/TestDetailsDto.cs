@@ -13,12 +13,12 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public TimeSpan? DurationCompltedIn { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ExamId { get; set; }
+        public int? SubjectId { get; set; }
         public int TotalQuestions { get; set; }
         public double? TotalMarks { get; set; }
         public double? MarksScored { get; init; }
         public string ExamName { get; set; } = default!;
         public string ExamCode { get; set; }
-        public Exam? Exam { get; set; }
         public string ImageUrl { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;
         public IReadOnlyList<QuestionDto> Questions { get; set; } = [];
