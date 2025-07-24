@@ -307,11 +307,8 @@ public class QuestionsHubService : IQuestionsHubService
                     Difficulty = ParseDifficulty(dto.Difficulty),
                     Explanation = dto.Explanation,
                     CorrectOptionIds = dto.CorrectOptionIds,
-                    SelectedOptionIds = dto.SelectedOptionIds,
-                    IsCorrect = dto.IsCorrect,
                     Marks = dto.Marks,
                     MinusMarks = dto.MinusMarks,
-                    AnsweredAt = dto.AnsweredAt
                 };
 
                 // Enforce Multiple type if DTO says it's multi-select

@@ -47,7 +47,7 @@ public class TestService : ITestService
         _http = http;
         _mapper = mapper;
         _log = log;
-        _webhookUrl = cfg["N8n:WebhookUrl"]!; // -> appsettings.json
+        _webhookUrl = $"{cfg["N8n:WebhookBaseUrl"]!}/generate-live-question";  // -> appsettings.json
     }
 
     /// <summary>All tests that belong to one user, most-recent first.</summary>
@@ -123,6 +123,8 @@ public class TestService : ITestService
 
         TestDetailsDto test = await GetTestAsync(testId, ct);
 
+        int subjectId = test.Exam.Subjects.FirstOrDefault(e => e.Title == test.Subject).Id;
+
         if (test == null)
             throw new ArgumentNullException(nameof(test));
 
@@ -130,20 +132,20 @@ public class TestService : ITestService
             return await GetTestAsync(testId, ct);
         else
         {
-            var env = await GetAIGeneratedQuestions(test, ct);
+            var env = await GetAIGeneratedQuestions(test, subjectId, ct);
             if (env.Questions.Count > 0)
             {
                 test.Questions = env.Questions;
                 test.TotalQuestions = env.Questions.Count;
                 test.TotalMarks = env.Questions.Count * 3;
                 test.Duration = TimeSpan.FromMinutes(env.Questions.Count * 2);
-                return await UpdateTestDetailsAsync(test, ct);
+                return await UpdateTestDetailsAsync(test, subjectId, ct);
             }
             throw new ArgumentNullException(nameof(test.Questions));
         }
     }
 
-    private async Task<TestDetailsDto> UpdateTestDetailsAsync(TestDetailsDto testDetails, CancellationToken ct = default)
+    private async Task<TestDetailsDto> UpdateTestDetailsAsync(TestDetailsDto testDetails, int subjectId, CancellationToken ct = default)
     {
         for (var attempt = 1; attempt <= MaxRetries; attempt++)
         {
@@ -155,29 +157,63 @@ public class TestService : ITestService
 
             #region --------- AddQuestions to the database ------------
 
-            var questions = testDetails.Questions.Select(q => new Question
-            {
-                QuestionText = q.QuestionText,
-                Options = q.Options,
-                OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
-                CorrectOptionIds = q.CorrectOptionIds,
-                Explanation = q.Explanation,
-                Marks = q.Marks,
-                Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
-                Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true),
-            }).ToList();
+            var hubs = new List<QuestionsHub>(testDetails.Questions.Count);
+            var testQuestions = new List<TestQuestion>(testDetails.Questions.Count);
 
-            _db.Questions.AddRange(questions);
+            foreach (var dto in testDetails.Questions)
+            {
+                var question = new Question
+                {
+                    QuestionText = dto.QuestionText,
+                    Options = dto.Options,
+                    OptionsJson = dto.OptionsJson,
+                    Type = dto.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
+                    Difficulty = Enum.Parse<DifficultyLevel>(dto.Difficulty, true),
+                    Explanation = dto.Explanation,
+                    CorrectOptionIds = dto.CorrectOptionIds,
+                    Marks = dto.Marks,
+                    MinusMarks = dto.MinusMarks,
+                };
+
+                // Enforce Multiple type if DTO says it's multi-select
+                if (dto.IsMultipleSelect && question.Type != QuestionType.Multiple)
+                    question.Type = QuestionType.Multiple;
+
+                hubs.Add(new QuestionsHub
+                {
+                    ExamId = testDetails.ExamId,
+                    SubjectId = subjectId,
+                    Question = question, // EF will insert Question then Hub automatically
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = 1,
+                    IsActive = true,
+                    Difficulty = dto.Difficulty ?? question.Difficulty.ToString()
+                });
+
+                testQuestions.Add(new TestQuestion
+                {
+                    TestId = test.Id,
+                    Question = question,
+                    Order = dto.QuestionNo
+                });
+            }
+
+            // var questions = testDetails.Questions.Select(q => new Question
+            // {
+            //     QuestionText = q.QuestionText,
+            //     Options = q.Options,
+            //     OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
+            //     CorrectOptionIds = q.CorrectOptionIds,
+            //     Explanation = q.Explanation,
+            //     Marks = q.Marks,
+            //     Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
+            //     Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true),
+            // }).ToList();
+
+            _db.QuestionsHubs.AddRange(hubs);
             await _db.SaveChangesAsync(ct);
 
-            var links = questions.Select((q, i) => new TestQuestion
-            {
-                TestId = test.Id,
-                QuestionId = q.Id,
-                Order = testDetails.Questions[i].QuestionNo
-            });
-
-            _db.TestQuestions.AddRange(links);
+            _db.TestQuestions.AddRange(testQuestions);
             await _db.SaveChangesAsync(ct);
 
             #endregion
@@ -190,9 +226,8 @@ public class TestService : ITestService
             await _db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
 
-            var questionsDto = _mapper.Map<List<QuestionDto>>(questions);
             var testDto = _mapper.Map<TestDetailsDto>(test);
-            testDto.Questions = questionsDto;
+            testDto.Questions = testDetails.Questions;
 
             return testDto;
 
@@ -355,7 +390,7 @@ public class TestService : ITestService
                    ?? throw new ApplicationException("Empty n8n response");
     }
 
-    private async Task<N8nResponseDto> GetAIGeneratedQuestions(TestDetailsDto req, CancellationToken ct)
+    private async Task<N8nResponseDto> GetAIGeneratedQuestions(TestDetailsDto req, int subjectId, CancellationToken ct)
     {
         var client = _http.CreateClient();
         client.DefaultRequestHeaders.Accept.ParseAdd("application/json"); // hint
@@ -368,8 +403,9 @@ public class TestService : ITestService
             ["difficultyLevel"] = "Mix",
             ["subject"] = req.Subject ?? "All",
             ["language"] = req.Language,
-            ["testId"] = "0",
+            ["testId"] = req.Id.ToString(),
             ["examId"] = req.ExamId.ToString(),
+            ["subjectId"] = subjectId.ToString(),
             ["testTitle"] = req.Title,
         };
 
@@ -391,7 +427,7 @@ public class TestService : ITestService
     {
         return await _db.Tests
                         .AsNoTracking()
-                        .Include(t => t.Exam)
+                        .Include(t => t.Exam).ThenInclude(e => e.Subjects)
                         .Include(t => t.TestQuestions)
                             .ThenInclude(tq => tq.Question)
                         .Where(t => t.Id == id)
@@ -409,6 +445,7 @@ public class TestService : ITestService
                             MarksScored = t.MarksScored,
                             TotalMarks = t.TotalMarks,
                             ExamName = t.Exam.Name,
+                            Exam = t.Exam,
                             ExamCode = t.Exam.Code,
                             Questions = t.TestQuestions
                                          .OrderBy(tq => tq.Order)

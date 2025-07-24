@@ -1,4 +1,5 @@
-﻿using Quizlo.Questionnaire.WebApi.Helpers.Constants;
+﻿using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 
 namespace Quizlo.Questionnaire.WebApi.DTO
 {
@@ -17,6 +18,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public double? MarksScored { get; init; }
         public string ExamName { get; set; } = default!;
         public string ExamCode { get; set; }
+        public Exam? Exam { get; set; }
         public string ImageUrl { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;
         public IReadOnlyList<QuestionDto> Questions { get; set; } = [];
