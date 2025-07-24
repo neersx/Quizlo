@@ -23,7 +23,7 @@ public interface ITestService
 
     Task<TestResultDto> GetTestResultAsync(int id, CancellationToken ct = default);
 
-    Task<IReadOnlyList<TestDetailsDto>>  GetUserActiveTestsAsync(int userId, CancellationToken ct = default);
+    Task<IReadOnlyList<TestDetailsDto>> GetUserActiveTestsAsync(int userId, CancellationToken ct = default);
 
     Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest request, CancellationToken ct = default);
 }
@@ -453,23 +453,23 @@ public class TestService : ITestService
                         }).FirstOrDefaultAsync(ct);
     }
 
-public async Task<TestResultDto?> GetTestResultAsync(int id, CancellationToken ct = default)
-{
-    var test = await _db.Tests
-        .AsNoTracking()
-        .Include(t => t.Exam)
-        .Include(t => t.TestQuestions)
-            .ThenInclude(tq => tq.Question)
-        .FirstOrDefaultAsync(t => t.Id == id, ct);
+    public async Task<TestResultDto?> GetTestResultAsync(int id, CancellationToken ct = default)
+    {
+        var test = await _db.Tests
+            .AsNoTracking()
+            .Include(t => t.Exam)
+            .Include(t => t.TestQuestions)
+                .ThenInclude(tq => tq.Question)
+            .FirstOrDefaultAsync(t => t.Id == id, ct);
 
-    if (test == null)
-        return null;
+        if (test == null)
+            return null;
 
-    var resultDto = _mapper.Map<TestResultDto>(test);
-    // resultDto.DurationCompltedIn = test.DurationCompletedIn;
+        var resultDto = _mapper.Map<TestResultDto>(test);
+        // resultDto.DurationCompltedIn = test.DurationCompletedIn;
 
-    return resultDto;
-}
+        return resultDto;
+    }
 
     public async Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest req, CancellationToken ct = default)
     {

@@ -282,18 +282,14 @@ public class QuestionsHubService : IQuestionsHubService
 
     }
 
-    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync( int subjectId, int createdBy, IReadOnlyList<QuestionDto> questions,string? topic = null, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int subjectId, int createdBy, IReadOnlyList<QuestionDto> questions, string? topic = null, CancellationToken cancellationToken = default)
     {
 
         // Validate Exam + Subject relationship
-        var subject = await _context.Subjects
-            .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.Id == subjectId, cancellationToken);
+        var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == subjectId, cancellationToken);
 
         if (subject is null)
             throw new ArgumentException("Invalid examId/subjectId combination. Subject not linked to exam.");
-
-    //    var questions = await GetQuestionsFromAiAsync(subject.ExamId, subjectId, expectedCount: 30, "English",cancellationToken);
 
         using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
         try
@@ -336,25 +332,15 @@ public class QuestionsHubService : IQuestionsHubService
             }
 
             _context.QuestionsHubs.AddRange(hubs);
-            await _context.SaveChangesAsync(cancellationToken);
 
             subject.TotalQuestions = await _context.QuestionsHubs.Where(h => h.ExamId == subject.ExamId && h.SubjectId == subjectId)
-                .Select(h => h.QuestionId).Distinct()
-                .CountAsync(cancellationToken);
+             .Select(h => h.QuestionId).Distinct()
+             .CountAsync(cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
-
             await tx.CommitAsync(cancellationToken);
-            // Reload just-created Hub rows
-            var result = await _context.QuestionsHubs
-                .AsNoTracking()
-                .Where(h => h.ExamId == subject.ExamId && h.SubjectId == subjectId)
-                .Include(h => h.Exam)
-                .Include(h => h.Subject)
-                .Include(h => h.Question)
-                .ProjectTo<QuestionsHubDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
 
+            var result = _mapper.Map<IReadOnlyList<QuestionsHubDto>>(hubs);
             return result;
         }
         catch

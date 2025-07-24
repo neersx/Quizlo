@@ -20,7 +20,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
 
     public class QuestionsHubDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int ExamId { get; set; }
         public string ExamName { get; set; }
         public int SubjectId { get; set; }
