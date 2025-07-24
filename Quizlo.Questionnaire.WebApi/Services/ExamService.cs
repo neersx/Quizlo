@@ -22,7 +22,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
 
         public async Task<List<ExamWithEmptySubjectsDto>> GetExamsWithSubjectsMissingQuestionsAsync(CancellationToken cancellationToken = default)
         {
-            var examsWithEmptySubjects = await _context.Exams
+            var examsWithEmptySubjects = await _context.Exams.AsNoTracking()
                 .Where(exam => exam.Subjects.Any(subject => subject.TotalQuestions < 20) && exam.IsTrending)
                 .Select(exam => new ExamWithEmptySubjectsDto
                 {
@@ -30,7 +30,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                     ExamName = exam.Name,
                     ExamCode = exam.Code,
                     Subjects = exam.Subjects
-                        .Where(subject => subject.TotalQuestions == 0)
+                        .Where(subject => subject.TotalQuestions < 20)
                         .Select(subject => new SubjectDto
                         {
                             SubjectId = subject.Id,
@@ -40,7 +40,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                         }).ToList()
                 }).ToListAsync(cancellationToken);
 
-            return examsWithEmptySubjects;
+            return examsWithEmptySubjects.Where(e => e.Subjects.Any()).ToList();
         }
 
         public async Task<IEnumerable<Exam>> GetExamsAsync(int pageNumber, int pageSize, string search = null)

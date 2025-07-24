@@ -18,7 +18,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public int SubjectId { get; set; }
         public string Name { get; set; }
         public int TotalQuestions { get; set; }
-        public int QuestionsInExam { get; set; } = 0;
+        public int QuestionsInExam { get; set; } = 20;
     }
 
 }
