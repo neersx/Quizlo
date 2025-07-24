@@ -332,12 +332,13 @@ public class QuestionsHubService : IQuestionsHubService
             }
 
             _context.QuestionsHubs.AddRange(hubs);
+            await _context.SaveChangesAsync(cancellationToken);
 
             subject.TotalQuestions = await _context.QuestionsHubs.Where(h => h.ExamId == subject.ExamId && h.SubjectId == subjectId)
-             .Select(h => h.QuestionId).Distinct()
-             .CountAsync(cancellationToken);
-
+            .Select(h => h.QuestionId).Distinct()
+            .CountAsync(cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+
             await tx.CommitAsync(cancellationToken);
 
             var result = _mapper.Map<IReadOnlyList<QuestionsHubDto>>(hubs);
