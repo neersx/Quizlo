@@ -19,13 +19,12 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public Exam Exam { get; set; }
 
         public int TotalQuestions { get; set; } = 0;
+        public int QuestionsInExam { get; set; } = 0;
         public decimal? MinusMarks { get; set; }
         public double? EachQuesMarks { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
         public int CreatedBy { get; set; }
-
         public bool IsDeleted { get; set; } = false;
     }
 }

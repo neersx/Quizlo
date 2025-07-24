@@ -17,8 +17,29 @@ namespace Quizlo.Questionnaire.WebApi.Services
 
         public async Task<Exam> GetExamAsync(int examId)
             => await _context.Exams
-                             .Include(e => e.Tests)
+                             .Include(e => e.Subjects)
                              .FirstOrDefaultAsync(e => e.Id == examId);
+
+        public async Task<List<ExamWithEmptySubjectsDto>> GetExamsWithSubjectsMissingQuestionsAsync(CancellationToken cancellationToken = default)
+        {
+            var examsWithEmptySubjects = await _context.Exams
+                .Where(exam => exam.Subjects.Any(subject => subject.TotalQuestions == 0) && exam.IsTrending)
+                .Select(exam => new ExamWithEmptySubjectsDto
+                {
+                    ExamId = exam.Id,
+                    ExamName = exam.Name,
+                    Subjects = exam.Subjects
+                        .Where(subject => subject.TotalQuestions == 0)
+                        .Select(subject => new SubjectDto
+                        {
+                            SubjectId = subject.Id,
+                            Name = subject.Title,
+                            TotalQuestions = subject.TotalQuestions
+                        }).ToList()
+                }).ToListAsync(cancellationToken);
+
+            return examsWithEmptySubjects;
+        }
 
         public async Task<IEnumerable<Exam>> GetExamsAsync(int pageNumber, int pageSize, string search = null)
         {
