@@ -282,18 +282,18 @@ public class QuestionsHubService : IQuestionsHubService
 
     }
 
-    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync(int examId, int subjectId, int createdBy, string? topic = null, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<QuestionsHubDto>> InsertQuestionsAndHubAsync( int subjectId, int createdBy, IReadOnlyList<QuestionDto> questions,string? topic = null, CancellationToken cancellationToken = default)
     {
 
         // Validate Exam + Subject relationship
         var subject = await _context.Subjects
             .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.Id == subjectId && s.ExamId == examId, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Id == subjectId, cancellationToken);
 
         if (subject is null)
             throw new ArgumentException("Invalid examId/subjectId combination. Subject not linked to exam.");
 
-       var questions = await GetQuestionsFromAiAsync(examId, subjectId, expectedCount: 30, "English",cancellationToken);
+    //    var questions = await GetQuestionsFromAiAsync(subject.ExamId, subjectId, expectedCount: 30, "English",cancellationToken);
 
         using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
         try
@@ -324,7 +324,7 @@ public class QuestionsHubService : IQuestionsHubService
 
                 hubs.Add(new QuestionsHub
                 {
-                    ExamId = examId,
+                    ExamId = subject.ExamId,
                     SubjectId = subjectId,
                     Question = question, // EF will insert Question then Hub automatically
                     Topic = topic,
@@ -338,7 +338,7 @@ public class QuestionsHubService : IQuestionsHubService
             _context.QuestionsHubs.AddRange(hubs);
             await _context.SaveChangesAsync(cancellationToken);
 
-            subject.TotalQuestions = await _context.QuestionsHubs.Where(h => h.ExamId == examId && h.SubjectId == subjectId)
+            subject.TotalQuestions = await _context.QuestionsHubs.Where(h => h.ExamId == subject.ExamId && h.SubjectId == subjectId)
                 .Select(h => h.QuestionId).Distinct()
                 .CountAsync(cancellationToken);
 
@@ -348,7 +348,7 @@ public class QuestionsHubService : IQuestionsHubService
             // Reload just-created Hub rows
             var result = await _context.QuestionsHubs
                 .AsNoTracking()
-                .Where(h => h.ExamId == examId && h.SubjectId == subjectId)
+                .Where(h => h.ExamId == subject.ExamId && h.SubjectId == subjectId)
                 .Include(h => h.Exam)
                 .Include(h => h.Subject)
                 .Include(h => h.Question)
@@ -372,65 +372,6 @@ public class QuestionsHubService : IQuestionsHubService
         return Enum.TryParse<DifficultyLevel>(s, true, out var parsed)
             ? parsed
             : DifficultyLevel.Medium;
-    }
-
-
-    private async Task<TestDetailsDto> AddQuestionsHubAsync(TestDetailsDto testDetails, CancellationToken ct = default)
-    {
-        for (var attempt = 1; attempt <= MaxRetries; attempt++)
-        {
-            await using var tx = await _context.Database.BeginTransactionAsync(ct);
-
-            var test = await _context.Tests.Include(t => t.TestQuestions).ThenInclude(tq => tq.Question)
-                                .FirstOrDefaultAsync(t => t.Id == testDetails.Id, ct)
-                                ?? throw new KeyNotFoundException($"Test {testDetails.Id} not found.");
-
-            #region --------- AddQuestions to the database ------------
-
-            var questions = testDetails.Questions.Select(q => new Question
-            {
-                QuestionText = q.QuestionText,
-                Options = q.Options,
-                OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
-                CorrectOptionIds = q.CorrectOptionIds,
-                Explanation = q.Explanation,
-                Marks = q.Marks,
-                Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
-                Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true),
-            }).ToList();
-
-            _context.Questions.AddRange(questions);
-            await _context.SaveChangesAsync(ct);
-
-            var links = questions.Select((q, i) => new TestQuestion
-            {
-                TestId = test.Id,
-                QuestionId = q.Id,
-                Order = testDetails.Questions[i].QuestionNo
-            });
-
-            _context.TestQuestions.AddRange(links);
-            await _context.SaveChangesAsync(ct);
-
-            #endregion
-
-
-            test.TotalQuestions = testDetails.TotalQuestions;
-            test.TotalMarks = testDetails.TotalMarks;
-            test.Duration = testDetails.Duration;
-
-            await _context.SaveChangesAsync(ct);
-            await tx.CommitAsync(ct);
-
-            var questionsDto = _mapper.Map<List<QuestionDto>>(questions);
-            var testDto = _mapper.Map<TestDetailsDto>(test);
-            testDto.Questions = questionsDto;
-
-            return testDto;
-
-        }
-
-        return testDetails;
     }
 
     private async Task<N8nResponseDto> GetAIGeneratedQuestions(QuestionsHubCreateDto req, CancellationToken ct)

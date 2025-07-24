@@ -29,12 +29,11 @@ public class QuestionsHubController : ControllerBase
         return Ok(new { Questions = questions });
     }
 
-    [HttpPost("{examId:int}/{subjectId:int}/insert")]
-    public async Task<IActionResult> InsertQuestionsAndHub(int examId, int subjectId, [FromQuery] string? topic, CancellationToken cancellationToken = default)
+    [HttpPost("{subjectId:int}/insert-questions")]
+    public async Task<IActionResult> InsertQuestionsAndHub( int subjectId, [FromQuery] string? topic,  [FromBody] List<QuestionDto> questions, CancellationToken cancellationToken = default)
     {
         int createdBy = 1;
-        var result = await _service.InsertQuestionsAndHubAsync(examId, subjectId, createdBy, topic,
-            cancellationToken: cancellationToken);
+        var result = await _service.InsertQuestionsAndHubAsync(subjectId, createdBy, questions, topic, cancellationToken: cancellationToken);
 
         return Ok(result);
     }
