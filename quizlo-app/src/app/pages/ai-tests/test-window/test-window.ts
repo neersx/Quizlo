@@ -105,7 +105,6 @@ export class TestWindow implements OnInit, OnDestroy {
           this.startAutoSave();
           document.addEventListener('visibilitychange', this.visibilityChangeHandler);
           this.cdr.detectChanges();
-          console.log('Questions Details:', this.questions);
         } else {
           console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
         }

@@ -38,10 +38,10 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             return Ok(ApiResponse<Exam>.Success(exam)); //return Ok(exam);
         }
 
-        [HttpGet("no-questions")]
-        public async Task<ActionResult<ApiResponse<Exam>>> GetExamWithNoQuestions(CancellationToken cancellationToken = default)
+        [HttpGet("{noOfQuestions}/no-questions")]
+        public async Task<ActionResult<ApiResponse<Exam>>> GetExamWithNoQuestions(int noOfQuestions = 100, CancellationToken cancellationToken = default)
         {
-            var exams = await _examService.GetExamsWithSubjectsMissingQuestionsAsync(cancellationToken);
+            var exams = await _examService.GetExamsWithSubjectsMissingQuestionsAsync(noOfQuestions, cancellationToken);
             if (exams == null) return NotFound();
             return Ok(ApiResponse<List<ExamWithEmptySubjectsDto>>.Success(exams)); //return Ok(exam);
         }

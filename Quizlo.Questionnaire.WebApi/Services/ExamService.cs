@@ -20,17 +20,17 @@ namespace Quizlo.Questionnaire.WebApi.Services
                              .Include(e => e.Subjects)
                              .FirstOrDefaultAsync(e => e.Id == examId);
 
-        public async Task<List<ExamWithEmptySubjectsDto>> GetExamsWithSubjectsMissingQuestionsAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ExamWithEmptySubjectsDto>> GetExamsWithSubjectsMissingQuestionsAsync(int noOfQuestions = 100, CancellationToken cancellationToken = default)
         {
             var examsWithEmptySubjects = await _context.Exams.AsNoTracking()
-                .Where(exam => exam.Subjects.Any(subject => subject.TotalQuestions < 20) && exam.IsTrending)
+                .Where(exam => exam.Subjects.Any(subject => subject.TotalQuestions < noOfQuestions) && exam.IsTrending)
                 .Select(exam => new ExamWithEmptySubjectsDto
                 {
                     ExamId = exam.Id,
                     ExamName = exam.Name,
                     ExamCode = exam.Code,
                     Subjects = exam.Subjects
-                        .Where(subject => subject.TotalQuestions < 20)
+                        .Where(subject => subject.TotalQuestions < noOfQuestions)
                         .Select(subject => new SubjectDto
                         {
                             SubjectId = subject.Id,
