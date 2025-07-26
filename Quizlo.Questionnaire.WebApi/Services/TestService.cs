@@ -469,6 +469,7 @@ public class TestService : ITestService
                             CreatedAt = t.CreatedAt,
                             ExamId = t.ExamId,
                             Subject = t.Subject,
+                            SubjectId = t.Exam.Subjects.FirstOrDefault(s => s.Title == t.Subject)!.Id,
                             Language = t.Language,
                             ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
                             Status = t.Status,

@@ -10,6 +10,8 @@ import { TestDetailsModel } from '../model/tests.model';
 @Injectable({ providedIn: 'root' })
 export class TestService {
   private baseUrl = `${environment.apiUrl}/tests`;
+  private hubUrl = `${environment.apiUrl}/questions-hub`;
+  
 
   constructor(private http: HttpClient) {}
 
@@ -27,8 +29,8 @@ export class TestService {
   }
 
   drawQuestionsFromHub( subjectId?: number, count: number = 20): Observable<{ Questions: ApiResponse<QuestionModel[]> }> {
-    const url = `${this.baseUrl}/draw-questions/${subjectId}`;
-    const params = new HttpParams().set('count', count.toString());
+    const url = `${this.hubUrl}/draw-questions/${subjectId}`;
+    const params = new HttpParams().set('expectedCount', count.toString());
 
     return this.http.get<{ Questions: ApiResponse<QuestionModel[]> }>(url, { params });
   }
