@@ -193,19 +193,19 @@ public class TestService : ITestService
                     Difficulty = dto.Difficulty ?? question.Difficulty.ToString()
                 });
 
-                testQuestions.Add(new TestQuestion
-                {
-                    TestId = test.Id,
-                    Question = question,
-                    Order = dto.QuestionNo
-                });
+                // testQuestions.Add(new TestQuestion
+                // {
+                //     TestId = test.Id,
+                //     Question = question,
+                //     Order = dto.QuestionNo
+                // });
             }
 
             _db.QuestionsHubs.AddRange(hubs);
             await _db.SaveChangesAsync(ct);
 
-            _db.TestQuestions.AddRange(testQuestions);
-            await _db.SaveChangesAsync(ct);
+            // _db.TestQuestions.AddRange(testQuestions);
+            // await _db.SaveChangesAsync(ct);
 
             #endregion
 
@@ -470,6 +470,7 @@ public class TestService : ITestService
                             ExamId = t.ExamId,
                             Subject = t.Subject,
                             SubjectId = t.Exam.Subjects.FirstOrDefault(s => s.Title == t.Subject)!.Id,
+                            AvailableQuesInHub = t.Exam.Subjects.FirstOrDefault(s => s.Title == t.Subject)!.TotalQuestions,
                             Language = t.Language,
                             ImageUrl = t.Exam.ImageUrl ?? "../assets/images/exams/icons/exam.png",
                             Status = t.Status,

@@ -13,6 +13,7 @@ export interface TestDetailsModel {
   imageUrl?: string;
   difficulty?: string;
   totalQuestions: number;
+  AvailableQuesInHub: number;
   totalMarks?: number | null;
   marksScored?: number | null;
   examName?: string;
