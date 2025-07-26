@@ -43,6 +43,7 @@ export class TestWindow implements OnInit, OnDestroy {
     difficulty: ''
   };
   result: any;
+  subjectId: number | undefined;
   questions: QuestionModel[] = [];
   isLoadingTest = true;
   isLoadingQuestions = true;
@@ -76,7 +77,6 @@ export class TestWindow implements OnInit, OnDestroy {
         this.localStorage.removeItem(LocalStorageKeys.UserTests);
       }
       this.loadTest();
-      this.loadTestQuestions();
       effect(() => {
         //console.log('⏳ Time Remaining C:', this.timeRemaining(), 'seconds');
       });
@@ -115,6 +115,32 @@ export class TestWindow implements OnInit, OnDestroy {
     });
   }
 
+  getQuestionsFromHub(subjectId?: number, noOfQuestions : number = 20) : any {
+    this.isLoadingQuestions = true;
+    this.testService.drawQuestionsFromHub(subjectId, noOfQuestions).subscribe({
+      next: (resp: any) => {
+        if (resp.isSuccess && resp.data) {
+          this.questions = resp.data.questions as QuestionModel[];
+          this.questions.forEach((q: any) => {
+            q.isMultipleSelect = q.correctOptionIds?.length > 1;
+          })
+          this.testData.questions = this.questions;
+          this.isLoadingQuestions = false;
+          this.startTimer();
+          this.loadSavedAnswers();
+          this.startAutoSave();
+          document.addEventListener('visibilitychange', this.visibilityChangeHandler);
+          this.cdr.detectChanges();
+        } else {
+          console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
+        }
+      },
+      error: err => {
+        console.error('Failed to load test details:', err);
+      }
+    });
+  }
+
   loadTest() {
     this.isLoadingTest = true;
     this.testService.getTest(this.testId).subscribe({
@@ -123,6 +149,8 @@ export class TestWindow implements OnInit, OnDestroy {
           this.isLoadingTest = false;
           if (resp.isSuccess && resp.data) {
             this.testDetails = resp.data as TestDetailsModel;
+            this.subjectId = this.testDetails.subjectId;
+            this.getQuestionsFromHub(this.subjectId, this.testDetails.totalQuestions);
             this.timeRemaining.set(+this.testDetails?.totalQuestions * 2 * 60);
             this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
             this.cdr.detectChanges();

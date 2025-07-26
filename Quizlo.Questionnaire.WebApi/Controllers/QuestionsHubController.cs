@@ -21,12 +21,11 @@ public class QuestionsHubController : ControllerBase
         return Ok(new { IsSufficient = count >= expectedCount, Count = count });
     }
 
-    [HttpGet("{examId:int}/{subjectId:int}/draw")]
-    public async Task<IActionResult> DrawQuestions(int examId, int subjectId, [FromQuery] int count = 0)
+    [HttpGet("draw-questions/{subjectId:int}")]
+    public async Task<IActionResult> DrawQuestions(int subjectId, [FromQuery] int count = 0)
     {
-        var questions = await _service.GetQuestionsFromHubAsync(examId, subjectId, count);
-        // Response shape as requested: wrapper w/ property Questions
-        return Ok(new { Questions = questions });
+        var questions = await _service.GetQuestionsFromHubAsync(subjectId, count);
+        return Ok(new ApiResponse<IReadOnlyList<QuestionDto>> { IsSuccess = true, Message = "fetched questions from hub", Data = questions });
     }
 
     [HttpPost("{subjectId:int}/insert-questions")]

@@ -56,6 +56,7 @@ public class TestService : ITestService
         // NB: projection happens in SQL, so only the needed columns travel over the wire
         return await _db.Tests
             .AsNoTracking()
+            .Include(x => x.Exam)
             .Where(t => t.CreatedByUserId == userId)
             .OrderByDescending(t => t.CreatedAt)
             .Select(t => new TestDetailsDto
@@ -64,6 +65,7 @@ public class TestService : ITestService
                 Title = t.Title,
                 Language = t.Language,
                 Subject = t.Subject,
+                SubjectId = t.Exam.Subjects.FirstOrDefault(x => x.Title == t.Subject).Id,
                 Duration = (TimeSpan)t.Duration,
                 DurationCompltedIn = t.DurationCompltedIn,
                 CreatedAt = t.CreatedAt,
@@ -79,13 +81,14 @@ public class TestService : ITestService
 
     public async Task<IReadOnlyList<TestDetailsDto>> GetUserActiveTestsAsync(int userId, CancellationToken ct = default)
     {
-        return await _db.Tests.AsNoTracking().Where(t => t.CreatedByUserId == userId && t.Status == TestStatus.NotStarted)
+        return await _db.Tests.AsNoTracking().Include(x => x.Exam).Where(t => t.CreatedByUserId == userId && t.Status == TestStatus.NotStarted)
                         .Select(t => new TestDetailsDto
                         {
                             Id = t.Id,
                             Title = t.Title,
                             Language = t.Language,
                             Subject = t.Subject,
+                            SubjectId = t.Exam.Subjects.FirstOrDefault(x => x.Title == t.Subject).Id,
                             Duration = (TimeSpan)t.Duration,
                             DurationCompltedIn = t.DurationCompltedIn,
                             CreatedAt = t.CreatedAt,
@@ -197,18 +200,6 @@ public class TestService : ITestService
                     Order = dto.QuestionNo
                 });
             }
-
-            // var questions = testDetails.Questions.Select(q => new Question
-            // {
-            //     QuestionText = q.QuestionText,
-            //     Options = q.Options,
-            //     OptionsJson = JsonConvert.SerializeObject(q.Options), // ↔ OptionsJson
-            //     CorrectOptionIds = q.CorrectOptionIds,
-            //     Explanation = q.Explanation,
-            //     Marks = q.Marks,
-            //     Type = q.IsMultipleSelect ? QuestionType.Multiple : QuestionType.Single,
-            //     Difficulty = Enum.Parse<DifficultyLevel>(q.Difficulty, true),
-            // }).ToList();
 
             _db.QuestionsHubs.AddRange(hubs);
             await _db.SaveChangesAsync(ct);

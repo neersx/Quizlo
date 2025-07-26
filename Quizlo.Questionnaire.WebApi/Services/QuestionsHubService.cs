@@ -33,13 +33,13 @@ public class QuestionsHubService : IQuestionsHubService
         _webhookUrl = $"{cfg["N8n:WebhookBaseUrl"]!}/questions-hub"; // -> appsettings.json
     }
 
-    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int examId, int subjectId, int questionsCount = 0)
+    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int subjectId, int questionsCount = 0)
     {
         // Filter QuestionsHub for this Exam + Subject and collapse to DISTINCT Questions
         // Using GroupBy to ensure distinct by QuestionId across providers (safer than Distinct on entity)
         var distinctQuestionsQuery = _context.QuestionsHubs
             .AsNoTracking()
-            .Where(qh => qh.ExamId == examId && qh.SubjectId == subjectId)
+            .Where(qh => qh.SubjectId == subjectId)
             .GroupBy(qh => qh.QuestionId)
             .Select(g => g.Select(x => x.Question).First());
 

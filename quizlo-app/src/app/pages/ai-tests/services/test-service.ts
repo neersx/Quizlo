@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -24,6 +24,13 @@ export class TestService {
   getTestQuestions(testId: number): Observable<ApiResponse<QuestionModel[]>> {
     return this.http.get<ApiResponse<QuestionModel[]>>(`${this.baseUrl}/${testId}/questions`);
     // return of(this.mockResponseQuestions);
+  }
+
+  drawQuestionsFromHub( subjectId?: number, count: number = 20): Observable<{ Questions: ApiResponse<QuestionModel[]> }> {
+    const url = `${this.baseUrl}/draw-questions/${subjectId}`;
+    const params = new HttpParams().set('count', count.toString());
+
+    return this.http.get<{ Questions: ApiResponse<QuestionModel[]> }>(url, { params });
   }
 
   getTestResult(id: number): Observable<TestDetailsDto> {
