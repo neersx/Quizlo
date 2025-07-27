@@ -101,14 +101,8 @@ export class TestWindow implements OnInit, OnDestroy {
             q.isMultipleSelect = q.correctOptionIds?.length > 1;
           })
           this.testData.questions = this.questions;
-          this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet: this.questions });
-
-          this.isLoadingQuestions = false;
-          this.startTimer();
-          this.loadSavedAnswers();
-          this.startAutoSave();
-          document.addEventListener('visibilitychange', this.visibilityChangeHandler);
-          this.cdr.detectChanges();
+          this.storeLocalState();
+          this.loadQuestionsInTest();
         } else {
           console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
         }
@@ -117,6 +111,15 @@ export class TestWindow implements OnInit, OnDestroy {
         console.error('Failed to load test details:', err);
       }
     });
+  }
+
+  loadQuestionsInTest() : any {
+    this.isLoadingQuestions = false;
+    this.startTimer();
+    this.loadSavedAnswers();
+    this.startAutoSave();
+    document.addEventListener('visibilitychange', this.visibilityChangeHandler);
+    this.cdr.detectChanges();
   }
 
   getQuestionsFromHub(subjectId?: number, noOfQuestions: number = 20): any {
@@ -129,14 +132,8 @@ export class TestWindow implements OnInit, OnDestroy {
             q.isMultipleSelect = q.correctOptionIds?.length > 1;
           })
           this.testData.questions = this.questions;
-          this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet: this.questions });
-
-          this.isLoadingQuestions = false;
-          this.startTimer();
-          this.loadSavedAnswers();
-          this.startAutoSave();
-          document.addEventListener('visibilitychange', this.visibilityChangeHandler);
-          this.cdr.detectChanges();
+          this.storeLocalState();
+          this.loadQuestionsInTest();
         } else {
           console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
         }
@@ -160,9 +157,7 @@ export class TestWindow implements OnInit, OnDestroy {
             if (savedTest && savedTest.activeTestId === this.testId && savedTest.activeQuestionsSet?.length > 0) {
               this.questions = savedTest.activeQuestionsSet;
               this.testData.questions = savedTest.activeQuestionsSet;
-              this.startTimer();
-              this.loadSavedAnswers();
-              this.startAutoSave();
+              this.loadQuestionsInTest();
             } else {
               if (this.testDetails?.AvailableQuesInHub > this.testDetails.totalQuestions)
                 this.getQuestionsFromHub(this.subjectId, this.testDetails.totalQuestions);
@@ -287,10 +282,14 @@ export class TestWindow implements OnInit, OnDestroy {
   private saveAnswers(): void {
     try {
       console.log(this.answers());
-      this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers() });
+      this.storeLocalState();
     } catch (error) {
       console.error('Error saving answers:', error);
     }
+  }
+
+  private storeLocalState() : void {
+    this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet : this.questions });
   }
 
   // Handle single-select (radio)
