@@ -64,7 +64,7 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public string? SelectedOptionIds { get; set; }  // CSV of Option.Id for multiple
         public bool? IsCorrect { get; set; }
         public decimal? MinusMarks { get; set; }
-        public double? Marks { get; init; }
+        public double? Marks { get; set; }
         public DateTime? AnsweredAt { get; set; }
     }
 

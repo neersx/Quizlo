@@ -281,7 +281,6 @@ export class TestWindow implements OnInit, OnDestroy {
   // Save answers to localStorage
   private saveAnswers(): void {
     try {
-      console.log(this.answers());
       this.storeLocalState();
     } catch (error) {
       console.error('Error saving answers:', error);
@@ -404,24 +403,29 @@ export class TestWindow implements OnInit, OnDestroy {
     return questions.map(q => {
       const selectedKey = `question_${q.id}`;
       const selectedOption = selectedAnswers[selectedKey];
-
-      if (!selectedOption) {
-        return q; // No answer selected, leave as-is
+  
+      if (!selectedOption || selectedOption.length === 0) {
+        return q; // No answer selected
       }
-
-      const isCorrect = q.correctOptionIds === selectedOption;
-
+  
+      // Convert array to CSV string if it's an array
+      const selectedIds = Array.isArray(selectedOption)
+        ? selectedOption.join(',')
+        : selectedOption;
+  
+      const isCorrect = q.correctOptionIds === selectedIds;
+  
       const result = {
         ...q,
-        selectedOptionIds: selectedOption,
+        selectedOptionIds: selectedIds,
         isCorrect: isCorrect,
         answeredAt: new Date().toISOString()
       };
-
+  
       this.storeLocalState();
       return result;
     });
-  }
+  }  
 
 
   private processSubmission(submissionData: SubmitTestRequest): void {
@@ -465,7 +469,6 @@ export class TestWindow implements OnInit, OnDestroy {
       percentage: (score / (this.testData?.totalMarks ?? 1)) * 100
     };
 
-    console.log('Test Result:', this.result);
     // alert(`Test Submitted Successfully!\n\nScore: ${score}/${this.testData.totalMarks}\nCorrect Answers: ${correctAnswers}/${this.testData?.questions?.length}\nPercentage: ${this.result.percentage.toFixed(2)}%`);
   }
 

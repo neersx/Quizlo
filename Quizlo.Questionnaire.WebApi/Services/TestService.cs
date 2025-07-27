@@ -516,30 +516,59 @@ public class TestService : ITestService
             await using var tx = await _db.Database.BeginTransactionAsync(ct);
             try
             {
-                var testQuestions = new List<TestQuestion>(req.Questions.Count);
-                var test = await _db.Tests.FirstOrDefaultAsync(t => t.Id == testId, ct)
+                var test = await _db.Tests
+                    .Include(x => x.TestQuestions)
+                    .FirstOrDefaultAsync(t => t.Id == testId, ct)
                     ?? throw new KeyNotFoundException($"Test {testId} not found.");
 
-                // var answers = req.Answers.ToDictionary(a => a.QuestionId, a => a.SelectedIds);
                 int attempted = 0, correct = 0, total = req.Questions.Count;
 
                 foreach (var question in req.Questions)
                 {
-                    testQuestions.Add(new TestQuestion
-                    {
-                        TestId = test.Id,
-                        QuestionId = question.Id,
-                        Order = question.QuestionNo,
-                        IsCorrect = question.IsCorrect,
-                        SelectedOptionIds = question.SelectedOptionIds,
-                        AnsweredAt = question.AnsweredAt,
-                        Marks = question.Marks,
-                        MinusMarks = question.MinusMarks,
-                    });
-                }
+                    var existing = test.TestQuestions.FirstOrDefault(tq => tq.QuestionId == question.Id);
 
-                _db.TestQuestions.AddRange(testQuestions);
-                await _db.SaveChangesAsync(ct);
+                    // Count attempted and correct answers
+                    if (!string.IsNullOrEmpty(question.SelectedOptionIds))
+                    {
+                        attempted++;
+
+                        var isCorrect = string.Equals(
+                            question.SelectedOptionIds?.Trim(),
+                            question.CorrectOptionIds?.Trim(),
+                            StringComparison.OrdinalIgnoreCase
+                        );
+
+                        if (isCorrect)
+                            correct++;
+
+                        if (existing != null)
+                        {
+                            // Update existing record
+                            existing.SelectedOptionIds = question.SelectedOptionIds;
+                            existing.IsCorrect = isCorrect;
+                            existing.AnsweredAt = question.AnsweredAt ?? DateTime.UtcNow;
+                            existing.Marks = question.Marks;
+                            existing.MinusMarks = question.MinusMarks;
+                        }
+                        else
+                        {
+                            // Add new record
+                            var newTestQuestion = new TestQuestion
+                            {
+                                TestId = test.Id,
+                                QuestionId = question.Id,
+                                Order = question.QuestionNo,
+                                IsCorrect = isCorrect,
+                                SelectedOptionIds = question.SelectedOptionIds,
+                                AnsweredAt = question.AnsweredAt ?? DateTime.UtcNow,
+                                Marks = question.Marks,
+                                MinusMarks = question.MinusMarks,
+                            };
+
+                            _db.TestQuestions.Add(newTestQuestion);
+                        }
+                    }
+                }
 
                 // Persist overall test marks
                 test.TotalMarks = total;
@@ -567,6 +596,7 @@ public class TestService : ITestService
         }
 
         throw new InvalidOperationException("Could not submit answers due to concurrent edits.");
+
     }
 
 
