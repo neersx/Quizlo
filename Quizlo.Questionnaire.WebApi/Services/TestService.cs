@@ -486,7 +486,6 @@ public class TestService : ITestService
     {
         var test = await _db.Tests
             .AsNoTracking()
-            .Include(t => t.Exam)
             .Include(t => t.TestQuestions)
                 .ThenInclude(tq => tq.Question)
             .FirstOrDefaultAsync(t => t.Id == id, ct);

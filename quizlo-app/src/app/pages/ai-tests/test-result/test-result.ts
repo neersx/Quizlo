@@ -50,8 +50,7 @@ export class TestResult implements AfterViewInit, OnInit {
   getTestResultDetails(id: number) {
     this.testService.getTestResult(id).subscribe((result: any) => {
 
-      if(result.isSuccess)
-      {
+      if (result.isSuccess) {
         this.testResult = result.data;
         this.durationFormatted = this.formatDuration(this.durationRaw);
         if (this.testResult && this.testResult.marksScored && this.testResult.totalMarks) {
@@ -70,27 +69,27 @@ export class TestResult implements AfterViewInit, OnInit {
     this.cdr.detectChanges();
   }
 
-loadChart() {
-  this.chartOptions1.series = [this.percentage?? 0];
-  // this.chartOptions1.labels = [this.percentage  ?? 0];
-  this.cdr.markForCheck();
-}
+  loadChart() {
+    this.chartOptions1.series = [this.percentage ?? 0];
+    // this.chartOptions1.labels = [this.percentage  ?? 0];
+    this.cdr.markForCheck();
+  }
 
-takeNewTest() {
-  this.router.navigate(['/test/select-exam']);
-}
+  takeNewTest() {
+    this.router.navigate(['/test/select-exam']);
+  }
 
-takeTestAgain() {
-  this.router.navigate(['/test/test-window/' + this.testResult?.id]);
-}
+  takeTestAgain() {
+    this.router.navigate(['/test/test-window/' + this.testResult?.id]);
+  }
 
-private formatDuration(dur: string): string {
-  const [h, m, s] = dur.split(':').map(v => parseInt(v, 10));
-  const hrs = h.toString().padStart(2, '0');
-  const mins = m.toString();         // you can padStart if you like
-  const secs = s.toString();
-  return `${hrs}hrs : ${mins}m : ${secs}s`;
-}
+  private formatDuration(dur: string): string {
+    const [h, m, s] = dur.split(':').map(v => parseInt(v, 10));
+    const hrs = h.toString().padStart(2, '0');
+    const mins = m.toString();         // you can padStart if you like
+    const secs = s.toString();
+    return `${hrs}hrs : ${mins}m : ${secs}s`;
+  }
 
   chartOptions1: any = {
     chart: {

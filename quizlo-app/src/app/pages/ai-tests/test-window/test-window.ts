@@ -34,6 +34,7 @@ export class TestWindow implements OnInit, OnDestroy {
     createdAt: '',
     examId: 0,
     totalQuestions: 0,
+    AvailableQuesInHub: 0,
     totalMarks: 0,
     marksScored: 0,
     examName: '',
@@ -65,7 +66,7 @@ export class TestWindow implements OnInit, OnDestroy {
     { key: 'building' as const, name: 'Building Animation' }
   ];
 
-  constructor(private cdr: ChangeDetectorRef, 
+  constructor(private cdr: ChangeDetectorRef,
     private localStorage: LocalStorageService, private router: Router,
     private testService: TestService, private route: ActivatedRoute,
   ) {
@@ -73,7 +74,7 @@ export class TestWindow implements OnInit, OnDestroy {
     this.testId = idParam !== null ? +idParam : NaN;
     if (this.testId) {
       const activeTestId = this.localStorage.getItem(LocalStorageKeys.UserTests)?.activeTestId;
-      if(activeTestId && activeTestId !== this.testId) {
+      if (activeTestId && activeTestId !== this.testId) {
         this.localStorage.removeItem(LocalStorageKeys.UserTests);
       }
       this.loadTest();
@@ -115,7 +116,7 @@ export class TestWindow implements OnInit, OnDestroy {
     });
   }
 
-  getQuestionsFromHub(subjectId?: number, noOfQuestions : number = 20) : any {
+  getQuestionsFromHub(subjectId?: number, noOfQuestions: number = 20): any {
     this.isLoadingQuestions = true;
     this.testService.drawQuestionsFromHub(subjectId, noOfQuestions).subscribe({
       next: (resp: any) => {
@@ -150,7 +151,11 @@ export class TestWindow implements OnInit, OnDestroy {
           if (resp.isSuccess && resp.data) {
             this.testDetails = resp.data as TestDetailsModel;
             this.subjectId = this.testDetails.subjectId;
-            this.getQuestionsFromHub(this.subjectId, this.testDetails.totalQuestions);
+            if (this.testDetails?.AvailableQuesInHub > this.testDetails.totalQuestions)
+              this.getQuestionsFromHub(this.subjectId, this.testDetails.totalQuestions);
+            else
+              this.loadTestQuestions();
+
             this.timeRemaining.set(+this.testDetails?.totalQuestions * 2 * 60);
             this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
             this.cdr.detectChanges();
@@ -267,7 +272,7 @@ export class TestWindow implements OnInit, OnDestroy {
   private saveAnswers(): void {
     try {
       // localStorage.setItem('bitsat_answers', JSON.stringify(this.answers()));
-      this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers()});
+      this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers() });
     } catch (error) {
       console.error('Error saving answers:', error);
     }
@@ -364,21 +369,47 @@ export class TestWindow implements OnInit, OnDestroy {
       durationCompletedIn: GetTimeSpan(getSecondsFromTimeSpan(this.testDetails?.duration) - this.timeRemaining())
     };
 
-    this.testService.submitTestAnswers(this.testId, payload).subscribe(
-      (response: any) => {
-        this.isTestSubmitted.set(true);
-        this.submittingTest = false;
-        this.processSubmission(payload);
-        this.localStorage.removeItem(LocalStorageKeys.UserTests);
-        this.resetTest();
-        this.router.navigate(['/test/test-result', this.testId]);
-      },
-      (error: any) => {
-        console.error('Error submitting test:', error);
-      }
-    )
+    const questions = this.updateQuestionsWithUserAnswers(this.questions, rawAnswers);
+    console.log('----questions----,', questions);
+
+    // this.testService.submitTestAnswers(this.testId, payload).subscribe(
+    //   (response: any) => {
+    //     this.isTestSubmitted.set(true);
+    //     this.submittingTest = false;
+    //     this.processSubmission(payload);
+    //     this.localStorage.removeItem(LocalStorageKeys.UserTests);
+    //     this.resetTest();
+    //     this.router.navigate(['/test/test-result', this.testId]);
+    //   },
+    //   (error: any) => {
+    //     console.error('Error submitting test:', error);
+    //   }
+    // )
 
   }
+
+  updateQuestionsWithUserAnswers( questions: any[], selectedAnswers: any): any[] {
+    return questions.map(q => {
+      const selectedKey = `question_${q.id}`;
+      const selectedOption = selectedAnswers[selectedKey];
+
+      if (!selectedOption) {
+        return q; // No answer selected, leave as-is
+      }
+
+      const isCorrect = q.correctOptionIds === selectedOption;
+
+      const result =  {
+        ...q,
+        selectedOptionIds: selectedOption,
+        isCorrect: isCorrect,
+        answeredAt: new Date().toISOString()
+      };
+
+      return result;
+    });
+  }
+
 
   private processSubmission(submissionData: SubmitTestRequest): void {
     // Calculate score

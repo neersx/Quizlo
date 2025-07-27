@@ -32,6 +32,7 @@ export class LiveTest {
     createdAt: '',
     examId: 0,
     totalQuestions: 0,
+    AvailableQuesInHub: 0,
     totalMarks: 0,
     marksScored: 0,
     examName: '',
