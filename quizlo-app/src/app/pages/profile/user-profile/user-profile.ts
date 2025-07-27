@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { SharedModule } from '../../../shared/sharedmodule';
-import { NgbNavModule,NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { GalleryItem, Gallery, ImageItem, ImageSize, ThumbnailsPosition, GalleryModule } from 'ng-gallery';
 import { Lightbox, LightboxModule } from 'ng-gallery/lightbox';
 import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
@@ -82,32 +82,30 @@ const data = [
 ];
 @Component({
   selector: 'app-user-profile',
-  imports: [     CommonModule,
+  imports: [CommonModule,
     FormsModule,
-    NgbNavModule,
-    AsyncPipe,
-    AsyncPipe,SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkGalleryComponent,
-    GalleryModule,LightboxModule,FormsModule,ReactiveFormsModule, EditProfile],
-    templateUrl: './user-profile.html',
-    styleUrl: './user-profile.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    NgbNavModule, SharedModule, NgbNavModule, NgSelectModule, NgbDropdownModule,
+    GalleryModule, LightboxModule, FormsModule, ReactiveFormsModule, EditProfile],
+  templateUrl: './user-profile.html',
+  styleUrl: './user-profile.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class UserProfile {
   user$: Observable<UserProfileModel> | undefined;
-  user : any;
+  user: any;
 
-  selectedSkill=[1,2,3,4,5,6,7,8,9,10,11,12]
+  selectedSkill = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   imageData = data;
   items!: GalleryItem[];
-  constructor(public gallery: Gallery, public lightbox: Lightbox, 
-    private profileService: ProfileService, private cdr: ChangeDetectorRef) {}
+  constructor(public gallery: Gallery, public lightbox: Lightbox,
+    private profileService: ProfileService, private cdr: ChangeDetectorRef) { }
 
 
   ngOnInit() {
     this.user$ = this.profileService.getProfile();
 
-    this.profileService.getProfile().subscribe((data : any) => {
+    this.profileService.getProfile().subscribe((data: any) => {
       this.user = data.data;
       this.cdr.detectChanges();
     });
@@ -147,10 +145,10 @@ export class UserProfile {
   getLocation(user: UserProfileModel): string {
     const parts = [user.city, user.country]
       .filter((x): x is string => !!x);
-      this.cdr.markForCheck();
+    this.cdr.markForCheck();
     return parts.length ? parts.join(', ') : 'N/A';
   }
-  
+
 
   profiles = [
     {
@@ -217,19 +215,19 @@ export class UserProfile {
       badgeClass: 'bg-info-transparent'
     }
   ];
-  selectedSkills=[1,2,3,4,5,6,7,8,9,10,11,12]
+  selectedSkills = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   selectedSkills1 = [
-    {value:1,label:'Project Management'},
-    {value:2,label:'Data Analysis'},
-    {value:3,label:'Marketing Strategy'},
-    {value:4,label:'Graphic Design'},
-    {value:5,label:'Content Creation'},
-    {value:6,label:'Market Research'},
-    {value:7,label:'Client Relations'},
-    {value:8,label:'Event Planning'},
-    {value:9,label:'Budgeting and Finance'},
-    {value:10,label:'Negotiation Skills'},
-    {value:11,label:'Team Collaboration'},
-    {value:12,label:'Adaptability'}];
+    { value: 1, label: 'Project Management' },
+    { value: 2, label: 'Data Analysis' },
+    { value: 3, label: 'Marketing Strategy' },
+    { value: 4, label: 'Graphic Design' },
+    { value: 5, label: 'Content Creation' },
+    { value: 6, label: 'Market Research' },
+    { value: 7, label: 'Client Relations' },
+    { value: 8, label: 'Event Planning' },
+    { value: 9, label: 'Budgeting and Finance' },
+    { value: 10, label: 'Negotiation Skills' },
+    { value: 11, label: 'Team Collaboration' },
+    { value: 12, label: 'Adaptability' }];
 }
 

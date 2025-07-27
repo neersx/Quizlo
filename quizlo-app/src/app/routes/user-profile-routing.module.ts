@@ -10,11 +10,6 @@ export const admin: Routes = [
       loadComponent: () =>
         import('../pages/profile/user-profile/user-profile').then((m) => m.UserProfile),
     },
-    // {
-    //     path: 'edit/:id',
-    //     loadComponent: () =>
-    //       import('../pages/profile/edit-profile/edit-profile').then((m) => m.EditProfile),
-    //   },
       // {
       //   path: 'edit/:id',
       //   loadComponent: () =>

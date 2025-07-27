@@ -17,7 +17,6 @@ import { ProfileService } from '../user-profile.service';
   selector: 'app-edit-profile',
   imports: [ FormsModule,
     NgbNavModule,
-    AsyncPipe,
     AsyncPipe,SharedModule,NgbNavModule,NgSelectModule,NgbDropdownModule,SpkProfileReusableCardComponent,SpkNgSelectComponent,SpkGalleryComponent,
     GalleryModule,LightboxModule, OverlayscrollbarsModule,SpkNgSelectComponent,FormsModule,ReactiveFormsModule, EditProfile],
   templateUrl: './edit-profile.html',

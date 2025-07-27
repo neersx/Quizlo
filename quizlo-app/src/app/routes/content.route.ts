@@ -6,19 +6,19 @@ export const content: Routes = [
   {
     path: '',
     children: [
-      {path:'', loadChildren : () => import('../routes/main-routing.module').then(r => r.pagesRoutingModule)},
+      { path: '', loadChildren: () => import('../routes/main-routing.module').then(r => r.pagesRoutingModule) },
     ],
   },
   {
     path: '',
     children: [
-      {path:'', loadChildren : () => import('../../app/routes/blogs-routing.module').then(r => r.blogsRoutingModule)},
+      { path: '', loadChildren: () => import('../../app/routes/blogs-routing.module').then(r => r.blogsRoutingModule) },
     ],
   },
   {
     path: '',
     children: [
-      {path:'', loadChildren : () => import('../../app/routes/user-profile-routing.module').then(r => r.userProfileRoutingModule)},
+      { path: '', loadChildren: () => import('../../app/routes/user-profile-routing.module').then(r => r.userProfileRoutingModule) },
     ],
   },
 ];
@@ -26,4 +26,4 @@ export const content: Routes = [
   imports: [RouterModule.forRoot(content)],
   exports: [RouterModule],
 })
-export class SaredRoutingModule {}
+export class SaredRoutingModule { }

@@ -30,6 +30,11 @@ export const admin: Routes = [
         loadComponent: () =>
           import('../pages/ai-tests/exams-home/exams-home').then((m) => m.ExamsHome),
       },
+      {
+        path: 'my-tests',
+        loadComponent: () =>
+          import('../pages/profile/user-tests/user-tests').then((m) => m.UserTests),
+      },
 
   ]}
 ];
