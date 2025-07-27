@@ -13,5 +13,6 @@ export interface SubmitAnswerDto {
     isAutoSubmit: boolean;
     submissionTime: string;
     rawAnswers?: any;
+    questions?: any;
     answers: SubmitAnswerDto[];
   }

@@ -138,6 +138,7 @@ public class TestService : ITestService
             var env = await GetAIGeneratedQuestions(test, subjectId, ct);
             if (env.Questions.Count > 0)
             {
+                test.Status = TestStatus.Started;
                 test.Questions = env.Questions;
                 test.TotalQuestions = env.Questions.Count;
                 test.TotalMarks = env.Questions.Count * 3;
@@ -158,10 +159,8 @@ public class TestService : ITestService
                                 .FirstOrDefaultAsync(t => t.Id == testDetails.Id, ct)
                                 ?? throw new KeyNotFoundException($"Test {testDetails.Id} not found.");
 
-            #region --------- AddQuestions to the Questions Hub and TestQuestions ------------
-
             var hubs = new List<QuestionsHub>(testDetails.Questions.Count);
-            var testQuestions = new List<TestQuestion>(testDetails.Questions.Count);
+            var newQuestions = new List<Question>();
 
             foreach (var dto in testDetails.Questions)
             {
@@ -178,36 +177,31 @@ public class TestService : ITestService
                     MinusMarks = dto.MinusMarks,
                 };
 
-                // Enforce Multiple type if DTO says it's multi-select
                 if (dto.IsMultipleSelect && question.Type != QuestionType.Multiple)
                     question.Type = QuestionType.Multiple;
+
+                newQuestions.Add(question);
 
                 hubs.Add(new QuestionsHub
                 {
                     ExamId = testDetails.ExamId,
                     SubjectId = subjectId,
-                    Question = question, // EF will insert Question then Hub automatically
+                    Question = question,
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = 1,
                     IsActive = true,
                     Difficulty = dto.Difficulty ?? question.Difficulty.ToString()
                 });
-
-                // testQuestions.Add(new TestQuestion
-                // {
-                //     TestId = test.Id,
-                //     Question = question,
-                //     Order = dto.QuestionNo
-                // });
             }
 
+            // Save Questions + QuestionsHub (Questions are saved via relationship)
             _db.QuestionsHubs.AddRange(hubs);
             await _db.SaveChangesAsync(ct);
 
-            // _db.TestQuestions.AddRange(testQuestions);
-            // await _db.SaveChangesAsync(ct);
-
-            #endregion
+            var subject = await _db.Subjects.FirstAsync(x => x.Id == subjectId, ct);
+            subject.TotalQuestions = await _db.QuestionsHubs.Where(h => h.ExamId == testDetails.ExamId && h.SubjectId == subjectId)
+            .Select(h => h.QuestionId).Distinct().CountAsync(ct);
+            await _db.SaveChangesAsync(ct);
 
             test.Status = TestStatus.Started;
             test.TotalQuestions = testDetails.TotalQuestions;
@@ -218,10 +212,26 @@ public class TestService : ITestService
             await tx.CommitAsync(ct);
 
             var testDto = _mapper.Map<TestDetailsDto>(test);
-            testDto.Questions = testDetails.Questions;
+
+            // Map saved questions (with generated IDs) to DTO
+            testDto.Questions = newQuestions.Select((q, index) => new QuestionDto
+            {
+                Id = q.Id,
+                QuestionText = q.QuestionText,
+                OptionsJson = q.OptionsJson,
+                Type = q.Type,
+                Difficulty = q.Difficulty.ToString(),
+                Explanation = q.Explanation,
+                CorrectOptionIds = q.CorrectOptionIds,
+                Language = IndianLanguages.English, // or testDetails.Language if applicable
+                IsMultipleSelect = q.Type == QuestionType.Multiple,
+                Marks = q.Marks,
+                MinusMarks = q.MinusMarks,
+                QuestionNo = testDetails.Questions[index].QuestionNo,
+                Options = q.Options,
+            }).ToList();
 
             return testDto;
-
         }
 
         return testDetails;
@@ -418,8 +428,7 @@ public class TestService : ITestService
         return await _db.Tests
                         .AsNoTracking()
                         .Include(t => t.Exam).ThenInclude(e => e.Subjects)
-                        .Include(t => t.TestQuestions)
-                            .ThenInclude(tq => tq.Question)
+                        .Include(t => t.TestQuestions).ThenInclude(tq => tq.Question)
                         .Where(t => t.Id == id)
                         .Select(t => new TestDetailsDto
                         {
@@ -437,7 +446,7 @@ public class TestService : ITestService
                             TotalMarks = t.TotalMarks,
                             ExamName = t.Exam.Name,
                             ExamCode = t.Exam.Code,
-                            Questions = t.TestQuestions
+                            Questions = t.Status == TestStatus.Completed ? t.TestQuestions
                                          .OrderBy(tq => tq.Order)
                                          .Select(tq => new QuestionDto
                                          {
@@ -449,10 +458,8 @@ public class TestService : ITestService
                                              CorrectOptionIds = tq.Question.CorrectOptionIds,
                                              Explanation = tq.Question.Explanation,
                                              Difficulty = tq.Question.Difficulty.ToString() // Convert DifficultyLevel to string  
-                                         })
-                                         .ToList()
-                        })
-                        .FirstOrDefaultAsync(ct);
+                                         }).ToList() : new List<QuestionDto>()
+                        }).FirstOrDefaultAsync(ct);
     }
 
     public async Task<TestDetailsDto?> GetTestInfoAsync(int id, CancellationToken ct = default)
@@ -509,36 +516,34 @@ public class TestService : ITestService
             await using var tx = await _db.Database.BeginTransactionAsync(ct);
             try
             {
-                var test = await _db.Tests
-                    .Include(t => t.TestQuestions)
-                        .ThenInclude(tq => tq.Question)
-                    .FirstOrDefaultAsync(t => t.Id == testId, ct)
+                var testQuestions = new List<TestQuestion>(req.Questions.Count);
+                var test = await _db.Tests.FirstOrDefaultAsync(t => t.Id == testId, ct)
                     ?? throw new KeyNotFoundException($"Test {testId} not found.");
 
                 var answers = req.Answers.ToDictionary(a => a.QuestionId, a => a.SelectedIds);
                 int attempted = 0, correct = 0, total = test.TestQuestions.Count;
 
-                foreach (var tq in test.TestQuestions)
+                foreach (var question in req.Questions)
                 {
-                    var q = tq.Question;
-                    if (!answers.TryGetValue(q.Id, out var selected)) continue;
-
-                    attempted++;
-
-                    q.SelectedOptionIds = string.Join(",", selected);
-                    q.IsCorrect = IsAnswerCorrect(q, selected);
-                    q.AnsweredAt = DateTime.UtcNow;
-                    if (q.IsCorrect == true) correct++;
+                    testQuestions.Add(new TestQuestion
+                    {
+                        TestId = test.Id,
+                        QuestionId = question.Id,
+                        Order = question.QuestionNo,
+                        IsCorrect = question.IsCorrect,
+                        SelectedOptionIds = question.SelectedOptionIds,
+                        AnsweredAt = question.AnsweredAt,
+                        Marks = question.Marks,
+                        MinusMarks = question.MinusMarks,
+                    });
                 }
 
                 // Persist overall test marks
                 test.TotalMarks = total;
                 test.MarksScored = correct;
+                test.Status = TestStatus.Completed;
                 test.DurationCompltedIn = req.DurationCompletedIn;
                 test.SubmissionTime = req.SubmissionTime;
-
-                var percentage = total == 0 ? 0 : Math.Round(correct * 100.0 / total, 2);
-                test.Status = percentage > 70 ? TestStatus.Passed : TestStatus.Failed;
 
                 await _db.SaveChangesAsync(ct);
                 await tx.CommitAsync(ct);

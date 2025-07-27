@@ -141,13 +141,14 @@
       </app-grid-loader>
 
       <!-- Submit Section -->
-      <div class="row submit-container">
+      <div *ngIf="testData && testData.questions" class="row submit-container">
         <div class="submit-card">
           <div class="submit-info">
-            <p>Answered: {{ answeredQuestionsCount() }}/{{ testData.questions?.length }} questions</p>
+            <p>Answered: {{ answeredQuestionsCount() }}/ {{ testData.questions?.length }} questions | {{((answeredQuestionsCount() * 100) / testData?.questions?.length)}}%</p>
             <p>Time Remaining: {{ formattedTime() }}</p>
           </div>
-          <button class="submit-btn" (click)="submitTest()" [disabled]="answeredQuestionsCount() === 0">
+          
+          <button class="submit-btn" [disabled]="((answeredQuestionsCount() * 100)/testData.questions?.length) > 80" (click)="submitTest()" [disabled]="answeredQuestionsCount() === 0">
             Submit Test
           </button>
   

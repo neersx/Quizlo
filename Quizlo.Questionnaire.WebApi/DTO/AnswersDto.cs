@@ -14,6 +14,7 @@
         public DateTime? SubmissionTime { get; init; } = DateTime.UtcNow;
 
         public List<SubmitAnswerDto> Answers { get; init; } = [];
+        public List<QuestionDto> Questions { get; init; } = [];
     }
 
     public record TestSubmissionResultDto(

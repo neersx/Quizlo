@@ -88,6 +88,7 @@ export class TestWindow implements OnInit, OnDestroy {
   private timerInterval: any;
 
   ngOnInit(): void {
+
   }
 
   loadTestQuestions() {
@@ -100,6 +101,8 @@ export class TestWindow implements OnInit, OnDestroy {
             q.isMultipleSelect = q.correctOptionIds?.length > 1;
           })
           this.testData.questions = this.questions;
+          this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet: this.questions });
+
           this.isLoadingQuestions = false;
           this.startTimer();
           this.loadSavedAnswers();
@@ -126,6 +129,8 @@ export class TestWindow implements OnInit, OnDestroy {
             q.isMultipleSelect = q.correctOptionIds?.length > 1;
           })
           this.testData.questions = this.questions;
+          this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet: this.questions });
+
           this.isLoadingQuestions = false;
           this.startTimer();
           this.loadSavedAnswers();
@@ -151,10 +156,20 @@ export class TestWindow implements OnInit, OnDestroy {
           if (resp.isSuccess && resp.data) {
             this.testDetails = resp.data as TestDetailsModel;
             this.subjectId = this.testDetails.subjectId;
-            if (this.testDetails?.AvailableQuesInHub > this.testDetails.totalQuestions)
-              this.getQuestionsFromHub(this.subjectId, this.testDetails.totalQuestions);
-            else
-              this.loadTestQuestions();
+            const savedTest = this.localStorage.getItem(LocalStorageKeys.UserTests);
+            if (savedTest && savedTest.activeTestId === this.testId && savedTest.activeQuestionsSet?.length > 0) {
+              this.questions = savedTest.activeQuestionsSet;
+              this.testData.questions = savedTest.activeQuestionsSet;
+              this.startTimer();
+              this.loadSavedAnswers();
+              this.startAutoSave();
+            } else {
+              if (this.testDetails?.AvailableQuesInHub > this.testDetails.totalQuestions)
+                this.getQuestionsFromHub(this.subjectId, this.testDetails.totalQuestions);
+              else
+                this.loadTestQuestions();
+
+            }
 
             this.timeRemaining.set(+this.testDetails?.totalQuestions * 2 * 60);
             this.questionIndexes = this.makeRange(this.testDetails?.totalQuestions);
@@ -271,7 +286,7 @@ export class TestWindow implements OnInit, OnDestroy {
   // Save answers to localStorage
   private saveAnswers(): void {
     try {
-      // localStorage.setItem('bitsat_answers', JSON.stringify(this.answers()));
+      console.log(this.answers());
       this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers() });
     } catch (error) {
       console.error('Error saving answers:', error);
@@ -283,7 +298,6 @@ export class TestWindow implements OnInit, OnDestroy {
     const currentAnswers = { ...this.answers() };
     currentAnswers[`question_${questionId}`] = optionValue;
     this.answers.set(currentAnswers);
-    console.log(this.answers());
     this.saveAnswers();
   }
 
@@ -360,35 +374,37 @@ export class TestWindow implements OnInit, OnDestroy {
     const rawAnswers = this.answers();  // read the signal value
     const answers = this.mapAnswersSignalToPayload(rawAnswers);
 
+    const questions = this.updateQuestionsWithUserAnswers(this.questions, rawAnswers);
+    console.log('----questions----,', questions);
+
+    this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet: questions });
+
     const payload: SubmitTestRequest = {
       testId: this.testId,
       answers: answers.answers,
+      questions: questions,
       rawAnswers: this.answers(),
       submissionTime: new Date().toISOString(),
       isAutoSubmit: isAutoSubmit,
       durationCompletedIn: GetTimeSpan(getSecondsFromTimeSpan(this.testDetails?.duration) - this.timeRemaining())
     };
-
-    const questions = this.updateQuestionsWithUserAnswers(this.questions, rawAnswers);
-    console.log('----questions----,', questions);
-
-    // this.testService.submitTestAnswers(this.testId, payload).subscribe(
-    //   (response: any) => {
-    //     this.isTestSubmitted.set(true);
-    //     this.submittingTest = false;
-    //     this.processSubmission(payload);
-    //     this.localStorage.removeItem(LocalStorageKeys.UserTests);
-    //     this.resetTest();
-    //     this.router.navigate(['/test/test-result', this.testId]);
-    //   },
-    //   (error: any) => {
-    //     console.error('Error submitting test:', error);
-    //   }
-    // )
+    this.testService.submitTestAnswers(this.testId, payload).subscribe(
+      (response: any) => {
+        this.isTestSubmitted.set(true);
+        this.submittingTest = false;
+        this.processSubmission(payload);
+        // this.localStorage.removeItem(LocalStorageKeys.UserTests);
+        this.resetTest();
+        this.router.navigate(['/test/test-result', this.testId]);
+      },
+      (error: any) => {
+        console.error('Error submitting test:', error);
+      }
+    )
 
   }
 
-  updateQuestionsWithUserAnswers( questions: any[], selectedAnswers: any): any[] {
+  updateQuestionsWithUserAnswers(questions: any[], selectedAnswers: any): any[] {
     return questions.map(q => {
       const selectedKey = `question_${q.id}`;
       const selectedOption = selectedAnswers[selectedKey];
@@ -399,7 +415,7 @@ export class TestWindow implements OnInit, OnDestroy {
 
       const isCorrect = q.correctOptionIds === selectedOption;
 
-      const result =  {
+      const result = {
         ...q,
         selectedOptionIds: selectedOption,
         isCorrect: isCorrect,

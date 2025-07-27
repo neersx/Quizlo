@@ -10,6 +10,8 @@ import { TestService } from '../services/test-service';
 import { TestDetailsModel } from '../model/tests.model';
 import { CommonModule } from '@angular/common';
 import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
+import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
+import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys';
 
 @Component({
   selector: 'app-test-result',
@@ -28,11 +30,13 @@ export class TestResult implements AfterViewInit, OnInit {
   isLoading = true;
   dotsConfig!: false;
   testId = 0;
+  savedTestResult : any;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private testService: TestService,
+    private localStorage: LocalStorageService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
@@ -42,6 +46,8 @@ export class TestResult implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
+    this.savedTestResult =  this.localStorage.getItem(LocalStorageKeys.UserTests);
+    console.log(this.savedTestResult);
     if (!this.testId) return;
     this.getTestResultDetails(this.testId);
     this.cdr.markForCheck();
@@ -60,6 +66,7 @@ export class TestResult implements AfterViewInit, OnInit {
         }
         this.loadChart();
         this.isLoading = false;
+        this.localStorage.removeItem(LocalStorageKeys.UserTests);
         this.cdr.detectChanges();
       }
     })

@@ -83,7 +83,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         public async Task<IActionResult> GetTestQuestionsByTestId(int testId, CancellationToken ct)
         {
             var dto = await _svc.GetQuestionsByTestIdAsync(testId, ct);
-            var apiResponse = ApiResponse<TestDetailsDto>.Success(dto,"Test questions retrieved successfully", StatusCodes.Status200OK);
+            var apiResponse = ApiResponse<TestDetailsDto>.Success(dto, "Test questions retrieved successfully", StatusCodes.Status200OK);
 
             return Ok(apiResponse);
         }
@@ -133,8 +133,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
 
         [HttpPost("{testId:int}/submit")]
-        public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(int testId,[FromBody] SubmitTestAnswersRequest request,
-            CancellationToken ct)
+        public async Task<ActionResult<ApiResponse<TestSubmissionResultDto>>> Submit(int testId, [FromBody] SubmitTestAnswersRequest request, CancellationToken ct)
         {
             if (request is null || request.Answers.Count == 0)
                 return BadRequest("Answers collection cannot be empty.");

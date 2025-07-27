@@ -20,5 +20,6 @@ export interface LocalStorageValues {
   [LocalStorageKeys.UserTests]: {
     activeTestId: number;
     activeAnswers?: any;
+    activeQuestionsSet?: any;
   };
 }
