@@ -13,6 +13,7 @@ import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader
 import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
 import { LocalStorageKeys } from '../../../utils/localstorage/localstorage-keys';
 
+
 @Component({
   selector: 'app-test-result',
   imports: [CommonModule, SharedModule, GalleryModule, NgbTooltipModule, SpkNftCardComponent, SpkReusableTablesComponent, ApexChartComponent, TestSkeletonLoader],
@@ -47,7 +48,6 @@ export class TestResult implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.savedTestResult =  this.localStorage.getItem(LocalStorageKeys.UserTests);
-    console.log(this.savedTestResult);
     if (!this.testId) return;
     this.getTestResultDetails(this.testId);
     this.cdr.markForCheck();
@@ -55,15 +55,20 @@ export class TestResult implements AfterViewInit, OnInit {
 
   getTestResultDetails(id: number) {
     this.testService.getTestResult(id).subscribe((result: any) => {
+      if (result.isSuccess && result.data) {
+        const data : any = result.data;
+        this.testResult = data as TestDetailsModel;
+        const percentage = this.testResult?.totalMarks === 0 ? 0 : Math.round((data.marksScored
+           * 100) / data.totalMarks * 100) / 100;
+        this.testResult.status = data.status === 'Completed' ? percentage > 70 ? 'Passed' : 'Failed' : 'Completed';
 
-      if (result.isSuccess) {
-        this.testResult = result.data;
         this.durationFormatted = this.formatDuration(this.durationRaw);
         if (this.testResult && this.testResult.marksScored && this.testResult.totalMarks) {
           this.percentage = +((this.testResult.marksScored / this.testResult.totalMarks) * 100).toFixed(0);
         } else {
           this.percentage = 0;
-        }
+        }        
+
         this.loadChart();
         this.isLoading = false;
         this.localStorage.removeItem(LocalStorageKeys.UserTests);

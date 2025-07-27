@@ -374,9 +374,6 @@ export class TestWindow implements OnInit, OnDestroy {
     const answers = this.mapAnswersSignalToPayload(rawAnswers);
 
     const questions = this.updateQuestionsWithUserAnswers(this.questions, rawAnswers);
-    console.log('----questions----,', questions);
-
-    this.localStorage.setItem(LocalStorageKeys.UserTests, { activeTestId: this.testId, activeAnswers: this.answers(), activeQuestionsSet: questions });
 
     const payload: SubmitTestRequest = {
       testId: this.testId,
@@ -387,12 +384,12 @@ export class TestWindow implements OnInit, OnDestroy {
       isAutoSubmit: isAutoSubmit,
       durationCompletedIn: GetTimeSpan(getSecondsFromTimeSpan(this.testDetails?.duration) - this.timeRemaining())
     };
+
     this.testService.submitTestAnswers(this.testId, payload).subscribe(
       (response: any) => {
         this.isTestSubmitted.set(true);
         this.submittingTest = false;
         this.processSubmission(payload);
-        // this.localStorage.removeItem(LocalStorageKeys.UserTests);
         this.resetTest();
         this.router.navigate(['/test/test-result', this.testId]);
       },
@@ -421,6 +418,7 @@ export class TestWindow implements OnInit, OnDestroy {
         answeredAt: new Date().toISOString()
       };
 
+      this.storeLocalState();
       return result;
     });
   }

@@ -148,7 +148,7 @@
             <p>Time Remaining: {{ formattedTime() }}</p>
           </div>
           
-          <button *ngIf="testData && testData.questions" class="submit-btn" (click)="submitTest()" [disabled]="answeredQuestionsCount() === 0">
+          <button *ngIf="testData && testData.questions" [disabled]="answeredQuestionsCount() < testData.questions.length" class="submit-btn" (click)="submitTest()">
             Submit Test
           </button>
   

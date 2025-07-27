@@ -520,8 +520,8 @@ public class TestService : ITestService
                 var test = await _db.Tests.FirstOrDefaultAsync(t => t.Id == testId, ct)
                     ?? throw new KeyNotFoundException($"Test {testId} not found.");
 
-                var answers = req.Answers.ToDictionary(a => a.QuestionId, a => a.SelectedIds);
-                int attempted = 0, correct = 0, total = test.TestQuestions.Count;
+                // var answers = req.Answers.ToDictionary(a => a.QuestionId, a => a.SelectedIds);
+                int attempted = 0, correct = 0, total = req.Questions.Count;
 
                 foreach (var question in req.Questions)
                 {
@@ -537,6 +537,9 @@ public class TestService : ITestService
                         MinusMarks = question.MinusMarks,
                     });
                 }
+
+                _db.TestQuestions.AddRange(testQuestions);
+                await _db.SaveChangesAsync(ct);
 
                 // Persist overall test marks
                 test.TotalMarks = total;
