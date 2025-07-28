@@ -69,6 +69,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IQuestionsHubService, QuestionsHubService>();
 builder.Services.AddScoped<JwtTokenService>();
 
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+
+
 builder.Services.AddHttpClient();          // for webhook
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IDropdownService, DropdownService>();

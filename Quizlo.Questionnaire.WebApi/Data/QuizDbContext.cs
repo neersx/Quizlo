@@ -24,7 +24,7 @@ namespace Quizlo.Questionnaire.WebApi.Data
         public DbSet<QuestionsHub> QuestionsHubs { get; set; }
 
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
-
+        public DbSet<UserSubscription> UserSubscriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

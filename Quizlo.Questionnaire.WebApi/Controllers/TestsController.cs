@@ -12,11 +12,15 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
     public class TestsController : ControllerBase
     {
         private readonly ITestService _svc;
+        private readonly SubscriptionService _subscriptionService;
 
-        public TestsController(ITestService svc) => _svc = svc;
+        public TestsController(ITestService svc, SubscriptionService subscriptionService)
+        {
+            _subscriptionService = subscriptionService;
+            _svc = svc;
+        }
 
-        /// <summary>Returns every test created by the currently-logged-in user.</summary>
-        [HttpGet]                                // GET api/tests
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ApiResponse<TestDetailsDto>>>> GetMyTests(
             CancellationToken ct)
         {
@@ -86,6 +90,24 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             var apiResponse = ApiResponse<TestDetailsDto>.Success(dto, "Test questions retrieved successfully", StatusCodes.Status200OK);
 
             return Ok(apiResponse);
+        }
+
+        [HttpGet("{testId:int}/retry")]
+        [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> RetryTest(int testId, CancellationToken ct)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            bool canRetry = await _subscriptionService.HasFeatureAsync(userId, p => p.AllowRetry);
+
+            if (canRetry)
+            {
+                var dto = await _svc.GetQuestionsByTestIdAsync(testId, ct);
+                var apiResponse = ApiResponse<TestDetailsDto>.Success(dto, "Test questions retrieved successfully", StatusCodes.Status200OK);
+
+                return Ok(apiResponse);
+            }
+            
+            throw new Exception("Retry not allowed in this Subscription.");      
         }
 
         /// GET api/tests/{id}

@@ -825,6 +825,123 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SubscriptionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AdFreeExperience")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowDifficultySelection")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowRetry")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowTestScheduling")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanAccessPremiumTests")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("DurationInDays")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HasAIRecommendations")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasAnalytics")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasCertification")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasProgressTracking")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasTestTimeline")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxActiveTests")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxExamsAllowed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxLanguagesPerTest")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxTestAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxTestsPerExam")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionPlans");
+                });
+
+            modelBuilder.Entity("UserSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AutoRenew")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentTransactionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("SubscribedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ValidTill")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionPlanId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSubscriptions");
+                });
+
             modelBuilder.Entity("BlogLike", b =>
                 {
                     b.HasOne("Blog", "Blog")
@@ -993,6 +1110,25 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("UserSubscription", b =>
+                {
+                    b.HasOne("SubscriptionPlan", "SubscriptionPlan")
+                        .WithMany("UserSubscriptions")
+                        .HasForeignKey("SubscriptionPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Quizlo.Questionnaire.WebApi.Data.Entities.User", "User")
+                        .WithMany("UserSubscriptions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubscriptionPlan");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Blog", b =>
                 {
                     b.Navigation("Likes");
@@ -1022,6 +1158,13 @@ namespace Quizlo.Questionnaire.WebApi.Migrations
             modelBuilder.Entity("Quizlo.Questionnaire.WebApi.Data.Entities.User", b =>
                 {
                     b.Navigation("UserRoles");
+
+                    b.Navigation("UserSubscriptions");
+                });
+
+            modelBuilder.Entity("SubscriptionPlan", b =>
+                {
+                    b.Navigation("UserSubscriptions");
                 });
 #pragma warning restore 612, 618
         }
