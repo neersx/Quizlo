@@ -97,7 +97,7 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         public async Task<IActionResult> RetryTest(int testId, CancellationToken ct)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            bool canRetry = await _subscriptionService.HasFeatureAsync(userId, p => p.AllowRetry);
+            bool canRetry = await _subscriptionService.HasFeatureAsync(userId, p => p.AllowRetryTestAttempt);
 
             if (canRetry)
             {

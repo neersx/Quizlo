@@ -19,20 +19,20 @@ public class SubscriptionPlan
     public int MaxExamsAllowed { get; set; }
     public int MaxTestsPerExam { get; set; }
     public int MaxLanguagesPerTest { get; set; }
-    public int MaxActiveTests { get; set; }
-    public bool AllowRetry { get; set; }
+    public int MaxActiveTests { get; set; } // Unfinished Tests count
+    public bool AllowRetryTestAttempt { get; set; }
     public int MaxTestAttempts { get; set; }
-    public bool HasTestTimeline { get; set; }
+    public bool DisplayTestTimeline { get; set; }
     public bool AllowDifficultySelection { get; set; }
     public bool AllowTestScheduling { get; set; }
+    public int MaxScheduledTestsAllowed { get; set; }
     public bool HasProgressTracking { get; set; }
-    public bool HasAnalytics { get; set; }
+    public bool DisplayTestAnalytics { get; set; }
 
     // Bonus Capabilities
-    public bool HasCertification { get; set; }
+    public bool AllowCertification { get; set; }
     public bool CanAccessPremiumTests { get; set; }
     public bool HasAIRecommendations { get; set; }
-    public bool AdFreeExperience { get; set; }
     public SubscriptionLevel Level { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
