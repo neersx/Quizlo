@@ -65,24 +65,15 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Login([FromBody] LoginDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user == null) return Unauthorized("Invalid credentials");
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
-            if (!result.Succeeded) return Unauthorized("Invalid credentials");
-
-            var token = await _jwtTokenService.GenerateJwtToken(user);
-
-            var response = new AuthResponseDto
+            try
             {
-                Token = token,
-                UserId = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName
-            };
-
-            return Ok(ApiResponse<AuthResponseDto>.Success(response)); //return CreatedAtAction(nameof(GetUser), new { id = user.Id }, response);
+                var response = await _userService.LoginAsync(dto.Email, dto.Password);
+                return Ok(ApiResponse<AuthResponseDto>.Success(response));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         // POST: api/users/logout

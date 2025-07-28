@@ -13,7 +13,7 @@ public class SubscriptionPlan
     public string Description { get; set; }
 
     public decimal Price { get; set; }
-    public int DurationInDays { get; set; } // e.g., 30, 90, 365
+    public int DurationInDays { get; set; } = 30; // e.g., 30, 90, 365
 
     // Capabilities
     public int MaxExamsAllowed { get; set; }
