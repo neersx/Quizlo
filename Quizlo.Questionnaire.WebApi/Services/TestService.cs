@@ -174,6 +174,7 @@ public class TestService : ITestService
                     Explanation = dto.Explanation,
                     CorrectOptionIds = dto.CorrectOptionIds,
                     Marks = dto.Marks,
+                    Language = testDetails.Language,
                     MinusMarks = dto.MinusMarks,
                 };
 
@@ -223,7 +224,7 @@ public class TestService : ITestService
                 Difficulty = q.Difficulty.ToString(),
                 Explanation = q.Explanation,
                 CorrectOptionIds = q.CorrectOptionIds,
-                Language = IndianLanguages.English, // or testDetails.Language if applicable
+                Language = q.Language, // or testDetails.Language if applicable
                 IsMultipleSelect = q.Type == QuestionType.Multiple,
                 Marks = q.Marks,
                 MinusMarks = q.MinusMarks,

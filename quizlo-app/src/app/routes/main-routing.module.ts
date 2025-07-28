@@ -34,7 +34,7 @@ export const admin: Routes = [
       {
         path: 'my-tests',
         loadComponent: () =>
-          import('../pages/profile/user-tests/user-tests').then((m) => m.UserTests),
+          import('../pages/ai-tests/my-tests/my-tests').then((m) => m.MyTests),
       },
 
     ]

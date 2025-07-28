@@ -1,25 +1,23 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from 'express';
-import { AuthService } from '../../../shared/services/auth.service';
-import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
-import { TestDetailsModel } from '../../ai-tests/model/tests.model';
-import { TestService } from '../../ai-tests/services/test-service';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from '../../../shared/sharedmodule';
-import { TestSkeletonLoader } from '../../ai-tests/test-skeleton-loader/test-skeleton-loader';
+import { TestSkeletonLoader } from '../test-skeleton-loader/test-skeleton-loader';
+import { TestDetailsModel } from '../model/tests.model';
+import { TestService } from '../services/test-service';
+import { GetCssClassByStatus } from '../../../utils/helpers/css-class-by-status';
 
 @Component({
-  selector: 'app-user-tests',
+  selector: 'app-my-tests',
   imports: [SharedModule, NgApexchartsModule, NgbModule, NgSelectModule, CommonModule, RouterModule, TestSkeletonLoader],
-  templateUrl: './user-tests.html',
-  styleUrl: './user-tests.scss',
+  templateUrl: './my-tests.html',
+  styleUrl: './my-tests.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserTestsComponent implements OnInit {
+export class MyTests implements OnInit {
   loading = false;
   loadingTest = false;
   testDetails: TestDetailsModel | undefined;
@@ -28,12 +26,7 @@ export class UserTestsComponent implements OnInit {
   error = '';
 
   constructor(private cdr: ChangeDetectorRef,
-    private modalService: NgbModal,
-    private router: Router,
-    private testService: TestService,
-    private userService: AuthService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private localStorageService: LocalStorageService) { }
+    private testService: TestService) { }
 
   ngOnInit() {
     this.loadTests();
@@ -45,7 +38,7 @@ export class UserTestsComponent implements OnInit {
     this.testService.getTests().subscribe({
       next: (resp: any) => {
         if (resp.isSuccess) {
-          this.tests = resp.data.filter((test: any) => test.status == 'Not Started');
+          this.tests = resp.data;
           this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load tests';
@@ -60,9 +53,15 @@ export class UserTestsComponent implements OnInit {
     });
   }
 
+  getStatusClass(status: string): string {
+    return GetCssClassByStatus(status);
+  }
+  
+
   onIconError(event: Event) {
     const img = event.target as HTMLImageElement;
     img.src = '../assets/images/exams/icons/exam.png';
     this.cdr.markForCheck();
   }
 }
+
