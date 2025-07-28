@@ -4,13 +4,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 export const admin: Routes = [
-  {path:'test',children:[
-    {
-      path: '',
-      loadComponent: () =>
-        import('../pages/ai-tests/prepare-test/prepare-test').then((m) => m.PrepareTest),
-    },
-    {
+  {
+    path: 'test', children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('../pages/ai-tests/prepare-test/prepare-test').then((m) => m.PrepareTest),
+      },
+      {
         path: 'live-test/:id',
         loadComponent: () =>
           import('../pages/ai-tests/live-test/live-test').then((m) => m.LiveTest),
@@ -36,7 +37,8 @@ export const admin: Routes = [
           import('../pages/profile/user-tests/user-tests').then((m) => m.UserTests),
       },
 
-  ]}
+    ]
+  }
 ];
 @NgModule({
   imports: [RouterModule.forChild(admin)],
