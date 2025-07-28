@@ -38,7 +38,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
             // Load user subscription with plan details
             var subscription = await _context.UserSubscriptions
                 .Include(us => us.SubscriptionPlan)
-                .Where(us => us.UserId == user.Id && us.IsActive)
+                .Where(us => us.UserId == user.Id && DateTime.UtcNow <= us.ValidTill)
                 .Select(us => new UserSubscriptionDto
                 {
                     PlanName = us.SubscriptionPlan.Name,
@@ -51,9 +51,10 @@ namespace Quizlo.Questionnaire.WebApi.Services
                     CanScheduleTests = us.SubscriptionPlan.AllowTestScheduling,
                     ShowAnalytics = us.SubscriptionPlan.DisplayTestAnalytics,
                     CanSelectDifficulty = us.SubscriptionPlan.AllowDifficultySelection,
-                    DisplayTestTimeline = us.SubscriptionPlan.DisplayTestTimeline
+                    DisplayTestTimeline = us.SubscriptionPlan.DisplayTestTimeline,
                 })
                 .FirstOrDefaultAsync();
+
 
             return new AuthResponseDto
             {
@@ -66,7 +67,31 @@ namespace Quizlo.Questionnaire.WebApi.Services
             };
         }
 
-        public async Task<User> CreateUserAsync(string email, string password, string firstName, string lastName, string phoneNumber)
+        public async Task<UserWithSubscriptionDto> GetUserWithSubscriptionAsync(User user)
+        {
+            var subscription = await _context.UserSubscriptions
+                .Include(us => us.SubscriptionPlan)
+                .Where(us => us.UserId == user.Id)
+                .OrderByDescending(us => us.SubscribedOn)
+                .FirstOrDefaultAsync();
+
+            return new UserWithSubscriptionDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Subscription = subscription == null ? null : new SubscriptionDto
+                {
+                    PlanName = subscription.SubscriptionPlan.Name,
+                    SubscribedOn = subscription.SubscribedOn,
+                    ValidTill = subscription.ValidTill
+                }
+            };
+        }
+
+
+        public async Task<UserWithSubscriptionDto> CreateUserAsync(string email, string password, string firstName, string lastName, string phoneNumber)
         {
             var user = new User
             {
@@ -98,6 +123,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                     UserId = user.Id,
                     SubscriptionPlanId = defaultPlan.Id,
                     SubscribedOn = DateTime.UtcNow,
+                    PaymentTransactionId = "-1",
                     ValidTill = DateTime.UtcNow.AddDays(defaultPlan.DurationInDays | 30),
                 };
 
@@ -105,7 +131,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return user;
+            return await GetUserWithSubscriptionAsync(user);
         }
 
 
