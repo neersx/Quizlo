@@ -22,4 +22,8 @@ export interface LocalStorageValues {
     activeAnswers?: any;
     activeQuestionsSet?: any;
   };
+
+  [LocalStorageKeys.UserSubscription]: {
+    subscriptionLevel: string;
+  };
 }

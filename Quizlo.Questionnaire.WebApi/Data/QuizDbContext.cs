@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Quizlo.Questionnaire.WebApi.Data
 {
@@ -23,6 +23,9 @@ namespace Quizlo.Questionnaire.WebApi.Data
         public DbSet<OTPRecord> OTPRecords { get; set; }
         public DbSet<QuestionsHub> QuestionsHubs { get; set; }
 
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -40,5 +43,6 @@ namespace Quizlo.Questionnaire.WebApi.Data
             builder.Entity<QuestionsHub>().HasOne(qh => qh.Subject).WithMany().HasForeignKey(qh => qh.SubjectId).OnDelete(DeleteBehavior.Restrict);   // Prevent multiple cascade paths
             builder.Entity<QuestionsHub>().HasOne(qh => qh.Question).WithMany().HasForeignKey(qh => qh.QuestionId).OnDelete(DeleteBehavior.Restrict);   // Prevent multiple cascade paths
         }
+
     }
 }

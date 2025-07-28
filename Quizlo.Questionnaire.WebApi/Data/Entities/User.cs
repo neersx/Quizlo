@@ -51,6 +51,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         public string? Headline { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; } = [];
+        public ICollection<UserSubscription> UserSubscriptions { get; set; } = new List<UserSubscription>();
+
     }
 
     public class Role : IdentityRole<int>

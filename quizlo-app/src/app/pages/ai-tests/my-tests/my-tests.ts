@@ -38,7 +38,19 @@ export class MyTests implements OnInit {
     this.testService.getTests().subscribe({
       next: (resp: any) => {
         if (resp.isSuccess) {
-          this.tests = resp.data;
+          this.tests = resp.data.map((x: any) => {
+            const percentage = x?.totalMarks === 0
+              ? 0
+              : Math.round((x.marksScored * 100) / x.totalMarks * 100) / 100;
+          
+            return {
+              ...x,
+              status: x.status === 'Completed'
+                ? (percentage > 70 ? 'Passed' : 'Failed')
+                : x.status
+            };
+          });
+          
           this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load tests';
@@ -56,7 +68,7 @@ export class MyTests implements OnInit {
   getStatusClass(status: string): string {
     return GetCssClassByStatus(status);
   }
-  
+
 
   onIconError(event: Event) {
     const img = event.target as HTMLImageElement;

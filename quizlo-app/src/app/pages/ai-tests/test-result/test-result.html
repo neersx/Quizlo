@@ -28,7 +28,7 @@
                                             <h4 class="text-primary mb-0">{{testResult?.marksScored ?? 0}}</h4>
                                         </div>
                                         <div class="text-end">
-                                            <p class="mb-1">Overall margin</p>
+                                            <p class="mb-1">Less To 100%</p>
                                             <h5 class="text-success mb-0" [ngClass]="{'text-danger': percentage < 60}">
                                                 {{100 - (percentage ?? 0)}}%</h5>
                                         </div>
@@ -74,8 +74,7 @@
                                                     <p class="fs-14 fw-medium mb-2">Test Status :</p>
                                                     <div
                                                         class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
-                                                        <img src="./assets/images/crypto-currencies/regular/Ethereum.svg"
-                                                            alt="">
+                                                        <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt="Ethereum">
                                                     </div>
                                                     <h4 class="mb-2 d-inline-block text-success"
                                                         [ngClass]="testResult?.status === 'passed' ? 'text-success' : 'text-danger'">
@@ -89,8 +88,7 @@
                                                     <div class="d-flex gap-1 align-items-center">
                                                         <div
                                                             class="avatar avatar-sm avatar-rounded p-1 bg-primary-transparent me-2 border border-primary border-opacity-10">
-                                                            <img src="./assets/images/crypto-currencies/regular/Ethereum.svg"
-                                                                alt="">
+                                                            <img src="./assets/images/crypto-currencies/regular/Ethereum.svg" alt="Ethereum">
                                                         </div>
                                                         <h6 class="mb-0"> {{testResult?.subject ?? 'General'}}</h6>
                                                     </div>
