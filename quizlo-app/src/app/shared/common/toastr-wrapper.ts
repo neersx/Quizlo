@@ -11,7 +11,6 @@ export class ToastrWrapperService {
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    console.log('ToastrWrapperService initialized. Is browser:', this.isBrowser);
   }
 
   success(message: string, title?: string) {
@@ -19,7 +18,6 @@ export class ToastrWrapperService {
   }
 
   error(message: string, title?: string) {
-    console.log('ToastrWrapperService.error called with message:', message, 'title:', title);
     if (this.isBrowser) this.toastr.error(message, title);
   }
 

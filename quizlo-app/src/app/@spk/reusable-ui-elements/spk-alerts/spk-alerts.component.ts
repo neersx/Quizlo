@@ -10,10 +10,11 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class SpkAlertsComponent {
   @Input() isDismissible = false; 
-  @Input() variant:string = ''; 
+  @Input() variant:string = 'success'; 
   @Output() close = new EventEmitter<void>(); 
   @Input() title: string = ''; 
   @Input() linkText: string = ''; 
+  @Input() type: 'danger' | 'success' | 'info' = 'danger'; 
   @Input() buttonClass: string = ''; 
 
 

@@ -19,9 +19,10 @@ export interface SubscriptionModel {
 }
 
 export interface UserCurrentUsageModel {
-    // Define properties as needed, e.g.:
-    // usageCount: number;
-    // lastUsed: Date;
+    activeTests: number;
+    retryAttempted: number;
+    testsCreatedPerExam: number;
+    noOfExamsForwhichTestsGiven: number;
 }
 
 export interface UserWithSubscriptionModel {

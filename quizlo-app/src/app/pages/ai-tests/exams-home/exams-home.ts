@@ -20,12 +20,12 @@ import { RegisterModal } from '../../identity/register-modal/register-modal';
 import { NgbModal, NgbModalOptions, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
 import { Title, Meta } from '@angular/platform-browser';
-import { environment } from '../../../../environments/environment';
+import { SpkAlertsComponent } from '../../../@spk/reusable-ui-elements/spk-alerts/spk-alerts.component';
 
 @Component({
   selector: 'app-exams-home',
   imports: [SharedModule, NgApexchartsModule, NgbModule, NgSelectModule, SpkNgSelectComponent, SpkDropdownsComponent,
-    CommonModule, RouterModule, TestSkeletonLoader, RegisterModal, GridLoader],
+    CommonModule, RouterModule, TestSkeletonLoader, RegisterModal, GridLoader, SpkAlertsComponent],
   templateUrl: './exams-home.html',
   styleUrl: './exams-home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -94,28 +94,28 @@ export class ExamsHome implements OnInit {
     { type: 'text' as const, width: 25 },
   ];
 
-    private setMetaTags(): void {
+  private setMetaTags(): void {
 
-      const title = 'Prepare any Exam with Live Tests Free | Quizlo AI';
-      const description = 'Absolutely Free! AI-powered live practice tests for IIT-JEE, NEET, AIEE, SSC, UPSC, CAT, CTAT, and more. Students & teachers love our instant scoring, adaptive questions & detailed reports.';
-      const keywords = 'Free live AI tests, IIT-JEE, NEET, AIEE, SSC, UPSC, CAT, CTAT, etrance exams, online practice tests, exam mastery, Quizlo Ai platform, adaptive testing, performance reports';
-      
-      this.titleService.setTitle(title);   
-      this.metaService.updateTag({ name: 'description', content: description });
-      this.metaService.updateTag({ name: 'keywords', content: keywords });  
-  
-      // Open Graph
-      this.metaService.updateTag({ property: 'og:title', content: title });
-      this.metaService.updateTag({ property: 'og:description', content: description });
-      this.metaService.updateTag({ property: 'og:image', content: 'https://res.cloudinary.com/quizloai/image/upload/v1753084790/exam-selection_hcdpgv.jpg' });
-      this.metaService.updateTag({ property: 'og:url', content: `https://quizloai.com/test/select-exam` });
-  
-      // Twitter Card
-      this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-      this.metaService.updateTag({ name: 'twitter:title', content: title });
-      this.metaService.updateTag({ name: 'twitter:description', content: description});
-      this.metaService.updateTag({ name: 'twitter:image', content: 'https://res.cloudinary.com/quizloai/image/upload/v1753084790/exam-selection_hcdpgv.jpg' });
-    }
+    const title = 'Prepare any Exam with Live Tests Free | Quizlo AI';
+    const description = 'Absolutely Free! AI-powered live practice tests for IIT-JEE, NEET, AIEE, SSC, UPSC, CAT, CTAT, and more. Students & teachers love our instant scoring, adaptive questions & detailed reports.';
+    const keywords = 'Free live AI tests, IIT-JEE, NEET, AIEE, SSC, UPSC, CAT, CTAT, etrance exams, online practice tests, exam mastery, Quizlo Ai platform, adaptive testing, performance reports';
+
+    this.titleService.setTitle(title);
+    this.metaService.updateTag({ name: 'description', content: description });
+    this.metaService.updateTag({ name: 'keywords', content: keywords });
+
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: title });
+    this.metaService.updateTag({ property: 'og:description', content: description });
+    this.metaService.updateTag({ property: 'og:image', content: 'https://res.cloudinary.com/quizloai/image/upload/v1753084790/exam-selection_hcdpgv.jpg' });
+    this.metaService.updateTag({ property: 'og:url', content: `https://quizloai.com/test/select-exam` });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: title });
+    this.metaService.updateTag({ name: 'twitter:description', content: description });
+    this.metaService.updateTag({ name: 'twitter:image', content: 'https://res.cloudinary.com/quizloai/image/upload/v1753084790/exam-selection_hcdpgv.jpg' });
+  }
 
 
   getActiveTests() {
@@ -201,19 +201,40 @@ export class ExamsHome implements OnInit {
     });
   }
 
+  checkTestCreationEligibility(): boolean {
+    const user = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
+    if (!user) {
+      this.error = 'Please login to start a test';
+      return false;
+    }
+
+    if (user.currentUsage && user.subscriptionPlan) {
+      if (user.currentUsage.activeTests >= user.subscriptionPlan.maxActiveTests) {
+        this.error = 'You have reached your unfinished test limit for today. Please try again tomorrow.';
+        return false;
+      }
+    }
+
+    return true;
+  }
 
   startTest() {
     if (this.tests.length > 0) {
       return;
     }
+
     this.loadingTest = true;
     if (!this.selectedExam || !this.selectedSubject) {
       this.loadingTest = false;
       return;
     }
     setTimeout(() => {
-
       if (this.isUserLoggedIn()) {
+        const isEligible = this.checkTestCreationEligibility();
+        if (!isEligible) {
+          this.loadingTest = false;
+          return;
+        }
         const payload = this.getPayload();
         this.loadTest(payload);
       } else {
@@ -229,15 +250,15 @@ export class ExamsHome implements OnInit {
 
   OpenRegisterModal() {
     const modalRef = this.modalService.open(RegisterModal, this.modalOptions);
-  
+
     modalRef.closed.subscribe((result: any) => {
-      if(result.isSuccess){
+      if (result.isSuccess) {
         this.startTest();
       } else {
         console.log('Closed with error:', result);
       }
     });
-  
+
     // fires only when .dismiss(...) is called, or ESC/backdrop
     modalRef.dismissed.subscribe((reason: any) => {
       console.log('Dismissed with:', reason);
@@ -247,12 +268,12 @@ export class ExamsHome implements OnInit {
 
   modalOptions: NgbModalOptions = {
     centered: true,
-    
+
   };
 
   isUserLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId)) {
-      const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+      const currentUser = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
       return !!currentUser;
     }
     return false;

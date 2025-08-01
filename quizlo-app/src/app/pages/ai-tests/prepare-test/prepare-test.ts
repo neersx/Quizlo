@@ -48,7 +48,6 @@ export class PrepareTest implements OnInit {
             ...exam,
             cssClass: colorClasses[Math.floor(Math.random() * colorClasses.length)]
           }));
-          console.log('Exams:', this.exams);
           this.cdr.detectChanges();
         } else {
           this.error = resp.message ?? 'Failed to load exams';

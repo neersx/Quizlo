@@ -2,6 +2,22 @@
     <ng-content >
     </ng-content>
   </ngb-alert> -->
-  <ngb-alert  [type]="variant + ' mb-3'" (closed)="onClose()" [dismissible]="isDismissible">
+  <!-- <ngb-alert  [type]="variant + ' mb-3'" (closed)="onClose()" [dismissible]="isDismissible">
     <ng-content></ng-content>
-  </ngb-alert>
+  </ngb-alert> -->
+
+  <div class="alert alert-{{type}} alert-dismissible fade show custom-alert-icon shadow-sm my-2"
+    role="alert"
+  >
+    <!-- <span [innerHTML]="getSanitizedSVG(alert.icon)"></span> -->
+
+    {{ title }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    >
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
