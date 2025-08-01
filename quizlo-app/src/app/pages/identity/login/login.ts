@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/identity/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../../shared/sharedmodule';
+import { ToastrWrapperService } from '../../../shared/common/toastr-wrapper';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +42,8 @@ export class Login implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     public readonly authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private toast: ToastrWrapperService
   ) { }
 
   errorMessage = ''; // validation _error handle
@@ -53,6 +55,7 @@ export class Login implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+     this.toast.error('Welcome to Angular 20 SSR!', 'Success');
     // Protect route if already logged in
     if (isPlatformBrowser(this.platformId) && this.authService.currentUser) {
       this.router.navigate(['/']);
@@ -100,8 +103,8 @@ export class Login implements OnInit, OnDestroy {
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
-        const msg = err.error?.message || 'Login failed. Please try again.';
-        this.toastr.error(msg, 'Login Error');
+        this.errorMessage = err.error?.message || 'Login failed. Please try again.';
+        this.toastr.error(this.errorMessage, 'Login Error');
       }
     });
   }

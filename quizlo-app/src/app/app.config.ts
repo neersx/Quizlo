@@ -25,10 +25,11 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       SharedModule,               // any standalone @NgModule you need
       NgbModule,
-      ToastrModule.forRoot({      // toastr needs its own provider
-        positionClass: 'toast-bottom-right',
-        timeOut: 3000
-      })
+      ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
     ),
 
     // 4) Animations

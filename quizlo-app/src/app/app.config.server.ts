@@ -21,10 +21,11 @@ const serverConfig: ApplicationConfig = {
       HttpClientModule,         // provides HttpClient
       NgbModule,
       SharedModule,
-      ToastrModule.forRoot({    // <-- wires up ToastConfig & ToastrService
-        positionClass: 'toast-bottom-right',
-        timeOut: 3000,
-      })
+      ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
     )
   ]
 };

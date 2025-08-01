@@ -19,6 +19,7 @@
                                     </a>
                                 </div>
                                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                                    {{errorMessage}}
                                     @if(errorMessage.length > 0){
                                     <p class="text-danger">
                                         {{errorMessage}}</p>
