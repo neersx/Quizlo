@@ -98,7 +98,6 @@ export class Login implements OnInit, OnDestroy {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.toastr.success('Login successful', 'Welcome');
-        console.log('Login successful, currentUser:', this.authService.currentUser);
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/test'; // or any default
         this.router.navigateByUrl(returnUrl);
       },

@@ -35,6 +35,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
             if (!result.Succeeded) throw new UnauthorizedAccessException("Invalid credentials");
 
             var token = await _jwtTokenService.GenerateJwtToken(user);
+            var currentUsage = await GetUserCurrentUsageAsync(user.Id);
 
             // Load user subscription with plan details
             var subscription = await _context.UserSubscriptions
@@ -56,7 +57,6 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 })
                 .FirstOrDefaultAsync();
 
-
             return new AuthResponseDto
             {
                 Token = token,
@@ -64,7 +64,8 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Subscription = subscription
+                SubscriptionPlan = subscription,
+                CurrentUsage = currentUsage
             };
         }
 
@@ -76,7 +77,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 .OrderByDescending(us => us.SubscribedOn)
                 .FirstOrDefaultAsync();
 
-                var currentUsage = await GetUserCurrentUsageAsync(user.Id);
+            var currentUsage = await GetUserCurrentUsageAsync(user.Id);
 
             return new UserWithSubscriptionDto
             {

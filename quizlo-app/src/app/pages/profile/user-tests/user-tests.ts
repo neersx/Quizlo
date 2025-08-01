@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from 'express';
-import { AuthService } from '../../../shared/services/auth.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LocalStorageService } from '../../../utils/localstorage/localstorage.service';
 import { TestDetailsModel } from '../../ai-tests/model/tests.model';
 import { TestService } from '../../ai-tests/services/test-service';
@@ -28,10 +26,7 @@ export class UserTestsComponent implements OnInit {
   error = '';
 
   constructor(private cdr: ChangeDetectorRef,
-    private modalService: NgbModal,
-    private router: Router,
     private testService: TestService,
-    private userService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private localStorageService: LocalStorageService) { }
 

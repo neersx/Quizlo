@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { User } from '../../../shared/services/auth.service';
-import { Exam, TestDetailsDto, CreateTestRequest, TestSubmissionResultDto } from '../model/questions.model';
+import { Exam } from '../model/questions.model';
 import { environment } from '../../../../environments/environment';
-import { SubmitAnswerDto } from '../model/answer.model';
 
 
 @Injectable({ providedIn: 'root' })

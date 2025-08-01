@@ -1,20 +1,11 @@
 import { Injectable,NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-export interface User {
-  id: number;
-  email: string;
-  displayName?: string;
-  firstName?: string,
-  lastName?: string,
-  photoURL?: string;
-  emailVerified?: boolean;
-  phoneNumbe?: string;
-  phoneNumberConfirmed?: boolean,
-}
+
+
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthServiceOld {
   authState: any;
   afAuth: any;
   afs: any;
@@ -50,29 +41,6 @@ export class AuthService {
     }
   }
 
-  registerWithEmail(email: string, password: string) {
-    // return this.afu
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then((user: any) => {
-    //     this.authState = user;
-    //   })
-    //   .catch((_error: any) => {
-    //     console.log(_error);
-    //     throw _error;
-    //   });
-  }
-
-  loginWithEmail(email: string, password: string) {
-    // return this.afu
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then((user: any) => {
-    //     this.authState = user;
-    //   })
-    //   .catch((_error: any) => {
-    //     console.log(_error);
-    //     throw _error;
-    //   });
-  }
 
   singout(): void {
     // this.afu.signOut();
@@ -87,7 +55,7 @@ export class AuthService {
           /* Call the SendVerificaitonMail() function when new user sign
           up and returns promise */
           this.SendVerificationMail();
-          this.SetUserData(result.user);
+          // this.SetUserData(result.user);
         }).catch((error:any) => {
           window.alert(error.message)
         })
@@ -100,28 +68,13 @@ export class AuthService {
           this.router.navigate(['/dashboard/sales']);
         })
     }
-      // Set user
-  SetUserData(user:any) {
-    // const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const userData: User = {
-      email: user.email,
-      displayName: user.displayName,
-      id: user.uid,
-      photoURL: user.photoURL || 'src/favicon.ico',
-      emailVerified: user.emailVerified
-    };
-    // userRef.delete().then(function () {})
-    //       .catch(function (error:any) {});
-    // return userRef.set(userData, {
-    //   merge: true
-    // });
-  }
+
+    
  // sign in function
  SignIn(email:any, password:any) {
   return this.afAuth.signInWithEmailAndPassword(email, password)
     .then((result:any) => {
       if (result.user.emailVerified !== true) {
-        this.SetUserData(result.user);
         this.SendVerificationMail();
         this.showLoader = true;
       } else {

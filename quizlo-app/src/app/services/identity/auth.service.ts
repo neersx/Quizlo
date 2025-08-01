@@ -1,37 +1,34 @@
 // src/app/services/auth.service.ts
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient }                      from '@angular/common/http';
-import { BehaviorSubject, Observable }     from 'rxjs';
-import { map }                             from 'rxjs/operators';
-import { isPlatformBrowser }               from '@angular/common';
-import { Router }                          from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../../models/api-response.model';
-import { User } from '../../shared/services/auth.service';
 import { RegisterDto } from '../../pages/identity/models/register.model';
+import { UserModel } from '../../models/user.model';
+import { AuthResponseModel } from '../../models/auth-response.model';
+import { LocalStorageService } from '../../utils/localstorage/localstorage.service';
+import { LocalStorageKeys } from '../../utils/localstorage/localstorage-keys';
 
-interface LoginData {
-  token:     string;
-  userId:    number;
-  email:     string;
-  firstName: string;
-  lastName:  string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly apiUrl          = `${environment.apiUrl}/Users`;
+  private readonly apiUrl = `${environment.apiUrl}/Users`;
   private readonly storageTokenKey = 'access_token';
-  private readonly storageUserKey  = 'current_user';
-  public showLoader:boolean=false;
+  private readonly storageUserKey = 'current_user';
+  public showLoader: boolean = false;
 
-  private userSubject = new BehaviorSubject<User | null>(this.readUserFromStorage());
-  public  user$       = this.userSubject.asObservable();
-  public  isLoggedIn$ = this.user$.pipe(map(u => !!u));
+  private userSubject = new BehaviorSubject<UserModel | null>(this.readUserFromStorage());
+  public user$ = this.userSubject.asObservable();
+  public isLoggedIn$ = this.user$.pipe(map(u => !!u));
 
   constructor(
     private http: HttpClient,
     private router: Router,
+    private localStorage: LocalStorageService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     if (isPlatformBrowser(this.platformId)) {
@@ -43,7 +40,7 @@ export class AuthService {
   }
 
   /** Expose the current user synchronously */
-  public get currentUser(): User | null {
+  public get currentUser(): UserModel | null {
     return this.userSubject.value;
   }
 
@@ -52,21 +49,23 @@ export class AuthService {
   }
 
   /** Call this to log in; returns the User on success */
-  login(credentials: { email: string; password: string }): Observable<User> {
+  login(credentials: { email: string; password: string }): Observable<UserModel> {
     return this.http
-      .post<ApiResponse<LoginData>>(`${this.apiUrl}/login`, credentials)
+      .post<ApiResponse<AuthResponseModel>>(`${this.apiUrl}/login`, credentials)
       .pipe(
         map(resp => {
           if (!resp.isSuccess || !resp.data) {
             throw new Error(resp.message || 'Login failed');
           }
-          const { token, userId, email, firstName, lastName } = resp.data;
-          // Build your User object from returned fields
-          const user: User = {
+          const { token, userId, email, firstName, lastName, currentUsage, subscriptionPlan } = resp.data;
+
+          const user: UserModel = {
             id: userId,
             email,
             firstName,
-            lastName
+            lastName,
+            currentUsage,
+            subscriptionPlan
           };
           this.saveAuthState(token, user);
           return user;
@@ -81,8 +80,8 @@ export class AuthService {
   /** Clears storage and redirects home */
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(this.storageTokenKey);
-      localStorage.removeItem(this.storageUserKey);
+      localStorage.removeItem(LocalStorageKeys.AuthToken);
+      localStorage.removeItem(LocalStorageKeys.CurrentUser);
     }
     this.userSubject.next(null);
     this.router.navigate(['/auth/login']);
@@ -99,25 +98,25 @@ export class AuthService {
   }
 
   /** Reads the persisted user JSON or null */
-  private readUserFromStorage(): User | null {
+  private readUserFromStorage(): UserModel | null {
     if (!isPlatformBrowser(this.platformId)) return null;
     const json = localStorage.getItem(this.storageUserKey);
     if (!json) return null;
     try {
-      return JSON.parse(json) as User;
+      return JSON.parse(json) as UserModel;
     } catch {
-      localStorage.removeItem(this.storageUserKey);
+      this.localStorage.removeItem(LocalStorageKeys.CurrentUser);
       return null;
     }
   }
 
   /** Persists token & user, then notifies subscribers */
-  private saveAuthState(token: string, user: User): void {
+  private saveAuthState(token: string, user: UserModel): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(this.storageTokenKey, token);
-      localStorage.setItem(this.storageUserKey, JSON.stringify(user));
+      this.localStorage.setItem(LocalStorageKeys.AuthToken, token);
+      this.localStorage.setItem(LocalStorageKeys.CurrentUser, { user });
     }
     this.userSubject.next(user);
-    console.log('userSubject now:', this.userSubject.value);
+    console.log('userSubject now:', this.localStorage.getItem(LocalStorageKeys.CurrentUser)?.user);
   }
 }

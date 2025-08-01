@@ -2,8 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
-import { User } from "../../../shared/services/auth.service";
 import { RegisterDto, LoginDto } from "../models/register.model";
+import { UserModel } from "../../../models/user.model";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -11,12 +11,12 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`);
+  getUser(id: number): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.baseUrl}/${id}`);
   }
 
-  register(dto: RegisterDto): Observable<User> {
-    return this.http.post<User>(`${this.baseUrl}/register`, dto);
+  register(dto: RegisterDto): Observable<UserModel> {
+    return this.http.post<UserModel>(`${this.baseUrl}/register`, dto);
   }
 
   login(dto: LoginDto): Observable<any> {
