@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Quizlo.Questionnaire.WebApi.Data;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
 using Quizlo.Questionnaire.WebApi.DTO;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 
 namespace Quizlo.Questionnaire.WebApi.Services
 {
@@ -75,18 +76,48 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 .OrderByDescending(us => us.SubscribedOn)
                 .FirstOrDefaultAsync();
 
+                var currentUsage = await GetUserCurrentUsageAsync(user.Id);
+
             return new UserWithSubscriptionDto
             {
                 Id = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Subscription = subscription == null ? null : new SubscriptionDto
+                Subscription = (subscription == null || subscription.SubscriptionPlan == null) ? null : new SubscriptionDto
                 {
                     PlanName = subscription.SubscriptionPlan.Name,
                     SubscribedOn = subscription.SubscribedOn,
                     ValidTill = subscription.ValidTill
-                }
+                },
+                CurrentUsage = currentUsage
+            };
+        }
+
+        public async Task<UserCurrentUsageDto> GetUserCurrentUsageAsync(int userId)
+        {
+            var userTests = await _context.Tests
+                .Where(t => t.CreatedByUserId == userId)
+                .ToListAsync();
+
+            var activeTests = userTests.Count(t => t.Status == TestStatus.Started || t.Status == TestStatus.NotStarted);
+            var retryAttempted = userTests.Sum(t => t.AttemptCount > 1 ? t.AttemptCount - 1 : 0);
+            var testsCreatedPerExam = userTests
+                .GroupBy(t => t.ExamId)
+                .Select(g => g.Count())
+                .DefaultIfEmpty(0)
+                .Max();
+            var noOfExamsWithTests = userTests
+                .Select(t => t.ExamId)
+                .Distinct()
+                .Count();
+
+            return new UserCurrentUsageDto
+            {
+                ActiveTests = activeTests,
+                RetryAttempted = retryAttempted,
+                TestsCreatedPerExam = testsCreatedPerExam,
+                NoOfExamsForwhichTestsGiven = noOfExamsWithTests
             };
         }
 

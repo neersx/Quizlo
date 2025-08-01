@@ -12,9 +12,9 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
     public class TestsController : ControllerBase
     {
         private readonly ITestService _svc;
-        private readonly SubscriptionService _subscriptionService;
+        private readonly ISubscriptionService _subscriptionService;
 
-        public TestsController(ITestService svc, SubscriptionService subscriptionService)
+        public TestsController(ITestService svc, ISubscriptionService subscriptionService)
         {
             _subscriptionService = subscriptionService;
             _svc = svc;
@@ -82,6 +82,13 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             return Ok(apiResponse);
         }
 
+        [HttpPost("{testId}/retry")]
+        public async Task<IActionResult> RetryTest(int testId)
+        {
+            await _svc.IncrementRetryAttemptAsync(testId);
+            return Ok(new { message = "Retry attempt count updated." });
+        }
+
         [HttpGet("{testId:int}/questions")]
         [ProducesResponseType(typeof(ApiResponse<TestDetailsDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTestQuestionsByTestId(int testId, CancellationToken ct)
@@ -106,8 +113,8 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
                 return Ok(apiResponse);
             }
-            
-            throw new Exception("Retry not allowed in this Subscription.");      
+
+            throw new Exception("Retry not allowed in this Subscription.");
         }
 
         /// GET api/tests/{id}

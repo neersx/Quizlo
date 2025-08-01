@@ -44,6 +44,8 @@ namespace Quizlo.Questionnaire.WebApi.Data.Entities
         [MaxLength(1000)]
         public string? Notes { get; set; }
 
+        public int AttemptCount { get; set; } = 0; // Number of attempts made by the user
+
         public string? Type { get; set; } // Group, Individual
         public DateTime? TestStartDateTime { get; set; }
         public string Status { get; set; } = TestStatus.NotStarted;

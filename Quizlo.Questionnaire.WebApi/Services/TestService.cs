@@ -22,7 +22,7 @@ public interface ITestService
     Task<TestDetailsDto?> GetTestInfoAsync(int id, CancellationToken ct = default);
 
     Task<TestResultDto> GetTestResultAsync(int id, CancellationToken ct = default);
-
+    Task<TestDetailsDto> IncrementRetryAttemptAsync(int testId, CancellationToken ct = default);
     Task<IReadOnlyList<TestDetailsDto>> GetUserActiveTestsAsync(int userId, CancellationToken ct = default);
 
     Task<TestSubmissionResultDto> SubmitAnswersAsync(int testId, SubmitTestAnswersRequest request, CancellationToken ct = default);
@@ -53,7 +53,6 @@ public class TestService : ITestService
     /// <summary>All tests that belong to one user, most-recent first.</summary>
     public async Task<IReadOnlyList<TestDetailsDto>> GetUserTestsAsync(int userId, CancellationToken ct = default)
     {
-        // NB: projection happens in SQL, so only the needed columns travel over the wire
         return await _db.Tests
             .AsNoTracking()
             .Include(x => x.Exam)
@@ -349,6 +348,7 @@ public class TestService : ITestService
             CreatedAt = DateTime.UtcNow,
             TotalQuestions = req.TotalQuestions,
             CreatedByUserId = userId,
+            AttemptCount = 0,
             Status = TestStatus.NotStarted,
             TotalMarks = req.TotalQuestions * 3
         };
@@ -424,7 +424,7 @@ public class TestService : ITestService
     }
 
     // Update the mapping of Difficulty property in the  method to convert DifficultyLevel to string.
-    public async Task<TestDetailsDto?> GetTestAsync(int id, CancellationToken ct = default)
+    public async Task<TestDetailsDto> GetTestAsync(int id, CancellationToken ct = default)
     {
         return await _db.Tests
                         .AsNoTracking()
@@ -600,14 +600,17 @@ public class TestService : ITestService
 
     }
 
-
-    private static bool IsAnswerCorrect(Question q, string[] selected)
+    public async Task<TestDetailsDto> IncrementRetryAttemptAsync(int testId, CancellationToken ct = default)
     {
-        var correct = q.CorrectOptionIds
-                       .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var test = await _db.Tests.FindAsync(testId);
+        if (test == null)
+            throw new KeyNotFoundException($"Test with ID {testId} not found.");
 
-        return q.Type == QuestionType.Single
-               ? selected.Length == 1 && correct.Length == 1 && selected[0] == correct[0]
-               : selected.OrderBy(x => x).SequenceEqual(correct.OrderBy(x => x), StringComparer.OrdinalIgnoreCase);
+        test.AttemptCount += 1;
+
+        _db.Tests.Update(test);
+        await _db.SaveChangesAsync(ct);
+
+        return await GetTestAsync(testId, ct);
     }
 }

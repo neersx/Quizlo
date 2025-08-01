@@ -7,6 +7,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
     {
         Task<User> GetUserByIdAsync(string userId);
         Task<AuthResponseDto> LoginAsync(string email, string password);
+        Task<UserCurrentUsageDto> GetUserCurrentUsageAsync(int userId);
         Task<UserWithSubscriptionDto> CreateUserAsync(string email, string password, string firstName, string lastName, string phoneNumber);
         Task<bool> CheckPasswordAsync(User user, string password);
     }

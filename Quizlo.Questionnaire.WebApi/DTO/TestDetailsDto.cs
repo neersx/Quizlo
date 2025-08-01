@@ -14,6 +14,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public DateTime CreatedAt { get; set; }
         public int ExamId { get; set; }
         public int? SubjectId { get; set; }
+        public int AttemptCount { get; set; } = 0;
         public int TotalQuestions { get; set; }
         public int AvailableQuesInHub { get; set; } = 0;
         public double? TotalMarks { get; set; }

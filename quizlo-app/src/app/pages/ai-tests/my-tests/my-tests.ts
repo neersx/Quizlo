@@ -30,7 +30,7 @@ export class MyTests implements OnInit {
 
   ngOnInit() {
     this.loadTests();
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   loadTests() {
@@ -42,7 +42,7 @@ export class MyTests implements OnInit {
             const percentage = x?.totalMarks === 0
               ? 0
               : Math.round((x.marksScored * 100) / x.totalMarks * 100) / 100;
-          
+           this.cdr.detectChanges();
             return {
               ...x,
               status: x.status === 'Completed'
@@ -51,7 +51,7 @@ export class MyTests implements OnInit {
             };
           });
           
-          this.cdr.detectChanges();
+         
         } else {
           this.error = resp.message ?? 'Failed to load tests';
         }

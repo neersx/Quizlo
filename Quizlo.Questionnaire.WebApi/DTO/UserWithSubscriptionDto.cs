@@ -7,6 +7,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public SubscriptionDto Subscription { get; set; }
+        public UserCurrentUsageDto CurrentUsage { get; set; }
     }
 
     public class SubscriptionDto
