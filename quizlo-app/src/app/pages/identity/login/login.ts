@@ -55,7 +55,6 @@ export class Login implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-     this.toast.error('Welcome to Angular 20 SSR!', 'Success');
     // Protect route if already logged in
     if (isPlatformBrowser(this.platformId) && this.authService.currentUser) {
       this.router.navigate(['/']);
@@ -97,13 +96,13 @@ export class Login implements OnInit, OnDestroy {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        this.toastr.success('Login successful', 'Welcome');
+        this.toastr.success('login successful', 'Quizlo Ai');
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/test'; // or any default
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
         this.errorMessage = err.error?.message || 'Login failed. Please try again.';
-        this.toastr.error(this.errorMessage, 'Login Error');
+        this.toastr.error('Invalid details', 'Quizlo Ai');
       }
     });
   }
