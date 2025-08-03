@@ -22,7 +22,11 @@
     </div>
     }
 
-    <div class="row justify-content-center">
+    <div *ngIf="!loading && tests.length === 0" class="text-center">
+        <p>No tests found.</p>
+    </div>
+
+    <div *ngIf="!loading && tests.length > 0" class="row justify-content-center">
 
         @for (test of tests; track $index) {
         <div class="col-xl-4">
