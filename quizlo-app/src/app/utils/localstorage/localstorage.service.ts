@@ -14,10 +14,12 @@ export class LocalStorageService {
 
   constructor() {}
 
-  setItem<K extends LocalStorageKeys>(key: K, value: LocalStorageValues[K]): void {
+
+
+  setItem<K extends LocalStorageKeys>(key: K, value: LocalStorageValues[K], isRaw: boolean = false): void {
     if (!this.isBrowser) return;
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key, isRaw ? value as any : JSON.stringify(value));
     } catch (e) {
       console.error(`Error setting ${key} in localStorage:`, e);
     }

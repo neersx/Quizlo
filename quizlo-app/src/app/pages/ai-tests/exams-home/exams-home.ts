@@ -54,6 +54,7 @@ export class ExamsHome implements OnInit {
     private metaService: Meta,
     private testService: TestService,
     private userService: AuthService,
+    private auth: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private localStorageService: LocalStorageService,
     private dropdownService: DropdownService) { }
@@ -274,6 +275,25 @@ export class ExamsHome implements OnInit {
   isUserLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId)) {
       const currentUser = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
+      if (currentUser) {
+        this.auth.validateSession().subscribe({
+          next: (valid: boolean) => {
+            if (!valid) {
+              this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
+              this.error = 'Session expired. Please login again.';
+              this.OpenRegisterModal();
+              return false;
+            }
+            return true;
+          },
+          error: (err: any) => {
+            this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
+            this.error = 'Session expired. Please login again.';
+            this.OpenRegisterModal();
+            return false;
+          }
+        });
+      }
       return !!currentUser;
     }
     return false;

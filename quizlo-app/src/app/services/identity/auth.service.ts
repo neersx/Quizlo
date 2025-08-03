@@ -73,6 +73,12 @@ export class AuthService {
       );
   }
 
+  validateSession(): Observable<boolean> {
+    return this.http.get<{ valid: boolean }>(`${this.apiUrl}/validate-token`).pipe(
+      map(response => response.valid)
+    );
+  }
+
   register(registerDto: RegisterDto): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, registerDto);
   }
@@ -113,10 +119,9 @@ export class AuthService {
   /** Persists token & user, then notifies subscribers */
   private saveAuthState(token: string, user: UserModel): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.localStorage.setItem(LocalStorageKeys.AuthToken, token);
+      this.localStorage.setItem(LocalStorageKeys.AuthToken, token, true);
       this.localStorage.setItem(LocalStorageKeys.CurrentUser, { user });
     }
     this.userSubject.next(user);
-    console.log('userSubject now:', this.localStorage.getItem(LocalStorageKeys.CurrentUser)?.user);
   }
 }

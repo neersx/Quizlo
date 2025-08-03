@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
@@ -12,26 +13,28 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
-        private readonly JwtTokenService _jwtTokenService;
         private readonly ITestService _testService;
 
         public UsersController(
-            UserManager<User> userManager, JwtTokenService jwtTokenService,
             IUserService userService,
             ITestService testService,
             SignInManager<User> signInManager)
         {
             _userService = userService;
-            _userManager = userManager;
-            _jwtTokenService = jwtTokenService;
             _signInManager = signInManager;
             _testService = testService;
+        }
+
+        [Authorize]
+        [HttpGet("validate-token")]
+        public IActionResult ValidateToken()
+        {
+            return Ok(new { valid = true });
         }
 
         // GET: api/users/{id}
