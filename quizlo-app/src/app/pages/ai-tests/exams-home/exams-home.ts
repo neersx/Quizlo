@@ -21,6 +21,7 @@ import { NgbModal, NgbModalOptions, NgbModule } from '@ng-bootstrap/ng-bootstrap
 import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-loader';
 import { Title, Meta } from '@angular/platform-browser';
 import { SpkAlertsComponent } from '../../../@spk/reusable-ui-elements/spk-alerts/spk-alerts.component';
+import { UserCurrentUsageModel } from '../../../models/subscription.model';
 
 @Component({
   selector: 'app-exams-home',
@@ -229,23 +230,15 @@ export class ExamsHome implements OnInit {
       this.loadingTest = false;
       return;
     }
-    setTimeout(() => {
-      if (this.isUserLoggedIn()) {
-        const isEligible = this.checkTestCreationEligibility();
-        if (!isEligible) {
-          this.loadingTest = false;
-          return;
-        }
-        const payload = this.getPayload();
-        this.loadTest(payload);
-      } else {
-        this.OpenRegisterModal();
-      }
-      this.loadingTest = false;
-      this.cdr.markForCheck();
-    }, 1000);
 
-    this.error = '';
+    if (this.isUserLoggedIn()) {
+
+      const payload = this.getPayload();
+      this.loadTest(payload);
+      this.error = '';
+    }
+    this.loadingTest = false;
+    this.cdr.markForCheck();
 
   }
 
@@ -273,29 +266,23 @@ export class ExamsHome implements OnInit {
   };
 
   isUserLoggedIn(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      const currentUser = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
-      if (currentUser) {
-        this.auth.validateSession().subscribe({
-          next: (valid: boolean) => {
-            if (!valid) {
-              this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
-              this.error = 'Session expired. Please login again.';
-              this.OpenRegisterModal();
-              return false;
-            }
-            return true;
-          },
-          error: (err: any) => {
-            this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
-            this.error = 'Session expired. Please login again.';
-            this.OpenRegisterModal();
-            return false;
-          }
-        });
+    this.auth.validateSession().subscribe({
+      next: (res: boolean) => {
+        if (!res) {
+          this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
+          this.error = 'Session expired. Please login again.';
+          this.OpenRegisterModal();
+          return false;
+        }
+        return this.checkTestCreationEligibility();
+      },
+      error: (err: any) => {
+        this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
+        this.error = 'Session expired. Please login again.';
+        this.OpenRegisterModal();
+        return false;
       }
-      return !!currentUser;
-    }
+    });
     return false;
   }
 

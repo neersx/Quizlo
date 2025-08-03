@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +33,10 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
 
         [Authorize]
         [HttpGet("validate-token")]
-        public IActionResult ValidateToken()
+        public async Task<IActionResult> ValidateToken()
         {
-            return Ok(new { valid = true });
+            var currentUsage = await _userService.GetUserCurrentUsageAsync(int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+            return Ok(currentUsage);
         }
 
         // GET: api/users/{id}

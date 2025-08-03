@@ -69,8 +69,11 @@ namespace Quizlo.Questionnaire.WebApi.Services
             };
         }
 
-        public async Task<UserWithSubscriptionDto> GetUserWithSubscriptionAsync(User user)
+        public async Task<UserWithSubscriptionDto> GetUserWithSubscriptionAsync(int userId)
         {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) throw new UnauthorizedAccessException("Invalid user id");
+
             var subscription = await _context.UserSubscriptions
                 .Include(us => us.SubscriptionPlan)
                 .Where(us => us.UserId == user.Id)
@@ -97,9 +100,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
 
         public async Task<UserCurrentUsageDto> GetUserCurrentUsageAsync(int userId)
         {
-            var userTests = await _context.Tests
-                .Where(t => t.CreatedByUserId == userId)
-                .ToListAsync();
+            var userTests = await _context.Tests.Where(t => t.CreatedByUserId == userId).ToListAsync();
 
             var activeTests = userTests.Count(t => t.Status == TestStatus.Started || t.Status == TestStatus.NotStarted);
             var retryAttempted = userTests.Sum(t => t.AttemptCount > 1 ? t.AttemptCount - 1 : 0);
@@ -163,7 +164,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return await GetUserWithSubscriptionAsync(user);
+            return await GetUserWithSubscriptionAsync(user.Id);
         }
 
 

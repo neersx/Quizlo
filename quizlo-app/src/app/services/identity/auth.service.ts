@@ -12,6 +12,7 @@ import { UserModel } from '../../models/user.model';
 import { AuthResponseModel } from '../../models/auth-response.model';
 import { LocalStorageService } from '../../utils/localstorage/localstorage.service';
 import { LocalStorageKeys } from '../../utils/localstorage/localstorage-keys';
+import { UserCurrentUsageModel } from '../../models/subscription.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -74,8 +75,16 @@ export class AuthService {
   }
 
   validateSession(): Observable<boolean> {
-    return this.http.get<{ valid: boolean }>(`${this.apiUrl}/validate-token`).pipe(
-      map(response => response.valid)
+    return this.http.get<UserCurrentUsageModel>(`${this.apiUrl}/validate-token`).pipe(
+      map((response: UserCurrentUsageModel) => {
+        const user = this.localStorage.getItem(LocalStorageKeys.CurrentUser)?.user;
+        if (user) {
+          user.currentUsage = response;
+          this.localStorage.setItem(LocalStorageKeys.CurrentUser, { user });
+          return true;
+        }
+        return false;
+      })
     );
   }
 
