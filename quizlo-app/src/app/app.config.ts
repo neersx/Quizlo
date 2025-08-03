@@ -26,7 +26,7 @@ export const appConfig: ApplicationConfig = {
       SharedModule,               // any standalone @NgModule you need
       NgbModule,
       ToastrModule.forRoot({
-      timeOut: 3000,
+      timeOut: 5000,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),

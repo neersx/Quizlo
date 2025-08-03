@@ -22,6 +22,7 @@ import { GridLoader } from '../../../shared/common/loaders/grid-loader/grid-load
 import { Title, Meta } from '@angular/platform-browser';
 import { SpkAlertsComponent } from '../../../@spk/reusable-ui-elements/spk-alerts/spk-alerts.component';
 import { UserCurrentUsageModel } from '../../../models/subscription.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-exams-home',
@@ -56,7 +57,7 @@ export class ExamsHome implements OnInit {
     private testService: TestService,
     private userService: AuthService,
     private auth: AuthService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    private toastr: ToastrService,
     private localStorageService: LocalStorageService,
     private dropdownService: DropdownService) { }
 
@@ -213,6 +214,7 @@ export class ExamsHome implements OnInit {
     if (user.currentUsage && user.subscriptionPlan) {
       if (user.currentUsage.activeTests >= user.subscriptionPlan.maxActiveTests) {
         this.error = 'You have reached your unfinished test limit for today. Please try again tomorrow.';
+        this.toastr.error(this.error, 'Subscription Limit Reached');
         return false;
       }
     }

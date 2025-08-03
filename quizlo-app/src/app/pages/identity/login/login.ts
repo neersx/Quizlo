@@ -43,7 +43,6 @@ export class Login implements OnInit, OnDestroy {
     public readonly authService: AuthService,
     private router: Router,
     private toastr: ToastrService,
-    private toast: ToastrWrapperService
   ) { }
 
   errorMessage = ''; // validation _error handle

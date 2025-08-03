@@ -1,12 +1,27 @@
 <app-page-header firstTitle="Tests" title="My Tests History" title1="My Tests List"
     activeTitle="My Tests History"></app-page-header>
-<div *ngIf="tests && tests.length == 0" class="header text-center">
+
+<div *ngIf="loading" class="header text-center">
     <h5 style="text-align: center;">Loading Your Tests...</h5>
     <app-test-skeleton-loader [displayFooter]="false" [displayProgress]="true" [totalQuestions]="0">
     </app-test-skeleton-loader>
 </div>
 
-<div *ngIf="tests && tests.length > 0" class="row">
+<div class="row">
+
+    @for (alert of usageAlerts; track alert; let i = $index) {
+    <div class="col-12 mb-3">
+        <spk-alerts [variant]="alert.type" [isDismissible]="true" (close)="customizedAlertclose(i)">
+            <span [innerHTML]="getSanitizedSVG(alert.icon)"></span>
+            {{alert.message}}
+            <button type="button" class="btn-close" (close)="customizedAlertclose(i)" data-bs-dismiss="alert"
+                aria-label="Close">
+                <i class="bi bi-x"></i>
+            </button>
+        </spk-alerts>
+    </div>
+    }
+
     <div class="row justify-content-center">
 
         @for (test of tests; track $index) {
