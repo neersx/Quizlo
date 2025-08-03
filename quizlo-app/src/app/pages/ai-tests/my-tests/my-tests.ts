@@ -15,6 +15,7 @@ import { SpkAlertsComponent } from '../../../@spk/reusable-ui-elements/spk-alert
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SubscriptionModel, UserCurrentUsageModel, UserSubscriptionModel } from '../../../models/subscription.model';
 import { GenerateUsageAlerts } from '../../../utils/helpers/usage-alerts';
+import { AuthService } from '../../../services/identity/auth.service';
 
 @Component({
   selector: 'app-my-tests',
@@ -34,24 +35,18 @@ export class MyTests implements OnInit {
 
   constructor(private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
+    private auth: AuthService,
     private readonly localStorageService: LocalStorageService,
     private testService: TestService) { }
 
   ngOnInit() {
-    const user = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user; 
-    this.usageAlerts = GenerateUsageAlerts(user?.subscriptionPlan, user?.currentUsage);
+    this.checkUserSubscriptionUsage();
 
-    if (!user) {
-      this.error = 'User not found. Please log in again.';
-      this.loading = false;
-      this.cdr.markForCheck();
-      return;
-    }
     this.loadTests();
     this.cdr.markForCheck();
   }
 
-  
+
   getSanitizedSVG(svgContent: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svgContent);
   }
@@ -59,6 +54,25 @@ export class MyTests implements OnInit {
   customizedAlertclose(index: number) {
     // Remove the alert from the array based on the index
     this.usageAlerts.splice(index, 1);
+  }
+
+  checkUserSubscriptionUsage(): void {
+    this.auth.validateSubscriptionUsage().subscribe({
+      next: (res: boolean) => {
+        if (!res) {
+          this.error = 'You are not logged in or your session has expired. Please login again.';
+        } else {
+          const user = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
+          this.usageAlerts = GenerateUsageAlerts(user?.subscriptionPlan, user?.currentUsage);
+
+          if (!user) {
+            this.error = 'User not found. Please log in again.';
+            this.loading = false;
+            this.cdr.markForCheck();
+          }
+        }
+      }
+    });
   }
 
   loadTests() {
@@ -71,7 +85,7 @@ export class MyTests implements OnInit {
             const percentage = x?.totalMarks === 0
               ? 0
               : Math.round((x.marksScored * 100) / x.totalMarks * 100) / 100;
-            this.cdr.detectChanges();
+
             return {
               ...x,
               status: x.status === 'Completed'
@@ -90,6 +104,7 @@ export class MyTests implements OnInit {
       complete: () => {
         this.loading = false;
         console.log('Loading complete');
+        this.cdr.detectChanges();
       }
     });
   }

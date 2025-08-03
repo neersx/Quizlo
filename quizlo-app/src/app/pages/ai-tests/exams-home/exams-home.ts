@@ -268,19 +268,17 @@ export class ExamsHome implements OnInit {
   };
 
   isUserLoggedIn(): boolean {
-    this.auth.validateSession().subscribe({
+    this.auth.validateSubscriptionUsage().subscribe({
       next: (res: boolean) => {
         if (!res) {
-          this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
-          this.error = 'Session expired. Please login again.';
+          this.error = 'You are not logged in or your session has expired. Please login again.';
           this.OpenRegisterModal();
           return false;
         }
         return this.checkTestCreationEligibility();
       },
       error: (err: any) => {
-        this.localStorageService.removeItem(LocalStorageKeys.CurrentUser);
-        this.error = 'Session expired. Please login again.';
+        this.error = 'You are not logged in or your session has expired. Please login again.';
         this.OpenRegisterModal();
         return false;
       }

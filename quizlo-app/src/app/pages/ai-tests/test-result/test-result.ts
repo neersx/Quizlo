@@ -60,7 +60,7 @@ export class TestResult implements AfterViewInit, OnInit {
         this.testResult = data as TestDetailsModel;
         const percentage = this.testResult?.totalMarks === 0 ? 0 : Math.round((data.marksScored
            * 100) / data.totalMarks * 100) / 100;
-        this.testResult.status = data.status === 'Completed' ? percentage > 70 ? 'Passed' : 'Failed' : 'Completed';
+        this.testResult.status = data.status === 'Completed' ? percentage > 70 ? 'Passed' : 'Failed' :  data.status;
 
         this.durationFormatted = this.formatDuration(this.durationRaw);
         if (this.testResult && this.testResult.marksScored && this.testResult.totalMarks) {

@@ -7,7 +7,7 @@
     </app-test-skeleton-loader>
 </div>
 
-<div class="row">
+<div *ngIf="!loading" class="row">
 
     @for (alert of usageAlerts; track alert; let i = $index) {
     <div class="col-12 mb-3">
@@ -34,9 +34,9 @@
                 <div class="card-body">
                     <div class="float-end">
                         <a [routerLink]="['/test', 'test-result', test.id]"
-                            class="avatar avatar-rounded bg-primary-transparent avatar-sm" data-bs-toggle="tooltip"
+                            class="avatar avatar-rounded bg-primary avatar-sm" data-bs-toggle="tooltip"
                             data-bs-placement="top" aria-label="Add to Wishlist" ngbTooltip="Open Test Details">
-                            <span><i class="bi bi-play"></i></span>
+                            <span><i class="bi bi-play"></i></span> 
                         </a>
                     </div>
                     <div class="d-flex align-items-center flex-wrap gap-2">
@@ -49,8 +49,7 @@
                                 <a [routerLink]="['/test', 'test-result', test.id]">{{ test.title }} </a>
                             </h6>
                             <div class="d-flex gap-2 mb-3 flex-wrap">
-                                <a href="javascript:void(0);"><i class="ri-map-pin-2-line text-info"></i> {{
-                                    test.language }} </a>
+                                <a href="javascript:void(0);"><i class="ri-chat-2-line text-info"></i> {{ test.language }} </a>
                                 <p class="mb-0 text-muted">Date taken - {{ test.createdAt | date: 'dd-MMM-yyyy hh:mm' }}
                                 </p>
                             </div>

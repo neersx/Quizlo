@@ -186,6 +186,10 @@
         <app-test-skeleton-loader [displayFooter]="false" [displayProgress]="true" [totalQuestions]="0">
         </app-test-skeleton-loader>
     </div>
+
+    <div *ngIf="!isLoading && testResult && testResult.answers && testResult.answers.length === 0" class="text-center mt-5">
+        <p>You have not finished the Test yet. Please finish your test to see the answers.</p>
+    </div>
     <div *ngIf="testResult && testResult.answers && !isLoading" class="card-body p-0 candidate-edu-timeline">
         @for (ans of testResult.answers; track $index) {
         <div class="p-3 border-bottom">

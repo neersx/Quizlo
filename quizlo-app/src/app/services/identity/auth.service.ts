@@ -74,10 +74,11 @@ export class AuthService {
       );
   }
 
-  validateSession(): Observable<boolean> {
+  validateSubscriptionUsage(): Observable<boolean> {
     return this.http.get<UserCurrentUsageModel>(`${this.apiUrl}/validate-token`).pipe(
       map((response: UserCurrentUsageModel) => {
         const user = this.localStorage.getItem(LocalStorageKeys.CurrentUser)?.user;
+        this.localStorage.removeItem(LocalStorageKeys.CurrentUser);
         if (user) {
           user.currentUsage = response;
           this.localStorage.setItem(LocalStorageKeys.CurrentUser, { user });
