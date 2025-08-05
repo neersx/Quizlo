@@ -22,7 +22,7 @@ public class QuestionsHubController : ControllerBase
     }
 
     [HttpGet("draw-questions/{subjectId:int}")]
-    public async Task<IActionResult> DrawQuestions(int subjectId, [FromQuery] int count = 0)
+    public async Task<IActionResult> DrawQuestions(int subjectId, [FromQuery] int count = 20)
     {
         var questions = await _service.GetQuestionsFromHubAsync(subjectId, count);
         return Ok(new ApiResponse<IReadOnlyList<QuestionDto>> { IsSuccess = true, Message = "fetched questions from hub", Data = questions });

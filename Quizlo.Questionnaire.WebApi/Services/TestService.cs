@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Data;
 using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 using AutoMapper;
+using Quizlo.Questionnaire.WebApi.Services;
 
 public interface ITestService
 {
@@ -34,11 +35,13 @@ public class TestService : ITestService
     private readonly IHttpClientFactory _http;
     private readonly ILogger<TestService> _log;
     private readonly string _webhookUrl;
+    private readonly IQuestionsHubService _questionsService;
     private const int MaxRetries = 3;
     private readonly IMapper _mapper;
 
     public TestService(QuizDbContext db,
                        IHttpClientFactory http,
+                       IQuestionsHubService questionsHubService,
                        IConfiguration cfg,
                        IMapper mapper,
                        ILogger<TestService> log)
@@ -46,6 +49,7 @@ public class TestService : ITestService
         _db = db;
         _http = http;
         _mapper = mapper;
+        _questionsService = questionsHubService;
         _log = log;
         _webhookUrl = $"{cfg["N8n:WebhookBaseUrl"]!}/generate-live-question";  // -> appsettings.json
     }
@@ -125,27 +129,45 @@ public class TestService : ITestService
 
         TestDetailsDto test = await GetTestAsync(testId, ct);
 
-        int subjectId = (int)test.SubjectId;
-
         if (test == null)
             throw new ArgumentNullException(nameof(test));
+
+        int subjectId = (int)test.SubjectId;
 
         if (test.Questions.Count > 0)
             return test;
         else
         {
-            var env = await GetAIGeneratedQuestions(test, subjectId, ct);
-            if (env.Questions.Count > 0)
+            if (test.AvailableQuesInHub > 200)
             {
-                test.Status = TestStatus.Started;
-                test.Questions = env.Questions;
-                test.TotalQuestions = env.Questions.Count;
-                test.TotalMarks = env.Questions.Count * 3;
-                test.Duration = TimeSpan.FromMinutes(env.Questions.Count * 2);
-                return await UpdateTestDetailsAsync(test, subjectId, ct);
+                var questions = await _questionsService.GetQuestionsFromHubAsync(subjectId);
+                if (questions.Count > 0)
+                {
+                    test.Status = TestStatus.Started;
+                    test.Questions = questions;
+                    test.TotalQuestions = questions.Count;
+                    test.TotalMarks = questions.Count * 3;
+                    test.Duration = TimeSpan.FromMinutes(questions.Count * 2);
+                    return test;
+                }
             }
-            throw new ArgumentNullException(nameof(test.Questions));
+            else
+            {
+                var env = await GetAIGeneratedQuestions(test, subjectId, ct);
+                if (env.Questions.Count > 0)
+                {
+                    test.Status = TestStatus.Started;
+                    test.Questions = env.Questions;
+                    test.TotalQuestions = env.Questions.Count;
+                    test.TotalMarks = env.Questions.Count * 3;
+                    test.Duration = TimeSpan.FromMinutes(env.Questions.Count * 2);
+                    return await UpdateTestDetailsAsync(test, subjectId, ct);
+                }
+            }
         }
+
+        // If none of the above conditions are met, throw an exception or return a default value
+        throw new InvalidOperationException("Unable to retrieve questions for the specified test.");
     }
 
     private async Task<TestDetailsDto> UpdateTestDetailsAsync(TestDetailsDto testDetails, int subjectId, CancellationToken ct = default)
@@ -426,7 +448,7 @@ public class TestService : ITestService
     // Update the mapping of Difficulty property in the  method to convert DifficultyLevel to string.
     public async Task<TestDetailsDto> GetTestAsync(int id, CancellationToken ct = default)
     {
-        return await _db.Tests
+        var result = await _db.Tests
                         .AsNoTracking()
                         .Include(t => t.Exam).ThenInclude(e => e.Subjects)
                         .Include(t => t.TestQuestions).ThenInclude(tq => tq.Question)
@@ -446,6 +468,7 @@ public class TestService : ITestService
                             MarksScored = t.MarksScored,
                             TotalMarks = t.TotalMarks,
                             ExamName = t.Exam.Name,
+                            AvailableQuesInHub = t.Exam.Subjects.FirstOrDefault(s => s.Title == t.Subject)!.TotalQuestions,
                             ExamCode = t.Exam.Code,
                             Questions = t.Status == TestStatus.Completed ? t.TestQuestions
                                          .OrderBy(tq => tq.Order)
@@ -461,6 +484,8 @@ public class TestService : ITestService
                                              Difficulty = tq.Question.Difficulty.ToString() // Convert DifficultyLevel to string  
                                          }).ToList() : new List<QuestionDto>()
                         }).FirstOrDefaultAsync(ct);
+
+                        return result ?? new TestDetailsDto();
     }
 
     public async Task<TestDetailsDto?> GetTestInfoAsync(int id, CancellationToken ct = default)

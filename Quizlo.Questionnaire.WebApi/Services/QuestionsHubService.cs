@@ -33,13 +33,13 @@ public class QuestionsHubService : IQuestionsHubService
         _webhookUrl = $"{cfg["N8n:WebhookBaseUrl"]!}/questions-hub"; // -> appsettings.json
     }
 
-    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int subjectId, int questionsCount = 0)
+    public async Task<IReadOnlyList<QuestionDto>> GetQuestionsFromHubAsync(int subjectId, int questionsCount = 20)
     {
         // Filter QuestionsHub for this Exam + Subject and collapse to DISTINCT Questions
         // Using GroupBy to ensure distinct by QuestionId across providers (safer than Distinct on entity)
         var distinctQuestionsQuery = _context.QuestionsHubs
             .AsNoTracking()
-            .Where(qh => qh.SubjectId == subjectId)
+            .Where(qh => qh.SubjectId == subjectId && qh.IsActive)
             .GroupBy(qh => qh.QuestionId)
             .Select(g => g.Select(x => x.Question).First());
 
@@ -50,7 +50,7 @@ public class QuestionsHubService : IQuestionsHubService
             return Array.Empty<QuestionDto>();
 
         // If questionsCount <= 0, just take *all* (shuffle below)
-        var takeCount = questionsCount <= 0 ? allQuestions.Count : Math.Min(questionsCount, allQuestions.Count);
+        var takeCount = questionsCount <= 0 ? 20 : Math.Min(questionsCount, allQuestions.Count);
 
         // Bucket by difficulty
         var byDifficulty = allQuestions
