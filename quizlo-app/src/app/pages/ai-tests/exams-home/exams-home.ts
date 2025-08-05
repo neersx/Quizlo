@@ -213,8 +213,13 @@ export class ExamsHome implements OnInit {
 
     if (user.currentUsage && user.subscriptionPlan) {
       if (user.currentUsage.activeTests >= user.subscriptionPlan.maxActiveTests) {
-        this.error = 'You have reached your unfinished test limit for today. Please try again tomorrow.';
-        this.toastr.error(this.error, 'Subscription Limit Reached');
+        this.error = 'You have reached your unfinished test limit. Please complete or submit your existing tests before starting a new one.';
+        this.toastr.error(this.error, 'Test Limit Reached');
+        return false;
+      }
+      if (!user.currentUsage.activeExamIds.includes(this.selectedExam.value) && user.currentUsage.activeExamIds.split(",").length >= user.subscriptionPlan.maxExams) {
+        this.error = `You have reached your Exam limit. You are allowed to take test for ${user.subscriptionPlan.maxExams} exams at a time.`;
+        this.toastr.error(this.error, 'Exam Limit Reached');
         return false;
       }
     }

@@ -117,6 +117,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
             return new UserCurrentUsageDto
             {
                 ActiveTests = activeTests,
+                ActiveExamIds = string.Join(",", userTests.Select(t => t.ExamId).Distinct()),
                 RetryAttempted = retryAttempted,
                 TestsCreatedPerExam = testsCreatedPerExam,
                 NoOfExamsForwhichTestsGiven = noOfExamsWithTests

@@ -172,7 +172,7 @@ export class TestWindow implements OnInit, OnDestroy {
           } else {
             console.error('Failed to load test details:', resp.message); // Log the error  resp.message ?? 'Could not start test';
           }
-        }, 3000);
+        }, 1000);
       },
       error: err => {
         console.error('Failed to load test details:', err);

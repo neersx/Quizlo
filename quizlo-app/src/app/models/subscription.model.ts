@@ -20,6 +20,7 @@ export interface SubscriptionModel {
 
 export interface UserCurrentUsageModel {
     activeTests: number;
+    activeExamIds: string; // Comma-separated list of active exam IDs
     retryAttempted: number;
     testsCreatedPerExam: number;
     noOfExamsForwhichTestsGiven: number;
