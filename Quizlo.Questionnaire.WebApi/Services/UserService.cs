@@ -143,7 +143,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
         {
             var userTests = await _context.Tests.Where(t => t.CreatedByUserId == userId).ToListAsync();
 
-            var selectedLanguagesCount = userTests.SelectMany(t => t.Language).Distinct().Count();
+            var selectedLanguagesCount = userTests.Select(t => t.Language).Distinct().Count();
             var scheduledTestsCount = userTests.Count(t => t.Status == TestStatus.Scheduled);
             var activeTests = userTests.Count(t => t.Status == TestStatus.Started || t.Status == TestStatus.NotStarted);
             var retryAttempted = userTests.Sum(t => t.AttemptCount > 1 ? t.AttemptCount - 1 : 0);

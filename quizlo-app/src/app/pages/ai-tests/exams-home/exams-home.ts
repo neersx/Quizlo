@@ -237,24 +237,22 @@ export class ExamsHome implements OnInit {
       return;
     }
 
-    this.auth.checkTestEligibility().subscribe({
-      next: (res: any) => {
+    this.auth.checkTestEligibility().subscribe((res: any) => {
         console.log('Eligibility response:', res);
         if (!res.isEligible) {
-          this.error = res.messages.join(', ') || 'You are not eligible to take this test. Please check your subscription or contact support.';
-        } else {
+          res.messages.forEach((msg: string) => {
+            this.toastr.error(msg, 'Eligibility Check', { timeOut: 5000 });
+          });
+          this.loadingTest = false;
+          this.cdr.detectChanges();
+         } else {
           const payload = this.getPayload();
           this.loadTest(payload);
           this.loadingTest = false;
           this.cdr.detectChanges();
           this.error = '';
         }
-      },
-      error: (err: any) => {
-        this.error = 'You are not logged in or your session has expired. Please login again.';
-        this.OpenRegisterModal();
-        this.loadingTest = false;
-      }
+      
     });
   }
 
