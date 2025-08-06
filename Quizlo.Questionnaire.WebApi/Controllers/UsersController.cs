@@ -39,6 +39,14 @@ namespace Quizlo.Questionnaire.WebApi.Controllers
             return Ok(currentUsage);
         }
 
+        [Authorize]
+        [HttpGet("check-test-eligibility")]
+        public async Task<IActionResult> CheckTestEligibility()
+        {
+            var eligibility = await _userService.CheckUserTestEligibility(int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+            return Ok(new ApiResponse<EligibilityResultDto>{ Data = eligibility, IsSuccess = true });
+        }
+
         // GET: api/users/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<User>>> GetUser(string id)

@@ -46,6 +46,7 @@ export class ExamsHome implements OnInit {
   testDetails: TestDetailsModel | undefined;
   tests: any[] = [];
   activeTests: any[] = [];
+  isEligibleToProceed = false;
   error = '';
 
   constructor(private cdr: ChangeDetectorRef,
@@ -204,27 +205,25 @@ export class ExamsHome implements OnInit {
     });
   }
 
-  checkTestCreationEligibility(): boolean {
+  checkTestCreationEligibility(): void {
     const user = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
     if (!user) {
       this.error = 'Please login to start a test';
-      return false;
+      this.isEligibleToProceed = false;
     }
 
-    if (user.currentUsage && user.subscriptionPlan) {
+    if (user?.currentUsage && user.subscriptionPlan) {
       if (user.currentUsage.activeTests >= user.subscriptionPlan.maxActiveTests) {
         this.error = 'You have reached your unfinished test limit. Please complete or submit your existing tests before starting a new one.';
         this.toastr.error(this.error, 'Test Limit Reached');
-        return false;
+        this.isEligibleToProceed = false;
       }
       if (!user.currentUsage.activeExamIds.includes(this.selectedExam.value) && user.currentUsage.activeExamIds.split(",").length >= user.subscriptionPlan.maxExams) {
         this.error = `You have reached your Exam limit. You are allowed to take test for ${user.subscriptionPlan.maxExams} exams at a time.`;
         this.toastr.error(this.error, 'Exam Limit Reached');
-        return false;
+        this.isEligibleToProceed = false;
       }
     }
-
-    return true;
   }
 
   startTest() {
@@ -238,15 +237,25 @@ export class ExamsHome implements OnInit {
       return;
     }
 
-    if (this.isUserLoggedIn()) {
-
-      const payload = this.getPayload();
-      this.loadTest(payload);
-      this.error = '';
-    }
-    this.loadingTest = false;
-    this.cdr.markForCheck();
-
+    this.auth.checkTestEligibility().subscribe({
+      next: (res: any) => {
+        console.log('Eligibility response:', res);
+        if (!res.isEligible) {
+          this.error = res.messages.join(', ') || 'You are not eligible to take this test. Please check your subscription or contact support.';
+        } else {
+          const payload = this.getPayload();
+          this.loadTest(payload);
+          this.loadingTest = false;
+          this.cdr.detectChanges();
+          this.error = '';
+        }
+      },
+      error: (err: any) => {
+        this.error = 'You are not logged in or your session has expired. Please login again.';
+        this.OpenRegisterModal();
+        this.loadingTest = false;
+      }
+    });
   }
 
   OpenRegisterModal() {
@@ -273,14 +282,16 @@ export class ExamsHome implements OnInit {
   };
 
   isUserLoggedIn(): boolean {
-    this.auth.validateSubscriptionUsage().subscribe({
-      next: (res: boolean) => {
-        if (!res) {
-          this.error = 'You are not logged in or your session has expired. Please login again.';
-          this.OpenRegisterModal();
+    this.auth.checkTestEligibility().subscribe({
+      next: (res: any) => {
+        if (!res.isEligible) {
+          this.error = res.messages.join(', ') || 'You are not eligible to take this test. Please check your subscription or contact support.';
+          // this.OpenRegisterModal();
           return false;
         }
-        return this.checkTestCreationEligibility();
+        this.checkTestCreationEligibility();
+        this.cdr.detectChanges();
+        return this.isEligibleToProceed;
       },
       error: (err: any) => {
         this.error = 'You are not logged in or your session has expired. Please login again.';

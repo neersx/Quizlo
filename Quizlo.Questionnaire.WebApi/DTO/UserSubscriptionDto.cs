@@ -7,6 +7,7 @@ namespace Quizlo.Questionnaire.WebApi.DTO
         public int MaxTestsPerExam { get; set; }
         public int MaxLanguages { get; set; }
         public int MaxActiveTests { get; set; }
+         public int MaxScheduledTestsAllowed { get; set; }
         public bool CanRetryTest { get; set; }
         public int MaxTestAttempts { get; set; }
         public bool CanScheduleTests { get; set; }

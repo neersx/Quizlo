@@ -89,6 +89,17 @@ export class AuthService {
     );
   }
 
+  checkTestEligibility(): Observable<boolean> {
+    return this.http.get<ApiResponse<{ isEligible: boolean }>>(`${this.apiUrl}/check-test-eligibility`).pipe(
+      map((response: any) => {
+        if (!response.isSuccess) {
+          throw new Error(response.message || 'Eligibility check failed');
+        }
+        return response.data;
+      })
+    );
+  }
+
   register(registerDto: RegisterDto): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, registerDto);
   }
