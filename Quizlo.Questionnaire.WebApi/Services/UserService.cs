@@ -172,6 +172,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
         private EligibilityResultDto ValidateTestCreationEligibility(UserSubscriptionDto subscription, UserCurrentUsageDto usage)
         {
             var result = new EligibilityResultDto();
+            result.IsEligible = true;
 
             if (usage.ActiveTests >= subscription.MaxActiveTests)
             {
@@ -185,7 +186,7 @@ namespace Quizlo.Questionnaire.WebApi.Services
                 result.Messages.Add("Maximum tests per exam exceeded.");
             }
 
-            if (usage.NoOfExamsForwhichTestsGiven >= subscription.MaxExams)
+            if (usage.NoOfExamsForwhichTestsGiven > subscription.MaxExams)
             {
                 result.IsEligible = false;
                 result.Messages.Add("Maximum number of exams exceeded.");

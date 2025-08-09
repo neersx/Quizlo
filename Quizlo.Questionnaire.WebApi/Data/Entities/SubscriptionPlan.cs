@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Quizlo.Questionnaire.WebApi.Data.Entities;
+using Quizlo.Questionnaire.WebApi.Helpers.Constants;
 using Quizlo.Questionnaire.WebApi.Helpers.Constants.enums;
 
 public class SubscriptionPlan
@@ -7,7 +8,7 @@ public class SubscriptionPlan
     public int Id { get; set; }
 
     [MaxLength(100)]
-    public string Name { get; set; } = string.Empty; // Beginner, Intermediate, Expert
+    public string Name { get; set; } = SubscriptionPlanName.Foundation;
 
     [MaxLength(500)]
     public string Description { get; set; }

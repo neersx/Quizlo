@@ -23,6 +23,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { SpkAlertsComponent } from '../../../@spk/reusable-ui-elements/spk-alerts/spk-alerts.component';
 import { UserCurrentUsageModel } from '../../../models/subscription.model';
 import { ToastrService } from 'ngx-toastr';
+import { SubscriptionPlanName } from '../../../utils/enums/subscription-plan-names';
 
 @Component({
   selector: 'app-exams-home',
@@ -238,21 +239,20 @@ export class ExamsHome implements OnInit {
     }
 
     this.auth.checkTestEligibility().subscribe((res: any) => {
-        console.log('Eligibility response:', res);
-        if (!res.isEligible) {
-          res.messages.forEach((msg: string) => {
-            this.toastr.error(msg, 'Eligibility Check', { timeOut: 5000 });
-          });
-          this.loadingTest = false;
-          this.cdr.detectChanges();
-         } else {
-          const payload = this.getPayload();
-          this.loadTest(payload);
-          this.loadingTest = false;
-          this.cdr.detectChanges();
-          this.error = '';
-        }
-      
+      if (!res.isEligible) {
+        res.messages.forEach((msg: string) => {
+          this.toastr.error(msg, 'Eligibility Check', { timeOut: 5000 });
+        });
+        this.loadingTest = false;
+        this.cdr.detectChanges();
+      } else {
+        const payload = this.getPayload();
+        this.loadTest(payload);
+        this.loadingTest = false;
+        this.cdr.detectChanges();
+        this.error = '';
+      }
+
     });
   }
 
@@ -340,7 +340,15 @@ export class ExamsHome implements OnInit {
 
 
   handleLanguageChange(value: any | any[]) {
-    this.selectedLanguage = value;
+    const user = this.localStorageService.getItem(LocalStorageKeys.CurrentUser)?.user;
+    if (user?.subscriptionPlan) {
+      if (user.subscriptionPlan.planName === SubscriptionPlanName.Champion) {
+        this.selectedLanguage = value;
+      } else {
+        this.toastr.error('You can change language only in Champion plan', 'Language Change Not Allowed');
+        this.selectedLanguage = { label: 'English', value: 'English' }; // Reset to default
+      }
+    }
   }
 
   handleExamChange(value: any | any[]) {

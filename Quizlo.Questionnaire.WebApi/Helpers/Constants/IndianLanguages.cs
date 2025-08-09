@@ -7,12 +7,12 @@
     {
         public const string English = "English";
         public const string Hindi = "Hindi";
-        public const string Bengali = "Bengali";
-        public const string Telugu = "Telugu";
-        public const string Marathi = "Marathi";
-        public const string Tamil = "Tamil";
+        // public const string Bengali = "Bengali";
+        // public const string Telugu = "Telugu";
+        // public const string Marathi = "Marathi";
+        // public const string Tamil = "Tamil";
         // public const string Gujarati = "Gujarati";
-        public const string Kannada = "Kannada";
+        // public const string Kannada = "Kannada";
 
     }
 }
